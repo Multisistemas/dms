@@ -17,13 +17,18 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+// Added to include pear packages in A2hosting
+if (file_exists('/home/multisis/php') && !is_dir('/home/multisis/php')) {
+	ini_set("include_path", '/home/multisis/php:' . ini_get("include_path"));
+}
+
 include("inc/inc.Settings.php");
 
 header("Location: ". (isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php"));
 ?>
 <html>
 <head>
-	<title>SeedDMS</title>
+	<title>Multisistemas DMS</title>
 </head>
 
 <body>
