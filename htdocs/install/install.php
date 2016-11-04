@@ -189,7 +189,7 @@ include("../inc/inc.ClassUI.php");
 UI::htmlStartPage("INSTALL");
 UI::globalBanner();
 UI::contentStart();
-UI::contentHeading("SeedDMS Installation for version ".SEEDDMS_VERSION);
+UI::contentHeading("Multisistemas DMS Installation for version ".SEEDDMS_VERSION);
 UI::contentContainerStart();
 
 
