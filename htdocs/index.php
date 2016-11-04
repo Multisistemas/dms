@@ -22,6 +22,10 @@ if (file_exists('/home/multisis/php') && is_dir('/home/multisis/php')) {
 	ini_set("include_path", '/home/multisis/php:' . ini_get("include_path"));
 }
 
+if (file_exists('/home/multisis/zf/library/Zend') && is_dir('/home/multisis/zf/library/Zend')) {
+        ini_set("include_path", '/home/multisis/zf/library/Zend:' . ini_get("include_path"));
+}
+
 include("inc/inc.Settings.php");
 
 header("Location: ". (isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php"));
