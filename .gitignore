@@ -1,4 +1,5 @@
 .DS_Store
 /data/
+cgi-bin
 htdocs/conf/settings.xml
 htdocs/conf/ENABLE_INSTALL_TOOL
