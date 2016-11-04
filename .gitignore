@@ -3,3 +3,4 @@
 cgi-bin
 htdocs/conf/settings.xml
 htdocs/conf/ENABLE_INSTALL_TOOL
+php.ini
