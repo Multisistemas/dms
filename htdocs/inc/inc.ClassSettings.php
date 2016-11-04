@@ -25,9 +25,9 @@ class Settings { /* {{{ */
 	var $_configFilePath = null;
 
 	// Name of site
-	var $_siteName = "SeedDMS";
+	var $_siteName = "MultiDMS";
 	// Message to display at the bottom of every page.
-	var $_footNote = "SeedDMS free document management \"system - www.seeddms.org";
+	var $_footNote = "MultiDMS reliable document management \"system - www.multisistemas.com.sv";
 	// if true the disclaimer message the lang.inc files will be print on the bottom of the page
 	var $_printDisclaimer = true;
 	// Default page on login
@@ -75,7 +75,7 @@ class Settings { /* {{{ */
 	// Path to SeedDMS_Lucene
 	var $_luceneClassDir = null;
 	// The relative path in the URL, after the domain part.
-	var $_httpRoot = "/seeddms/";
+	var $_httpRoot = "/";
 	// Where the uploaded files are stored (best to choose a directory that
 	// is not accessible through your web-server)
 	var $_contentDir = null;
@@ -104,7 +104,7 @@ class Settings { /* {{{ */
 	// Maximum number of sub-directories per parent directory
 	var $_maxDirID = 32700;
 	// default language (name of a subfolder in folder "languages")
-	var $_language = "en_GB";
+	var $_language = "es_ES";
 	// users are notified about document-changes that took place within the last $_updateNotifyTime seconds
 	var $_updateNotifyTime = 86400;
 	// files with one of the following endings can be viewed online
