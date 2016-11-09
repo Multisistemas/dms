@@ -110,7 +110,12 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		} else {
 			$mail = Mail::factory('mail', $mail_params);
 		}
- 
+		
+		$message = var_export($message, true);
+/*
+ debug_to_console($message);
+ die;
+*/
 		$result = $mail->send($recipient->getEmail(), $headers, $message);
 		if (PEAR::isError($result)) {
 			return false;
