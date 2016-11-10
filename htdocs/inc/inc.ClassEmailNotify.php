@@ -18,6 +18,7 @@
  */
 require_once("inc.ClassNotify.php");
 require_once("Mail.php");
+require_once("PHPMailer/PHPMailerAutoload.php");
 
 /**
  * Class to send email notifications to individuals or groups
@@ -88,6 +89,16 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$message = getMLText("email_header", array(), "", $lang)."\r\n\r\n".getMLText($message, $params, "", $lang);
 		$message .= "\r\n\r\n".getMLText("email_footer", array(), "", $lang);
 
+		$mail = new PHPMailer;
+		
+		$to = $recipient->getEmail();
+		$toName = $recipient->getFullName();
+		
+		$mail->setFrom($from, 'Multisistemas DMS');
+		$mail->addAddress($to, $toName);
+		$mail->set('Subject', getMLText($subject, $params, "", $lang));
+		$mail->msgHTML($message);
+		
 		$headers = array ();
 		$headers['From'] = $from;
 		$headers['To'] = $recipient->getEmail();
@@ -95,49 +106,31 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$headers['MIME-Version'] = "1.0";
 		$headers['Content-type'] = "text/plain; charset=utf-8";
 
-		$mail_params = array();
 		if($this->smtp_server) {
-			$mail_params['host'] = $this->smtp_server;
+			$mail->Host = $this->smtp_server;
 			if($this->smtp_port) {
-				$mail_params['port'] = $this->smtp_port;
+				$mail->Port = $this->smtp_port;
 			}
 			if($this->smtp_user) {
-				$mail_params['auth'] = true;
-				$mail_params['username'] = $this->smtp_user;
-				$mail_params['password'] = $this->smtp_password;
+				$mail->SMTPAuth = true;
+				$mail->SMTPSecure = 'tls';
+				$mail->Username = $this->smtp_user;
+				$mail->Password = $this->smtp_password;
 			}
-			$mail = Mail::factory('smtp', $mail_params);
+			$mail->isSMTP();
+			$mail->SMTPDebug = 0;
+			$mail->Debugoutput = 'html';
 		} else {
-			$mail = Mail::factory('mail', $mail_params);
+//			$mail = Mail::factory('mail', $mail_params);
 		}
-		
-		$message = var_export($message, true);
-/*
- debug_to_console($message);
- die;
-*/
-		$result = $mail->send($recipient->getEmail(), $headers, $message);
-		if (PEAR::isError($result)) {
+
+		if (!$mail->send()) {
+			debug_to_console("Mailer Error: " . $mail->ErrorInfo);
 			return false;
 		} else {
+			debug_to_console("Message sent!");
 			return true;
 		}
-
-/*
-		$headers   = array();
-		$headers[] = "MIME-Version: 1.0";
-		$headers[] = "Content-type: text/plain; charset=utf-8";
-		$headers[] = "From: ". $from;
-
-		$lang = $recipient->getLanguage();
-		$message = getMLText("email_header", array(), "", $lang)."\r\n\r\n".getMLText($message, $params, "", $lang);
-		$message .= "\r\n\r\n".getMLText("email_footer", array(), "", $lang);
-
-		$subject = "=?UTF-8?B?".base64_encode(getMLText($subject, $params, "", $lang))."?=";
-		mail($recipient->getEmail(), $subject, $message, implode("\r\n", $headers));
-
-		return true;
-*/
 	} /* }}} */
 
 	function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) { /* {{{ */

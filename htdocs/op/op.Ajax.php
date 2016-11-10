@@ -739,7 +739,7 @@ function debug_to_console($data) {
 		echo("<script>console.log(JSON.stringify(".json_encode($data).", null, 4));</script>");
 	} else {
 		$data = htmlentities($data);
-		echo("<script>console.log($data);</script>");
+		echo("<script>console.log('$data');</script>");
 	}
 }
 
