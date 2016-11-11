@@ -132,7 +132,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 //			$mail = Mail::factory('mail', $mail_params);
 		}
 
-		if (!$mail->Send()) {
+		if (!$mail->send()) {
 			debug_to_console("Mailer Error: " . $mail->ErrorInfo);
 			return false;
 		} else {
