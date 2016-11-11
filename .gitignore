@@ -7,3 +7,4 @@ htdocs/conf/ENABLE_INSTALL_TOOL
 php.ini
 info.php
 php_errors.log
+htdocs/robots.txt
