@@ -115,7 +115,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			$mail->isSMTP();
 
 			$mail->Host = $mail_params['host'];
-
+			$mail->Port = 465;
 			$mail->From = $headers['From'];
 			$mail->FromName = "Servicio de envio automatico";
 			$mail->Subject = $headers['Subject'];
