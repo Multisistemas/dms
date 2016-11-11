@@ -19,8 +19,8 @@
 require_once("inc.ClassNotify.php");
 require_once("Mail.php");
 /*require_once("PHPMailer/PHPMailerAutoload.php");*/
-require_once("../../PHPMailer/class.phpmailer.php");
-require_once("../../PHPMailer/class.smtp.php");
+require_once("../../lib/PHPMailer/class.phpmailer.php");
+require_once("../../lib/PHPMailer/class.smtp.php");
 
 /**
  * Class to send email notifications to individuals or groups
