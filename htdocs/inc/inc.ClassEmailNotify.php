@@ -150,7 +150,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		}*/
 
 		$mail             = new PHPMailer();
-		$body             = "Este es un mensaje de prueba"
+		$body             = "Este es un mensaje de prueba";
 
 		$mail->IsSMTP(); // telling the class to use SMTP
 		$mail->Host       = "obsidian.websitewelcome.com"; // SMTP server
