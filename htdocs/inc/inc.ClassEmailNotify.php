@@ -129,7 +129,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			$mail->SMTPDebug = 0;
 			$mail->Debugoutput = 'html';
 			var_dump($mail);
-			var_export(expression)
+			var_export(expression);
 		} /*else {
 			$mail = Mail::factory('mail', $mail_params);
 		}*/
