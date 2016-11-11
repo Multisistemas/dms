@@ -73,7 +73,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	 *        the subject and body
 	 * @return false or -1 in case of error, otherwise true
 	 */
-	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
+		function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
 		if ($recipient->isDisabled() || $recipient->getEmail()=="") return 0;
 
 		if(!is_object($recipient) || strcasecmp(get_class($recipient), $this->_dms->getClassname('user'))) {
@@ -117,33 +117,40 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 
 			$mail->isSMTP();
 
-			$mail->Host = "a2ss35.a2hosting.com";
-			$mail->Port = 465;
-			$mail->From = "dms@multisistemax.com";
+			$mail->Host = $mail_params['host'];
+
+			$mail->From = $headers['From'];
 			$mail->FromName = "Servicio de envio automatico";
 			$mail->Subject = $headers['Subject'];
 			$mail->MsgHTML($message);
 			$mail->AddAddress($headers['To']);
 			$mail->SMTPAuth = true;
-			$mail->Username = "dms@multisistemax.com";
-			$mail->Password = "LOUg@MNUl$)W";
+			$mail->Username = $mail_params['username'];
+			$mail->Password = $mail_params['password'];
 
 			$mail->SMTPDebug = 1;
 			$mail->Debugoutput = 'html';
 			echo('<pre>');
 			print_r($mail);
 			echo('</pre>');
-		}
-
-		if (!$mail->Send()){
-			debug_to_console("Mailer Error: " . $mail->ErrorInfo);
+		} /*else {
+			$mail = Mail::factory('mail', $mail_params);
+		}*/
+ 
+		/*$result = $mail->send($recipient->getEmail(), $headers, $message);
+		if (PEAR::isError($result)) {
 			return false;
 		} else {
-			debug_to_console("Message sent!");
+			return true;
+		}*/
+
+		if (!$mail->Send()){
+			return false;
+		} else {
 			return true;
 		}
-    
-	 }/* }}} */
+
+	}
 
 
 	function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) { /* {{{ */
