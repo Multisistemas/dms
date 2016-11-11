@@ -115,7 +115,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			}
 			if($this->smtp_user) {
 				$mail->SMTPAuth = true;
-				$mail->SMTPSecure = 'tls';
+
 				$mail->Username = $this->smtp_user;
 				$mail->Password = $this->smtp_password;
 			}
