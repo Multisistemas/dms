@@ -153,17 +153,17 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$body             = "Este es un mensaje de prueba";
 
 		$mail->IsSMTP(); // telling the class to use SMTP
-		$mail->Host       = "obsidian.websitewelcome.com"; // SMTP server
+		$mail->Host       = "a2ss35.a2hosting.com"; // SMTP server
 		$mail->SMTPDebug  = 1;                     // enables SMTP debug information (for testing)
 		                                           // 1 = errors and messages
 		                                           // 2 = messages only
 		$mail->SMTPAuth   = true;                  // enable SMTP authentication
-		$mail->Host       = "obsidian.websitewelcome.com"; // sets the SMTP server
+		$mail->Host       = "a2ss35.a2hosting.com"; // sets the SMTP server
 		$mail->Port       = 465;                    // set the SMTP port for the GMAIL server
-		$mail->Username   = "test@gestiontotal.net"; // SMTP account username
-		$mail->Password   = "[Fq5AG99=w#@";        // SMTP account password
+		$mail->Username   = "dms@multisistemax.com"; // SMTP account username
+		$mail->Password   = "LOUg@MNUl$)W";        // SMTP account password
 
-		$mail->SetFrom('test@gestiontotal.net', 'First Last');
+		$mail->SetFrom('dms@multisistemax.com', 'Test');
 
 		$mail->Subject    = "PHPMailer Test Subject via smtp, basic with authentication";
 
