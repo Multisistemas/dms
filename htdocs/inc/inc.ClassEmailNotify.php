@@ -91,16 +91,6 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$message = getMLText("email_header", array(), "", $lang)."\r\n\r\n".getMLText($message, $params, "", $lang);
 		$message .= "\r\n\r\n".getMLText("email_footer", array(), "", $lang);
 
-		$mail = new PHPMailer;
-		
-		$to = $recipient->getEmail();
-		$toName = $recipient->getFullName();
-		
-		$mail->setFrom($from, 'Multisistemas DMS');
-		$mail->addAddress($to, $toName);
-		$mail->set('Subject', getMLText($subject, $params, "", $lang));
-		$mail->msgHTML($message);
-		
 		$headers = array ();
 		$headers['From'] = $from;
 		$headers['To'] = $recipient->getEmail();
@@ -108,32 +98,58 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$headers['MIME-Version'] = "1.0";
 		$headers['Content-type'] = "text/plain; charset=utf-8";
 
+		$mail_params = array();
 		if($this->smtp_server) {
-			$mail->Host = $this->smtp_server;
+			$mail_params['host'] = $this->smtp_server;
 			if($this->smtp_port) {
-				$mail->Port = $this->smtp_port;
+				$mail_params['port'] = $this->smtp_port;
 			}
 			if($this->smtp_user) {
-				$mail->SMTPAuth = true;
-
-				$mail->Username = $this->smtp_user;
-				$mail->Password = $this->smtp_password;
+				$mail_params['auth'] = true;
+				$mail_params['username'] = $this->smtp_user;
+				$mail_params['password'] = $this->smtp_password;
 			}
+			//$mail = Mail::factory('smtp', $mail_params);
+
+			$mail = new PHPMailer();
+
 			$mail->isSMTP();
+
+			$mail->Host = $mail_params['host'];
+
+			$mail->From = $headers['From'];
+			$mail->FromName = "Servicio de envio automatico";
+			$mail->Subject = $headers['Subject'];
+			$mail->MsgHTML($message);
+			$mail->AddAddress($headers['To']);
+			$mail->SMTPAuth = true;
+			$mail->Username = $mail_params['username'];
+			$mail->Password = $mail_params['password'];
+
 			$mail->SMTPDebug = 0;
 			$mail->Debugoutput = 'html';
+			var_dump($mail);
+			var_export(expression)
+		} /*else {
+			$mail = Mail::factory('mail', $mail_params);
+		}*/
+ 
+		/*$result = $mail->send($recipient->getEmail(), $headers, $message);
+		if (PEAR::isError($result)) {
+			return false;
 		} else {
-//			$mail = Mail::factory('mail', $mail_params);
-		}
+			return true;
+		}*/
 
-		if (!$mail->Send()) {
+		if (!$mail->Send()){
 			debug_to_console("Mailer Error: " . $mail->ErrorInfo);
 			return false;
 		} else {
 			debug_to_console("Message sent!");
 			return true;
 		}
-	} /* }}} */
+	 }/* }}} */
+
 
 	function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) { /* {{{ */
 		if ((!is_object($sender) && strcasecmp(get_class($sender), $this->_dms->getClassname('user'))) ||
