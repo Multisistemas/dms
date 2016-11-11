@@ -18,8 +18,7 @@
  */
 require_once("inc.ClassNotify.php");
 require_once("Mail.php");
-/*require_once("PHPMailer/PHPMailerAutoload.php");*/
-require_once("PHPMailer/class.phpmailer.php");
+require_once("PHPMailer/PHPMailerAutoload.php");
 require_once("PHPMailer/PHPMailerAutoload.php");
 
 /**
@@ -126,9 +125,9 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			$mail->Username = $mail_params['username'];
 			$mail->Password = $mail_params['password'];
 
-			$mail->SMTPDebug = 2;
+			$mail->SMTPDebug = 1;
 			$mail->Debugoutput = 'html';
-			var_dump($mail);
+
 			var_export($mail);
 		} /*else {
 			$mail = Mail::factory('mail', $mail_params);
