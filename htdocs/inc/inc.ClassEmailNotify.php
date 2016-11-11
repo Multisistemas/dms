@@ -130,8 +130,9 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 
 			$mail->SMTPDebug = 1;
 			$mail->Debugoutput = 'html';
-
+			echo('<pre>');
 			var_dump($mail);
+			echo('</pre>');
 		}
 
 		if (!$mail->Send()){
