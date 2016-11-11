@@ -19,11 +19,10 @@
 require_once("inc.ClassNotify.php");
 require_once("Mail.php");
 require_once("PHPMailer/PHPMailerAutoload.php");
+require_once("PHPMailer/class.phpmailer.php");
 require_once("PHPMailer/class.smtp.php");
 require_once("PHPMailer/SMTP.php");
 require_once("PHPMailer/Socket.php");
-
-
 
 /**
  * Class to send email notifications to individuals or groups
@@ -132,7 +131,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			$mail->SMTPDebug = 1;
 			$mail->Debugoutput = 'html';
 
-			var_export($mail);
+			var_dump($mail);
 		}
 
 		if (!$mail->Send()){
