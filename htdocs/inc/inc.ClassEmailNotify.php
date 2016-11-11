@@ -20,6 +20,9 @@ require_once("inc.ClassNotify.php");
 require_once("Mail.php");
 require_once("PHPMailer/PHPMailerAutoload.php");
 require_once("PHPMailer/class.smtp.php");
+require_once("PHPMailer/SMTP.php");
+require_once("PHPMailer/Socket.php");
+
 
 
 /**
@@ -72,7 +75,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	 * @return false or -1 in case of error, otherwise true
 	 */
 	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
-		/*if ($recipient->isDisabled() || $recipient->getEmail()=="") return 0;
+		if ($recipient->isDisabled() || $recipient->getEmail()=="") return 0;
 
 		if(!is_object($recipient) || strcasecmp(get_class($recipient), $this->_dms->getClassname('user'))) {
 			return -1;
@@ -115,30 +118,21 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 
 			$mail->isSMTP();
 
-			$mail->Host = $mail_params['host'];
-			$mail->Port = 587;
-			$mail->From = $headers['From'];
+			$mail->Host = "a2ss35.a2hosting.com";
+			$mail->Port = 465;
+			$mail->From = "dms@multisistemax.com";
 			$mail->FromName = "Servicio de envio automatico";
 			$mail->Subject = $headers['Subject'];
 			$mail->MsgHTML($message);
 			$mail->AddAddress($headers['To']);
 			$mail->SMTPAuth = true;
-			$mail->Username = $mail_params['username'];
-			$mail->Password = $mail_params['password'];
+			$mail->Username = "dms@multisistemax.com";
+			$mail->Password = "LOUg@MNUl$)W";
 
 			$mail->SMTPDebug = 1;
 			$mail->Debugoutput = 'html';
 
 			var_export($mail);
-		} /*else {
-			$mail = Mail::factory('mail', $mail_params);
-		}*/
- 
-		/*$result = $mail->send($recipient->getEmail(), $headers, $message);
-		if (PEAR::isError($result)) {
-			return false;
-		} else {
-			return true;
 		}
 
 		if (!$mail->Send()){
@@ -147,42 +141,6 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		} else {
 			debug_to_console("Message sent!");
 			return true;
-		}*/
-
-		$mail             = new PHPMailer();
-		$body             = "Este es un mensaje de prueba";
-
-		$mail->IsSMTP(); // telling the class to use SMTP
-		$mail->Host       = "a2ss35.a2hosting.com"; // SMTP server
-		$mail->SMTPDebug  = 1;                     // enables SMTP debug information (for testing)
-		                                           // 1 = errors and messages
-		                                           // 2 = messages only
-		$mail->SMTPAuth   = true;                  // enable SMTP authentication
-		$mail->Host       = "a2ss35.a2hosting.com"; // sets the SMTP server
-		$mail->Port       = 465;                    // set the SMTP port for the GMAIL server
-		$mail->Username   = "dms@multisistemax.com"; // SMTP account username
-		$mail->Password   = "LOUg@MNUl$)W";        // SMTP account password
-
-		$mail->SetFrom('dms@multisistemax.com', 'Test');
-
-		$mail->Subject    = "PHPMailer Test Subject via smtp, basic with authentication";
-
-		$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
-
-		$mail->MsgHTML($body);
-
-		$address = "lmedrano@multisistemas.com.sv";
-		$mail->AddAddress($address, "Luis Medrano");
-
-		$mail->Debugoutput = 'html';
-		var_export($mail);
-
-		if(!$mail->Send()) {
-		  echo "Mailer Error: " . $mail->ErrorInfo;
-		  return false;
-		} else {
-		  echo "Message sent!";
-		  return true;
 		}
     
 	 }/* }}} */
