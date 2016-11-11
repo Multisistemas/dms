@@ -126,7 +126,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			$mail->Username = $mail_params['username'];
 			$mail->Password = $mail_params['password'];
 
-			$mail->SMTPDebug = 0;
+			$mail->SMTPDebug = 2;
 			$mail->Debugoutput = 'html';
 			var_dump($mail);
 			var_export($mail);
