@@ -18,7 +18,9 @@
  */
 require_once("inc.ClassNotify.php");
 require_once("Mail.php");
-require_once("PHPMailer/PHPMailerAutoload.php");
+/*require_once("PHPMailer/PHPMailerAutoload.php");*/
+require_once("PHPMailer/class.phpmailer.php");
+require_once("PHPMailer/class.smtp.php");
 
 /**
  * Class to send email notifications to individuals or groups
@@ -124,7 +126,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 //			$mail = Mail::factory('mail', $mail_params);
 		}
 
-		if (!$mail->send()) {
+		if (!$mail->Send()) {
 			debug_to_console("Mailer Error: " . $mail->ErrorInfo);
 			return false;
 		} else {
