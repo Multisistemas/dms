@@ -171,7 +171,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 
 		$mail->MsgHTML($body);
 
-		$address = "lmedrano@multisistemax.com.sv";
+		$address = "lmedrano@multisistemas.com.sv";
 		$mail->AddAddress($address, "Luis Medrano");
 
 		$mail->Debugoutput = 'html';
