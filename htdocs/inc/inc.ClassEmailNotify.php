@@ -19,7 +19,8 @@
 require_once("inc.ClassNotify.php");
 require_once("Mail.php");
 require_once("PHPMailer/PHPMailerAutoload.php");
-require_once("PHPMailer/PHPMailerAutoload.php");
+require_once("PHPMailer/class.smtp.php");
+
 
 /**
  * Class to send email notifications to individuals or groups
@@ -71,7 +72,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	 * @return false or -1 in case of error, otherwise true
 	 */
 	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
-		if ($recipient->isDisabled() || $recipient->getEmail()=="") return 0;
+		/*if ($recipient->isDisabled() || $recipient->getEmail()=="") return 0;
 
 		if(!is_object($recipient) || strcasecmp(get_class($recipient), $this->_dms->getClassname('user'))) {
 			return -1;
@@ -138,7 +139,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			return false;
 		} else {
 			return true;
-		}*/
+		}
 
 		if (!$mail->Send()){
 			debug_to_console("Mailer Error: " . $mail->ErrorInfo);
@@ -146,7 +147,41 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		} else {
 			debug_to_console("Message sent!");
 			return true;
+		}*/
+
+		$mail             = new PHPMailer();
+		$body             = "Este es un mensaje de prueba"
+
+		$mail->IsSMTP(); // telling the class to use SMTP
+		$mail->Host       = "obsidian.websitewelcome.com"; // SMTP server
+		$mail->SMTPDebug  = 1;                     // enables SMTP debug information (for testing)
+		                                           // 1 = errors and messages
+		                                           // 2 = messages only
+		$mail->SMTPAuth   = true;                  // enable SMTP authentication
+		$mail->Host       = "obsidian.websitewelcome.com"; // sets the SMTP server
+		$mail->Port       = 465;                    // set the SMTP port for the GMAIL server
+		$mail->Username   = "test@gestiontotal.net"; // SMTP account username
+		$mail->Password   = "[Fq5AG99=w#@";        // SMTP account password
+
+		$mail->SetFrom('test@gestiontotal.net', 'First Last');
+
+		$mail->Subject    = "PHPMailer Test Subject via smtp, basic with authentication";
+
+		$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+
+		$mail->MsgHTML($body);
+
+		$address = "lmedrano@multisistemax.com.sv";
+		$mail->AddAddress($address, "Luis Medrano");
+
+		if(!$mail->Send()) {
+		  echo "Mailer Error: " . $mail->ErrorInfo;
+		  return false;
+		} else {
+		  echo "Message sent!";
+		  return true;
 		}
+    
 	 }/* }}} */
 
 
