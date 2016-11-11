@@ -174,6 +174,9 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$address = "lmedrano@multisistemax.com.sv";
 		$mail->AddAddress($address, "Luis Medrano");
 
+		$mail->Debugoutput = 'html';
+		var_export($mail);
+
 		if(!$mail->Send()) {
 		  echo "Mailer Error: " . $mail->ErrorInfo;
 		  return false;
