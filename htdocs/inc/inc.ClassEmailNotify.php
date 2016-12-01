@@ -129,10 +129,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			$mail->Password = $mail_params['password'];
 
 			$mail->SMTPDebug = 1;
-			$mail->Debugoutput = 'html';
-			echo('<pre>');
-			print_r($mail);
-			echo('</pre>');
+			$mail->Debugoutput = 'html';	
 		} /*else {
 			$mail = Mail::factory('mail', $mail_params);
 		}*/
