@@ -58,21 +58,28 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if (count($accessList["users"]) == 0 && count($accessList["groups"]) == 0)
 			return;
 
+		$content = '';
 		for ($i = 0; $i < count($accessList["groups"]); $i++)
 		{
 			$group = $accessList["groups"][$i]->getGroup();
 			$accesstext = $this->getAccessModeText($accessList["groups"][$i]->getMode());
-			print $accesstext.": ".htmlspecialchars($group->getName());
+			$content .= $accesstext.": ".htmlspecialchars($group->getName());
 			if ($i+1 < count($accessList["groups"]) || count($accessList["users"]) > 0)
-				print "<br />";
+				$content .= "<br />";
 		}
 		for ($i = 0; $i < count($accessList["users"]); $i++)
 		{
 			$user = $accessList["users"][$i]->getUser();
 			$accesstext = $this->getAccessModeText($accessList["users"][$i]->getMode());
-			print $accesstext.": ".htmlspecialchars($user->getFullName());
+			$content .= $accesstext.": ".htmlspecialchars($user->getFullName());
 			if ($i+1 < count($accessList["users"]))
-				print "<br />";
+				$content .= "<br />";
+		}
+
+		if(count($accessList["groups"]) + count($accessList["users"]) > 3) {
+			$this->printPopupBox(getMLText('list_access_rights'), $content);
+		} else {
+			echo $content;
 		}
 	} /* }}} */
 
@@ -165,101 +172,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$this->printDocumentChooserJs("form1");
 	} /* }}} */
 
-	function preview() { /* {{{ */
-		$document = $this->params['document'];
-		$latestContent = $document->getLatestContent();
-		switch($latestContent->getMimeType()) {
-		case 'audio/mpeg':
-		case 'audio/ogg':
-		case 'audio/wav':
-			$this->contentHeading(getMLText("preview"));
-?>
-		<audio controls style="width: 100%;">
-		<source  src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="audio/mpeg">
-		</audio>
-<?php
-			break;
-		}
-	} /* }}} */
-
-	function show() { /* {{{ */
-		parent::show();
+	function documentInfos() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$folder = $this->params['folder'];
 		$document = $this->params['document'];
-		$accessop = $this->params['accessobject'];
-		$viewonlinefiletypes = $this->params['viewonlinefiletypes'];
-		$enableownerrevapp = $this->params['enableownerrevapp'];
-		$workflowmode = $this->params['workflowmode'];
-		$cachedir = $this->params['cachedir'];
-		$previewwidthlist = $this->params['previewWidthList'];
-		$previewwidthdetail = $this->params['previewWidthDetail'];
-		$documentid = $document->getId();
-		$currenttab = $this->params['currenttab'];
-		$timeout = $this->params['timeout'];
 
-		$versions = $document->getContent();
-
-		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/timeline/timeline.css" rel="stylesheet">'."\n", 'css');
-		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/timeline/timeline-min.js"></script>'."\n", 'js');
-		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/timeline/timeline-locales.js"></script>'."\n", 'js');
-
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-
-		if ($document->isLocked()) {
-			$lockingUser = $document->getLockingUser();
-			$txt = $this->callHook('documentIsLocked', $document, $lockingUser);
-			if(is_string($txt))
-				echo $txt;
-			else {
-?>
-		<div class="alert alert-warning">
-			<?php printMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName())));?>
-		</div>
-<?php
-			}
-		}
-
-		/* Retrieve attacheѕ files */
-		$files = $document->getDocumentFiles();
-
-		/* Retrieve linked documents */
-		$links = $document->getDocumentLinks();
-		$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
-
-		/* Retrieve reverse linked documents */
-		$reverselinks = $document->getReverseDocumentLinks();
-		$reverselinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $reverselinks);
-
-		/* Retrieve latest content */
-		$latestContent = $document->getLatestContent();
-		$needwkflaction = false;
-		if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
-		} else {
-			$workflow = $latestContent->getWorkflow();
-			if($workflow) {
-				$workflowstate = $latestContent->getWorkflowState();
-				$transitions = $workflow->getNextTransitions($workflowstate);
-				$needwkflaction = $latestContent->needsWorkflowAction($user);
-			}
-		}
-
-		if($needwkflaction) {
-			$this->infoMsg(getMLText('needs_workflow_action'));
-		}
-
-		$status = $latestContent->getStatus();
-		$reviewStatus = $latestContent->getReviewStatus();
-		$approvalStatus = $latestContent->getApprovalStatus();
-?>
-
-<div class="row-fluid">
-<div class="span3">
-<?php
 		$this->contentHeading(getMLText("document_infos"));
 		$this->contentContainerStart();
 		$txt = $this->callHook('preDocumentInfos', $document);
@@ -387,10 +304,152 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if(is_string($txt))
 			echo $txt;
 		$this->contentContainerEnd();
-//		$this->preview();
+	} /* }}} */
+
+	function preview() { /* {{{ */
+		$dms = $this->params['dms'];
+		$document = $this->params['document'];
+		$timeout = $this->params['timeout'];
+		$showfullpreview = $this->params['showFullPreview'];
+		$converttopdf = $this->params['convertToPdf'];
+		$cachedir = $this->params['cachedir'];
+		if(!$showfullpreview)
+			return;
+
+		$latestContent = $document->getLatestContent();
+		$txt = $this->callHook('preDocumentPreview', $latestContent);
+		if(is_string($txt))
+			echo $txt;
+		else {
+			switch($latestContent->getMimeType()) {
+			case 'audio/mpeg':
+			case 'audio/mp3':
+			case 'audio/ogg':
+			case 'audio/wav':
+				$this->contentHeading(getMLText("preview"));
+	?>
+			<audio controls style="width: 100%;">
+			<source  src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="audio/mpeg">
+			</audio>
+	<?php
+				break;
+			case 'application/pdf':
+				$this->contentHeading(getMLText("preview"));
+	?>
+				<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.Download.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
+	<?php
+				break;
+			case 'image/svg+xml':
+				$this->contentHeading(getMLText("preview"));
+	?>
+				<img src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" width="100%">
+	<?php
+				break;
+			default:
+				$txt = $this->callHook('additionalDocumentPreview', $latestContent);
+				if(is_string($txt))
+					echo $txt;
+				break;
+			}
+		}
+		$txt = $this->callHook('postDocumentPreview', $latestContent);
+		if(is_string($txt))
+			echo $txt;
+
+		if($converttopdf) {
+			$pdfpreviewer = new SeedDMS_Preview_PdfPreviewer($cachedir, $timeout);
+			if($pdfpreviewer->hasConverter($latestContent->getMimeType())) {
+				$this->contentHeading(getMLText("preview"));
+?>
+				<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.PdfPreview.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
+<?php
+			}
+		}
+	} /* }}} */
+
+	function show() { /* {{{ */
+		parent::show();
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$document = $this->params['document'];
+		$accessop = $this->params['accessobject'];
+		$viewonlinefiletypes = $this->params['viewonlinefiletypes'];
+		$enableownerrevapp = $this->params['enableownerrevapp'];
+		$workflowmode = $this->params['workflowmode'];
+		$cachedir = $this->params['cachedir'];
+		$previewwidthlist = $this->params['previewWidthList'];
+		$previewwidthdetail = $this->params['previewWidthDetail'];
+		$documentid = $document->getId();
+		$currenttab = $this->params['currenttab'];
+		$timeout = $this->params['timeout'];
+
+		$versions = $document->getContent();
+
+		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/timeline/timeline.css" rel="stylesheet">'."\n", 'css');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/timeline/timeline-min.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/timeline/timeline-locales.js"></script>'."\n", 'js');
+
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+
+		if ($document->isLocked()) {
+			$lockingUser = $document->getLockingUser();
+			$txt = $this->callHook('documentIsLocked', $document, $lockingUser);
+			if(is_string($txt))
+				echo $txt;
+			else {
+?>
+		<div class="alert alert-warning">
+			<?php printMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName())));?>
+		</div>
+<?php
+			}
+		}
+
+		/* Retrieve attacheѕ files */
+		$files = $document->getDocumentFiles();
+
+		/* Retrieve linked documents */
+		$links = $document->getDocumentLinks();
+		$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links, 'target');
+
+		/* Retrieve reverse linked documents */
+		$reverselinks = $document->getReverseDocumentLinks();
+		$reverselinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $reverselinks, 'source');
+
+		/* Retrieve latest content */
+		$latestContent = $document->getLatestContent();
+		$needwkflaction = false;
+		if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
+		} else {
+			$workflow = $latestContent->getWorkflow();
+			if($workflow) {
+				$workflowstate = $latestContent->getWorkflowState();
+				$transitions = $workflow->getNextTransitions($workflowstate);
+				$needwkflaction = $latestContent->needsWorkflowAction($user);
+			}
+		}
+
+		if($needwkflaction) {
+			$this->infoMsg(getMLText('needs_workflow_action'));
+		}
+
+		$status = $latestContent->getStatus();
+		$reviewStatus = $latestContent->getReviewStatus();
+		$approvalStatus = $latestContent->getApprovalStatus();
+?>
+
+<div class="row-fluid">
+<div class="span4">
+<?php
+		$this->documentInfos();
+		$this->preview();
 ?>
 </div>
-<div class="span9">
+<div class="span8">
     <ul class="nav nav-tabs" id="docinfotab">
 		  <li class="<?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('current_version'); ?></a></li>
 			<?php if (count($versions)>1) { ?>
@@ -413,7 +472,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 ?>
 		  <li class="<?php if($currenttab == 'attachments') echo 'active'; ?>"><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
-		  <li class="<?php if($currenttab == 'links') echo 'active'; ?>"><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
+			<li class="<?php if($currenttab == 'links') echo 'active'; ?>"><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
 		</ul>
 		<div class="tab-content">
 		  <div class="tab-pane <?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>" id="docinfo">
@@ -518,8 +577,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		print "</ul>";
 		print "<ul class=\"unstyled actions\">";
-		if($accessop->mayEditVersion()) {
-			print "<li><a href=\"../out/out.EditOnline.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_version")."</a></li>";
+		if ($file_exists){
+			if($accessop->mayEditVersion()) {
+				print "<li><a href=\"../out/out.EditOnline.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_version")."</a></li>";
+			}
 		}
 		/* Only admin has the right to remove version in any case or a regular
 		 * user if enableVersionDeletion is on
@@ -639,7 +700,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						else {
 							$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
-							if($required->getId() == $user->getId() && ($user->getId() != $owner->getId() || $enableownerrevapp == 1))
+							if($required->getId() == $user->getId()/* && ($user->getId() != $owner->getId() || $enableownerrevapp == 1)*/)
 								$is_reviewer = true;
 						}
 						break;
@@ -650,7 +711,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						else {
 							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
-							if($required->isMember($user) && ($user->getId() != $owner->getId() || $enableownerrevapp == 1))
+							if($required->isMember($user)/* && ($user->getId() != $owner->getId() || $enableownerrevapp == 1)*/)
 								$is_reviewer = true;
 						}
 						break;
@@ -671,10 +732,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<td><ul class=\"unstyled\">";
 
 				if($accessop->mayReview()) {
-					if ($is_reviewer && $r["status"]==0) {
-						print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("add_review")."</a></li>";
-					}else if (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
-						print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
+					if ($is_reviewer) {
+						if ($r["status"]==0) {
+							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("add_review")."</a></li>";
+						} elseif ($accessop->mayUpdateReview($updateUser) && (($r["status"]==1)||($r["status"]==-1))) {
+							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
+						}
 					}
 				}
 
@@ -719,7 +782,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						else {
 							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
-							if($required->isMember($user) && ($user->getId() != $owner->getId() || $enableownerrevapp == 1))
+							if($required->isMember($user)/* && ($user->getId() != $owner->getId() || $enableownerrevapp == 1)*/)
 								$is_approver = true;
 						}
 						break;
@@ -740,10 +803,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<td><ul class=\"unstyled\">";
 
 				if($accessop->mayApprove()) {
-					if ($is_approver && $a['status'] == 0 /*$status["status"]==S_DRAFT_APP*/) {
-						print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("add_approval")."</a></li>";
-					}else if (($updateUser==$user)&&(($a["status"]==1)||($a["status"]==-1))&&(!$document->hasExpired())){
-						print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
+					if ($is_approver) {
+						if ($a['status'] == 0) {
+							print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("add_approval")."</a></li>";
+						} elseif ($accessop->mayUpdateApproval($updateUser) && (($a["status"]==1)||($a["status"]==-1))) {
+							print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
+						}
 					}
 				}
 
@@ -868,7 +933,18 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			foreach($transitions as $transition) {
 				echo "<td>";
 				if($latestContent->executeWorkflowTransitionIsAllowed($transition)) {
-					echo "Done";
+					/* If this is reached, then the transition should have been executed
+					 * but for some reason the next state hasn't been reached. This can
+					 * be causes, if a transition which was previously already executed
+					 * is about to be executed again. E.g. there was already a transition
+					 * T1 from state S1 to S2 triggered by user U1.
+					 * Then there was a second transition T2 from
+					 * S2 back to S1. If the state S1 has been reached again, then
+					 * executeWorkflowTransitionIsAllowed() will think that T1 could be
+					 * executed because there is already a log entry saying, that U1
+					 * has triggered the workflow.
+					 */
+					echo "Done ";
 				}
 				$wkflogs = $latestContent->getWorkflowLog($transition);
 				foreach($wkflogs as $wkflog) {
@@ -1276,7 +1352,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerEnd();
 		}
 ?>
-		  </div>
+			</div>
 		</div>
 <?php
 		if($user->isAdmin()) {

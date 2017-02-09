@@ -18,25 +18,35 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
+include("../inc/inc.Utils.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
-include("../inc/inc.Utils.php");
+include("../inc/inc.Extension.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('clearcache')) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 }
 
-$cmd = 'rm -rf '.$settings->_cacheDir.'/*';
-$ret = null;
-system($cmd, $ret);
+if(!empty($_POST['preview'])) {
+	$cmd = 'rm -rf '.$settings->_cacheDir.'/[1-9]*';
+	$ret = null;
+	system($cmd, $ret);
+}
+
+if(!empty($_POST['js'])) {
+	$cmd = 'rm -rf '.$settings->_cacheDir.'/js/*';
+	$ret = null;
+	system($cmd, $ret);
+}
+
 if($ret)
-	$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_clearcache')));
+	$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_cleared_cache')));
 else
-	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_clearcache')));
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_cleared_cache')));
 
 add_log_line("");
 

@@ -16,14 +16,6 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-// Added to include pear packages in A2hosting
-if (file_exists('/home/multisis/php') && is_dir('/home/multisis/php')) {
-        ini_set("include_path", '/home/multisis/php:' . ini_get("include_path"));
-}
-
-if (file_exists('/home/multisis/zf/library') && is_dir('/home/multisis/zf/library')) {
-        ini_set("include_path", '/home/multisis/zf/library:' . ini_get("include_path"));
-}
 
 /**
  * Check Update file
@@ -126,7 +118,7 @@ function fileExistsInIncludePath($file) { /* {{{ */
  * Load default settings + set
  */
 define("SEEDDMS_INSTALL", "on");
-define("SEEDDMS_VERSION", "5.0.6");
+define("SEEDDMS_VERSION", "5.0.9");
 
 require_once('../inc/inc.ClassSettings.php');
 
@@ -197,7 +189,7 @@ include("../inc/inc.ClassUI.php");
 UI::htmlStartPage("INSTALL");
 UI::globalBanner();
 UI::contentStart();
-UI::contentHeading("Multisistemas DMS Installation for version ".SEEDDMS_VERSION);
+UI::contentHeading("SeedDMS Installation for version ".SEEDDMS_VERSION);
 UI::contentContainerStart();
 
 

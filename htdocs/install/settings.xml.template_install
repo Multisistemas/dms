@@ -8,10 +8,10 @@
        - theme: default style (name of a subfolder in folder "styles")
     -->
     <display
-      siteName = "Multisistemas DMS"
-      footNote = "Multisistemas DMS reliable document management system - &lt;a href='http://www.multisistemas.com.sv'&gt;www.multisistemas.com.sv&lt;/a&gt;"
+      siteName = "SeedDMS"
+      footNote = "SeedDMS free document management system - &lt;a href='http://www.seeddms.org'&gt;www.seeddms.org&lt;/a&gt; - please donate if you like SeedDMS!"
       printDisclaimer="true"
-      language = "es_ES"
+      language = "en_GB"
       theme = "bootstrap"
       previewWidthList = "40"
       previewWidthDetail = "100"
@@ -74,7 +74,7 @@
     -->
     <server
       rootDir = ""
-      httpRoot = "/"
+      httpRoot = "/seeddms/"
       contentDir = ""
       stagingDir = ""
       luceneDir = ""
@@ -164,9 +164,9 @@
     <database
       dbDriver = "mysql"
       dbHostname = "localhost"
-      dbDatabase = "multidms"
-      dbUser = "multidms"
-      dbPass = "multidms"
+      dbDatabase = "seeddms"
+      dbUser = "seeddms"
+      dbPass = "seeddms"
     >
     </database>
     <!-- smtpServer: SMTP Server hostname
@@ -176,7 +176,7 @@
     <smtp 
       smtpServer = "localhost" 
       smtpPort = "25" 
-      smtpSendFrom = "multidms@localhost"
+      smtpSendFrom = "seeddms@localhost"
     />    
   </system>
  

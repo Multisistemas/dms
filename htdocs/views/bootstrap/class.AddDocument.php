@@ -196,6 +196,24 @@ console.log(element);
 			<td><?php printMLText("sequence");?>:</td>
 			<td><?php $this->printSequenceChooser($folder->getDocuments('s')); if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off'); ?></td>
 		</tr>
+<?php if($user->isAdmin()) { ?>
+		<tr>
+			<td><?php printMLText("owner");?>:</td>
+			<td>
+				<select class="chzn-select" name="ownerid">
+<?php
+	$allUsers = $dms->getAllUsers($sortusersinlist);
+	foreach ($allUsers as $currUser) {
+		if ($currUser->isGuest())
+			continue;
+		print "<option value=\"".$currUser->getID()."\" ".($currUser->getID()==$user->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($currUser->getFullName())."\"";
+		print ">" . htmlspecialchars($currUser->getLogin()) . "</option>\n";
+	}
+?>
+				</select>
+			</td>
+		</tr>
+<?php } ?>
 <?php
 			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_all));
 			if($attrdefs) {
@@ -226,21 +244,25 @@ console.log(element);
 		<tr>
 			<td><?php printMLText("expires");?>:</td>
 			<td>
-        <span class="input-append date span12" id="expirationdate" data-date="<?php echo date('Y-m-d', $expts); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+        <span class="input-append date span12" id="expirationdate" data-date="<?php echo date('Y-m-d', $expts); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>" data-checkbox="#expires">
           <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('Y-m-d', $expts); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
         <label class="checkbox inline">
-					<input type="checkbox" name="expires" value="false" <?php echo  ($presetexpiration ? "" : "checked");?>><?php printMLText("does_not_expire");?>
+					<input type="checkbox" id="expires" name="expires" value="false" <?php echo  ($presetexpiration ? "" : "checked");?>><?php printMLText("does_not_expire");?>
         </label>
 			</td>
+
 		</tr>
 
 		<tr>
-			<td>
+
+			<td colspan="2">
+				<hr>
 		<?php $this->contentSubHeading(getMLText("version_info")); ?>
 			</td>
 		</tr>
+
 		<tr>
 			<td><?php printMLText("version");?>:</td>
 			<td><input type="text" name="reqversion" value="1"></td>
@@ -613,7 +635,8 @@ console.log(element);
 			</tr>
 		</table>
 
-			<p><input type="submit" class="btn" value="<?php printMLText("add_document");?>"></p>
+			<!--<p><input type="submit" class="btn" value="<?php printMLText();?>"></p>-->
+			<button type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("add_document")?></button>
 		</form>
 <?php
 		$this->contentContainerEnd();

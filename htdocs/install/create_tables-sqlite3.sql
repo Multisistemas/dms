@@ -621,5 +621,3 @@ INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', strftime('%s','now'), 1, 0, 2, 0);
 INSERT INTO tblVersion VALUES (DATETIME(), 5, 0, 0);
 INSERT INTO tblCategory VALUES (0, '');
-INSERT INTO tblWorkflowStates VALUES (1, 'Started', 0, 0, NULL, 0);
-INSERT INTO tblWorkflows VALUES (1, 'Main workflow',1);

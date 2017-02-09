@@ -29,7 +29,7 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('adddocument')) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }
@@ -58,6 +58,18 @@ if($settings->_quota > 0) {
 	}
 }
 
+if($user->isAdmin()) {
+	$ownerid = (int) $_POST["ownerid"];
+	if($ownerid) {
+		if(!($owner = $dms->getUser($ownerid))) {
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+		}
+	} else {
+		$owner = $user;
+	}
+} else {
+	$owner = $user;
+}
 $comment  = trim($_POST["comment"]);
 $version_comment = trim($_POST["version_comment"]);
 if($version_comment == "" && isset($_POST["use_comment"]))
@@ -72,18 +84,9 @@ else
 foreach($attributes as $attrdefid=>$attribute) {
 	$attrdef = $dms->getAttributeDefinition($attrdefid);
 	if($attribute) {
-		if($attrdef->getRegex()) {
-			if(!preg_match($attrdef->getRegex(), $attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_no_regex_match"));
-			}
-		}
-		if(is_array($attribute)) {
-			if($attrdef->getMinValues() > count($attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-			}
-			if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-			}
+		if(!$attrdef->validate($attribute)) {
+			$errmsg = getAttributeValidationText($attrdef->getValidationError(), $attrdef->getName(), $attribute);
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())), $errmsg);
 		}
 	} elseif($attrdef->getMinValues() > 0) {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
@@ -97,21 +100,10 @@ else
 foreach($attributes_version as $attrdefid=>$attribute) {
 	$attrdef = $dms->getAttributeDefinition($attrdefid);
 	if($attribute) {
-		if($attrdef->getRegex()) {
-			if(!preg_match($attrdef->getRegex(), $attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_no_regex_match"));
-			}
+		if(!$attrdef->validate($attribute)) {
+			$errmsg = getAttributeValidationText($attrdef->getValidationError(), $attrdef->getName(), $attribute);
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),$errmsg);
 		}
-		if(is_array($attribute)) {
-			if($attrdef->getMinValues() > count($attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-			}
-			if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-			}
-		}
-	} elseif($attrdef->getMinValues() > 0) {
-		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 	}
 }
 
@@ -297,7 +289,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	}
 
 	$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
-	$res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
+	$res = $folder->addDocument($name, $comment, $expires, $owner, $keywords,
 															$cats, $userfiletmp, basename($userfilename),
 	                            $fileType, $userfiletype, $sequence,
 	                            $reviewers, $approvers, $reqversion,
@@ -307,6 +299,15 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
 	} else {
 		$document = $res[0];
+
+		/* Set access as specified in settings. */
+		if($settings->_defaultAccessDocs) {
+			if($settings->_defaultAccessDocs > 0 && $settings->_defaultAccessDocs < 4) {
+				$document->setInheritAccess(0, true);
+				$document->setDefaultAccess($settings->_defaultAccessDocs, true);
+			}
+		}
+
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
 			foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
 				if (method_exists($hookObj, 'postAddDocument')) {
@@ -348,8 +349,12 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 
 		// Send notification to subscribers of folder.
 		if($notifier) {
-			$notifyList1 = $folder->getNotifyList();
-			$notifyList2 = $document->getNotifyList();
+			$fnl = $folder->getNotifyList();
+			$dnl = $document->getNotifyList();
+			$nl = array(
+				'users'=>array_merge($dnl['users'], $fnl['users']),
+				'groups'=>array_merge($dnl['groups'], $fnl['groups'])
+			);
 
 			$subject = "new_document_email_subject";
 			$message = "new_document_email_body";
@@ -363,12 +368,8 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 			$params['sitename'] = $settings->_siteName;
 			$params['http_root'] = $settings->_httpRoot;
-			$notifier->toList($user, $notifyList1["users"], $subject, $message, $params);
-			foreach ($notifyList1["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message, $params);
-			}
-			$notifier->toList($user, $notifyList2["users"], $subject, $message, $params);
-			foreach ($notifyList2["groups"] as $grp) {
+			$notifier->toList($user, $nl["users"], $subject, $message, $params);
+			foreach ($nl["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 
@@ -419,7 +420,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 					}
 				}
 
-				if($approvers['i'] || $approvers['g']) {
+				elseif($approvers['i'] || $approvers['g']) {
 					$subject = "approval_request_email_subject";
 					$message = "approval_request_email_body";
 					$params = array();

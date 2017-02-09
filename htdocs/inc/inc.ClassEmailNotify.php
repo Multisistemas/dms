@@ -18,11 +18,6 @@
  */
 require_once("inc.ClassNotify.php");
 require_once("Mail.php");
-require_once("PHPMailer/PHPMailerAutoload.php");
-require_once("PHPMailer/class.phpmailer.php");
-require_once("PHPMailer/class.smtp.php");
-require_once("PHPMailer/SMTP.php");
-require_once("PHPMailer/Socket.php");
 
 /**
  * Class to send email notifications to individuals or groups
@@ -73,7 +68,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	 *        the subject and body
 	 * @return false or -1 in case of error, otherwise true
 	 */
-		function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
+	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
 		if ($recipient->isDisabled() || $recipient->getEmail()=="") return 0;
 
 		if(!is_object($recipient) || strcasecmp(get_class($recipient), $this->_dms->getClassname('user'))) {
@@ -96,7 +91,9 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$headers = array ();
 		$headers['From'] = $from;
 		$headers['To'] = $recipient->getEmail();
-		$headers['Subject'] = getMLText($subject, $params, "", $lang);
+		$preferences = array("input-charset" => "UTF-8", "output-charset" => "UTF-8");
+		$encoded_subject = iconv_mime_encode("Subject", getMLText($subject, $params, "", $lang), $preferences);
+		$headers['Subject'] = substr($encoded_subject, strlen('Subject: '));
 		$headers['MIME-Version'] = "1.0";
 		$headers['Content-type'] = "text/plain; charset=utf-8";
 
@@ -111,44 +108,34 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 				$mail_params['username'] = $this->smtp_user;
 				$mail_params['password'] = $this->smtp_password;
 			}
-			//$mail = Mail::factory('smtp', $mail_params);
-
-			$mail = new PHPMailer();
-
-			$mail->isSMTP();
-
-			$mail->Host = $mail_params['host'];
-
-			$mail->From = $headers['From'];
-			$mail->FromName = "Servicio de envio automatico";
-			$mail->Subject = $headers['Subject'];
-			$mail->MsgHTML($message);
-			$mail->AddAddress($headers['To']);
-			$mail->SMTPAuth = true;
-			$mail->Username = $mail_params['username'];
-			$mail->Password = $mail_params['password'];
-
-			$mail->SMTPDebug = 1;
-			$mail->Debugoutput = 'html';	
-		} /*else {
-			$mail = Mail::factory('mail', $mail_params);
-		}*/
- 
-		/*$result = $mail->send($recipient->getEmail(), $headers, $message);
-		if (PEAR::isError($result)) {
-			return false;
+			$mail = Mail::factory('smtp', $mail_params);
 		} else {
-			return true;
-		}*/
-
-		if (!$mail->Send()){
+			$mail = Mail::factory('mail', $mail_params);
+		}
+ 
+		$result = $mail->send($recipient->getEmail(), $headers, $message);
+		if (PEAR::isError($result)) {
 			return false;
 		} else {
 			return true;
 		}
 
-	}
+/*
+		$headers   = array();
+		$headers[] = "MIME-Version: 1.0";
+		$headers[] = "Content-type: text/plain; charset=utf-8";
+		$headers[] = "From: ". $from;
 
+		$lang = $recipient->getLanguage();
+		$message = getMLText("email_header", array(), "", $lang)."\r\n\r\n".getMLText($message, $params, "", $lang);
+		$message .= "\r\n\r\n".getMLText("email_footer", array(), "", $lang);
+
+		$subject = "=?UTF-8?B?".base64_encode(getMLText($subject, $params, "", $lang))."?=";
+		mail($recipient->getEmail(), $subject, $message, implode("\r\n", $headers));
+
+		return true;
+*/
+	} /* }}} */
 
 	function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) { /* {{{ */
 		if ((!is_object($sender) && strcasecmp(get_class($sender), $this->_dms->getClassname('user'))) ||

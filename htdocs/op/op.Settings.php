@@ -58,10 +58,16 @@ if ($action == "saveSettings")
 	$settings->_siteName = $_POST["siteName"];
   $settings->_footNote = $_POST["footNote"];
   $settings->_printDisclaimer = getBoolValue("printDisclaimer");
-  $settings->_language = $_POST["language"];
+	$settings->_language = $_POST["language"];
+	if(empty($_POST["availablelanguages"]))
+		$settings->_availablelanguages = array();
+	else
+		$settings->_availablelanguages = $_POST["availablelanguages"];
   $settings->_theme = $_POST["theme"];
   $settings->_previewWidthList = $_POST["previewWidthList"];
   $settings->_previewWidthDetail = $_POST["previewWidthDetail"];
+  $settings->_showFullPreview = getBoolValue("showFullPreview");
+  $settings->_convertToPdf = getBoolValue("convertToPdf");
 
   // SETTINGS - SITE - EDITION
   $settings->_strictFormCheck = getBoolValue("strictFormCheck");
@@ -74,6 +80,7 @@ if ($action == "saveSettings")
   $settings->_maxSizeForFullText = intval($_POST["maxSizeForFullText"]);
   $settings->_fullSearchEngine = $_POST["fullSearchEngine"];
   $settings->_defaultSearchMethod = $_POST["defaultSearchMethod"];
+  $settings->_showSingleSearchHit = getBoolValue("showSingleSearchHit");
   $settings->_enableClipboard = getBoolValue("enableClipboard");
   $settings->_enableDropUpload = getBoolValue("enableDropUpload");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");
@@ -123,6 +130,7 @@ if ($action == "saveSettings")
   $settings->_undelUserIds = strval($_POST["undelUserIds"]);
   $settings->_encryptionKey = strval($_POST["encryptionKey"]);
   $settings->_cookieLifetime = intval($_POST["cookieLifetime"]);
+  $settings->_defaultAccessDocs = intval($_POST["defaultAccessDocs"]);
 
   // TODO Connectors
 
@@ -157,6 +165,7 @@ if ($action == "saveSettings")
   $settings->_enableAdminRevApp = getBoolValue("enableAdminRevApp");
   $settings->_enableOwnerRevApp = getBoolValue("enableOwnerRevApp");
   $settings->_enableSelfRevApp = getBoolValue("enableSelfRevApp");
+  $settings->_enableUpdateRevApp = getBoolValue("enableUpdateRevApp");
   $settings->_enableVersionDeletion = getBoolValue("enableVersionDeletion");
   $settings->_enableVersionModification = getBoolValue("enableVersionModification");
   $settings->_enableDuplicateDocNames = getBoolValue("enableDuplicateDocNames");
@@ -178,7 +187,11 @@ if ($action == "saveSettings")
   $settings->_cmdTimeout = (intval($_POST["cmdTimeout"]) > 0) ?intval($_POST["cmdTimeout"]) : 1;
 
   // SETTINGS - ADVANCED - INDEX CMD
-  $settings->_converters['fulltext'] = $_POST["converters"];
+	$settings->_converters['fulltext'] = $_POST["converters"];
+	$newmimetype = preg_replace('#[^A-Za-z0-9_/+.-]+#', '', $_POST["converters_newmimetype"]);
+  if($newmimetype && trim($_POST["converters_newcmd"])) {
+    $settings->_converters['fulltext'][$newmimetype] = trim($_POST["converters_newcmd"]);
+  }
 
   // SETTINGS - EXTENSIONS
   $settings->_extensions = isset($_POST["extensions"]) ? $_POST["extensions"] : array();

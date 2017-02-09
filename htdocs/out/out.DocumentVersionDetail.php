@@ -58,6 +58,7 @@ if (!is_object($version)) {
 $latestContent = $document->getLatestContent();
 if ($latestContent->getVersion()==$version->getVersion()) {
 	header("Location:../out/out.ViewDocument.php?documentid=".$document->getID());
+	exit;
 }
 
 $folder = $document->getFolder();
@@ -74,6 +75,8 @@ if($view) {
 	$view->setParam('viewonlinefiletypes', $settings->_viewOnlineFileTypes);
 	$view->setParam('enableversionmodification', $settings->_enableVersionModification);
 	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
+	$view->setParam('showFullPreview', $settings->_showFullPreview);
+	$view->setParam('convertToPdf', $settings->_convertToPdf);
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view->setParam('accessobject', $accessop);

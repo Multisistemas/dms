@@ -58,6 +58,7 @@ if ($document->getAccessMode($user) < M_READ) {
  */
 if ($document->verifyLastestContentExpriry()){
 	header("Location:../out/out.ViewDocument.php?documentid=".$document->getID());
+	exit;
 }
 
 if($view) {
@@ -72,6 +73,8 @@ if($view) {
 	$view->setParam('workflowmode', $settings->_workflowMode);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
+	$view->setParam('showFullPreview', $settings->_showFullPreview);
+	$view->setParam('convertToPdf', $settings->_convertToPdf);
 	$view->setParam('currenttab', isset($_GET['currenttab']) ? $_GET['currenttab'] : "");
 	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view($_GET);

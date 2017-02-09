@@ -75,8 +75,12 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/select2/css/select2.min.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/select2/css/select2-bootstrap.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/custom.css" rel="stylesheet">'."\n";
+
 		if($this->extraheader['css'])
 			echo $this->extraheader['css'];
 //		echo '<link href="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">'."\n";
@@ -84,7 +88,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
 		if($this->extraheader['js'])
 			echo $this->extraheader['js'];
-		echo '<script type="text/javascript" src="../js/jquery.passwordstrength.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/passwordstrength/jquery.passwordstrength.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/jquery.noty.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topCenter.js"></script>'."\n";
@@ -129,18 +133,25 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
 			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
+		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 		if($this->footerjs) {
-			echo "<script type=\"text/javascript\">
-//<![CDATA[
-$(document).ready(function () {
-";
+			$jscode = "$(document).ready(function () {\n";
 			foreach($this->footerjs as $script) {
-				echo $script."\n";
+				$jscode .= $script."\n";
 			}
-			echo "});
-//]]>
-</script>";
+			$jscode .= "});\n";
+			$hashjs = md5($jscode);
+			if(!is_dir($this->params['cachedir'].'/js')) {
+				SeedDMS_Core_File::makeDir($this->params['cachedir'].'/js');
+			}
+			if(is_dir($this->params['cachedir'].'/js')) {
+				file_put_contents($this->params['cachedir'].'/js/'.$hashjs.'.js', $jscode);
+			}
+			parse_str($_SERVER['QUERY_STRING'], $tmp);
+			$tmp['action'] = 'footerjs';
+			$tmp['hash'] = $hashjs;
+			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		if(method_exists($this, 'js')) {
 			parse_str($_SERVER['QUERY_STRING'], $tmp);
@@ -148,6 +159,13 @@ $(document).ready(function () {
 			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		echo "</body>\n</html>\n";
+	} /* }}} */
+
+	function footerjs() { /* {{{ */
+		header('Content-Type: application/javascript');
+		if(file_exists($this->params['cachedir'].'/js/'.$_GET['hash'].'.js')) {
+			readfile($this->params['cachedir'].'/js/'.$_GET['hash'].'.js');
+		}
 	} /* }}} */
 
 	function missingḺanguageKeys() { /* {{{ */
@@ -201,7 +219,7 @@ $(document).ready(function () {
 	} /* }}} */
 
 	function globalBanner() { /* {{{ */
-		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
+		echo "<div class=\"navbar navbar-default navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container-fluid\">\n";
 		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
@@ -251,7 +269,7 @@ $(document).ready(function () {
 
 	function globalNavigation($folder=null) { /* {{{ */
 		$dms = $this->params['dms'];
-		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
+		echo "<div class=\"navbar navbar-default navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container-fluid\">\n";
 		echo "   <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".nav-col1\">\n";
@@ -259,7 +277,7 @@ $(document).ready(function () {
 		echo "     <span class=\"icon-bar\"></span>\n";
 		echo "     <span class=\"icon-bar\"></span>\n";
 		echo "   </a>\n";
-		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
+		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\"><img src='/views/bootstrap/images/logo.png' alt=\"Multisistemas Logo\" /> ".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		if(isset($this->params['user']) && $this->params['user']) {
 			echo "   <div class=\"nav-collapse nav-col1\">\n";
 			echo "   <ul id=\"main-menu-admin\" class=\"nav pull-right\">\n";
@@ -276,10 +294,12 @@ $(document).ready(function () {
 						$menuitems = $hookObj->userMenuItems($this, $menuitems);
 					}
 				}
-				foreach($menuitems as $menuitem) {
-					echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
+				if($menuitems) {
+					foreach($menuitems as $menuitem) {
+						echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
+					}
+					echo "    <li class=\"divider\"></li>\n";
 				}
-				echo "    <li class=\"divider\"></li>\n";
 			}
 			$showdivider = false;
 			if($this->params['enablelanguageselector']) {
@@ -938,7 +958,7 @@ $(document).ready(function () {
 	function printDocumentChooserHtml($formName) { /* {{{ */
 		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosedocsearch\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
+		print "<input type=\"text\" id=\"choosedocsearch".$formName."\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
 		print "<a data-target=\"#docChooser".$formName."\" href=\"../out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
 		print "</div>\n";
 ?>
@@ -961,7 +981,7 @@ $(document).ready(function () {
 ?>
 function documentSelected<?php echo $formName ?>(id, name) {
 	$('#docid<?php echo $formName ?>').val(id);
-	$('#choosedocsearch').val(name);
+	$('#choosedocsearch<?php echo $formName ?>').val(name);
 	$('#docChooser<?php echo $formName ?>').modal('hide');
 }
 function folderSelected<?php echo $formName ?>(id, name) {
@@ -987,6 +1007,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\"/>";
+		print "<button type=\"button\" class=\"btn\" id=\"clearfolder".$form."\"><i class=\"icon-remove\"></i></button>";
 		print "<a data-target=\"#folderChooser".$form."\" href=\"../out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
@@ -1012,6 +1033,12 @@ function folderSelected<?php echo $form ?>(id, name) {
 	$('#choosefoldersearch<?php echo $form ?>').val(name);
 	$('#folderChooser<?php echo $form ?>').modal('hide');
 }
+$(document).ready(function() {
+	$('#clearfolder<?php print $form ?>').click(function(ev) {
+		$('#choosefoldersearch<?php echo $form ?>').val('');
+		$('#targetid<?php echo $form ?>').val('');
+	});
+});
 <?php
 	} /* }}} */
 
@@ -1106,8 +1133,10 @@ function folderSelected<?php echo $form ?>(id, name) {
 
 	function printKeywordChooserJs($formName) { /* {{{ */
 ?>
-$('#acceptkeywords').click(function(ev) {
-	acceptKeywords();
+$(document).ready(function() {
+	$('#acceptkeywords').click(function(ev) {
+		acceptKeywords();
+	});
 });
 <?php
 	} /* }}} */
@@ -1123,31 +1152,35 @@ $('#acceptkeywords').click(function(ev) {
 <?php
 	} /* }}} */
 
-	function printAttributeEditField($attrdef, $attribute, $fieldname='attributes') { /* {{{ */
+	function printAttributeEditField($attrdef, $attribute, $fieldname='attributes', $norequire=false) { /* {{{ */
 		switch($attrdef->getType()) {
 		case SeedDMS_Core_AttributeDefinition::type_boolean:
 			echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"0\" />";
-			echo "<input type=\"checkbox\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
+			echo "<input type=\"checkbox\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 ?>
-        <span class="input-append date datepicker" style="_display: inline;" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-					<input class="span4" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
+        <span class="input-append date datepicker" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+					<input id="<?php echo $fieldname."_".$attrdef->getId();?>" class="span9" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
 				</span>
 <?php
 			break;
+		case SeedDMS_Core_AttributeDefinition::type_email:
+			$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
+			echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').' data-rule-email="true"'." />";
+			break;
 		default:
 			if($valueset = $attrdef->getValueSetAsArray()) {
 				echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
-				echo "<select name=\"".$fieldname."[".$attrdef->getId()."]";
+				echo "<select id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]";
 				if($attrdef->getMultipleValues()) {
 					echo "[]\" multiple";
 				} else {
 					echo "\"";
 				}
-				echo "".($attrdef->getMinValues() > 0 ? ' required' : '').">";
+				echo "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">";
 				if(!$attrdef->getMultipleValues()) {
 					echo "<option value=\"\"></option>";
 				}
@@ -1166,9 +1199,9 @@ $('#acceptkeywords').click(function(ev) {
 			} else {
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 				if(strlen($objvalue) > 80) {
-					echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\"".($attrdef->getMinValues() > 0 ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
+					echo "<textarea id=\"".$fieldname."_".$attrdef->getId()."\" class=\"input-xxlarge\" name=\"".$fieldname."[".$attrdef->getId()."]\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
 				} else {
-					echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".($attrdef->getMinValues() > 0 ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
+					echo "<input type=\"text\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
 				}
 			}
 			break;
@@ -1178,7 +1211,7 @@ $('#acceptkeywords').click(function(ev) {
 	function printDropFolderChooserHtml($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
 		print "<div class=\"input-append\">\n";
 		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
-		print "<button type=\"button\" class=\"btn\" id=\"clearFilename".$formName."\"><i class=\"icon-remove\"></i></button>";
+		print "<button type=\"button\" class=\"btn\" id=\"clearfilename".$formName."\"><i class=\"icon-remove\"></i></button>";
 		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
 		print "</div>\n";
 ?>
@@ -1211,11 +1244,10 @@ function folderSelected(name) {
 	modalDropfolderChooser.modal('hide');
 }
 <?php } ?>
-function clearFilename<?php print $formName ?>() {
-	$('#dropfolderfile<?php echo $formName ?>').val('');
-}
-$('#clearfilename<?php print $formName ?>').click(function(ev) {
-	$('#dropfolderfile<?php echo $formName ?>').val('');
+$(document).ready(function() {
+	$('#clearfilename<?php print $formName ?>').click(function(ev) {
+		$('#dropfolderfile<?php echo $formName ?>').val('');
+	});
 });
 <?php
 	} /* }}} */
@@ -1396,14 +1428,14 @@ $(function() {
 	$('#jqtree<?php echo $formid ?>').tree({
 		saveState: true,
 		data: data,
-		saveState: 'jqtree<?= $formid; ?>',
+		saveState: 'jqtree<?php echo $formid; ?>',
 		openedIcon: '<i class="icon-minus-sign"></i>',
 		closedIcon: '<i class="icon-plus-sign"></i>',
 		_onCanSelectNode: function(node) {
 			if(node.is_folder) {
-				folderSelected<?= $formid ?>(node.id, node.name);
+				folderSelected<?php echo $formid ?>(node.id, node.name);
 			} else
-				documentSelected<?= $formid ?>(node.id, node.name);
+				documentSelected<?php echo $formid ?>(node.id, node.name);
 		},
 		autoOpen: true,
 		drapAndDrop: true,
@@ -1416,17 +1448,17 @@ $(function() {
     }
 	});
 	// Unfold tree if folder is opened
-	$('#jqtree<?php echo $formid ?>').tree('openNode', $('#jqtree<?PHP echo $formid ?>').tree('getNodeById', <?php echo $folderid ?>), false);
-  $('#jqtree<?= $formid ?>').bind(
+	$('#jqtree<?php echo $formid ?>').tree('openNode', $('#jqtree<?php echo $formid ?>').tree('getNodeById', <?php echo $folderid ?>), false);
+  $('#jqtree<?php echo $formid ?>').bind(
 		'tree.click',
 		function(event) {
 			var node = event.node;
-			$('#jqtree<?= $formid ?>').tree('openNode', node);
+			$('#jqtree<?php echo $formid ?>').tree('openNode', node);
 //			event.preventDefault();
 			if(node.is_folder) {
-				folderSelected<?= $formid ?>(node.id, node.name);
+				folderSelected<?php echo $formid ?>(node.id, node.name);
 			} else
-				documentSelected<?= $formid ?>(node.id, node.name);
+				documentSelected<?php echo $formid ?>(node.id, node.name);
 		}
 	);
 });
@@ -1750,7 +1782,91 @@ $(document).ready( function() {
 			for(var i in arr) {
 				$("#"+target+" option[value='"+arr[i]+"']").attr("selected", "selected");
 			}
-			$("#"+target).trigger("chosen:updated");
+//			$("#"+target).trigger("chosen:updated");
+			$("#"+target).trigger("change");
+		}
+	});
+});
+<?php
+	} /* }}} */
+
+	/**
+	 * Output left-arrow with link which takes over a string into
+	 * a input field.
+	 *
+	 * Clicking on the button will preset the string
+	 * in data-ref the value of the input field with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param string $text text
+	 */
+	function printInputPresetButtonHtml($name, $text, $sep='') { /* {{{ */
+?>
+	<span id="<?php echo $name; ?>_btn" class="inputpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOverAttributeValue"); ?>" data-ref="<?php echo $name; ?>" data-text="<?php echo is_array($text) ? implode($sep, $text) : htmlspecialchars($text);?>"<?php if($sep) echo "data-sep=\"".$sep."\""; ?>><i class="icon-arrow-left"></i></span>
+<?php
+	} /* }}} */
+
+	/**
+	 * Javascript code for input preset button
+	 * This code workѕ for input fields and single select fields
+	 */
+	function printInputPresetButtonJs() { /* {{{ */
+?>
+$(document).ready( function() {
+	$('.inputpreset_btn').click(function(ev){
+		ev.preventDefault();
+		if (typeof $(ev.currentTarget).data('text') != 'undefined') {
+			target = $(ev.currentTarget).data('ref');
+			value = $(ev.currentTarget).data('text');
+			sep = $(ev.currentTarget).data('sep');
+			if(sep) {
+				// Use attr() instead of data() because data() converts to int which cannot be split
+				arr = value.split(sep);
+				for(var i in arr) {
+					$("#"+target+" option[value='"+arr[i]+"']").attr("selected", "selected");
+				}
+			} else {
+				$("#"+target).val(value);
+			}
+		}
+	});
+});
+<?php
+	} /* }}} */
+
+	/**
+	 * Output left-arrow with link which takes over a boolean value
+	 * into a checkbox field.
+	 *
+	 * Clicking on the button will preset the checkbox
+	 * in data-ref the value of the input field with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param string $text text
+	 */
+	function printCheckboxPresetButtonHtml($name, $text) { /* {{{ */
+?>
+	<span id="<?php echo $name; ?>_btn" class="checkboxpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOverAttributeValue"); ?>" data-ref="<?php echo $name; ?>" data-text="<?php echo is_array($text) ? implode($sep, $text) : htmlspecialchars($text);?>"<?php if($sep) echo "data-sep=\"".$sep."\""; ?>><i class="icon-arrow-left"></i></span>
+<?php
+	} /* }}} */
+
+	/**
+	 * Javascript code for checkboxt preset button
+	 * This code workѕ for checkboxes
+	 */
+	function printCheckboxPresetButtonJs() { /* {{{ */
+?>
+$(document).ready( function() {
+	$('.checkboxpreset_btn').click(function(ev){
+		ev.preventDefault();
+		if (typeof $(ev.currentTarget).data('text') != 'undefined') {
+			target = $(ev.currentTarget).data('ref');
+			value = $(ev.currentTarget).data('text');
+			if(value) {
+				$("#"+target).attr('checked', '');
+			} else {
+				$("#"+target).removeAttribute('checked');
+			}
 		}
 	});
 });
@@ -1767,6 +1883,7 @@ $(document).ready( function() {
 	function documentListRow($document, $previewer, $skipcont=false, $version=0) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$showtree = $this->params['showtree'];
 		$workflowmode = $this->params['workflowmode'];
 		$previewwidth = $this->params['previewWidthList'];
 		$enableClipboard = $this->params['enableclipboard'];
@@ -1841,9 +1958,14 @@ $(document).ready( function() {
 				$content .= count($files)." ".getMLText("linked_files")."<br />";
 			if(count($links))
 				$content .= count($links)." ".getMLText("linked_documents")."<br />";
-			$content .= getOverallStatusText($status["status"])."</small>";
-			$content .= "</td>\n";
-
+			if($status["status"] == S_IN_WORKFLOW && $workflowmode == 'advanced') {
+				$workflowstate = $latestContent->getWorkflowState();
+				$content .= '<span title="'.getOverallStatusText($status["status"]).': '.$workflow->getName().'">'.$workflowstate->getName().'</span>';
+			} else {
+				$content .= getOverallStatusText($status["status"]);
+			}
+			$content .= "</small></td>";
+//				$content .= "<td>".$version."</td>";
 			$content .= "<td>";
 			$content .= "<div class=\"list-action\">";
 			if($document->getAccessMode($user) >= M_ALL) {
@@ -2434,6 +2556,50 @@ mayscript>
 		$this->printTimelineJs($timelineurl, $height, $start, $end, $skip);
 		echo "</script>";
 		$this->printTimelineHtml($height);
+	} /* }}} */
+
+	protected function printPopupBox($title, $content, $ret=false) { /* {{{ */
+		$id = md5(uniqid());
+		/*
+		$this->addFooterJS('
+$("body").on("click", "span.openpopupbox", function(e) {
+	$(""+$(e.target).data("href")).toggle();
+//	$("div.popupbox").toggle();
+});
+');
+		 */
+		$html = '
+		<span class="openpopupbox" data-href="#'.$id.'">'.$title.'</span>
+		<div id="'.$id.'" class="popupbox" style="display: none;">
+		'.$content.'
+			<span class="closepopupbox"><i class="icon-remove"></i></span>
+		</div>';
+		if($ret)
+			return $html;
+		else
+			echo $html;
+	} /* }}} */
+
+	protected function printAccordion($title, $content) { /* {{{ */
+		$id = substr(md5(uniqid()), 0, 4);
+?>
+		<div class="accordion" id="accordion<?php echo $id; ?>">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion<?php echo $id; ?>" href="#collapse<?php echo $id; ?>">
+						<?php echo $title; ?>
+          </a>
+        </div>
+				<div id="collapse<?php echo $id; ?>" class="accordion-body collapse" style="height: 0px;">
+          <div class="accordion-inner">
+<?php
+		echo $content;
+?>
+          </div>
+        </div>
+      </div>
+    </div>
+<?php
 	} /* }}} */
 }
 ?>

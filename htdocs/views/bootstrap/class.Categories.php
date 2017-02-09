@@ -58,48 +58,54 @@ $(document).ready( function() {
 
 	function showCategoryForm($category) { /* {{{ */
 ?>
-			<table class="table-condensed">
-				<tr>
-					<td></td><td>
+				<div class="control-group">
+					<label class="control-label"></label>
+
+					<div class="controls">
 <?php
 		if($category) {
-		if($category && $category->isUsed()) {
+			if($category->isUsed()) {
 ?>
 						<p><?php echo getMLText('category_in_use') ?></p>
 <?php
-		} else {
+			} else {
 ?>
 						<form style="display: inline-block;" method="post" action="../op/op.Categories.php" >
 						<?php echo createHiddenFieldWithKey('removecategory'); ?>
-						<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-						<input type="Hidden" name="action" value="removecategory">
+						<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+						<input type="hidden" name="action" value="removecategory">
 						<button class="btn" type="submit"><i class="icon-remove"></i> <?php echo getMLText("rm_document_category")?></button>
 						</form>
 <?php
-		}
+			}
 		}
 ?>
-					</td>
-				</tr>
-				<tr>
-					<td><?php echo getMLText("name")?>:</td>
-					<td>
-						<form class="form-inline" style="margin-bottom: 0px;" action="../op/op.Categories.php" method="post">
-						<?php if(!$category) { ?>
-							<?php echo createHiddenFieldWithKey('addcategory'); ?>
-							<input type="Hidden" name="action" value="addcategory">
-						<?php } else { ?>
-  		        <?php echo createHiddenFieldWithKey('editcategory'); ?>
-							<input type="Hidden" name="action" value="editcategory">
-							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-						<?php } ?>
+					</div>
+				</div>
+
+
+				<form class="form-horizontal" style="margin-bottom: 0px;" action="../op/op.Categories.php" method="post">
+				<?php if(!$category) { ?>
+					<?php echo createHiddenFieldWithKey('addcategory'); ?>
+					<input type="hidden" name="action" value="addcategory">
+				<?php } else { ?>
+					<?php echo createHiddenFieldWithKey('editcategory'); ?>
+					<input type="hidden" name="action" value="editcategory">
+					<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+				<?php } ?>
+				<div class="control-group">
+					<label class="control-label"><?php echo getMLText("name")?>:</label>
+					<div class="controls">
 							<input name="name" type="text" value="<?php echo $category ? htmlspecialchars($category->getName()) : '' ?>">&nbsp;
-							<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
-						</form>
-					</td>
-				</tr>
-				
-			</table>
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
+					</div>
+				</div>
+				</form>
+
 <?php
 	} /* }}} */
 
@@ -125,8 +131,11 @@ $(document).ready( function() {
 <div class="row-fluid">
 	<div class="span4">
 		<div class="well">
-<?php echo getMLText("selection")?>:
-			<select id="selector" class="span9">
+<form class="form-horizontal">
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
+		<div class="controls">
+			<select id="selector" class="input-xlarge">
 				<option value="-1"><?php echo getMLText("choose_category")?>
 				<option value="0"><?php echo getMLText("new_document_category")?>
 <?php
@@ -135,6 +144,9 @@ $(document).ready( function() {
 				}
 ?>
 			</select>
+		</div>
+	</div>
+</form>
 		</div>
 		<div class="ajax" data-view="Categories" data-action="info" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 	</div>
