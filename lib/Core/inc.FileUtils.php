@@ -10,7 +10,7 @@
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 
 /**
@@ -22,7 +22,7 @@
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 class SeedDMS_Core_File {
 	static function renameFile($old, $new) { /* {{{ */

@@ -8,7 +8,7 @@
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2012 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 
 /**
@@ -18,7 +18,7 @@
  * @package    SeedDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2012 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 class SeedDMS_Core_Workflow { /* {{{ */
 	/**
@@ -301,6 +301,35 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		return true;
 	} /* }}} */
 
+	private function penetrate($laststates) {
+		$state = end($laststates);
+		$transitions = $this->getNextTransitions($state);
+		foreach($transitions as $transition) {
+			$nextstate = $transition->getNextState();
+			/* Check if nextstate is already in list of previous states */
+			foreach($laststates as $laststate) {
+				if($laststate->getID() == $nextstate->getID())
+					return array_merge($laststates, array($nextstate));
+			}
+			if($ret = $this->penetrate(array_merge($laststates, array($nextstate))))
+				return $ret;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if workflow contains cycles
+	 *
+	 * @return boolean list of states if workflow contains cycles, otherwise false
+	 */
+	function checkForCycles() { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		$initstate = $this->getInitState();
+
+		return $this->penetrate(array($initstate));
+	} /* }}} */
+
 	/**
 	 * Remove the workflow and all its transitions
 	 * Do not remove actions and states of the workflow
@@ -349,7 +378,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
  * @package    SeedDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2012 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 class SeedDMS_Core_Workflow_State { /* {{{ */
 	/**
@@ -489,6 +518,29 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Return workflow transitions the status is being used in
+	 *
+	 * @return array/boolean array of workflow transitions or false in case of an error
+	 */
+	function getTransitions() { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE state=".$this->_id. " OR nextstate=".$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_array($resArr) && count($resArr) == 0)
+			return false;
+
+		$wkftransitions = array();
+		for ($i = 0; $i < count($resArr); $i++) {
+			$wkftransition = new SeedDMS_Core_Workflow_Transition($resArr[$i]["id"], $this->_dms->getWorkflow($resArr[$i]["workflow"]), $this->_dms->getWorkflowState($resArr[$i]["state"]), $this->_dms->getWorkflowAction($resArr[$i]["action"]), $this->_dms->getWorkflowState($resArr[$i]["nextstate"]), $resArr[$i]["maxtime"]);
+			$wkftransition->setDMS($this->_dms);
+			$wkftransitions[$resArr[$i]["id"]] = $wkftransition;
+		}
+
+		return $wkftransitions;
+	} /* }}} */
+
+	/**
 	 * Remove the workflow state
 	 *
 	 * @return boolean true on success or false in case of an error
@@ -523,7 +575,7 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
  * @package    SeedDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2012 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 class SeedDMS_Core_Workflow_Action { /* {{{ */
 	/**
@@ -589,6 +641,29 @@ class SeedDMS_Core_Workflow_Action { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Return workflow transitions the action is being used in
+	 *
+	 * @return array/boolean array of workflow transitions or false in case of an error
+	 */
+	function getTransitions() { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE action=".$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_array($resArr) && count($resArr) == 0)
+			return false;
+
+		$wkftransitions = array();
+		for ($i = 0; $i < count($resArr); $i++) {
+			$wkftransition = new SeedDMS_Core_Workflow_Transition($resArr[$i]["id"], $this->_dms->getWorkflow($resArr[$i]["workflow"]), $this->_dms->getWorkflowState($resArr[$i]["state"]), $this->_dms->getWorkflowAction($resArr[$i]["action"]), $this->_dms->getWorkflowState($resArr[$i]["nextstate"]), $resArr[$i]["maxtime"]);
+			$wkftransition->setDMS($this->_dms);
+			$wkftransitions[$resArr[$i]["id"]] = $wkftransition;
+		}
+
+		return $wkftransitions;
+	} /* }}} */
+
+	/**
 	 * Remove the workflow action
 	 *
 	 * @return boolean true on success or false in case of an error
@@ -623,7 +698,7 @@ class SeedDMS_Core_Workflow_Action { /* {{{ */
  * @package    SeedDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2012 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 class SeedDMS_Core_Workflow_Transition { /* {{{ */
 	/**
@@ -863,7 +938,7 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
  * @package    SeedDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2012 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 class SeedDMS_Core_Workflow_Transition_User { /* {{{ */
 	/**
@@ -930,7 +1005,7 @@ class SeedDMS_Core_Workflow_Transition_User { /* {{{ */
  * @package    SeedDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2012 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 class SeedDMS_Core_Workflow_Transition_Group { /* {{{ */
 	/**
@@ -1015,7 +1090,7 @@ class SeedDMS_Core_Workflow_Transition_Group { /* {{{ */
  * @package    SeedDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2012 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 class SeedDMS_Core_Workflow_Log { /* {{{ */
 	/**

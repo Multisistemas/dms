@@ -9,7 +9,7 @@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal, 2006-2008 Malcolm Cowe,
  *             2010 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 
 /**
@@ -19,7 +19,7 @@
  * @package    SeedDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal, 2006-2008 Malcolm Cowe, 2010 Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 class SeedDMS_Core_Group { /* {{{ */
 	/**

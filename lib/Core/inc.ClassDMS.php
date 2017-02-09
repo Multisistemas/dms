@@ -8,7 +8,7 @@
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2010, Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 
 /**
@@ -43,15 +43,16 @@ require_once("inc.ClassAttribute.php");
  * by design. It is up to the calling application to use the methods
  * {@link SeedDMS_Core_Folder::getAccessMode()} and
  * {@link SeedDMS_Core_Document::getAccessMode()} and interpret them as desired.
- * Though, there are two convinient functions to filter a list of
+ * Though, there are two convenient functions to filter a list of
  * documents/folders for which users have access rights for. See
- * {@link SeedDMS_Core_DMS::filterAccess()}
- * and {@link SeedDMS_Core_DMS::filterUsersByAccess()}
+ * {@link filterAccess()}
+ * and {@link filterUsersByAccess()}
  *
- * Though, this class has two methods to set the currently logged in user
- * ({@link setUser} and {@link login}), none of them need to be called, because
+ * Though, this class has a method to set the currently logged in user
+ * ({@link setUser}), it does not have to be called, because
  * there is currently no class within the SeedDMS core which needs the logged
- * in user.
+ * in user. {@link SeedDMS_Core_DMS} itself does not do any user authentication.
+ * It is up to the application using this class.
  *
  * <code>
  * <?php
@@ -69,7 +70,7 @@ require_once("inc.ClassAttribute.php");
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2010, Uwe Steinmann
- * @version    Release: 5.0.6
+ * @version    Release: 5.0.9
  */
 class SeedDMS_Core_DMS {
 	/**
@@ -175,11 +176,12 @@ class SeedDMS_Core_DMS {
 
 
 	/**
-	 * Checks if two objects are equal by comparing its ID
+	 * Checks if two objects are equal by comparing their IDs
 	 *
 	 * The regular php check done by '==' compares all attributes of
-	 * two objects, which isn't required. The method will first check
-	 * if the objects are instances of the same class.
+	 * two objects, which is often not required. The method will first check
+	 * if the objects are instances of the same class and than if they
+	 * have the same id.
 	 *
 	 * @param object $object1 first object to be compared
 	 * @param object $object2 second object to be compared
@@ -194,7 +196,7 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
-	 * Checks if a list of objects contains a single object 
+	 * Checks if a list of objects contains a single object by comparing their IDs
 	 *
 	 * This function is only applicable on list containing objects which have
 	 * a method getID() because it is used to check if two objects are equal.
@@ -221,6 +223,8 @@ class SeedDMS_Core_DMS {
 	 * Checks if date conforms to a given format
 	 *
 	 * @param string $date date to be checked
+	 * @param string $format format of date. Will default to 'Y-m-d H:i:s' if
+	 * format is not given.
 	 * @return boolean true if date is in propper format, otherwise false
 	 */
 	static function checkDate($date, $format='Y-m-d H:i:s') { /* {{{ */
@@ -229,11 +233,16 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
-	 * Filter objects out which are not accessible in a given mode by a user.
+	 * Filter out objects which are not accessible in a given mode by a user.
+	 *
+	 * The list of objects to be checked can be of any class, but has to have
+	 * a method getAccessMode($user) which checks if the given user has at
+	 * least access rights to the object as passed in $minMode.
 	 *
 	 * @param array $objArr list of objects (either documents or folders)
 	 * @param object $user user for which access is checked
-	 * @param integer $minMode minimum access mode required
+	 * @param integer $minMode minimum access mode required (M_ANY, M_NONE,
+	 *        M_READ, M_READWRITE, M_ALL)
 	 * @return array filtered list of objects
 	 */
 	static function filterAccess($objArr, $user, $minMode) { /* {{{ */
@@ -249,12 +258,17 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
-	 * Filter users out which cannot access an object in a given mode.
+	 * Filter out users which cannot access an object in a given mode.
+	 *
+	 * The list of users to be checked can be of any class, but has to have
+	 * a method getAccessMode($user) which checks if a user has at least
+	 * access rights as passed in $minMode.
 	 *
 	 * @param object $obj object that shall be accessed
 	 * @param array $users list of users which are to check for sufficient
 	 *        access rights
 	 * @param integer $minMode minimum access right on the object for each user
+	 *        (M_ANY, M_NONE, M_READ, M_READWRITE, M_ALL)
 	 * @return array filtered list of users
 	 */
 	static function filterUsersByAccess($obj, $users, $minMode) { /* {{{ */
@@ -267,27 +281,45 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
-	 * Filter document links
+	 * Filter out document links which can not be accessed by a given user
 	 *
 	 * Returns a filtered list of links which are accessible by the
-	 * given user.
+	 * given user. A link is only accessible, if it is publically visible,
+	 * owned by the user, or the accessing user is an administrator.
 	 *
 	 * @param array $links list of objects of type SeedDMS_Core_DocumentLink
 	 * @param object $user user for which access is being checked
+	 * @param string $access set if source or target of link shall be checked
+	 * for sufficient access rights. Set to 'source' if the source document
+	 * of a link is to be checked, set to 'target' for the target document.
+	 * If not set, then access right aren't checked at all.
 	 * @return array filtered list of links
 	 */
-	static function filterDocumentLinks($user, $links) { /* {{{ */
+	static function filterDocumentLinks($user, $links, $access='') { /* {{{ */
 		$tmp = array();
-		foreach ($links as $link)
-			if ($link->isPublic() || ($link->getUser()->getID() == $user->getID()) || $user->isAdmin())
-				array_push($tmp, $link);
+		foreach ($links as $link) {
+			if ($link->isPublic() || ($link->getUser()->getID() == $user->getID()) || $user->isAdmin()){
+				if($access == 'source') {
+					$obj = $link->getDocument();
+					if ($obj->getAccessMode($user) >= M_READ)
+						array_push($tmp, $link);
+				} elseif($access == 'target') {
+					$obj = $link->getTarget();
+					if ($obj->getAccessMode($user) >= M_READ)
+						array_push($tmp, $link);
+				} else {
+					array_push($tmp, $link);
+				}
+			}
+		}
 		return $tmp;
 	} /* }}} */
 
 	/**
 	 * Create a new instance of the dms
 	 *
-	 * @param object $db object to access the underlying database
+	 * @param object $db object of class {@link SeedDMS_Core_DatabaseAccess}
+	 *        to access the underlying database
 	 * @param string $contentDir path in filesystem containing the data store
 	 *        all document contents is stored
 	 * @return object instance of {@link SeedDMS_Core_DMS}
@@ -310,9 +342,9 @@ class SeedDMS_Core_DMS {
 		$this->classnames['user'] = 'SeedDMS_Core_User';
 		$this->classnames['group'] = 'SeedDMS_Core_Group';
 		$this->callbacks = array();
-		$this->version = '5.0.6';
+		$this->version = '5.0.9';
 		if($this->version[0] == '@')
-			$this->version = '5.0.6';
+			$this->version = '5.0.9';
 	} /* }}} */
 
 	/**
@@ -476,21 +508,6 @@ class SeedDMS_Core_DMS {
 
 	function setForceRename($enable) { /* {{{ */
 		$this->forceRename = $enable;
-	} /* }}} */
-
-	/**
-	 * Login as a user
-	 *
-	 * Checks if the given credentials are valid and returns a user object.
-	 * It also sets the property $user for later access on the currently
-	 * logged in user
-	 *
-	 * @param string $username login name of user
-	 * @param string $password password of user
-	 *
-	 * @return object instance of class {@link SeedDMS_Core_User} or false
-	 */
-	function login($username, $password) { /* {{{ */
 	} /* }}} */
 
 	/**
@@ -674,7 +691,7 @@ class SeedDMS_Core_DMS {
 
 		// if none is checkd search all
 		if (count($searchin)==0)
-			$searchin=array(1, 2, 3, 4);
+			$searchin=array(1, 2, 3, 4, 5);
 
 		/*--------- Do it all over again for folders -------------*/
 		$totalFolders = 0;
@@ -835,6 +852,9 @@ class SeedDMS_Core_DMS {
 			if (in_array(4, $searchin)) {
 				$searchFields[] = "`tblDocumentAttributes`.`value`";
 				$searchFields[] = "`tblDocumentContentAttributes`.`value`";
+			}
+			if (in_array(5, $searchin)) {
+				$searchFields[] = "`tblDocuments`.`id`";
 			}
 
 
@@ -1697,6 +1717,12 @@ class SeedDMS_Core_DMS {
 		}
 		if(!$type)
 			return false;
+		if(trim($valueset)) {
+			$valuesetarr = array_map('trim', explode($valueset[0], substr($valueset, 1)));
+			$valueset = $valueset[0].implode($valueset[0], $valuesetarr);
+		} else {
+			$valueset = '';
+		}
 		$queryStr = "INSERT INTO tblAttributeDefinitions (name, objtype, type, multiple, minvalues, maxvalues, valueset, regex) VALUES (".$this->db->qstr($name).", ".intval($objtype).", ".intval($type).", ".intval($multiple).", ".intval($minvalues).", ".intval($maxvalues).", ".$this->db->qstr($valueset).", ".$this->db->qstr($regex).")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
@@ -2026,7 +2052,7 @@ class SeedDMS_Core_DMS {
 	function getUnlinkedDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM tblDocumentContent WHERE document NOT IN (SELECT id FROM tblDocuments)";
 		$resArr = $this->db->getResultArray($queryStr);
-		if (!$resArr)
+		if ($resArr === false)
 			return false;
 
 		$versions = array();
@@ -2050,7 +2076,7 @@ class SeedDMS_Core_DMS {
 	function getNoFileSizeDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM tblDocumentContent WHERE fileSize = 0 OR fileSize is null";
 		$resArr = $this->db->getResultArray($queryStr);
-		if (!$resArr)
+		if ($resArr === false)
 			return false;
 
 		$versions = array();
@@ -2074,7 +2100,7 @@ class SeedDMS_Core_DMS {
 	function getNoChecksumDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM tblDocumentContent WHERE checksum = '' OR checksum is null";
 		$resArr = $this->db->getResultArray($queryStr);
-		if (!$resArr)
+		if ($resArr === false)
 			return false;
 
 		$versions = array();
