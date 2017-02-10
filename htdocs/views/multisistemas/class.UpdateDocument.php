@@ -625,7 +625,7 @@ console.log(element);
 ?>
 		<tr>
 			<td></td>
-			<td><input type="submit" class="btn" value="<?php printMLText("update_document")?>"></td>
+			<td><input type="submit" class="btn btn-primary" value="<?php printMLText("update_document")?>"></td>
 		</tr>
 	</table>
 </form>

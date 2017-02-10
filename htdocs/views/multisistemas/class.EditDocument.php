@@ -193,7 +193,7 @@ $(document).ready( function() {
 ?>
 		<tr>
 			<td></td>
-			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
+			<td><button type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
 		</tr>
 	</table>
 </form>

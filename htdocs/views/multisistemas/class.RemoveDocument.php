@@ -52,7 +52,7 @@ class SeedDMS_View_RemoveDocument extends SeedDMS_Bootstrap_Style {
 <p>
 <?php printMLText("confirm_rm_document", array ("documentname" => htmlspecialchars($document->getName())));?>
 </p>
-<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_document");?></button></p>
+<p><button type="submit" class="btn btn-danger"><i class="icon-remove"></i> <?php printMLText("rm_document");?></button></p>
 </form>
 <?php
 		$this->contentContainerEnd();

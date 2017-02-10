@@ -50,7 +50,7 @@ class SeedDMS_View_RemoveFolder extends SeedDMS_Bootstrap_Style {
 	<p>
 	<?php printMLText("confirm_rm_folder", array ("foldername" => htmlspecialchars($folder->getName())));?>
 	</p>
-	<p><button class="btn" type="submit"><i class="icon-remove"></i> <?php printMLText("rm_folder");?></button></p>
+	<p><button class="btn btn-danger" type="submit"><i class="icon-remove"></i> <?php printMLText("rm_folder");?></button></p>
 </form>
 <?php
 		$this->contentContainerEnd();

@@ -60,7 +60,7 @@ class SeedDMS_View_MoveDocument extends SeedDMS_Bootstrap_Style {
 		</div>
 	</div>
 	<div class="controls">
-		<input class="btn" type="submit" value="<?php printMLText("move"); ?>">
+		<input class="btn btn-primary" type="submit" value="<?php printMLText("move"); ?>">
 	</div>
 </form>
 <?php

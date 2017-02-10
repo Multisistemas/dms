@@ -278,7 +278,7 @@ $(document).ready(function() {
 </tr>
 <tr>
 <td></td>
-<td><input type="submit" class="btn" value="<?php printMLText("add");?>"></td>
+<td><input type="submit" class="btn btn-success" value="<?php printMLText("add");?>"></td>
 </tr>
 </table>
 </form>

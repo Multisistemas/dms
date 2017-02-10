@@ -1233,7 +1233,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$content = $this->getLatestContent($contentID);
 //		$content = new SeedDMS_Core_DocumentContent($contentID, $this, $version, $comment, $date, $user->getID(), $dir, $orgFileName, $fileType, $mimeType, $filesize, $checksum);
 		if($workflow)
-			$content->setWorkflow($workflow, $user);
+		$content->setWorkflow($workflow, $user);
 		$docResultSet = new SeedDMS_Core_AddContentResultSet($content);
 		$docResultSet->setDMS($this->_dms);
 
