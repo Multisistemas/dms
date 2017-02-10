@@ -252,17 +252,13 @@ console.log(element);
 					<input type="checkbox" id="expires" name="expires" value="false" <?php echo  ($presetexpiration ? "" : "checked");?>><?php printMLText("does_not_expire");?>
         </label>
 			</td>
-
 		</tr>
 
 		<tr>
-
-			<td colspan="2">
-				<hr>
+			<td>
 		<?php $this->contentSubHeading(getMLText("version_info")); ?>
 			</td>
 		</tr>
-
 		<tr>
 			<td><?php printMLText("version");?>:</td>
 			<td><input type="text" name="reqversion" value="1"></td>
@@ -635,8 +631,7 @@ console.log(element);
 			</tr>
 		</table>
 
-			<!--<p><input type="submit" class="btn" value="<?php printMLText();?>"></p>-->
-			<button type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("add_document")?></button>
+			<p><input type="submit" class="btn" value="<?php printMLText("add_document");?>"></p>
 		</form>
 <?php
 		$this->contentContainerEnd();

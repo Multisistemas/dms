@@ -108,7 +108,7 @@ $(document).ready(function() {
 			}
 ?>
 	</select>
-	<button type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("save")?></button>
+	<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 	</form>
 	<?php
 		}

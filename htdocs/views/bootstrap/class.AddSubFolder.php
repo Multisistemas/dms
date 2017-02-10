@@ -137,8 +137,7 @@ $(document).ready( function() {
 ?>
 
 <div class="controls">
-	<!--<input type="submit" class="btn btn-primary" value="<?php printMLText();?>"><i class="icon-save"></i>-->
-	<button type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("add_subfolder")?></button>
+	<input type="submit" class="btn" value="<?php printMLText("add_subfolder");?>">
 </div>
 
 </form>

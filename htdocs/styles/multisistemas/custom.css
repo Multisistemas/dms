@@ -66,10 +66,18 @@ a > img {
   margin-top: 20px !important;
 }
 
+#admin-tools i {
+  color: #146aae;
+}
+
 #admin-tools a {
-  color: #146454;
+  color: #000000;
 }
 
 hr {
   border-bottom: 1px solid #c3c3c3;
 }
+
+.lbl-right {
+  text-align: right !important;
+} 
