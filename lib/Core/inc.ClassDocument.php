@@ -2554,15 +2554,15 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (!isset($this->_status)) {
 			$this->getStatus();
 		}
-		if ($this->_status["status"]==$status) {
+		/*if ($this->_status["status"]==$status) {
 			return false;
-		}
+		}*/
 		if($date)
 			$ddate = $db->qstr($date);
 		else
 			$ddate = $db->getCurrentDatetime();
 		$queryStr = "INSERT INTO `tblDocumentStatusLog` (`statusID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $this->_status["statusID"] ."', '". (int) $status ."', ".$db->qstr($comment).", ".$ddate.", '". $updateUser->getID() ."')";
+			"VALUES ('". $this->_status ."', '". (int) $status ."', ".$db->qstr($comment).", ".$ddate.", '". $updateUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res)
 			return false;
@@ -3561,6 +3561,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 			}
 			$this->_workflow = $workflow;	
+
 			if(!$this->setStatus(S_IN_WORKFLOW, "Added workflow '".$workflow->getName()."'", $user)) {
 				$db->rollbackTransaction();
 				return false;
