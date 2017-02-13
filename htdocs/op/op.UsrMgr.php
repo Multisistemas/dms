@@ -30,9 +30,8 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassPasswordStrength.php");
 
-if (!($user->isAdmin())) {
+if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
-	var_dump($user);
 }
 
 if (isset($_POST["action"])) $action=$_POST["action"];

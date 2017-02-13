@@ -1880,6 +1880,7 @@ $(document).ready( function() {
 	 */
 	function documentListRow($document, $previewer, $skipcont=false, $version=0) { /* {{{ */
 		$dms = $this->params['dms'];
+		var_dump($dms);
 		$user = $this->params['user'];
 		$showtree = $this->params['showtree'];
 		$workflowmode = $this->params['workflowmode'];
