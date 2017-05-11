@@ -18,6 +18,7 @@
  */
 require_once("inc.ClassNotify.php");
 require_once("Mail.php");
+require_once('swiftmailer/lib/swift_required.php');
 
 /**
  * Class to send email notifications to individuals or groups
@@ -108,12 +109,32 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 				$mail_params['username'] = $this->smtp_user;
 				$mail_params['password'] = $this->smtp_password;
 			}
-			$mail = Mail::factory('smtp', $mail_params);
+
+      ////////////////////////////////////////////////////////
+
+			$transport = \Swift_SmtpTransport::newInstance($this->smtp_server, $this->smtp_port)
+            ->setUsername($this->smtp_user)
+            ->setPassword($this->smtp_password);
+
+      $mailer = \Swift_Mailer::newInstance($transport);
+
+      $themessage = \Swift_Message::newInstance($headers['Subject'])
+              ->setFrom($headers['From'])
+              ->setTo($headers['To'])
+              ->addPart($message);
+
+
+        ////////////////////////////////////////////////////////
+
+			/*$mail = Mail::factory('smtp', $mail_params);
 		} else {
-			$mail = Mail::factory('mail', $mail_params);
+			$mail = Mail::factory('mail', $mail_params);*/
 		}
  
-		$result = $mail->send($recipient->getEmail(), $headers, $message);
+		//$result = $mail->send($recipient->getEmail(), $headers, $message);
+
+		$result = $mailer->send($themessage);
+
 		if (PEAR::isError($result)) {
 			return false;
 		} else {
