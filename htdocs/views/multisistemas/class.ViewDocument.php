@@ -506,7 +506,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if ($file_exists){
 			print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\" class=\"btn btn-medium\"><i class=\"icon-download\"></i><br />".getMLText("download")."</a></li>";
 			if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
-				print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\" class=\"btn btn-medium\"><i class=\"icon-star\"></i><br />" . getMLText("view_online") . "</a></li>";
+				print "<li><a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\" class=\"btn btn-medium\"><i class=\"icon-star\"></i><br />" . getMLText("view_online") . "</a></li>";
 		}else print "<li><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></li>";
 
 		print "</ul>";
@@ -515,7 +515,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$previewer->createPreview($latestContent);
 		if ($file_exists) {
 			if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes)) {
-				print "<a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\">";
+				print "<a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\">";
 			} else {
 				print "<a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">";
 			}
@@ -573,7 +573,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if ($file_exists){
 			print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-download\"></i>".getMLText("download")."</a></li>";
 			if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
-				print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
+				print "<li><a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
 		}
 		print "</ul>";
 		print "<ul class=\"unstyled actions\">";
@@ -1089,7 +1089,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<td nowrap>";
 				if($file_exists) {
 					if ($viewonlinefiletypes && in_array(strtolower($version->getFileType()), $viewonlinefiletypes)) {
-							print "<a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=".$version->getVersion()."\">";
+							print "<a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=".$version->getVersion()."\">";
 					} else {
 						print "<a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$version->getVersion()."\">";
 					}
@@ -1134,7 +1134,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				if ($file_exists){
 					print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$version->getVersion()."\"><i class=\"icon-download\"></i>".getMLText("download")."</a>";
 					if ($viewonlinefiletypes && in_array(strtolower($version->getFileType()), $viewonlinefiletypes))
-						print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=".$version->getVersion()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a>";
+						print "<li><a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=".$version->getVersion()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a>";
 					print "</ul>";
 					print "<ul class=\"actions unstyled\">";
 				}
@@ -1187,7 +1187,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				$previewer->createPreview($file, $previewwidthdetail);
 				if($file_exists) {
 					if ($viewonlinefiletypes && in_array(strtolower($file->getFileType()), $viewonlinefiletypes))
-						print "<a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\">";
+						print "<a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\">";
 					else
 						print "<a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\">";
 				}
@@ -1217,7 +1217,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				if ($file_exists) {
 					print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\"><i class=\"icon-download\"></i>".getMLText('download')."</a>";
 					if ($viewonlinefiletypes && in_array(strtolower($file->getFileType()), $viewonlinefiletypes))
-						print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
+						print "<li><a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
 				} else print "<li><img class=\"mimeicon\" src=\"images/icons/".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
 				echo "</ul><ul class=\"unstyled actions\">";
 				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))

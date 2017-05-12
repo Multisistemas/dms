@@ -110,28 +110,19 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 				$mail_params['password'] = $this->smtp_password;
 			}
 
-      ////////////////////////////////////////////////////////
-
 			$transport = \Swift_SmtpTransport::newInstance($this->smtp_server, $this->smtp_port)
             ->setUsername($this->smtp_user)
             ->setPassword($this->smtp_password);
 
       $mailer = \Swift_Mailer::newInstance($transport);
 
-      $themessage = \Swift_Message::newInstance($headers['Subject'])
-              ->setFrom($from)
+      $themessage = \Swift_Message::newInstance($params['sitename'])
+              ->setFrom($sender->_email)
               ->setTo($recipient->getEmail())
               ->addPart($message);
 
-
-        ////////////////////////////////////////////////////////
-
-			/*$mail = Mail::factory('smtp', $mail_params);
-		} else {
-			$mail = Mail::factory('mail', $mail_params);*/
 		}
  
-		//$result = $mail->send($recipient->getEmail(), $headers, $message);
 
 		$result = $mailer->send($themessage);
 
