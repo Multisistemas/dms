@@ -29,7 +29,7 @@ $settings->load($configDir."/settings.xml");
  * Check if ENABLE_INSTALL_TOOL exists in config dir
  */
 if (!file_exists($configDir."/ENABLE_INSTALL_TOOL")) {
-	echo "For installation of SeedDMS, you must create the file conf/ENABLE_INSTALL_TOOL";
+	echo "For installation of Multisistemas DMS, you must create the file conf/ENABLE_INSTALL_TOOL";
 	exit;
 }
 
@@ -38,7 +38,7 @@ require_once("../inc/inc.Language.php");
 require_once("../inc/inc.ClassUI.php");
 
 UI::htmlStartPage('Database update');
-UI::contentHeading("SeedDMS Installation for version ".$_GET['version']);
+UI::contentHeading("Multisistemas DMS Installation for version ".$_GET['version']);
 UI::contentContainerStart();
 
 $sqlfile = "update.sql";

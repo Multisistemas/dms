@@ -21,7 +21,7 @@
  * Check Update file
  */
 if (file_exists("../inc/inc.Settings.old.php")) {
-  echo "You can't install SeedDMS, unless you delete " . realpath("../inc/inc.Settings.old.php") . ".";
+  echo "You can't install Multisistemas DMS, unless you delete " . realpath("../inc/inc.Settings.old.php") . ".";
   exit;
 }
 
@@ -30,15 +30,15 @@ if (file_exists("../inc/inc.Settings.old.php")) {
  * Check file for installation
  */
 if (!file_exists("create_tables-innodb.sql")) {
-  echo "Can't install SeedDMS, 'create_tables-innodb.sql' missing";
+  echo "Can't install Multisistemas DMS, 'create_tables-innodb.sql' missing";
   exit;
 }
 if (!file_exists("create_tables-sqlite3.sql")) {
-  echo "Can't install SeedDMS, 'create_tables-sqlite3.sql' missing";
+  echo "Can't install Multisistemas DMS, 'create_tables-sqlite3.sql' missing";
   exit;
 }
 if (!file_exists("settings.xml.template_install")) {
-  echo "Can't install SeedDMS, 'settings.xml.template_install' missing";
+  echo "Can't install Multisistemas DMS, 'settings.xml.template_install' missing";
   exit;
 }
 
@@ -133,7 +133,7 @@ if (!$configDir) {
 }
 
 if (!file_exists($configDir."/ENABLE_INSTALL_TOOL")) {
-	echo "For installation of SeedDMS, you must create the file conf/ENABLE_INSTALL_TOOL";
+	echo "For installation of Multisistemas DMS, you must create the file conf/ENABLE_INSTALL_TOOL";
 	exit;
 }
 
@@ -189,7 +189,7 @@ include("../inc/inc.ClassUI.php");
 UI::htmlStartPage("INSTALL");
 UI::globalBanner();
 UI::contentStart();
-UI::contentHeading("SeedDMS Installation for version ".SEEDDMS_VERSION);
+UI::contentHeading("Multisistemas DMS Installation for version ".SEEDDMS_VERSION);
 UI::contentContainerStart();
 
 
