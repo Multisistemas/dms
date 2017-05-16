@@ -9,7 +9,7 @@
  *             Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal, 2006-2008 Malcolm Cowe,
  *             2010 Matteo Lucarelli, 2010-2012 Uwe Steinmann
- * @version    Release: 5.0.9
+ * @version    Release: 5.0.11
  */
 
 /**

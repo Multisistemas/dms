@@ -8,7 +8,7 @@
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2010 Uwe Steinmann
- * @version    Release: 5.0.9
+ * @version    Release: 5.0.11
  */
 
 /**
@@ -18,7 +18,7 @@
  * @package    SeedDMS_Core
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C)2011 Uwe Steinmann
- * @version    Release: 5.0.9
+ * @version    Release: 5.0.11
  */
 class SeedDMS_Core_DocumentCategory {
 	/**
@@ -56,7 +56,7 @@ class SeedDMS_Core_DocumentCategory {
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblCategory SET name = ".$db->qstr($newName)." WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblCategory` SET `name` = ".$db->qstr($newName)." WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -67,7 +67,7 @@ class SeedDMS_Core_DocumentCategory {
 	function isUsed() { /* {{{ */
 		$db = $this->_dms->getDB();
 		
-		$queryStr = "SELECT * FROM tblDocumentCategory WHERE categoryID=".$this->_id;
+		$queryStr = "SELECT * FROM `tblDocumentCategory` WHERE `categoryID`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_array($resArr) && count($resArr) == 0)
 			return false;
@@ -77,21 +77,21 @@ class SeedDMS_Core_DocumentCategory {
 	function getCategories() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblCategory";
+		$queryStr = "SELECT * FROM `tblCategory`";
 		return $db->getResultArray($queryStr);
 	} /* }}} */
 
 	function addCategory($keywords) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "INSERT INTO tblCategory (category) VALUES (".$db->qstr($keywords).")";
+		$queryStr = "INSERT INTO `tblCategory` (`category`) VALUES (".$db->qstr($keywords).")";
 		return $db->getResult($queryStr);
 	} /* }}} */
 
 	function remove() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "DELETE FROM tblCategory WHERE id = " . $this->_id;
+		$queryStr = "DELETE FROM `tblCategory` WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -101,7 +101,7 @@ class SeedDMS_Core_DocumentCategory {
 	function getDocumentsByCategory() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblDocumentCategory where categoryID=".$this->_id;
+		$queryStr = "SELECT * FROM `tblDocumentCategory` where `categoryID`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;

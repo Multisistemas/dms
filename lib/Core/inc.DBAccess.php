@@ -9,7 +9,7 @@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal, 2006-2008 Malcolm Cowe,
  *             2010 Matteo Lucarelli, 2010 Uwe Steinmann
- * @version    Release: 5.0.9
+ * @version    Release: 5.0.11
  */
 
 /**
@@ -24,7 +24,7 @@ require_once "adodb/adodb.inc.php";
  * @package    SeedDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Matteo Lucarelli, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal, 2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli, 2010 Uwe Steinmann
- * @version    Release: 5.0.9
+ * @version    Release: 5.0.11
  */
 class SeedDMS_Core_DatabaseAccess {
 	var $_debug;

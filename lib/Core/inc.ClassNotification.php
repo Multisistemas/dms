@@ -8,7 +8,7 @@
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2010 Uwe Steinmann
- * @version    Release: 5.0.9
+ * @version    Release: 5.0.11
  */
 
 /**
@@ -18,7 +18,7 @@
  * @package    SeedDMS_Core
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2010 Uwe Steinmann
- * @version    Release: 5.0.9
+ * @version    Release: 5.0.11
  */
 class SeedDMS_Core_Notification { /* {{{ */
 	/**
