@@ -99,7 +99,8 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$headers['Content-type'] = "text/plain; charset=utf-8";
 
 		$mail_params = array();
-		if($this->smtp_server) {
+
+		if(!empty($this->smtp_server)) {
 			$mail_params['host'] = $this->smtp_server;
 			if($this->smtp_port) {
 				$mail_params['port'] = $this->smtp_port;
@@ -121,9 +122,10 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
               ->setTo($recipient->getEmail())
               ->addPart($message);
 
+		} else {
+			return false;
 		}
  
-
 		$result = $mailer->send($themessage);
 
 		if (PEAR::isError($result)) {

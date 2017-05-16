@@ -860,7 +860,14 @@ nURL: [url]',
 'remove_marked_files' => 'Eliminar ficheros marcados',
 'repaired' => 'Reparado',
 'repairing_objects' => 'Reparando documentos y carpetas.',
-'request_workflow_action_email_body' => '',
+'request_workflow_action_email_body' => 'El flujo de trabajo ha alcanzado un estado que requiere su acción
+Documento: [name]
+Versión: [version]
+Flujo de trabajo: [workflow]
+Estado actual: [current_state]
+Carpeta principal: [folder_path]
+Usuario: [username]
+URL: [url]',
 'request_workflow_action_email_subject' => '',
 'reset_checkout' => '',
 'restrict_access' => '',
