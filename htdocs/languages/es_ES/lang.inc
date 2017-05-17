@@ -1442,8 +1442,8 @@ URL: [url]',
 'toggle_manager' => 'Intercambiar mánager',
 'toggle_qrcode' => '',
 'to_before_from' => 'La fecha de finalización no debe ser anterior a la de inicio',
-'transition_triggered_email' => 'Workflow transition triggered',
-'transition_triggered_email_body' => 'Workflow transition triggered
+'transition_triggered_email' => 'Nueva transición en flujo de trabajo',
+'transition_triggered_email_body' => 'Transición de flujo de trabajo
 Documento: [name]
 Versión: [version]
 Comentario: [comment]
