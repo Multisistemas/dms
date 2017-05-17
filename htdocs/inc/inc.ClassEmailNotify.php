@@ -99,6 +99,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$headers['Content-type'] = "text/plain; charset=utf-8";
 
 		$mail_params = array();
+        $to = $recipient->getEmail();
 
 		if(!empty($this->smtp_server)) {
 			$mail_params['host'] = $this->smtp_server;
@@ -117,9 +118,15 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 
       $mailer = \Swift_Mailer::newInstance($transport);
 
-      $themessage = \Swift_Message::newInstance($params['sitename'])
+      //if ($params['sitename'] == null){
+      	$thesubject = getMLText($subject, array(), "", $lang);
+	  /*} else {
+      	$thesubject = $params['sitename'];
+	  }*/
+
+      $themessage = \Swift_Message::newInstance($thesubject)
               ->setFrom($sender->_email)
-              ->setTo($recipient->getEmail())
+              ->setTo($to)
               ->addPart($message);
 
 		} else {
