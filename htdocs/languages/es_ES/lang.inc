@@ -819,7 +819,7 @@ Si continua teniendo problemas de acceso, por favor contacte con el administrado
 'previous_versions' => 'Versiones anteriores',
 'pt_BR' => 'Portuges (BR)',
 'quota' => 'Cuota',
-'quota_exceeded' => 'Su cuota de disco se ha excedido en [bytes].',
+'quota_exceeded' => 'Su cuota de disco se ha excedido en [bytes]. Por favor elimine los archivos que considere innecesarios para liberar espacio en disco, o solicite al administrador un aumento en la cuota de su usuario.',
 'quota_is_disabled' => 'La cuota está actualmente deshabilitada en las opciones. Establecer una cuota de usuario no tendrá efecto hasta que sea habilitada de nuevo.',
 'quota_warning' => 'El máximo de uso de disco se ha excedido en [bytes]. Por favor eliminar documentos o versiones anteriores.',
 'receipt_deletion_email_body' => '',
