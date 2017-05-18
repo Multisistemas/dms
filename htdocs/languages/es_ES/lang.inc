@@ -41,7 +41,7 @@ Documento: [name]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'access_permission_changed_email_subject' => '[sitename]: [name] - Permisos modificados',
+'access_permission_changed_email_subject' => 'Permisos modificados',
 'according_settings' => 'Conforme a configuración',
 'action' => 'Acción',
 'actions' => 'Acciones',
@@ -101,7 +101,7 @@ Versión: [version]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'approval_request_email_subject' => '[sitename]: [name] - Petición de aprobación',
+'approval_request_email_subject' => 'Petición de aprobación',
 'approval_status' => 'Estado de aprobación',
 'approval_submit_email' => '',
 'approval_submit_email_body' => 'Aprobación del documento
@@ -112,7 +112,7 @@ Estado: [status]
 Comentarios: [comment]
 Usuario: [username]
 URL: [url]',
-'approval_submit_email_subject' => '[sitename]: [name] - Aprobación enviada',
+'approval_submit_email_subject' => 'Aprobación enviada',
 'approval_summary' => 'Resumen de aprobación',
 'approval_update_failed' => 'Error actualizando el estado de aprobación. Actualización fallida.',
 'approvers' => 'Aprobadores',
@@ -162,7 +162,7 @@ Atributo: [attribute]
 Carpeta principal: [folder_path]
 Usario: [username]
 URL: [url]',
-'attribute_changed_email_subject' => '[sitename]: [name] - Atributo modificado',
+'attribute_changed_email_subject' => 'Atributo modificado',
 'attribute_count' => 'Cantidad de usos',
 'attribute_value' => 'Valor del atributo',
 'attribute_value_not_in_valueset' => '',
@@ -329,7 +329,7 @@ Comentario: [new_comment]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'document_comment_changed_email_subject' => '[sitename]: [name] - Comentario modificado',
+'document_comment_changed_email_subject' => 'Comentario modificado',
 'document_count' => 'Número de documentos:',
 'document_deleted' => 'Documento eliminado',
 'document_deleted_email' => 'Documento eliminado',
@@ -337,7 +337,7 @@ URL: [url]',
 Documento: [name]
 Carpeta principal: [folder_path]
 Usuario: [username]',
-'document_deleted_email_subject' => '[sitename]: [name] - Documento eliminado',
+'document_deleted_email_subject' => 'Documento eliminado',
 'document_duplicate_name' => 'Nombre de documento duplicado',
 'document_has_no_workflow' => 'Documento sin flujo de trabajo',
 'document_infos' => 'Informaciones',
@@ -352,7 +352,7 @@ carpeta antigua: [old_folder_path]
 Nueva carpeta: [new_folder_path]
 Usuario: [username]
 URL: [url]',
-'document_moved_email_subject' => '[sitename]: [name] - Documento movido',
+'document_moved_email_subject' => 'Documento movido',
 'document_not_checkedout' => '',
 'document_renamed_email' => 'Documento renombrado',
 'document_renamed_email_body' => 'Documento renombrado
@@ -361,7 +361,7 @@ Carpeta principal: [folder_path]
 Nombre anterior: [old_name]
 Usuario: [username]
 URL: [url]',
-'document_renamed_email_subject' => '[sitename]: [name] - Documento renombrado',
+'document_renamed_email_subject' => 'Documento renombrado',
 'document_status_changed_email' => 'Estado del documento modificado',
 'document_status_changed_email_body' => 'Estado del documento modificado
 Documento: [name]
@@ -369,7 +369,7 @@ Estado: [status]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'document_status_changed_email_subject' => '[sitename]: [name] - Estado del documento modificado',
+'document_status_changed_email_subject' => 'Estado del documento modificado',
 'document_title' => 'Documento \'[documentname]\'',
 'document_updated_email' => 'Documento actualizado',
 'document_updated_email_body' => 'Documento actualizado
@@ -379,7 +379,7 @@ Usuario: [username]
 Comentario: [comment]
 Versión comentario: [version_comment]
 URL: [url]',
-'document_updated_email_subject' => '[sitename]: [name] - Documento actualizado',
+'document_updated_email_subject' => 'Documento actualizado',
 'does_not_expire' => 'No caduca',
 'does_not_inherit_access_msg' => 'heredar el acceso',
 'download' => 'Descargar',
@@ -456,7 +456,7 @@ Documento: [name]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'expiry_changed_email_subject' => '[sitename]: [name] - Fecha de caducidad modificada',
+'expiry_changed_email_subject' => 'Fecha de caducidad modificada',
 'export' => '',
 'extension_manager' => 'Administrar extensiones',
 'february' => 'Febrero',
@@ -479,7 +479,7 @@ Comentario: [new_comment]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'folder_comment_changed_email_subject' => '[sitename]: [name] - Comentario modificado',
+'folder_comment_changed_email_subject' => 'Comentario modificado',
 'folder_contents' => 'Contenido de Carpetas',
 'folder_deleted_email' => 'Carpeta eliminada',
 'folder_deleted_email_body' => 'Carpeta eliminada
@@ -487,7 +487,7 @@ Carpeta: [name]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'folder_deleted_email_subject' => '[sitename]: [name] - Carpeta eliminada',
+'folder_deleted_email_subject' => 'Carpeta eliminada',
 'folder_infos' => 'Informaciones de Carpeta',
 'folder_moved_email' => 'Carpeta movida',
 'folder_moved_email_body' => 'Carpeta movida
@@ -496,7 +496,7 @@ Antigua carpeta: [old_folder_path]
 Nueva carpeta: [new_folder_path]
 Usuario: [username]
 URL: [url]',
-'folder_moved_email_subject' => '[sitename]: [name] - Carpeta movida',
+'folder_moved_email_subject' => 'Carpeta movida',
 'folder_renamed_email' => 'Carpeta renombrada',
 'folder_renamed_email_body' => 'Carpeta renombrada
 Carpeta: [name]
@@ -504,7 +504,7 @@ Carpeta principal: [folder_path]
 Antiguo nombre: [old_name]
 Usuario: [username]
 URL: [url]',
-'folder_renamed_email_subject' => '[sitename]: [name] - Carpeta renombrada',
+'folder_renamed_email_subject' => 'Carpeta renombrada',
 'folder_title' => 'Carpeta \'[foldername]\'',
 'friday' => 'Viernes',
 'friday_abbr' => 'V',
@@ -692,7 +692,7 @@ Comentario: [comment]
 Versión comentario: [version_comment]
 Usuario: [username]
 URL: [url]',
-'new_document_email_subject' => '[sitename]: [folder_name] - Nuevo documento',
+'new_document_email_subject' => 'Nuevo documento',
 'new_file_email' => 'Nuevo adjunto',
 'new_file_email_body' => 'Nuevo adjunto
 Nombre: [name]
@@ -700,7 +700,7 @@ Documento: [document]
 Comentario: [comment]
 Usuario: [username]
 URL: [url]',
-'new_file_email_subject' => '[sitename]: [document] - Nuevo adjunto',
+'new_file_email_subject' => 'Nuevo adjunto',
 'new_folder' => 'Nueva carpeta',
 'new_password' => 'Nueva contraseña',
 'new_subfolder_email' => 'Nueva carpeta',
@@ -710,7 +710,7 @@ Carpeta principal: [folder_path]
 Comentario: [comment]
 Usuario: [username]
 URL: [url]',
-'new_subfolder_email_subject' => '[sitename]: [name] - Nueva carpeta',
+'new_subfolder_email_subject' => 'Nueva carpeta',
 'new_user_image' => 'Nueva imagen',
 'next_state' => 'Nuevo estado',
 'nl_NL' => 'Holandes',
@@ -721,14 +721,14 @@ Nombre: [name]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'notify_added_email_subject' => '[sitename]: [name] - Añadido a la lista de notificación',
+'notify_added_email_subject' => 'Añadido a la lista de notificación',
 'notify_deleted_email' => 'Ha sido eliminado de la lista de notificación',
 'notify_deleted_email_body' => 'Eliminado de la lista de notificación
 Nombre: [name]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'notify_deleted_email_subject' => '[sitename]: [name] - Eliminado de la lista de notificación',
+'notify_deleted_email_subject' => 'Eliminado de la lista de notificación',
 'november' => 'Noviembre',
 'now' => 'ahora',
 'no_action' => 'No es necesaria ninguna acción',
@@ -777,7 +777,7 @@ Antiguo propietario: [old_owner]
 Nuevo propietario: [new_owner]
 Usuario: [username]
 URL: [url]',
-'ownership_changed_email_subject' => '[sitename]: [name] - Propietario modificado',
+'ownership_changed_email_subject' => 'Propietario modificado',
 'password' => 'Contraseña',
 'password_already_used' => 'La contraseña ya está en uso',
 'password_expiration' => 'Caducidad de la contraseña',
@@ -856,7 +856,7 @@ Flujo de trabajo: [workflow]
 Carpeta principal: [folder_path]
 Usuario: [username]
 nURL: [url]',
-'removed_workflow_email_subject' => '[sitename]: [name] - Eliminar flujo de trabajo de la versión del documento',
+'removed_workflow_email_subject' => 'Eliminar flujo de trabajo de la versión del documento',
 'remove_marked_files' => 'Eliminar ficheros marcados',
 'repaired' => 'Reparado',
 'repairing_objects' => 'Reparando documentos y carpetas.',
@@ -868,9 +868,9 @@ Estado actual: [current_state]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'request_workflow_action_email_subject' => '',
+'request_workflow_action_email_subject' => 'Acción requerida en flujo de trabajo',
 'reset_checkout' => '',
-'restrict_access' => '',
+'restrict_access' => 'Sin acceso a',
 'results_page' => 'Página de resultados',
 'return_from_subworkflow' => 'Regreso a sub Flujo de trabajo',
 'return_from_subworkflow_email_body' => 'Retorno del subflujo de trabajo
@@ -881,7 +881,7 @@ Subflujo de trabajo: [subworkflow]
 Carpeta principal: [folder_path]
 Usuario: [username]
 nURL: [url]',
-'return_from_subworkflow_email_subject' => '[sitename]: [name] - Retorno del subflujo de trabajo',
+'return_from_subworkflow_email_subject' => 'Retorno del subflujo de trabajo',
 'reverse_links' => 'Documentos que contienen un link al documento actual',
 'reviewers' => 'Revisores',
 'reviewer_already_assigned' => 'Ya está asignado como revisor',
@@ -905,7 +905,7 @@ Comentario: [comment]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'review_submit_email_subject' => '[sitename]: [name] - Revisión enviada',
+'review_submit_email_subject' => 'Revisión enviada',
 'review_summary' => 'Resumen de revisión',
 'review_update_failed' => 'Error actualizando el estado de la revisión. La actualización ha fallado.',
 'revise_document' => '',
@@ -928,7 +928,7 @@ Flujo de trabajo: [workflow]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'rewind_workflow_email_subject' => '[sitename]: [name] - El flujo de trabajo fue retrocedido',
+'rewind_workflow_email_subject' => 'El flujo de trabajo fue retrocedido',
 'rewind_workflow_warning' => 'Si su flujo de trabajo fue retrocedido a su estado inicial, todo el log del flujo de trabajo de este documento será borrado y no se podrá recuperar.',
 'rm_attrdef' => 'Eliminar definición de atributo',
 'rm_attrdefgroup' => '',
@@ -966,7 +966,7 @@ Sub flujo de trabajo: [subworkflow]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'run_subworkflow_email_subject' => '[sitename]: [name] - Subflujo de trabajo iniciado',
+'run_subworkflow_email_subject' => 'Subflujo de trabajo iniciado',
 'ru_RU' => 'Russo',
 'saturday' => 'Sábado',
 'saturday_abbr' => 'S',
@@ -1442,8 +1442,8 @@ URL: [url]',
 'toggle_manager' => 'Intercambiar mánager',
 'toggle_qrcode' => '',
 'to_before_from' => 'La fecha de finalización no debe ser anterior a la de inicio',
-'transition_triggered_email' => 'Workflow transition triggered',
-'transition_triggered_email_body' => 'Workflow transition triggered
+'transition_triggered_email' => 'Nueva transición en flujo de trabajo',
+'transition_triggered_email_body' => 'Transición de flujo de trabajo
 Documento: [name]
 Versión: [version]
 Comentario: [comment]
@@ -1453,7 +1453,7 @@ Estado actual: [current_state]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'transition_triggered_email_subject' => '[sitename]: [name] - Workflow transition triggered',
+'transition_triggered_email_subject' => 'Transisión en el flujo de trabajo',
 'transmittal' => '',
 'transmittalitem_removed' => '',
 'transmittalitem_updated' => '',
@@ -1526,7 +1526,7 @@ Versión: [version]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'version_deleted_email_subject' => '[sitename]: [name] - Versión eliminada',
+'version_deleted_email_subject' => 'Versión eliminada',
 'version_info' => 'Información de versión',
 'view' => 'Vista',
 'view_online' => 'Ver online',
