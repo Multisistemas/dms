@@ -34,7 +34,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	function __construct($params, $theme='bootstrap') {
 		$this->theme = $theme;
 		$this->params = $params;
-		$this->imgpath = '../views/'.$theme.'/images/';
+		$this->imgpath = '/views/'.$theme.'/images/';
 		$this->extraheader = array('js'=>'', 'css'=>'');
 		$this->footerjs = array();
 	}
@@ -69,33 +69,33 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">'."\n";
 		if($base)
-			echo '<base href="../../">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/select2/css/select2.min.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/select2/css/select2-bootstrap.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/custom.css" rel="stylesheet">'."\n";
+			echo '<base href="/../">'."\n";
+		echo '<link href="/styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
+		echo '<link href="/styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
+		echo '<link href="/styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
+		echo '<link href="/styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
+		echo '<link href="/styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
+		echo '<link href="/styles/'.$this->theme.'/select2/css/select2.min.css" rel="stylesheet">'."\n";
+		echo '<link href="/styles/'.$this->theme.'/select2/css/select2-bootstrap.css" rel="stylesheet">'."\n";
+		echo '<link href="/styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
+		echo '<link href="/styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
+		echo '<link href="/styles/'.$this->theme.'/custom.css" rel="stylesheet">'."\n";
 
 		if($this->extraheader['css'])
 			echo $this->extraheader['css'];
-//		echo '<link href="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">'."\n";
+//		echo '<link href="/styles/'.$this->theme.'/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">'."\n";
 
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
+		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
 		if($this->extraheader['js'])
 			echo $this->extraheader['js'];
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/passwordstrength/jquery.passwordstrength.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/jquery.noty.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topCenter.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/themes/default.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jqtree/tree.jquery.js"></script>'."\n";
-//		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-cookie/jquery.cookie.js"></script>'."\n";
-		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
+		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/passwordstrength/jquery.passwordstrength.js"></script>'."\n";
+		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/noty/jquery.noty.js"></script>'."\n";
+		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
+		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/noty/layouts/topCenter.js"></script>'."\n";
+		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/noty/themes/default.js"></script>'."\n";
+		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/jqtree/tree.jquery.js"></script>'."\n";
+//		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/jquery-cookie/jquery.cookie.js"></script>'."\n";
+		echo '<link rel="shortcut icon" href="/styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
 		if($this->params['session'] && $this->params['session']->getSu()) {
 ?>
 <style type="text/css">
@@ -128,13 +128,13 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				$this->missingḺanguageKeys();
 			}
 		}
-		echo '<script src="../styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
-		echo '<script src="../styles/'.$this->theme.'/datepicker/js/bootstrap-datepicker.js"></script>'."\n";
+		echo '<script src="/styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
+		echo '<script src="/styles/'.$this->theme.'/datepicker/js/bootstrap-datepicker.js"></script>'."\n";
 		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
-			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
-		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
-		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
-		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
+			echo '<script src="/styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
+		echo '<script src="/styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
+		echo '<script src="/styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
+		echo '<script src="/styles/'.$this->theme.'/application.js"></script>'."\n";
 		if($this->footerjs) {
 			$jscode = "$(document).ready(function () {\n";
 			foreach($this->footerjs as $script) {
@@ -151,7 +151,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			parse_str($_SERVER['QUERY_STRING'], $tmp);
 			$tmp['action'] = 'footerjs';
 			$tmp['hash'] = $hashjs;
-			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
+			echo '<script src="/out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		if(method_exists($this, 'js')) {
 			parse_str($_SERVER['QUERY_STRING'], $tmp);
@@ -222,7 +222,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"navbar navbar-default navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container-fluid\">\n";
-		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
+		echo "   <a class=\"brand\" href=\"/out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		echo "  </div>\n";
 		echo " </div>\n";
 		echo "</div>\n";
@@ -249,18 +249,18 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		foreach($clipboard['folders'] as $folderid) {
 			if($folder = $this->params['dms']->getFolder($folderid))
-				$content .= "    <li><a href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><i class=\"icon-folder-close-alt\"></i> ".htmlspecialchars($folder->getName())."</a></li>\n";
+				$content .= "    <li><a href=\"/out/out.ViewFolder.php?folderid=".$folder->getID()."\"><i class=\"icon-folder-close-alt\"></i> ".htmlspecialchars($folder->getName())."</a></li>\n";
 		}
 		foreach($clipboard['docs'] as $docid) {
 			if($document = $this->params['dms']->getDocument($docid))
-				$content .= "    <li><a href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><i class=\"icon-file\"></i> ".htmlspecialchars($document->getName())."</a></li>\n";
+				$content .= "    <li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getID()."\"><i class=\"icon-file\"></i> ".htmlspecialchars($document->getName())."</a></li>\n";
 		}
 		$content .= "    <li class=\"divider\"></li>\n";
 		if(isset($this->params['folder']) && $this->params['folder']->getAccessMode($this->params['user']) >= M_READWRITE) {
-			$content .= "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
+			$content .= "    <li><a href=\"/op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
 		}
-//		$content .= "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">kkk</a> </li>\n";
-		$content .= "    <li><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">".getMLText("clear_clipboard")."</a></li>\n";
+//		$content .= "    <li><a href=\"/op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a><a class=\"ajax-click\" data-href=\"/op/op.Ajax.php\" data-param1=\"command=clearclipboard\">kkk</a> </li>\n";
+		$content .= "    <li><a class=\"ajax-click\" data-href=\"/op/op.Ajax.php\" data-param1=\"command=clearclipboard\">".getMLText("clear_clipboard")."</a></li>\n";
 		$content .= "     </ul>\n";
 		$content .= "    </li>\n";
 		$content .= "   </ul>\n";
@@ -277,7 +277,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "     <span class=\"icon-bar\"></span>\n";
 		echo "     <span class=\"icon-bar\"></span>\n";
 		echo "   </a>\n";
-		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\"><img src='/views/multisistemas/images/logo.png' alt=\"Multisistemas Logo\" /> ".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
+		echo "   <a class=\"brand\" href=\"/out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\"><img src='/views/multisistemas/images/logo.png' alt=\"Multisistemas Logo\" /> ".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		if(isset($this->params['user']) && $this->params['user']) {
 			echo "   <div class=\"nav-collapse nav-col1\">\n";
 			echo "   <ul id=\"main-menu-admin\" class=\"nav pull-right\">\n";
@@ -286,8 +286,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 			if (!$this->params['user']->isGuest()) {
 				$menuitems = array();
-				$menuitems['my_documents'] = array('link'=>"../out/out.MyDocuments.php?inProcess=1", 'label'=>'my_documents');
-				$menuitems['my_account'] = array('link'=>"../out/out.MyAccount.php", 'label'=>'my_account');
+				$menuitems['my_documents'] = array('link'=>"/out/out.MyDocuments.php?inProcess=1", 'label'=>'my_documents');
+				$menuitems['my_account'] = array('link'=>"/out/out.MyAccount.php", 'label'=>'my_account');
 				$hookObjs = $this->getHookObjects('SeedDMS_View_Bootstrap');
 				foreach($hookObjs as $hookObj) {
 					if (method_exists($hookObj, 'userMenuItems')) {
@@ -313,7 +313,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 						echo "<li class=\"active\">";
 					else
 						echo "<li>";
-					echo "<a href=\"../op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
+					echo "<a href=\"/op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
 					echo getMLText($currLang)."</a></li>\n";
 				}
 				echo "     </ul>\n";
@@ -321,14 +321,14 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			}
 			if($this->params['user']->isAdmin()) {
 				$showdivider = true;
-				echo "    <li><a href=\"../out/out.SubstituteUser.php\">".getMLText("substitute_user")."</a></li>\n";
+				echo "    <li><a href=\"/out/out.SubstituteUser.php\">".getMLText("substitute_user")."</a></li>\n";
 			}
 			if($showdivider)
 				echo "    <li class=\"divider\"></li>\n";
 			if($this->params['session']->getSu()) {
-				echo "    <li><a href=\"../op/op.ResetSu.php\">".getMLText("sign_out_user")."</a></li>\n";
+				echo "    <li><a href=\"/op/op.ResetSu.php\">".getMLText("sign_out_user")."</a></li>\n";
 			} else {
-				echo "    <li><a href=\"../op/op.Logout.php\">".getMLText("sign_out")."</a></li>\n";
+				echo "    <li><a href=\"/op/op.Logout.php\">".getMLText("sign_out")."</a></li>\n";
 			}
 			echo "     </ul>\n";
 			echo "    </li>\n";
@@ -341,16 +341,16 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			}
 
 			echo "   <ul class=\"nav\">\n";
-	//		echo "    <li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
-	//		echo "    <li><a href=\"../out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
-			if ($this->params['enablecalendar']) echo "    <li><a href=\"../out/out.Calendar.php?mode=".$this->params['calendardefaultview']."\">".getMLText("calendar")."</a></li>\n";
-			if ($this->params['user']->isAdmin()) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
+	//		echo "    <li id=\"first\"><a href=\"/out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
+	//		echo "    <li><a href=\"/out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
+			if ($this->params['enablecalendar']) echo "    <li><a href=\"/out/out.Calendar.php?mode=".$this->params['calendardefaultview']."\">".getMLText("calendar")."</a></li>\n";
+			if ($this->params['user']->isAdmin()) echo "    <li><a href=\"/out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
 			if($this->params['enablehelp']) {
 			$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-			echo "    <li><a href=\"../out/out.Help.php?context=".$tmp[1]."\">".getMLText("help")."</a></li>\n";
+			echo "    <li><a href=\"/out/out.Help.php?context=".$tmp[1]."\">".getMLText("help")."</a></li>\n";
 			}
 			echo "   </ul>\n";
-			echo "     <form action=\"../out/out.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
+			echo "     <form action=\"/out/out.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
 			if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), $dms->getClassname('folder'))) {
 				echo "      <input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
 			}
@@ -381,17 +381,17 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		for ($i = 0; $i < count($path); $i++) {
 			$txtpath .= "<li>";
 			if ($i +1 < count($path)) {
-				$txtpath .= "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\" rel=\"folder_".$path[$i]->getID()."\" class=\"table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">".
+				$txtpath .= "<a href=\"/out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\" rel=\"folder_".$path[$i]->getID()."\" class=\"table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">".
 					htmlspecialchars($path[$i]->getName())."</a>";
 			}
 			else {
-				$txtpath .= ($tagAll ? "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\">".
+				$txtpath .= ($tagAll ? "<a href=\"/out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\">".
 										 htmlspecialchars($path[$i]->getName())."</a>" : htmlspecialchars($path[$i]->getName()));
 			}
 			$txtpath .= " <span class=\"divider\">/</span></li>";
 		}
 		if($document)
-			$txtpath .= "<li><a href=\"../out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
+			$txtpath .= "<li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
 
 		return '<ul class="breadcrumb">'.$txtpath.'</ul>';
 	} /* }}} */
@@ -448,34 +448,34 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 		$accessMode = $folder->getAccessMode($this->params['user']);
 		$folderID = $folder->getID();
-		echo "<id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=". $folderID ."&showtree=".showtree()."\" class=\"brand\">".getMLText("folder")."</a>\n";
+		echo "<id=\"first\"><a href=\"/out/out.ViewFolder.php?folderid=". $folderID ."&showtree=".showtree()."\" class=\"brand\">".getMLText("folder")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 		$menuitems = array();
 
 		if ($accessMode == M_READ && !$this->params['user']->isGuest()) {
-			$menuitems['edit_folder_notify'] = array('link'=>"../out/out.FolderNotify.php?folderid=".$folderID."&showtree=".showtree(), 'label'=>'edit_folder_notify');
+			$menuitems['edit_folder_notify'] = array('link'=>"/out/out.FolderNotify.php?folderid=".$folderID."&showtree=".showtree(), 'label'=>'edit_folder_notify');
 		}
 		else if ($accessMode >= M_READWRITE) {
-			$menuitems['add_subfolder'] = array('link'=>"../out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_subfolder');
-			$menuitems['add_document'] = array('link'=>"../out/out.AddDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_document');
+			$menuitems['add_subfolder'] = array('link'=>"/out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_subfolder');
+			$menuitems['add_document'] = array('link'=>"/out/out.AddDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_document');
 			if($this->params['enablelargefileupload'])
-				$menuitems['add_multiple_documents'] = array('link'=>"../out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_multiple_documents');
-			$menuitems['edit_folder_props'] = array('link'=>"../out/out.EditFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'edit_folder_props');
+				$menuitems['add_multiple_documents'] = array('link'=>"/out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_multiple_documents');
+			$menuitems['edit_folder_props'] = array('link'=>"/out/out.EditFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'edit_folder_props');
 			if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
-				$menuitems['move_folder'] = array('link'=>"../out/out.MoveFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'move_folder');
+				$menuitems['move_folder'] = array('link'=>"/out/out.MoveFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'move_folder');
 
 			if ($accessMode == M_ALL) {
 				if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
-					$menuitems['rm_folder'] = array('link'=>"../out/out.RemoveFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'rm_folder');
+					$menuitems['rm_folder'] = array('link'=>"/out/out.RemoveFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'rm_folder');
 			}
 			if ($accessMode == M_ALL) {
-				$menuitems['edit_folder_access'] = array('link'=>"../out/out.FolderAccess.php?folderid=".$folderID."&showtree=".showtree(), 'label'=>'edit_folder_access');
+				$menuitems['edit_folder_access'] = array('link'=>"/out/out.FolderAccess.php?folderid=".$folderID."&showtree=".showtree(), 'label'=>'edit_folder_access');
 			}
-			$menuitems['edit_existing_notify'] = array('link'=>"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=". showtree(), 'label'=>'edit_existing_notify');
+			$menuitems['edit_existing_notify'] = array('link'=>"/out/out.FolderNotify.php?folderid=". $folderID ."&showtree=". showtree(), 'label'=>'edit_existing_notify');
 		}
 		if ($this->params['user']->isAdmin() && $this->params['enablefullsearch']) {
-			$menuitems['index_folder'] = array('link'=>"../out/out.Indexer.php?folderid=". $folderID."&showtree=".showtree(), 'label'=>'index_folder');
+			$menuitems['index_folder'] = array('link'=>"/out/out.Indexer.php?folderid=". $folderID."&showtree=".showtree(), 'label'=>'index_folder');
 		}
 
 		/* Check if hook exists because otherwise callHook() will override $menuitems */
@@ -493,37 +493,37 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	private function documentNavigationBar($document)	{ /* {{{ */
 		$accessMode = $document->getAccessMode($this->params['user']);
 		$docid=".php?documentid=" . $document->getID();
-		echo "<id=\"first\"><a href=\"../out/out.ViewDocument". $docid ."\" class=\"brand\">".getMLText("document")."</a>\n";
+		echo "<id=\"first\"><a href=\"/out/out.ViewDocument". $docid ."\" class=\"brand\">".getMLText("document")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 		$menuitems = array();
 
 		if ($accessMode >= M_READWRITE) {
 			if (!$document->isLocked()) {
-				$menuitems['update_document'] = array('link'=>"../out/out.UpdateDocument".$docid, 'label'=>'update_document');
-				$menuitems['lock_document'] = array('link'=>"../op/op.LockDocument".$docid, 'label'=>'lock_document');
-				$menuitems['edit_document_props'] = array('link'=>"../out/out.EditDocument".$docid , 'label'=>'edit_document_props');
-				$menuitems['move_document'] = array('link'=>"../out/out.MoveDocument".$docid, 'label'=>'move_document');
+				$menuitems['update_document'] = array('link'=>"/out/out.UpdateDocument".$docid, 'label'=>'update_document');
+				$menuitems['lock_document'] = array('link'=>"/op/op.LockDocument".$docid, 'label'=>'lock_document');
+				$menuitems['edit_document_props'] = array('link'=>"/out/out.EditDocument".$docid , 'label'=>'edit_document_props');
+				$menuitems['move_document'] = array('link'=>"/out/out.MoveDocument".$docid, 'label'=>'move_document');
 			}
 			else {
 				$lockingUser = $document->getLockingUser();
 				if (($lockingUser->getID() == $this->params['user']->getID()) || ($document->getAccessMode($this->params['user']) == M_ALL)) {
-					$menuitems['update_document'] = array('link'=>"../out/out.UpdateDocument".$docid, 'label'=>'update_document');
-					$menuitems['unlock_document'] = array('link'=>"../op/op.UnlockDocument".$docid, 'label'=>'unlock_document');
-					$menuitems['edit_document_props'] = array('link'=>"../out/out.EditDocument".$docid, 'label'=>'edit_document_props');
-					$menuitems['move_document'] = array('link'=>"../out/out.MoveDocument".$docid, 'label'=>'move_document');
+					$menuitems['update_document'] = array('link'=>"/out/out.UpdateDocument".$docid, 'label'=>'update_document');
+					$menuitems['unlock_document'] = array('link'=>"/op/op.UnlockDocument".$docid, 'label'=>'unlock_document');
+					$menuitems['edit_document_props'] = array('link'=>"/out/out.EditDocument".$docid, 'label'=>'edit_document_props');
+					$menuitems['move_document'] = array('link'=>"/out/out.MoveDocument".$docid, 'label'=>'move_document');
 				}
 			}
 			if($this->params['accessobject']->maySetExpires()) {
-				$menuitems['expires'] = array('link'=>"../out/out.SetExpires".$docid, 'label'=>'expires');
+				$menuitems['expires'] = array('link'=>"/out/out.SetExpires".$docid, 'label'=>'expires');
 			}
 		}
 		if ($accessMode == M_ALL) {
-			$menuitems['rm_document'] = array('link'=>"../out/out.RemoveDocument".$docid, 'label'=>'rm_document');
-			$menuitems['edit_document_access'] = array('link'=>"../out/out.DocumentAccess". $docid, 'label'=>'edit_document_access');
+			$menuitems['rm_document'] = array('link'=>"/out/out.RemoveDocument".$docid, 'label'=>'rm_document');
+			$menuitems['edit_document_access'] = array('link'=>"/out/out.DocumentAccess". $docid, 'label'=>'edit_document_access');
 		}
 		if ($accessMode >= M_READ && !$this->params['user']->isGuest()) {
-			$menuitems['edit_existing_notify'] = array('link'=>"../out/out.DocumentNotify". $docid, 'label'=>'edit_existing_notify');
+			$menuitems['edit_existing_notify'] = array('link'=>"/out/out.DocumentNotify". $docid, 'label'=>'edit_existing_notify');
 		}
 
 		/* Check if hook exists because otherwise callHook() will override $menuitems */
@@ -551,21 +551,21 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	} /* }}} */
 
 	private function accountNavigationBar() { /* {{{ */
-		echo "<id=\"first\"><a href=\"../out/out.MyAccount.php\" class=\"brand\">".getMLText("my_account")."</a>\n";
+		echo "<id=\"first\"><a href=\"/out/out.MyAccount.php\" class=\"brand\">".getMLText("my_account")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
 		if ($this->params['user']->isAdmin() || !$this->params['disableselfedit'])
-			echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
+			echo "<li id=\"first\"><a href=\"/out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
 		
 		if (!$this->params['user']->isAdmin()) 
-			echo "<li><a href=\"../out/out.UserDefaultKeywords.php\">".getMLText("edit_default_keywords")."</a></li>\n";
+			echo "<li><a href=\"/out/out.UserDefaultKeywords.php\">".getMLText("edit_default_keywords")."</a></li>\n";
 
-		echo "<li><a href=\"../out/out.ManageNotify.php\">".getMLText("edit_existing_notify")."</a></li>\n";
+		echo "<li><a href=\"/out/out.ManageNotify.php\">".getMLText("edit_existing_notify")."</a></li>\n";
 
 		if ($this->params['enableusersview']){
-			echo "<li><a href=\"../out/out.UsrView.php\">".getMLText("users")."</a></li>\n";
-			echo "<li><a href=\"../out/out.GroupView.php\">".getMLText("groups")."</a></li>\n";
+			echo "<li><a href=\"/out/out.UsrView.php\">".getMLText("users")."</a></li>\n";
+			echo "<li><a href=\"/out/out.GroupView.php\">".getMLText("groups")."</a></li>\n";
 		}		
 		echo "</ul>\n";
 		echo "</div>\n";
@@ -574,18 +574,18 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 	private function myDocumentsNavigationBar() { /* {{{ */
 
-		echo "<id=\"first\"><a href=\"../out/out.MyDocuments.php?inProcess=1\" class=\"brand\">".getMLText("my_documents")."</a>\n";
+		echo "<id=\"first\"><a href=\"/out/out.MyDocuments.php?inProcess=1\" class=\"brand\">".getMLText("my_documents")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
-		echo "<li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
-		echo "<li><a href=\"../out/out.MyDocuments.php\">".getMLText("all_documents")."</a></li>\n";
+		echo "<li><a href=\"/out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
+		echo "<li><a href=\"/out/out.MyDocuments.php\">".getMLText("all_documents")."</a></li>\n";
 		if($this->params['workflowmode'] == 'traditional' || $this->params['workflowmode'] == 'traditional_only_approval') {
 			if($this->params['workflowmode'] == 'traditional')
-				echo "<li><a href=\"../out/out.ReviewSummary.php\">".getMLText("review_summary")."</a></li>\n";
-			echo "<li><a href=\"../out/out.ApprovalSummary.php\">".getMLText("approval_summary")."</a></li>\n";
+				echo "<li><a href=\"/out/out.ReviewSummary.php\">".getMLText("review_summary")."</a></li>\n";
+			echo "<li><a href=\"/out/out.ApprovalSummary.php\">".getMLText("approval_summary")."</a></li>\n";
 		} else {
-			echo "<li><a href=\"../out/out.WorkflowSummary.php\">".getMLText("workflow_summary")."</a></li>\n";
+			echo "<li><a href=\"/out/out.WorkflowSummary.php\">".getMLText("workflow_summary")."</a></li>\n";
 		}
 		echo "</ul>\n";
 		echo "</div>\n";
@@ -593,16 +593,16 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	} /* }}} */
 
 	private function adminToolsNavigationBar() { /* {{{ */
-		echo "    <id=\"first\"><a href=\"../out/out.AdminTools.php\" class=\"brand\">".getMLText("admin_tools")."</a>\n";
+		echo "    <id=\"first\"><a href=\"/out/out.AdminTools.php\" class=\"brand\">".getMLText("admin_tools")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "   <ul class=\"nav\">\n";
 
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.UserList.php\">".getMLText("user_list")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.UserList.php\">".getMLText("user_list")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
@@ -611,13 +611,13 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("definitions")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
-		echo "     <li><a href=\"../out/out.Categories.php\">".getMLText("global_document_categories")."</a></li>\n";
-		echo "     <li><a href=\"../out/out.AttributeMgr.php\">".getMLText("global_attributedefinitions")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
+		echo "     <li><a href=\"/out/out.Categories.php\">".getMLText("global_document_categories")."</a></li>\n";
+		echo "     <li><a href=\"/out/out.AttributeMgr.php\">".getMLText("global_attributedefinitions")."</a></li>\n";
 		if($this->params['workflowmode'] == 'advanced') {
-			echo "     <li><a href=\"../out/out.WorkflowMgr.php\">".getMLText("global_workflows")."</a></li>\n";
-			echo "     <li><a href=\"../out/out.WorkflowStatesMgr.php\">".getMLText("global_workflow_states")."</a></li>\n";
-			echo "     <li><a href=\"../out/out.WorkflowActionsMgr.php\">".getMLText("global_workflow_actions")."</a></li>\n";
+			echo "     <li><a href=\"/out/out.WorkflowMgr.php\">".getMLText("global_workflows")."</a></li>\n";
+			echo "     <li><a href=\"/out/out.WorkflowStatesMgr.php\">".getMLText("global_workflow_states")."</a></li>\n";
+			echo "     <li><a href=\"/out/out.WorkflowActionsMgr.php\">".getMLText("global_workflow_actions")."</a></li>\n";
 		}
 		echo "     </ul>\n";
 		echo "    </li>\n";
@@ -628,9 +628,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "    <li class=\"dropdown\">\n";
 			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("fullsearch")." <i class=\"icon-caret-down\"></i></a>\n";
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-			echo "      <li><a href=\"../out/out.Indexer.php\">".getMLText("update_fulltext_index")."</a></li>\n";
-			echo "      <li><a href=\"../out/out.CreateIndex.php\">".getMLText("create_fulltext_index")."</a></li>\n";
-			echo "      <li><a href=\"../out/out.IndexInfo.php\">".getMLText("fulltext_info")."</a></li>\n";
+			echo "      <li><a href=\"/out/out.Indexer.php\">".getMLText("update_fulltext_index")."</a></li>\n";
+			echo "      <li><a href=\"/out/out.CreateIndex.php\">".getMLText("create_fulltext_index")."</a></li>\n";
+			echo "      <li><a href=\"/out/out.IndexInfo.php\">".getMLText("fulltext_info")."</a></li>\n";
 			echo "     </ul>\n";
 			echo "    </li>\n";
 			echo "   </ul>\n";
@@ -640,9 +640,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("backup_log_management")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
 		if ($this->params['logfileenable'])
-			echo "      <li><a href=\"../out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
+			echo "      <li><a href=\"/out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
@@ -651,14 +651,14 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.ImportFS.php\">".getMLText("import_fs")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ClearCache.php\">".getMLText("clear_cache")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.ImportFS.php\">".getMLText("import_fs")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.ClearCache.php\">".getMLText("clear_cache")."</a></li>\n";
+		echo "      <li><a href=\"/out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
@@ -671,14 +671,14 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	
 	private function calendarNavigationBar($d){ /* {{{ */
 		$ds="&day=".$d[0]."&month=".$d[1]."&year=".$d[2];
-		echo "<id=\"first\"><a href=\"../out/out.Calendar.php?mode=y\" class=\"brand\">".getMLText("calendar")."</a>\n";
+		echo "<id=\"first\"><a href=\"/out/out.Calendar.php?mode=y\" class=\"brand\">".getMLText("calendar")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
-		echo "<li><a href=\"../out/out.Calendar.php?mode=w".$ds."\">".getMLText("week_view")."</a></li>\n";
-		echo "<li><a href=\"../out/out.Calendar.php?mode=m".$ds."\">".getMLText("month_view")."</a></li>\n";
-		echo "<li><a href=\"../out/out.Calendar.php?mode=y".$ds."\">".getMLText("year_view")."</a></li>\n";
-		if (!$this->params['user']->isGuest()) echo "<li><a href=\"../out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
+		echo "<li><a href=\"/out/out.Calendar.php?mode=w".$ds."\">".getMLText("week_view")."</a></li>\n";
+		echo "<li><a href=\"/out/out.Calendar.php?mode=m".$ds."\">".getMLText("month_view")."</a></li>\n";
+		echo "<li><a href=\"/out/out.Calendar.php?mode=y".$ds."\">".getMLText("year_view")."</a></li>\n";
+		if (!$this->params['user']->isGuest()) echo "<li><a href=\"/out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -959,7 +959,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosedocsearch".$formName."\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-		print "<a data-target=\"#docChooser".$formName."\" href=\"../out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
+		print "<a data-target=\"#docChooser".$formName."\" href=\"/out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="docChooser<?php echo $formName ?>" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
@@ -1008,7 +1008,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\"/>";
 		print "<button type=\"button\" class=\"btn\" id=\"clearfolder".$form."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#folderChooser".$form."\" href=\"../out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "<a data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
@@ -1268,7 +1268,7 @@ $(document).ready(function() {
 		if ( is_file($this->imgpath.$img) ) {
 			return $this->imgpath.$img;
 		}
-		return "../out/images/$img";
+		return "/out/images/$img";
 	} /* }}} */
 
 	function getCountryFlag($lang) { /* {{{ */
@@ -1338,7 +1338,7 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function printNewTreeNavigationHtml($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0, $orderby='') { /* {{{ */
-		echo "<div id=\"jqtree".$formid."\" style=\"margin-left: 10px;\" data-url=\"../op/op.Ajax.php?command=subtree&showdocs=".$showdocs."&orderby=".$orderby."\"></div>\n";
+		echo "<div id=\"jqtree".$formid."\" style=\"margin-left: 10px;\" data-url=\"/op/op.Ajax.php?command=subtree&showdocs=".$showdocs."&orderby=".$orderby."\"></div>\n";
 	} /* }}} */
 
 	/**
@@ -1467,19 +1467,19 @@ $(function() {
 
 	function printTreeNavigation($folderid, $showtree){ /* {{{ */
 		if ($showtree==1){
-			$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><i class=\"icon-minus-sign\"></i></a>", true);
+			$this->contentHeading("<a href=\"/out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><i class=\"icon-minus-sign\"></i></a>", true);
 			$this->contentContainerStart();
 ?>
 	<script language="JavaScript">
 	function folderSelected(id, name) {
-		window.location = '../out/out.ViewFolder.php?folderid=' + id;
+		window.location = '/out/out.ViewFolder.php?folderid=' + id;
 	}
 	</script>
 <?php
 			$this->printNewTreeNavigation($folderid, M_READ, 0, '');
 			$this->contentContainerEnd();
 		} else {
-			$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
+			$this->contentHeading("<a href=\"/out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
 		}
 	} /* }}} */
 
@@ -1507,7 +1507,7 @@ $(function() {
 					}
 					$content .= "</td>\n";
 					$content .= "<td>\n";
-					$content .= "<div class=\"list-action\"><a class=\"removefromclipboard\" rel=\"F".$folderid."\" msg=\"".getMLText('splash_removed_from_clipboard')."\" _href=\"../op/op.RemoveFromClipboard.php?folderid=".(isset($this->params['folder']) ? $this->params['folder']->getID() : '')."&id=".$folderid."&type=folder\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
+					$content .= "<div class=\"list-action\"><a class=\"removefromclipboard\" rel=\"F".$folderid."\" msg=\"".getMLText('splash_removed_from_clipboard')."\" _href=\"/op/op.RemoveFromClipboard.php?folderid=".(isset($this->params['folder']) ? $this->params['folder']->getID() : '')."&id=".$folderid."&type=folder\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
 					$content .= "</td>\n";
 					$content .= "</tr>\n";
 					$foldercount++;
@@ -1528,9 +1528,9 @@ $(function() {
 						$content .= "<tr draggable=\"true\" rel=\"document_".$docid."\" class=\"table-row-document\" formtoken=\"".createFormKey('movedocument')."\">";
 
 						if (file_exists($dms->contentDir . $latestContent->getPath())) {
-							$content .= "<td><a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
+							$content .= "<td><a draggable=\"false\" href=\"/op/op.Download.php?documentid=".$docid."&version=".$version."\">";
 							if($previewer->hasPreview($latestContent)) {
-								$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"40\"src=\"/op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
 								$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							}
@@ -1544,7 +1544,7 @@ $(function() {
 						}
 						$content .= "</td>\n";
 						$content .= "<td>\n";
-						$content .= "<div class=\"list-action\"><a class=\"removefromclipboard\" rel=\"D".$docid."\" msg=\"".getMLText('splash_removed_from_clipboard')."\" _href=\"../op/op.RemoveFromClipboard.php?folderid=".(isset($this->params['folder']) ? $this->params['folder']->getID() : '')."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
+						$content .= "<div class=\"list-action\"><a class=\"removefromclipboard\" rel=\"D".$docid."\" msg=\"".getMLText('splash_removed_from_clipboard')."\" _href=\"/op/op.RemoveFromClipboard.php?folderid=".(isset($this->params['folder']) ? $this->params['folder']->getID() : '')."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
 						$content .= "</td>\n";
 						$content .= "</tr>";
 						$doccount++;
@@ -1619,7 +1619,7 @@ $(function() {
 					\"label\" : \"<i class='icon-remove'></i> ".getMLText("rm_document")."\",
 					\"class\" : \"btn-danger\",
 					\"callback\": function() {
-						$.get('../op/op.Ajax.php',
+						$.get('/op/op.Ajax.php',
 							{ command: 'deletedocument', id: id, formtoken: formtoken },
 							function(data) {
 								if(data.success) {
@@ -1692,7 +1692,7 @@ $(function() {
 					\"label\" : \"<i class='icon-remove'></i> ".getMLText("rm_folder")."\",
 					\"class\" : \"btn-danger\",
 					\"callback\": function() {
-						$.get('../op/op.Ajax.php',
+						$.get('/op/op.Ajax.php',
 							{ command: 'deletefolder', id: id, formtoken: formtoken },
 							function(data) {
 								if(data.success) {
@@ -1924,9 +1924,9 @@ $(document).ready( function() {
 
 			$content .= "<td>";
 			if (file_exists($dms->contentDir . $latestContent->getPath())) {
-				$content .= "<a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
+				$content .= "<a draggable=\"false\" href=\"/op/op.Download.php?documentid=".$docID."&version=".$version."\">";
 				if($previewer->hasPreview($latestContent)) {
-					$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"/op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				} else {
 					$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				}
@@ -1974,7 +1974,7 @@ $(document).ready( function() {
 				$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
 			}
 			if($document->getAccessMode($user) >= M_READWRITE) {
-				$content .= '<a href="../out/out.EditDocument.php?documentid='.$docID.'" title="'.getMLText("edit_document_props").'"><i class="icon-edit"></i></a>';
+				$content .= '<a href="/out/out.EditDocument.php?documentid='.$docID.'" title="'.getMLText("edit_document_props").'"><i class="icon-edit"></i></a>';
 			} else {
 				$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>';
 			}
@@ -2053,7 +2053,7 @@ $(document).ready( function() {
 			$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
 		}
 		if($subFolder->getAccessMode($user) >= M_READWRITE) {
-			$content .= '<a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid='.$subFolder->getID().'" title="'.getMLText("edit_folder_props").'"><i class="icon-edit"></i></a>';
+			$content .= '<a class_="btn btn-mini" href="/out/out.EditFolder.php?folderid='.$subFolder->getID().'" title="'.getMLText("edit_folder_props").'"><i class="icon-edit"></i></a>';
 		} else {
 			$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>';
 		}
@@ -2434,13 +2434,13 @@ mayscript>
 			case "review":
 				if($rec['file']) {
 					echo "<br />";
-					echo "<a href=\"../op/op.Download.php?documentid=".$document->getID()."&reviewlogid=".$rec['reviewLogID']."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText('download')."</a>";
+					echo "<a href=\"/op/op.Download.php?documentid=".$document->getID()."&reviewlogid=".$rec['reviewLogID']."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText('download')."</a>";
 				}
 				break;
 			case "approval":
 				if($rec['file']) {
 					echo "<br />";
-					echo "<a href=\"../op/op.Download.php?documentid=".$document->getID()."&approvelogid=".$rec['approveLogID']."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText('download')."</a>";
+					echo "<a href=\"/op/op.Download.php?documentid=".$document->getID()."&approvelogid=".$rec['approveLogID']."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText('download')."</a>";
 				}
 				break;
 			}
