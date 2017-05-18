@@ -611,9 +611,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($accessop->mayEditComment()) {
 			print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-comment\"></i>".getMLText("edit_comment")."</a></li>";
 		}
-		if($accessop->mayEditAttributes()) {
+		/*if($accessop->mayEditAttributes()) {
 			print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
-		}
+		}*/
+
+print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
 
 		//print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&vfile=1\"><i class=\"icon-info-sign\"></i>".getMLText("versioning_info")."</a></li>";	
 

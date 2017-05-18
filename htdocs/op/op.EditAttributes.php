@@ -59,7 +59,7 @@ if (!is_object($version)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
-$attributes = $_POST["attributes"];
+$attributes = $_POST["attributes"];////////////////
 
 if($attributes) {
 	$oldattributes = $version->getAttributes();
