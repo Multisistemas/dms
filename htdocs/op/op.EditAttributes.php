@@ -59,7 +59,25 @@ if (!is_object($version)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
-$attributes = $_POST["attributes"];////////////////
+if ($version->_mimeType != $_FILES["filename"]["type"][0]){
+    UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("no_equal_file_extension"));
+}
+
+$target_dir = $folder->_dms->contentDir.$documentid."/";
+
+$target_file = $target_dir . basename($_FILES["filename"]["name"][0]);
+
+$upload_result = move_uploaded_file($_FILES["filename"]["tmp_name"][0], $target_file);
+
+$change_name = rename($target_file, $target_dir.$version->getVersion().$version->_fileType);
+//$result = move_uploaded_file($thename = $_POST["userfile"][0], $file_folder.$version->getVersion().$version->_fileType);
+
+$document->setComment($_POST['version_comment']);
+
+$queryStr = "UPDATE tbl SET modified = " . $db->getCurrentTimestamp() . ", modifiedBy = " . $user->getID() . ", name = " . $db->qstr($name) . " WHERE id = ". (int) $id;
+$ret = $db->getResult($queryStr);
+
+//$new_file = rename($_POST["userfile"]["name"][0], $version->getVersion().$version->_fileType);
 
 if($attributes) {
 	$oldattributes = $version->getAttributes();

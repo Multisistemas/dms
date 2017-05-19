@@ -1564,5 +1564,6 @@ URL: [url]',
 'yes' => 'Sí',
 'zh_CN' => 'Chino (CN)',
 'zh_TW' => 'Chino (TW)',
+    'no_equal_file_extension' => 'El tipo de archivo subido no coincide con el existente en la versión actual'
 );
 ?>

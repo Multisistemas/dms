@@ -143,7 +143,7 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("edit_attributes"));
 		$this->contentContainerStart();
 ?>
-<form class="form-horizontal" action="../op/op.EditAttributes.php" name="form1" method="POST">
+<form class="form-horizontal" action="../op/op.EditAttributes.php" name="form1" method="POST" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('editattributes'); ?>
 	<input type="hidden" name="documentid" value="<?php print $document->getID();?>">
 	<input type="hidden" name="version" value="<?php print $version->getVersion();?>">
@@ -163,7 +163,18 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
         </tr>
         <tr>
             <td class="lbl-right"><?php printMLText("change_local_file");?>:</td>
-            <td><?php $this->printFileChooser('userfile[]', false); ?></td>
+            <td>
+                <div id="upload-files">
+                    <div id="upload-file">
+                        <div class="input-append">
+                            <input type="text" class="form-control" readonly>
+                            <span class="btn btn-default btn-file">
+					        <?php printMLText("browse");?>&hellip; <input id="" type="file" name="filename[]">
+				</span>
+                        </div>
+                    </div>
+                </div>
+            </td>
         </tr>
         <tr>
             <td class="lbl-right"><?php printMLText("comment_for_current_version");?>:</td>
