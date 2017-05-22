@@ -145,7 +145,7 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `tblActionsFollows`;
 
-CREATE TABLE `tblProcessOwners` (
+CREATE TABLE `tblActionsFollows` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `actionId` int(11) NOT NULL,
   `followResult` LONG VARCHAR NOT NULL DEFAULT '',
