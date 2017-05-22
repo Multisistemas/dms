@@ -109,7 +109,7 @@ DELIMITER ;
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
 
 
-# Dump of table tblActions
+# Dump of table tblProcessOwners
 # ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `tblProcessOwners`;
@@ -140,7 +140,7 @@ DELIMITER ;
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
 
 
-# Dump of table tblActions
+# Dump of table tblActionsFollows
 # ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `tblActionsFollows`;
