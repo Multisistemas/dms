@@ -1596,6 +1596,6 @@ URL: [url]',
 'zh_CN' => 'Chinese (CN)',
 'zh_TW' => 'Chinese (TW)',
 'no_equal_file_extension' => 'Uploaded file type does not match with the existing file type in current version',
-'no_confo' => 'Non Conformities',
+'nonconfo' => 'Non Conformities',
 );
 ?>

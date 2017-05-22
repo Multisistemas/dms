@@ -1565,6 +1565,10 @@ URL: [url]',
 'zh_CN' => 'Chino (CN)',
 'zh_TW' => 'Chino (TW)',
 'no_equal_file_extension' => 'El tipo de archivo subido no coincide con el existente en la versión actual',
-'no_confo' => 'No Conformidades',
+'nonconfo' => 'No Conformidades',
+'nonconfo_add_nonconfo' => 'Agregar No Conformidad',
+'nonconfo_view_all' => 'Enlistar No Conformidades',
+'nonconfo_add_process' => 'Agregar proceso',
+'nonconfo_define_owners' => 'Definir propietarios de procesos',
 );
 ?>

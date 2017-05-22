@@ -68,10 +68,7 @@ $(document).ready(function() {
 		$this->htmlStartPage(getMLText("nonconfo_title"));
 		$this->globalNavigation();
 		$this->contentStart();
-		$this->pageNavigation("", "nonconfo_title");
-
-		$this->contentHeading(getMLText("nonconfo_view_all"));
-		$this->contentContainerStart();
+		$this->pageNavigation("nonconfo_title", "nonconfo_view_navigation", "");
 
 ?>
 
