@@ -6,7 +6,6 @@ $EXT_CONF['nonconfo'] = array(
 	'version' => '1.0.0',
 	'releasedate' => '2017-05-17',
 	'author' => array('name'=>'Herson Cruz', 'email'=>'herson@multisistemas.com.sv', 'company'=>'<a href=http://multisistemas.com.sv>Multisistemas</a>'),
-	'author' => array('name'=>'Luis Medrano', 'email'=>'lmedrano@multisistemas.com.sv', 'company'=>'<a href=http://multisistemas.com.sv>Multisistemas</a>'),
 	'config' => array(
 		/*'input_field' => array(
 			'title'=>'Default alert days',

@@ -15,7 +15,7 @@
 
 include("../../../inc/inc.Settings.php");
 include("../../../inc/inc.Language.php");
-include("../inc/inc.NoConfoLanguages.php");
+include("../inc/inc.NonConfoLanguages.php");
 include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");

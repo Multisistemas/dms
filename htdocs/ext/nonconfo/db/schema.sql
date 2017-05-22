@@ -55,10 +55,10 @@ DELIMITER ;
 DROP TABLE IF EXISTS `tblNonconformities`;
 
 CREATE TABLE `tblNonconformities` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(255) NOT NULL DEFAULT '',
-  `description` LONG VARCHAR NOT NULL DEFAULT '',
-  `analysis` LONG VARCHAR NOT NULL DEFAULT '',
+  `description` VARCHAR(255) NOT NULL DEFAULT '',
+  `analysis` VARCHAR(255) NOT NULL DEFAULT '',
   `created` int(11) NOT NULL,
   `createdBy` int(11) NOT NULL,
   `modified` int(11) DEFAULT NULL,
@@ -85,9 +85,9 @@ DELIMITER ;
 DROP TABLE IF EXISTS `tblActions`;
 
 CREATE TABLE `tblActions` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nonconformityId` int(11) NOT NULL,
-  `description` LONG VARCHAR NOT NULL DEFAULT '',
+  `description` VARCHAR(255) NOT NULL DEFAULT '',
   `dateEnd` int(11) NOT NULL, 
   `created` int(11) NOT NULL,
   `createdBy` int(11) NOT NULL,
@@ -116,7 +116,7 @@ DROP TABLE IF EXISTS `tblProcessOwners`;
 
 CREATE TABLE `tblProcessOwners` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `processId` int(11) NOT NULL,
+  `processId` int(11) unsigned NOT NULL,
   `userId` int(11) NOT NULL,
   `created` int(11) NOT NULL,
   `createdBy` int(11) NOT NULL,
@@ -124,9 +124,11 @@ CREATE TABLE `tblProcessOwners` (
   `modifiedBy` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fkProcessOwnersProcessId` (`processId`),
+  KEY `fkProcessOwnersUserId` (`userId`),
   KEY `fkProcessOwnersCreatedBy` (`createdBy`),
   KEY `fkProcessOwnersModifiedBy` (`modifiedBy`),
   CONSTRAINT `fkProcessOwnersProcessId` FOREIGN KEY (`processId`) REFERENCES `tblProcesses` (`id`),
+  CONSTRAINT `fkProcessOwnersUserId` FOREIGN KEY (`userId`) REFERENCES `tblUsers` (`id`),
   CONSTRAINT `fkProcessOwnersCreatedBy` FOREIGN KEY (`createdBy`) REFERENCES `tblUsers` (`id`),
   CONSTRAINT `fkProcessOwnersModifiedBy` FOREIGN KEY (`modifiedBy`) REFERENCES `tblUsers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -146,12 +148,12 @@ DELIMITER ;
 DROP TABLE IF EXISTS `tblActionsFollows`;
 
 CREATE TABLE `tblActionsFollows` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `actionId` int(11) NOT NULL,
-  `followResult` LONG VARCHAR NOT NULL DEFAULT '',
+  `followResult` VARCHAR(255) NOT NULL DEFAULT '',
   `indicatorBefore` varchar(255) NOT NULL DEFAULT '',
   `indicatorAfter` varchar(255) NOT NULL DEFAULT '',
-  `status` varchar(255) NOT NULL NOT NULL DEFAULT '',
+  `status` varchar(255) NOT NULL DEFAULT '',
   `created` int(11) NOT NULL,
   `createdBy` int(11) NOT NULL,
   `modified` int(11) DEFAULT NULL,
