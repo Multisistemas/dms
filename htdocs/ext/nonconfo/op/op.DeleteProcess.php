@@ -14,8 +14,9 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../../../inc/inc.Settings.php");
+include("../../../inc/inc.LogInit.php");
+include("../../../inc/inc.Utils.php");
 include("../../../inc/inc.Language.php");
-include("../inc/inc.NonConfoLanguages.php");
 include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
@@ -24,19 +25,21 @@ include("../inc/inc.Process.php");
 include("../../../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
-	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("access_denied"));
+	UI::exitError(getMLText("nonconfo_delete_process"),getMLText("access_denied"));
 }
 
-// Get all process saved
-$processes = getProcesses();
-
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
-if($view) {
-	$view->setParam('processes', $processes);;
-	$view($_GET);
-	exit;
+if (!isset($_POST["id"])) {
+	UI::exitError(getMLText("nonconfo_delete_process"),getMLText("error_occured"));
 }
+
+$id = $_POST["id"];
+
+$res = deleteProcess($id);
+                                
+if (is_bool($res) && !$res) {
+	UI::exitError(getMLText("nonconfo_delete_process"),getMLText("error_occured"));
+}
+
+echo $res;
 
 ?>

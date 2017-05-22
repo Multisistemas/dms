@@ -17,13 +17,13 @@
 
 // DB //////////////////////////////////////////////////////////////////////////
 
-function getProcesses($page=0, $offset=10){
+function getProcesses(){
 
 	global $db;
 
-	$date = mktime(12,0,0, $month, $day, $year);
+	//$date = mktime(12,0,0, $month, $day, $year);
 	
-	$queryStr = "SELECT * FROM tblProcesses WHERE LIMIT " . $pge . ", " . $offset;
+	$queryStr = "SELECT * FROM tblProcesses";
 	$ret = $db->getResultArray($queryStr);
 	return $ret;
 }

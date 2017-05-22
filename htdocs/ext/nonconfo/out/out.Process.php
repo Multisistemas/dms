@@ -23,7 +23,7 @@ include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
 include("../../../inc/inc.Authentication.php");
 
-if ($_GET["mode"]) $mode=$_GET["mode"];
+//if ($_GET["mode"]) $mode=$_GET["mode"];
 
 // get required date else use current
 $currDate = time();
@@ -31,7 +31,7 @@ $currDate = time();
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->setParam('mode', $mode);
+	//$view->setParam('mode', $mode);
 	$view($_GET);
 	exit;
 }

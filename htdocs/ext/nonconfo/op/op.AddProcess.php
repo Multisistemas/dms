@@ -42,6 +42,6 @@ if (is_bool($res) && !$res) {
 
 add_log_line("?name=".$name);
 
-header("Location:../out/out.Process.php?mode=w");
+header("Location:../out/out.AddProcess.php");
 
 ?>
