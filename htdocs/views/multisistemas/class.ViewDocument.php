@@ -313,6 +313,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$showfullpreview = $this->params['showFullPreview'];
 		$converttopdf = $this->params['convertToPdf'];
 		$cachedir = $this->params['cachedir'];
+
 		if(!$showfullpreview)
 			return;
 
@@ -529,7 +530,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			print "</a>";
 		}
 		print "</td>\n";
-
 		print "<td><ul class=\"actions unstyled\">\n";
 		print "<li class=\"wordbreak\">".$latestContent->getOriginalFileName() ."</li>\n";
 		print "<li>".getMLText('version').": ".$latestContent->getVersion()."</li>\n";
@@ -542,10 +542,16 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".htmlspecialchars($updatingUser->getFullName())."</a></li>";
 		print "<li>".getLongReadableDate($latestContent->getDate())."</li>";
 
-		print "</ul>\n";
+    print "</ul></td>\n";
+
+    print "<td>";
+    print $latestContent->getComment();
+    print "</td>";
+
 		print "<ul class=\"actions unstyled\">\n";
 		$attributes = $latestContent->getAttributes();
 		if($attributes) {
+      print "<td>";
 			foreach($attributes as $attribute) {
 				$arr = $this->callHook('showDocumentContentAttribute', $latestContent, $attribute);
 				if(is_array($arr)) {
@@ -555,10 +561,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $attribute->getValueAsArray()))."</li>\n";
 				}
 			}
+      print "</ul></td>\n";
 		}
-		print "</ul></td>\n";
 
-		print "<td>".htmlspecialchars($latestContent->getComment())."</td>";
 
 		print "<td width='10%'>";
 		print getOverallStatusText($status["status"]);
@@ -569,13 +574,32 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		print "<td>";
 
-		print "<ul class=\"unstyled actions\">";
-		if ($file_exists){
-			print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-download\"></i>".getMLText("download")."</a></li>";
-			if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
-				print "<li><a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
+		/* Block for allow view/download the file*/
+		$theaccessMode2 = $folder->getAccessMode($this->params['user']);
+		if ($theaccessMode2 == M_READWRITE || $theaccessMode2 == M_ALL ) {
+				print "<ul class=\"unstyled actions\">";
+				if ($file_exists){
+					print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-download\"></i>".getMLText("download")."</a></li>";
+					if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
+						print "<li><a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
+				}
+				print "</ul>";
 		}
-		print "</ul>";
+
+		if ($theaccessMode2 == M_READ) {
+			// TODO: GET final status of the document
+			if($status["status"] == S_RELEASED) {
+				print "<ul class=\"unstyled actions\">";
+				if ($file_exists){
+					print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-download\"></i>".getMLText("download")."</a></li>";
+					if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
+						print "<li><a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
+				}
+				print "</ul>";
+			}
+		}
+		
+
 		print "<ul class=\"unstyled actions\">";
 		if ($file_exists){
 			if($accessop->mayEditVersion()) {
@@ -615,7 +639,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
 		}*/
 
-print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
+		$theaccessMode3 = $folder->getAccessMode($this->params['user']);
+		if ($theaccessMode3 == M_READWRITE || $theaccessMode3 == M_ALL ) {
+			if (!$this->params['user']->isGuest()) {
+				print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
+			}
+		}
 
 		//print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&vfile=1\"><i class=\"icon-info-sign\"></i>".getMLText("versioning_info")."</a></li>";	
 
@@ -870,10 +899,23 @@ print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version="
 			if($user->isAdmin()) {
 				if(SeedDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState())) {
 					print "<form action=\"../out/out.RemoveWorkflowFromDocument.php\" method=\"post\">".createHiddenFieldWithKey('removeworkflowfromdocument')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText('rm_workflow')."</button></form>";
-				} else {
+				} /*else {
 					print "<form action=\"../out/out.RewindWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('rewindworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-refresh\"></i> ".getMLText('rewind_workflow')."</button></form>";
+				}*/
+			}
+
+
+			/* Block for rewind the workflow status */
+			/* ///////////////////////////////////// */
+			$theaccessMode = $folder->getAccessMode($this->params['user']);
+			if ($theaccessMode == M_READWRITE || $theaccessMode == M_ALL ) {
+				if (!$this->params['user']->isGuest()) {
+					if(!(SeedDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState()))) {
+						print "<form action=\"../out/out.RewindWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('rewindworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-refresh\"></i> ".getMLText('rewind_workflow')."</button></form>";
+					}
 				}
 			}
+			/* ///////////////////////////////////// */
 
 			echo "<h4>".$workflow->getName()."</h4>";
 			if($parentworkflow = $latestContent->getParentWorkflow()) {

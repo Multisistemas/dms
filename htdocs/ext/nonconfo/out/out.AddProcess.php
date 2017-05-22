@@ -15,7 +15,7 @@
 
 include("../../../inc/inc.Settings.php");
 include("../../../inc/inc.Language.php");
-include("../lang.php");
+include("../inc/inc.NoConfoLanguages.php");
 include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
@@ -23,7 +23,7 @@ include("../../../inc/inc.ClassUI.php");
 include("../../../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
-	UI::exitError(getMLText("edit_process"),getMLText("access_denied"));
+	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("access_denied"));
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));

@@ -145,7 +145,7 @@ $(document).ready( function() {
       <p>Please wait, until document tree is loaded …</p>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php print getMLText("close"); ?></button>
+      <button class="btn" data-dismiss="modal" aria-hidden="true"><?php print getMLText("close"); ?></button>
     </div>
   </div>
 <?php

@@ -105,24 +105,24 @@ $(document).ready(function() {
 		// Display the Workflow form.
 ?>
 	<div class="row-fluid">
-	<div class="span4">
+	<div class="span6">
 	<form class="form-horizontal" method="post" action="../op/op.TriggerWorkflow.php" id="form1" name="form1">
 	<?php echo createHiddenFieldWithKey('triggerworkflow'); ?>
 	<div class="control-group">
 		<label class="control-label"><?php printMLText('comment'); ?>:</label>
 		<div class="controls">
-			<textarea name="comment" cols="80" rows="4"></textarea>
+			<textarea name="comment" cols="80" rows="4" id="trigger_workflow_comment"></textarea>
 		</div>
 	</div>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
 	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
 	<input type='hidden' name='transition' value='<?php echo $transition->getID(); ?>'/>
 	<div class="controls">
-		<input type='submit' class="btn" value='<?php printMLText("action_".strtolower($action->getName()), array(), $action->getName()); ?>'/>
+		<input type='submit' class="btn btn-info" value='<?php printMLText("action_".strtolower($action->getName()), array(), $action->getName()); ?>'/>
 	</div>
 	</form>
 	</div>
-	<div id="workflowgraph" class="span8">
+	<div id="workflowgraph" class="span6">
 	<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?>&transition=<?php echo $transition->getID(); ?>&documentid=<?php echo $document->getID(); ?>" width="100%" height="500" style="border: 1px solid #AAA;"></iframe>
 	</div>
 	</div>

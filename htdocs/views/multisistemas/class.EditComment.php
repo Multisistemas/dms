@@ -95,7 +95,7 @@ $(document).ready(function() {
 			</div>
 	</div>
 	<div class="controls">
-		<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+		<button type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("save") ?></button>
 	</div>
 </form>
 <?php

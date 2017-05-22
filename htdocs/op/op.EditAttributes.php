@@ -74,12 +74,18 @@ $change_name = rename($target_file, $target_dir.$version->getVersion().$version-
 
 $document->setComment($_POST['version_comment']);
 
-$queryStr = "UPDATE tbl SET modified = " . $db->getCurrentTimestamp() . ", modifiedBy = " . $user->getID() . ", name = " . $db->qstr($name) . " WHERE id = ". (int) $id;
-$ret = $db->getResult($queryStr);
+$comment = $_POST['version_comment'];
+
+if (($oldcomment = $version->getComment()) != $comment) {
+	$version->setComment($comment);
+}
+
+//$queryStr = "UPDATE tbl SET modified = " . $db->getCurrentTimestamp() . ", modifiedBy = " . $user->getID() . ", name = " . $db->qstr($name) . " WHERE id = ". (int) $id;
+//$ret = $db->getResult($queryStr);
 
 //$new_file = rename($_POST["userfile"]["name"][0], $version->getVersion().$version->_fileType);
 
-if($attributes) {
+/*if($attributes) {
 	$oldattributes = $version->getAttributes();
 	foreach($attributes as $attrdefid=>$attribute) {
 		$attrdef = $dms->getAttributeDefinition($attrdefid);
@@ -124,7 +130,7 @@ if($attributes) {
 				UI::exitError(getMLText("document_title", array("documentname" => $folder->getName())),getMLText("error_occured"));
 		}
 	}
-}
+}*/
 
 add_log_line("?documentid=".$documentid);
 

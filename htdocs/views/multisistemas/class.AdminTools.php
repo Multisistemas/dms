@@ -46,8 +46,10 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 ?>
 	<div id="admin-tools">
 	<div class="row-fluid">
+	<?php if ($user->_comment != "client-admin") { ?>
 		<a href="../out/out.UsrMgr.php" class="span3 btn btn-medium"><i class="icon-user"></i><br /><?php echo getMLText("user_management")?></a>
 		<a href="../out/out.GroupMgr.php" class="span3 btn btn-medium"><i class="icon-group"></i><br /><?php echo getMLText("group_management")?></a>
+	<?php } ?>
 	</div>
 	<div class="row-fluid">
 		<a href="../out/out.BackupTools.php" class="span3 btn btn-medium"><i class="icon-hdd"></i><br /><?php echo getMLText("backup_tools")?></a>
@@ -88,9 +90,11 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 		<a href="../out/out.Timeline.php" class="span3 btn btn-medium"><i class="icon-time"></i><br /><?php echo getMLText("timeline")?></a>
 	</div>
 	<div class="row-fluid">
+	<?php if ($user->_comment != "client-admin") { ?>
 		<a href="../out/out.Settings.php" class="span3 btn btn-medium"><i class="icon-wrench"></i><br /><?php echo getMLText("settings")?></a>
 		<a href="../out/out.ExtensionMgr.php" class="span3 btn btn-medium"><i class="icon-cogs"></i><br /><?php echo getMLText("extension_manager")?></a>
 		<a href="../out/out.Info.php" class="span3 btn btn-medium"><i class="icon-info-sign"></i><br /><?php echo getMLText("version_info")?></a>
+	<?php } ?>	
 	</div>
 	</div>
 <?php

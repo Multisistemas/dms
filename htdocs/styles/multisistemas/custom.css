@@ -80,4 +80,14 @@ hr {
 
 .lbl-right {
   text-align: right !important;
-} 
+}
+
+#trigger_workflow_comment {
+  width: 100%;
+  min-height: 200px;
+}
+
+/*.btn {
+  color: #ffffff !important;
+  background: #30a2f6;
+}*/

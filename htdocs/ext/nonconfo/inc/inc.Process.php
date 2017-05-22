@@ -32,8 +32,8 @@ function addProcess($name){
 
 	global $db,$user;
 
-	$queryStr = "INSERT INTO tblProcesses (name, created, createdBy) VALUES ".
-		"(".$db->qstr($name).", ".$db->getCurrentTimestamp().", ".$user->getID().")";
+	$queryStr = "INSERT INTO tblProcesses (name, createdBy) VALUES ".
+		"(".$db->qstr($name).", ".$user->getID().")";
 	
 	$ret = $db->getResult($queryStr);
 	return $ret;

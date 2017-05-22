@@ -33,98 +33,38 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 
-  	$strictformcheck = $this->params['strictformcheck'];
-  	$dropfolderdir = $this->params['dropfolderdir'];
-
     header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-  function checkForm()
-  {
+  function checkForm() {
     msg = new Array();
-   	//if (document.form1.userfile[].value == "") msg += "<?php printMLText("js_no_file");?>\n";
-
-<?php 
-
-    	if ($strictformcheck) { 
-?>
-      if(!document.form1.name.disabled){
-        if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
-      }
-      if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-      if (document.form1.keywords.value == "") msg.push("<?php printMLText("js_no_keywords");?>");
-<?php
-  		}
-?>
-  		if (msg != ""){
-        noty({
-        text: msg.join('<br />'),
-        type: 'error',
-        dismissQueue: true,
-        layout: 'topRight',
-        theme: 'defaultTheme',
-        _timeout: 1500,
-      });
-        return false;
-      }
-    return true;
-  }
-
-        
-  $(document).ready(function() {
-    $('body').on('submit', '#form1', function(ev){
-      if(checkForm()) return;
-  	      ev.preventDefault();
-    });
-    
-    $('#new-file').click(function(event) {
-      $("#upload-file").clone().appendTo("#upload-files").removeAttr("id").children('div').children('input').val('');
-    });
-
-    jQuery.validator.addMethod("alternatives", function(value, element, params) {
-      if(value == '' && params.val() == '')
-        return false;
-      return true;
-    }, "<?php printMLText("js_no_file");?>");
-      
-      $("#form1").validate({
-      	invalidHandler: function(e, validator) {
-        noty({
-        	text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
-        type: 'error',
-        dismissQueue: true,
-        layout: 'topRight',
-        theme: 'defaultTheme',
-        timeout: 1500,
-      });
-    },
-    	rules: {
-	      'userfile[]': {
-	      alternatives: $('#dropfolderfileform1')
-      },
-        dropfolderfileform1: {
-        alternatives: $(".btn-file input")
-      }
-    },
-      messages: {
-      name: "<?php printMLText("js_no_name");?>",
-      comment: "<?php printMLText("js_no_comment");?>",
-      keywords: "<?php printMLText("js_no_keywords");?>"
-    },
-      errorPlacement: function( error, element ) {
-        if ( element.is( ":file" ) ) {
-        error.appendTo( element.parent().parent().parent());
-        console.log(element);
-      } else {
-        error.appendTo( element.parent());
-      }
+   	if (document.getElementById("filename").value == "") {
+        msg.push("<?php printMLText("js_no_file");?>");
     }
+
+  		if (msg != "") {
+        noty({
+          text: msg.join('<br />'),
+          type: 'error',
+          dismissQueue: true,
+          layout: 'topRight',
+          theme: 'defaultTheme',
+          _timeout: 1500,
+        });
+        return false;
+      }
+      else
+        return true;   
+  }
+        
+ $(document).ready(function() {
+  $('body').on('submit', '#form1', function(ev){
+    if(checkForm()) return;
+    ev.preventDefault();
   });
 });
+
 <?php
-        $this->printKeywordChooserJs("form1");
-        if($dropfolderdir) {
-            $this->printDropFolderChooserJs("form1");
-        }
+
 } /* }}} */         
 
 	function show() { /* {{{ */
@@ -143,7 +83,7 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("edit_attributes"));
 		$this->contentContainerStart();
 ?>
-<form class="form-horizontal" action="../op/op.EditAttributes.php" name="form1" method="POST" enctype="multipart/form-data">
+<form class="form-horizontal" action="../op/op.EditAttributes.php" name="form1" id="form1" method="POST" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('editattributes'); ?>
 	<input type="hidden" name="documentid" value="<?php print $document->getID();?>">
 	<input type="hidden" name="version" value="<?php print $version->getVersion();?>">
@@ -169,7 +109,7 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
                         <div class="input-append">
                             <input type="text" class="form-control" readonly>
                             <span class="btn btn-default btn-file">
-					        <?php printMLText("browse");?>&hellip; <input id="" type="file" name="filename[]">
+					        <?php printMLText("browse");?>&hellip; <input id="filename" type="file" name="filename[]">
 				</span>
                         </div>
                     </div>
@@ -183,7 +123,7 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
         <tr>
             <td>
                 <div class="controls">
-                    <button type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+                    <button type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("save") ?></button>
                 </div>
             </td>
         </tr>

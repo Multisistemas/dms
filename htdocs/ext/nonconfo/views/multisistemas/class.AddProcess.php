@@ -68,7 +68,7 @@ $(document).ready(function() {
 		$this->contentStart();
 		$this->pageNavigation("", "process");
 
-		$this->contentHeading(getMLText("add_process"));
+		$this->contentHeading(getMLText("nonconfo_add_process"));
 		$this->contentContainerStart();
 
 		$expdate = date('Y-m-d');
@@ -77,12 +77,12 @@ $(document).ready(function() {
 <form class="form-horizontal" action="../op/op.AddProcess.php" id="form1" name="form1" method="post">
 
 		<div class="control-group">
-			<label class="control-label"><?php printMLText("name");?>:</label>
+			<label class="control-label"><?php printMLText("nonconfo_process_name");?>:</label>
 			<div class="controls"><input type="text" name="name" size="100"></div>
 		</div>
 		
 		<div class="controls">
-			<input class="btn" type="submit" value="<?php printMLText("add_process");?>">
+			<input class="btn" type="submit" value="<?php printMLText("nonconfo_add_process");?>">
 		</div>
 
 </form>

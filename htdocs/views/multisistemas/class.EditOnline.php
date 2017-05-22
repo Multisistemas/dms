@@ -124,7 +124,7 @@ $this->contentHeading(getMLText("content"));
 		echo htmlspecialchars(file_get_contents($dms->contentDir . $version->getPath()));
 ?>
 </textarea>
-<button id="update" type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("save"); ?></button>
+<button id="update" type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("save"); ?></button>
 </form>
 <?php
 		echo "</div>\n";

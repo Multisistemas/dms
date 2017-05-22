@@ -112,7 +112,7 @@ $(document).ready( function() {
 	}
 	?>
 	</select>
-	<button type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("save")?></button>
+	<button type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("save")?></button>
 	</form>
 <?php
 
@@ -161,7 +161,7 @@ $(document).ready( function() {
 	<input type="Hidden" name="documentid" value="<?php print $document->getId();?>">
 	<input type="Hidden" name="action" value="setdefault">
 	<?php $this->printAccessModeSelection($document->getDefaultAccess()); ?>
-	<button type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("save")?></button>
+	<button type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("save")?></button>
 </form>
 
 <?php

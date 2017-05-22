@@ -161,13 +161,16 @@ $(document).ready( function() {
 			<input type="text" id="email" name="email" value="<?php print htmlspecialchars($user->getEmail());?>" size="30">
 		</div>
 	</div>
+
+	<?php if ($user->_comment != "client-admin") { ?>
 	<div class="control-group">
 		<label class="control-label"><?php printMLText("comment");?>:</label>
 		<div class="controls">
 			<textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($user->getComment());?></textarea>
 		</div>
 	</div>
-
+	<?php } ?>
+	
 <?php	
 		if ($enableuserimage){	
 ?>	

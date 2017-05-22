@@ -279,7 +279,7 @@ console.log(element);
 <?php
 	$this->printFileChooser('userfile[]', false);
 ?>
-			<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>
+			<!-- <a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a> -->
 			</td>
 		</tr>
 <?php if($dropfolderdir) { ?>
@@ -637,7 +637,7 @@ console.log(element);
 		</table>
 
 			<!--<p><input type="submit" class="btn" value="<?php printMLText();?>"></p>-->
-			<button type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("add_document")?></button>
+			<button type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("add_document")?></button>
 		</form>
 <?php
 		$this->contentContainerEnd();

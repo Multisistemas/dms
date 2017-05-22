@@ -61,7 +61,7 @@ class SeedDMS_View_MoveFolder extends SeedDMS_Bootstrap_Style {
 		</div>
 	</div>
 	<div class="controls">
-		<input class="btn btn-primary" type="submit" value="<?php printMLText("move_folder"); ?>">
+		<input class="btn btn-success" type="submit" value="<?php printMLText("move_folder"); ?>">
 	</div>
 </form>
 

@@ -138,7 +138,7 @@ $(document).ready( function() {
 			echo "</table>";
 
 			if($user->isAdmin() && $seluser->getID() != $user->getID())
-				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
+				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-success\">".getMLText("substitute_user")."</a>\n";
 		}
 	} /* }}} */
 

@@ -341,6 +341,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			}
 
 			echo "   <ul class=\"nav\">\n";
+			// Link to non-conformities extension
+			
+			echo "    <li><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("no_confo")."</a></li>\n";
 	//		echo "    <li id=\"first\"><a href=\"/out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
 	//		echo "    <li><a href=\"/out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
 			if ($this->params['enablecalendar']) echo "    <li><a href=\"/out/out.Calendar.php?mode=".$this->params['calendardefaultview']."\">".getMLText("calendar")."</a></li>\n";
@@ -459,8 +462,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		else if ($accessMode >= M_READWRITE) {
 			$menuitems['add_subfolder'] = array('link'=>"/out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_subfolder');
 			$menuitems['add_document'] = array('link'=>"/out/out.AddDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_document');
-			if($this->params['enablelargefileupload'])
-				$menuitems['add_multiple_documents'] = array('link'=>"/out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_multiple_documents');
+			//if($this->params['enablelargefileupload'])
+				//$menuitems['add_multiple_documents'] = array('link'=>"/out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_multiple_documents');
 			$menuitems['edit_folder_props'] = array('link'=>"/out/out.EditFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'edit_folder_props');
 			if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
 				$menuitems['move_folder'] = array('link'=>"/out/out.MoveFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'move_folder');
@@ -597,7 +600,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "   <ul class=\"nav\">\n";
 
-		echo "    <li class=\"dropdown\">\n";
+		/*echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		echo "      <li><a href=\"/out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
@@ -605,7 +608,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "      <li><a href=\"/out/out.UserList.php\">".getMLText("user_list")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
-		echo "   </ul>\n";
+		echo "   </ul>\n";*/
 
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
@@ -971,7 +974,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		<p><?php printMLText('tree_loading') ?></p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
   </div>
 </div>
 <?php 
@@ -1020,7 +1023,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		<p><?php printMLText('tree_loading') ?></p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
   </div>
 </div>
 <?php
@@ -1101,7 +1104,7 @@ $(document).ready(function() {
 		<p><?php printMLText('categories_loading') ?></p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
     <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button>
   </div>
 </div>
@@ -1124,7 +1127,7 @@ $(document).ready(function() {
 		<p><?php printMLText('keywords_loading') ?></p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
     <button class="btn" data-dismiss="modal" aria-hidden="true" id="acceptkeywords"><i class="icon-save"></i> <?php printMLText("save") ?></button>
   </div>
 </div>
@@ -1224,7 +1227,7 @@ $(document).ready(function() {
 		<p><?php printMLText('files_loading') ?></p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
   </div>
 </div>
 <?php

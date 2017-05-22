@@ -6,14 +6,15 @@ $EXT_CONF['nonconfo'] = array(
 	'version' => '1.0.0',
 	'releasedate' => '2017-05-17',
 	'author' => array('name'=>'Herson Cruz', 'email'=>'herson@multisistemas.com.sv', 'company'=>'<a href=http://multisistemas.com.sv>Multisistemas</a>'),
+	'author' => array('name'=>'Luis Medrano', 'email'=>'lmedrano@multisistemas.com.sv', 'company'=>'<a href=http://multisistemas.com.sv>Multisistemas</a>'),
 	'config' => array(
-		'input_field' => array(
+		/*'input_field' => array(
 			'title'=>'Default alert days',
 			'type'=>'input',
 			'size'=>10,
-		),
+		),*/
 		'checkbox' => array(
-			'title'=>'Example check box',
+			'title'=>'Active/Deactivate extension',
 			'type'=>'checkbox',
 		),
 	),
@@ -25,8 +26,9 @@ $EXT_CONF['nonconfo'] = array(
 		'file' => 'class.nonconfo.php',
 		'name' => 'SeedDMS_ExtNonConfo'
 	),
-	'language' => array(
-		'file' => 'lang.php',
-	),
+	/*'language' => array(
+		'es_ES' => 'languages/es_ES/es_ES.php',
+		'en_GB' => 'languages/en_GB/en_GB.php',
+	),*/
 );
 ?>

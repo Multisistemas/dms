@@ -921,7 +921,7 @@ URL: [url]',
 'revisors' => '',
 'revisor_already_assigned' => '',
 'revisor_already_removed' => '',
-'rewind_workflow' => 'Retroceso del flujo de trabajo',
+'rewind_workflow' => 'Retroceder versión a estado inicial',
 'rewind_workflow_email_body' => 'Flujo de trabajo fue retrocedido
 Documento: [name]
 Versión: [version]
@@ -1564,6 +1564,7 @@ URL: [url]',
 'yes' => 'Sí',
 'zh_CN' => 'Chino (CN)',
 'zh_TW' => 'Chino (TW)',
-    'no_equal_file_extension' => 'El tipo de archivo subido no coincide con el existente en la versión actual'
+'no_equal_file_extension' => 'El tipo de archivo subido no coincide con el existente en la versión actual',
+'no_confo' => 'No Conformidades',
 );
 ?>
