@@ -23,7 +23,7 @@
 # Dump of table tblProcesses
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `tblProcess`;
+DROP TABLE IF EXISTS `tblProcesses`;
 
 CREATE TABLE `tblProcesses` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
