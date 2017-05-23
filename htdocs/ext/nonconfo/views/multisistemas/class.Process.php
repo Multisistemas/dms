@@ -7,6 +7,7 @@
  * @license    GPL 2
  * @version    @version@
  * @author     Herson Cruz <herson@multisistemas.com.sv>
+ * @author     Luis Medrano <lmedrano@multisistemas.com.sv>
  * @copyright  Copyright (C) 2011-2017 Multisistemas
  * @version    Release: @package_version@
  */

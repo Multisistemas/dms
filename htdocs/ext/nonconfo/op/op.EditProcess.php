@@ -1,4 +1,6 @@
 <?php
+//    Copyright (C) 2017 Multisistemas e Inversiones S.A. de C.V.
+// 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation; either version 2 of the License, or
@@ -17,6 +19,7 @@ include("../../../inc/inc.Settings.php");
 include("../../../inc/inc.LogInit.php");
 include("../../../inc/inc.Utils.php");
 include("../../../inc/inc.Language.php");
+include("../inc/inc.NonConfoLanguages.php");
 include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
@@ -30,28 +33,24 @@ if ($user->isGuest()) {
 
 /* Check if the form data comes from a trusted request */
 if(!checkFormKey('editprocess')) {
-	UI::exitError(getMLText("edit_process"),getMLText("invalid_request_token"));
+	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("invalid_request_token"));
 }
 
 if (!isset($_POST["name"])) {
-	UI::exitError(getMLText("edit_process"),getMLText("error_occured"));
+	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("error_occured"));
 }
 
-if (!isset($_POST["processid"])) {
-	UI::exitError(getMLText("edit_process"),getMLText("error_occured"));
-}
-
-$name     = $_POST["name"];
+$name = $_POST["name"];
 
 $res = editProcess($_POST["processid"], $name );
 
 if (is_bool($res) && !$res) {
-	UI::exitError(getMLText("edit_process"),getMLText("error_occured"));
+	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("error_occured"));
 }
 
 add_log_line("?processid=".$_POST["processid"]."&name=".$name);
 
-header("Location:../out/out.Process.php?mode=w");
+header("Location:../out/out.AddProcess.php");
 
 
 ?>

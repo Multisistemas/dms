@@ -17,23 +17,37 @@
 
 include("../../../inc/inc.Settings.php");
 include("../../../inc/inc.Language.php");
-include("../inc/inc.Process.php");
-include("../lang.php");
+include("../inc/inc.NonConfoLanguages.php");
 include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
+include("../inc/inc.Process.php");
 include("../../../inc/inc.Authentication.php");
 
-//if ($_GET["mode"]) $mode=$_GET["mode"];
+if ($user->isGuest()) {
+	UI::exitError(getMLText("nonconfo_add_owners"),getMLText("access_denied"));
+}
 
-// get required date else use current
-$currDate = time();
+// Get all process saved
+$processes = getProcesses();
+
+// Get all users
+$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+
+if(isset($_GET['processid']) && $_GET['processid']) {
+	$selProcess = getProcess($_GET['processid']);
+} else {
+	$selProcess = null;
+}
+
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	//$view->setParam('mode', $mode);
+	$view->setParam('processes', $processes);
+	$view->setParam('selProcess', $selProcess);
+	$view->setParam('allUsers', $allUsers);
 	$view($_GET);
 	exit;
 }

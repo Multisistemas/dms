@@ -467,6 +467,8 @@ $(document).ready( function() {
 
 		$this->contentHeading(getMLText("user_management"));
 ?>
+
+<?php if ($user->_comment != "client-admin") { ?>
 <div class="row-fluid">
 <div class="span4">
 <div class="well">
@@ -498,6 +500,8 @@ $(document).ready( function() {
 </div>
 
 <?php
+
+	}
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */

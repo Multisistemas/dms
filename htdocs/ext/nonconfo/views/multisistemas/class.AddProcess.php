@@ -1,12 +1,13 @@
 <?php
 /**
- * Implementation of AddEvent view
+ * Implementation of AddProcess view
  *
  * @category   DMS
  * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Herson Cruz <herson@multisistemas.com.sv>
+ * @author     Luis Medrano <lmedrano@multisistemas.com.sv>
  * @copyright  Copyright (C) 2011-2017 Multisistemas,
  * @version    Release: @package_version@
  */
@@ -51,39 +52,56 @@ function checkForm() {
 		return true;
 }
 
-function removeProcess(id){
-	$.ajax({
-    data: id,
-    url: '../op/op.DeleteProcess.php',
-    type: 'post',
-    beforeSend: function () {
-      noty({
-	  		text: 'Procesando, por favor espere',
-	  		type: 'error',
-	      dismissQueue: true,
-	  		layout: 'topRight',
-	  		theme: 'defaultTheme',
-				_timeout: 1500,
-  		});
-    },
-    success: function (response) {
-      noty({
-	  		text: 'Elemento borrado',
-	  		type: 'success',
-	      dismissQueue: true,
-	  		layout: 'topRight',
-	  		theme: 'defaultTheme',
-				_timeout: 1500,
-  		});
-    }
-  });
-}
-
 $(document).ready(function() {
 	$('body').on('submit', '#form1', function(ev){
 		if(checkForm()) return;
 		ev.preventDefault();
 	});
+
+	$('body').on('click', 'a.delete-process-btn', function(ev){
+		id = $(ev.currentTarget).attr('rel');
+		confirmmsg = $(ev.currentTarget).attr('confirmmsg');
+		msg = $(ev.currentTarget).attr('msg');
+		formtoken = "<?php echo createFormKey('removeprocess'); ?>";
+		bootbox.dialog(confirmmsg, [{
+		"label" : "<i class='icon-remove'></i><?php echo getMLText("nonconfo_rm_process"); ?>",
+		"class" : "btn-danger",
+		"callback": function() {
+			$.get('../op/op.DeleteProcess.php',
+				{ command: 'deleteprocess', id: id, formtoken: formtoken },
+							function(data) {
+								if(data.success) {
+									$('#table-row-process-'+id).hide('slow');
+									noty({
+										text: data.message,
+										type: 'success',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 1500,
+									});
+								} else {
+									noty({
+										text: data.message,
+										type: 'error',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 3500,
+									});
+								}
+							},
+							'json'
+						);
+					}
+				}, {
+					"label" : "<?php echo getMLText("cancel"); ?>",
+					"class" : "btn-cancel",
+					"callback": function() {
+					}
+				}]);
+			});
+
 });
 
 <?php
@@ -93,6 +111,8 @@ $(document).ready(function() {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$processes = $this->params['processes'];
+
+		$this->htmlAddHeader('<script type="text/javascript" src="/styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("nonconfo_title"));
 		$this->globalNavigation();
@@ -107,12 +127,13 @@ $(document).ready(function() {
 		<?php $this->contentHeading(getMLText("nonconfo_add_process")); ?>
 		<div class="well">
 			<form class="form-horizontal" action="../op/op.AddProcess.php" id="form1" name="form1" method="post">
+			<?php echo createHiddenFieldWithKey('addprocess'); ?>
 					<div class="control-group">
 						<label class="control-label"><?php printMLText("nonconfo_process_name");?>:</label>
 						<div class="controls"><input type="text" name="name" size="100"></div>
 					</div>
 					<div class="controls">
-						<input class="btn" type="submit" value="<?php printMLText("nonconfo_add_process");?>">
+						<input class="btn btn-success" type="submit" value="<?php printMLText("nonconfo_add_process");?>">
 					</div>
 			</form>
 		</div>
@@ -132,7 +153,7 @@ $(document).ready(function() {
 				</thead>
 				<tbody>
 					<?php foreach ($processes as $process): ?>
-						<tr>
+						<tr id="table-row-process-<?php echo $process['id']?>">
 							<td>
 								<?php echo $process['name']; ?>
 							</td>
@@ -141,8 +162,8 @@ $(document).ready(function() {
 							</td>
 							<td>
 								<div class="list-action">
-									<a id="delete-process-btn" onclick="removeProcess(<?php echo $process['id']; ?>);"><i class="icon-remove"></i></a>
-									<a href="/out/out.EditDocument.php?documentid=52" title="Editar propiedades de documento">
+									<a class="delete-process-btn" rel="<?php echo $process['id']; ?>" msg="<?php echo getMLText('nonconfo_rm_process'); ?>"confirmmsg="<?php echo htmlspecialchars(getMLText("nonconfo_confirm_rm_process", array ("nonconfo_process_name" => $process['name'])), ENT_QUOTES); ?>" title="<?php echo getMLText("nonconfo_rm_process"); ?>"><i class="icon-remove"></i></a>									
+									<a href="../out/out.EditProcess.php?processid=<?php echo $process['id']; ?>" title="<?php echo getMLText("nonconfo_edit_process"); ?>">
 									<i class="icon-edit"></i></a>
 								</div>
 							</td>

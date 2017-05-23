@@ -457,7 +457,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$menuitems = array();
 		$menuitems['nonconfo_add_nonconfo'] = array('link' => "/ext/nonconfo/out/out.AddNonConfo.php", 'label' => 'nonconfo_add_nonconfo');
 		$menuitems['nonconfo_view_all'] = array('link' => "/ext/nonconfo/out/out.ViewAllNonConfo.php", 'label' => 'nonconfo_view_all');
-		$menuitems['nonconfo_add_process'] = array('link' => "/ext/nonconfo/out/out.AddProcess.php", 'label' => 'nonconfo_add_process');
+		$menuitems['nonconfo_processes'] = array('link' => "/ext/nonconfo/out/out.AddProcess.php", 'label' => 'nonconfo_processes');
 		$menuitems['nonconfo_define_owners'] = array('link' => "/ext/nonconfo/out/out.AddOwners.php", 'label' => 'nonconfo_define_owners');
 
 		foreach($menuitems as $menuitem) {
@@ -1953,16 +1953,30 @@ $(document).ready( function() {
 			$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
 			$content .= "<td>";
-			if (file_exists($dms->contentDir . $latestContent->getPath())) {
-				$content .= "<a draggable=\"false\" href=\"/op/op.Download.php?documentid=".$docID."&version=".$version."\">";
-				if($previewer->hasPreview($latestContent)) {
-					$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"/op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-				} else {
-					$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+			if (file_exists($dms->contentDir . $latestContent->getPath())) { 
+
+				/*************** If the document status is equal to "released" the download will be available ***************/
+				if ($status['status'] == 2 ) { 
+					$content .= "<a draggable=\"false\" href=\"/op/op.Download.php?documentid=".$docID."&version=".$version."\">";
+					if($previewer->hasPreview($latestContent)) {
+						$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"/op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					} else {
+						$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					}
+					$content .= "</a>";
 				}
-				$content .= "</a>";
-			} else
-				$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+				/******************************************************************************************************/
+
+			} else {
+
+					if($previewer->hasPreview($latestContent)) {
+						$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"/op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					} else {
+						$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					}
+
+			} 
+
 			$content .= "</td>";
 
 			$content .= "<td>";	

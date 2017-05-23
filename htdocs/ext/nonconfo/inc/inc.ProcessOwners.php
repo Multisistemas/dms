@@ -17,35 +17,34 @@
 
 // DB //////////////////////////////////////////////////////////////////////////
 
-function getProcesses(){
+function getProcessOwners(){
 
 	global $db;
-
-	//$date = mktime(12,0,0, $month, $day, $year);
 	
-	$queryStr = "SELECT * FROM tblProcesses";
+	$queryStr = "SELECT * FROM tblProcessOwners";
 	$ret = $db->getResultArray($queryStr);
+
 	return $ret;
 }
 
-function addProcess($name){
+function addProcessOwners($processId, $ownerId){
 
 	global $db,$user;
 
-	$queryStr = "INSERT INTO tblProcesses (name, createdBy) VALUES ".
-		"(".$db->qstr($name).", ".$user->getID().")";
+	$queryStr = "INSERT INTO tblProcessOwners (processId, userId) VALUES (".$processId.", ".$ownerId.")";
 	
 	$ret = $db->getResult($queryStr);
+
 	return $ret;
 }
 
-function getProcess($id){
+function getProcessOwner($id){
 
 	if (!is_numeric($id)) return false;
 
 	global $db;
 	
-	$queryStr = "SELECT * FROM tblProcesses WHERE id = " . (int) $id;
+	$queryStr = "SELECT * FROM tblProcessOwners WHERE id = " . (int) $id;
 	$ret = $db->getResultArray($queryStr);
 	
 	if (is_bool($ret) && $ret == false) return false;
@@ -54,7 +53,7 @@ function getProcess($id){
 	return $ret[0];	
 }
 
-function editProcess($id, $name){
+function editProcessOwner($id, $name){
 
 	if (!is_numeric($id)) return false;
 

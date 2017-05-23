@@ -17,23 +17,33 @@
 
 include("../../../inc/inc.Settings.php");
 include("../../../inc/inc.Language.php");
-include("../inc/inc.Process.php");
-include("../lang.php");
+include("../inc/inc.NonConfoLanguages.php");
 include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
+include("../inc/inc.Process.php");
 include("../../../inc/inc.Authentication.php");
 
-//if ($_GET["mode"]) $mode=$_GET["mode"];
+if ($user->isGuest()) {
+	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("access_denied"));
+}
 
-// get required date else use current
-$currDate = time();
+if (!isset($_REQUEST['processid'])) {
+	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("nonconfo_id_error"));	
+}
+
+$process = getProcess($_REQUEST['processid']);
+
+if (count($process) == 0 || $process == false) {
+	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("nonconfo_id_error"));	
+}
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	//$view->setParam('mode', $mode);
+	$view->setParam('process', $process);;
 	$view($_GET);
 	exit;
 }
