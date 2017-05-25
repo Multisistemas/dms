@@ -45,7 +45,7 @@ $name = $_POST["name"];
 $res = addProcess($name);
                                 
 if (is_bool($res) && !$res) {
-	UI::exitError(getMLText("add_process"),getMLText("error_occured"));
+	UI::exitError(getMLText("add_process"),getMLText("dberror_occured"));
 }
 
 add_log_line("?name=".$name);

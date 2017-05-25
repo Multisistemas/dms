@@ -46,6 +46,7 @@ if ($_POST['type'] == -1) {
 	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("nonconfo_no_type_selected"));
 }
 
+/*
 $nonconfos = getNonconformities();
 
 if (count($nonconfos) == 0 ) {
@@ -53,24 +54,25 @@ if (count($nonconfos) == 0 ) {
 } else {
 	$correlative = count($nonconfos) + 1;
 }
+*/
 
 $res = addNonconformity($correlative, $_POST['processId'], $_POST['type'], $_POST['source'], $_POST['description']);
 
-if (is_bool($res) && !$res) {
+if (is_integer($res) && !empty($res)) {
 	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("error_occured"));
 }
 
-$nonconfo = getNonconformity($correlative);
+//$nonconfo = getNonconformity($res);
 
 if (count($nonconfo) != 0) {
 	$owners = getOwnersByProcess($_POST['processId']);
 	if (count($owners) != 0) {
 		if (count($owners) > 1) {
 			foreach ($owners as $owner) {
-				$res = addNonConfoResponsible($nonconfo['id'], $owner['userId']);
+				$resp = addNonConfoResponsible($res, $owner['userId']);
 			}
 		} else if (count($owners) == 1) {
-			$res = addNonConfoResponsible($nonconfo['id'], $owners['userId']);
+			$resp = addNonConfoResponsible($res, $owners['userId']);
 		}
 	}
 }
@@ -79,6 +81,6 @@ $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('nonconfo_added
 
 add_log_line();
 
-header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$nonconfo['id']);
+header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$res);
 
 ?>

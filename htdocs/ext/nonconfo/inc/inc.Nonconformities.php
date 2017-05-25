@@ -33,7 +33,8 @@ function addNonconformity($correlative, $processId, $type, $source, $description
 	$queryStr = "INSERT INTO tblNonconformities (correlative, processId, type, source, description, createdBy) VALUES ".
 		"(".$correlative.", ".$processId.", \"".$type."\", \"".$source."\", \"".$description."\",".$user->getID().")";
 	
-	$ret = $db->getResult($queryStr);
+	$ret = $db->getInsertID($queryStr);
+	
 	return $ret;
 }
 
