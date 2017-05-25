@@ -33,9 +33,17 @@ function addNonconformity($processId, $type, $source, $description){
 	$queryStr = "INSERT INTO tblNonconformities (processId, type, source, description, createdBy) VALUES ".
 		"(".$processId.", \"".$type."\", \"".$source."\", \"".$description."\",".$user->getID().")";
 	
-	$ret = $db->getInsertID($queryStr);
+	$ret = $db->getResult($queryStr);
 	
-	return $ret;
+	if(is_bool($ret) && $ret) {
+		$id = $db->getInsertID($queryStr);
+	} else {
+		$id = 0;
+	}
+	
+	var_dump($id);
+	
+	return $id;
 }
 
 function getNonconformity($id){
