@@ -56,7 +56,7 @@ if (count($nonconfos) == 0 ) {
 }
 */
 
-$res = addNonconformity($correlative, $_POST['processId'], $_POST['type'], $_POST['source'], $_POST['description']);
+$res = addNonconformity($_POST['processId'], $_POST['type'], $_POST['source'], $_POST['description']);
 
 if (is_integer($res) && !empty($res)) {
 	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("error_occured"));

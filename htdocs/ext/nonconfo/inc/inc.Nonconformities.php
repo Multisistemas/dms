@@ -26,23 +26,23 @@ function getNonconformities(){
 	return $ret;
 }
 
-function addNonconformity($correlative, $processId, $type, $source, $description){
+function addNonconformity($processId, $type, $source, $description){
 
 	global $db,$user;
 
-	$queryStr = "INSERT INTO tblNonconformities (correlative, processId, type, source, description, createdBy) VALUES ".
-		"(".$correlative.", ".$processId.", \"".$type."\", \"".$source."\", \"".$description."\",".$user->getID().")";
+	$queryStr = "INSERT INTO tblNonconformities (processId, type, source, description, createdBy) VALUES ".
+		"(".$processId.", \"".$type."\", \"".$source."\", \"".$description."\",".$user->getID().")";
 	
 	$ret = $db->getInsertID($queryStr);
 	
 	return $ret;
 }
 
-function getNonconformity($correlative){
+function getNonconformity($id){
 
 	global $db;
 	
-	$queryStr = "SELECT * FROM tblNonconformities WHERE correlative = ".$correlative;
+	$queryStr = "SELECT * FROM tblNonconformities WHERE id = ".$id;
 	$ret = $db->getResultArray($queryStr);
 	
 	if (is_bool($ret) && $ret == false) return false;
