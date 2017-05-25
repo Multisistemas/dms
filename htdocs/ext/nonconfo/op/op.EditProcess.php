@@ -28,7 +28,7 @@ include("../inc/inc.Process.php");
 include("../../../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
-	UI::exitError(getMLText("edit_process"),getMLText("access_denied"));
+	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("access_denied"));
 }
 
 /* Check if the form data comes from a trusted request */

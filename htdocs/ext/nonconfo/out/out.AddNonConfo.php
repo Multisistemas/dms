@@ -16,41 +16,38 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../../../inc/inc.Settings.php");
-include("../../../inc/inc.LogInit.php");
-include("../../../inc/inc.Utils.php");
 include("../../../inc/inc.Language.php");
+include("../inc/inc.NonConfoLanguages.php");
 include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
 include("../inc/inc.Process.php");
+include("../inc/inc.ProcessOwners.php");
+include("../inc/inc.Nonconformities.php");
 include("../../../inc/inc.Authentication.php");
 
-/* Check if the form data comes from a trusted request */
-if(!checkFormKey('removeevent')) {
-	UI::exitError(getMLText("edit_event"),getMLText("invalid_request_token"));
+if ($user->isGuest()) {
+	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("access_denied"));
 }
 
-if (!isset($_POST["eventid"]) || !is_numeric($_POST["eventid"]) || intval($_POST["eventid"])<1) {
-	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
+$processes = getProcesses();
+
+if ($processes == null || count($processes) <= 0) {
+	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("nonconfo_no_process"));
 }
 
-$event=getEvent($_POST["eventid"]);
+// Get all users
+$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 
-if (($user->getID()!=$event["userID"])&&(!$user->isAdmin())){
-	UI::exitError(getMLText("edit_event"),getMLText("access_denied"));
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+if($view) {
+	$view->setParam('allUsers', $allUsers);
+	$view->setParam('processes', $processes);
+	$view($_GET);
+	exit;
 }
-
-$res = delEvent($_POST["eventid"]);
-                                
-if (is_bool($res) && !$res) {
-	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
-}
-
-add_log_line("?id=".$_POST["eventid"]);
-
-$dt=getdate($event["start"]);
-
-header("Location:../out/out.Calendar.php?mode=w&day=".$dt["mday"]."&year=".$dt["year"]."&month=".$dt["mon"]);
 
 ?>

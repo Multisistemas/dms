@@ -23,6 +23,7 @@ include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
 include("../inc/inc.Process.php");
+include("../inc/inc.ProcessOwners.php");
 include("../../../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
@@ -31,6 +32,10 @@ if ($user->isGuest()) {
 
 // Get all process saved
 $processes = getProcesses();
+
+if ($processes == null || count($processes) <= 0) {
+	UI::exitError(getMLText("nonconfo_add_owners"),getMLText("nonconfo_no_process"));
+}
 
 // Get all users
 $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
@@ -43,11 +48,26 @@ if(isset($_GET['processid']) && $_GET['processid']) {
 	$selProcess = null;
 }
 
+// Get process creator
+if($selProcess != null) {
+	$userCreator = $dms->getUser($selProcess["createdBy"]);
+} else {
+	$userCreator = null;
+}
+
+if ($selProcess != null) {
+		$owners = getOwnersByProcess($selProcess["id"]);
+} else {
+		$owners = null;
+}
+
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('processes', $processes);
 	$view->setParam('selProcess', $selProcess);
 	$view->setParam('allUsers', $allUsers);
+	$view->setParam('userCreator', $userCreator);
+	$view->setParam('owners', $owners);
 	$view($_GET);
 	exit;
 }

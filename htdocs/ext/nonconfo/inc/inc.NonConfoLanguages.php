@@ -20,10 +20,9 @@ $__languages = getLanguagesTwo();
 foreach($__languages as $_lang) {
 	if(file_exists($settings->_rootDir . "ext/nonconfo/languages/" . $_lang . "/lang.inc")) {
 		include $settings->_rootDir . "ext/nonconfo/languages/" . $_lang . "/lang.inc";
-		//array_merge($LANG[$_lang], $text);
+
 		$LANG[$_lang] = $LANG[$_lang] + $text;
-		//var_dump($LANG[$_lang]);
-		//$LANG[$_lang] = $text;
+
 	}
 }
 unset($text);

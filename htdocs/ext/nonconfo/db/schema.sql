@@ -55,16 +55,20 @@ DROP TABLE IF EXISTS `tblNonconformities`;
 
 CREATE TABLE `tblNonconformities` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `correlative` int(11) NOT NULL,
+  `processId` int(11) unsigned NOT NULL,
   `type` varchar(255) NOT NULL DEFAULT '',
-  `description` VARCHAR(255) NOT NULL DEFAULT '',
-  `analysis` VARCHAR(255) NOT NULL DEFAULT '',
+  `source` VARCHAR(255) NULL DEFAULT '',
+  `description` VARCHAR(1000) NOT NULL DEFAULT '',
   `created` int(11) NOT NULL,
   `createdBy` int(11) NOT NULL,
   `modified` int(11) DEFAULT NULL,
   `modifiedBy` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `fkNonconformitiesProcessId` (`processId`),
   KEY `fkNonconformitiesCreatedBy` (`createdBy`),
   KEY `fkNonconformitiesModifiedBy` (`modifiedBy`),
+  CONSTRAINT `fkNonconformitiesProcessId` FOREIGN KEY (`processId`) REFERENCES `tblProcesses` (`id`),
   CONSTRAINT `fkNonconformitiesCreatedBy` FOREIGN KEY (`createdBy`) REFERENCES `tblUsers` (`id`),
   CONSTRAINT `fkNonconformitiesModifiedBy` FOREIGN KEY (`modifiedBy`) REFERENCES `tblUsers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -171,6 +175,71 @@ DELIMITER ;;
 /*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `tgActionsFollowsCreated` BEFORE INSERT ON `tblActionsFollows` FOR EACH ROW SET new.`created` = UNIX_TIMESTAMP(NOW()) */;;
 /*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION" */;;
 /*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `tgActionsFollowsModified` BEFORE UPDATE ON `tblActionsFollows` FOR EACH ROW SET new.`modified` = UNIX_TIMESTAMP(NOW()) */;;
+DELIMITER ;
+/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
+
+# Dump of table tblNonconfoResponsibles
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tblNonconfoResponsibles`;
+
+CREATE TABLE `tblNonconfoResponsibles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nonconformityId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `created` int(11) NOT NULL,
+  `createdBy` int(11) NOT NULL,
+  `modified` int(11) DEFAULT NULL,
+  `modifiedBy` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fkNonconfoResponsiblesNonconformityId` (`nonconformityId`),
+  KEY `fkNonconfoResponsiblesUserId` (`userId`),
+  KEY `fkNonconfoResponsiblesCreatedBy` (`createdBy`),
+  KEY `fkNonconfoResponsiblesModifiedBy` (`modifiedBy`),
+  CONSTRAINT `fkNonconfoResponsiblesNonconformityId` FOREIGN KEY (`nonconformityId`) REFERENCES `tblNonconformities` (`id`),
+  CONSTRAINT `fkNonconfoResponsiblesUserId` FOREIGN KEY (`userId`) REFERENCES `tblUsers` (`id`),
+  CONSTRAINT `fkNonconfoResponsiblesCreatedBy` FOREIGN KEY (`createdBy`) REFERENCES `tblUsers` (`id`),
+  CONSTRAINT `fkNonconfoResponsiblesModifiedBy` FOREIGN KEY (`modifiedBy`) REFERENCES `tblUsers` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DELIMITER ;;
+/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION" */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `tgNonconfoResponsiblesCreated` BEFORE INSERT ON `tblNonconfoResponsibles` FOR EACH ROW SET new.`created` = UNIX_TIMESTAMP(NOW()) */;;
+/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION" */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `tgNonconfoResponsiblesModified` BEFORE UPDATE ON `tblNonconfoResponsibles` FOR EACH ROW SET new.`modified` = UNIX_TIMESTAMP(NOW()) */;;
+DELIMITER ;
+/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
+
+# Dump of table tblNonconfoAnalysis
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tblNonconfoAnalysis`;
+
+CREATE TABLE `tblNonconfoAnalysis` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nonconformityId` int(11) NOT NULL,
+  `comment` varchar(1000) NULL DEFAULT '',
+  `dir` varchar(255) NOT NULL,
+  `fileName` varchar(150) NOT NULL,
+  `mimeType` varchar(100) NOT NULL,
+  `created` int(11) NOT NULL,
+  `createdBy` int(11) NOT NULL,
+  `modified` int(11) DEFAULT NULL,
+  `modifiedBy` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fkNonconfoAnalysisNonconformityId` (`nonconformityId`),
+  KEY `fkNonconfoAnalysisCreatedBy` (`createdBy`),
+  KEY `fkNonconfoAnalysisModifiedBy` (`modifiedBy`),
+  CONSTRAINT `fkNonconfoAnalysisNonconformityId` FOREIGN KEY (`nonconformityId`) REFERENCES `tblNonconformities` (`id`),
+  CONSTRAINT `fkNonconfoAnalysisCreatedBy` FOREIGN KEY (`createdBy`) REFERENCES `tblUsers` (`id`),
+  CONSTRAINT `fkNonconfoAnalysisModifiedBy` FOREIGN KEY (`modifiedBy`) REFERENCES `tblUsers` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DELIMITER ;;
+/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION" */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `tgNonconfoAnalysisCreated` BEFORE INSERT ON `tblNonconfoAnalysis` FOR EACH ROW SET new.`created` = UNIX_TIMESTAMP(NOW()) */;;
+/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION" */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `tgNonconfoAnalysisModified` BEFORE UPDATE ON `tblNonconfoAnalysis` FOR EACH ROW SET new.`modified` = UNIX_TIMESTAMP(NOW()) */;;
 DELIMITER ;
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
 

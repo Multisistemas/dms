@@ -24,32 +24,34 @@ include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
-include("../inc/inc.Process.php");
+include("../inc/inc.ProcessOwners.php");
 include("../../../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
-	UI::exitError(getMLText("edit_process"),getMLText("access_denied"));
+	UI::exitError(getMLText("nonconfo_add_owners"),getMLText("access_denied"));
 }
 
 /* Check if the form data comes from a trusted request */
-if(!checkFormKey('addprocess')) {
-	UI::exitError(getMLText("nonconfo_add_process"),getMLText("invalid_request_token"));
+if(!checkFormKey('addowner')) {
+	UI::exitError(getMLText("nonconfo_add_owners"),getMLText("invalid_request_token"));
 }
 
-if (!isset($_POST["name"])) {
-	UI::exitError(getMLText("nonconfo_add_process"),getMLText("error_occured"));
+if (!isset($_POST["processId"])) {
+	UI::exitError(getMLText("nonconfo_add_owners"),getMLText("error_occured"));
 }
 
-$name = $_POST["name"];
+$processId = $_POST['processId'];
 
-$res = addProcess($name);
+$res = addProcessOwner($processId, $_POST["userId"]);
                                 
 if (is_bool($res) && !$res) {
 	UI::exitError(getMLText("add_process"),getMLText("error_occured"));
 }
 
-add_log_line("?name=".$name);
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('nonconfo_owner_success')));
 
-header("Location:../out/out.AddProcess.php");
+add_log_line();
+
+header("Location:../out/out.AddOwners.php?processid=".$_POST['processId']);
 
 ?>

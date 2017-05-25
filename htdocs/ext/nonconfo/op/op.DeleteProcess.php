@@ -51,7 +51,7 @@ switch ($command) {
 				                                
 				if (is_bool($res) && !$res) {
 					header('Content-Type: application/json');
-					echo json_encode(array('success'=>false, 'message'=>getMLText('error_occured'), 'data'=>''));
+					echo json_encode(array('success'=>false, 'message'=>getMLText('nonprocess_process_delete_error'), 'data'=>''));
 				}
 
 				header('Content-Type: application/json');

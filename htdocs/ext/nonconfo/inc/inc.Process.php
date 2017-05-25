@@ -49,7 +49,7 @@ function getProcess($id){
 	$ret = $db->getResultArray($queryStr);
 	
 	if (is_bool($ret) && $ret == false) return false;
-	else if (count($ret) != 1) return false;
+	else if (count($ret) <= 0) return false;
 		
 	return $ret[0];	
 }

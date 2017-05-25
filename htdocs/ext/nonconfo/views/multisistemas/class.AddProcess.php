@@ -128,13 +128,17 @@ $(document).ready(function() {
 		<div class="well">
 			<form class="form-horizontal" action="../op/op.AddProcess.php" id="form1" name="form1" method="post">
 			<?php echo createHiddenFieldWithKey('addprocess'); ?>
-					<div class="control-group">
-						<label class="control-label"><?php printMLText("nonconfo_process_name");?>:</label>
-						<div class="controls"><input type="text" name="name" size="100"></div>
-					</div>
-					<div class="controls">
+			<table id="table1" class="table">
+				<tr>
+					<td class="lbl-right"><?php printMLText("nonconfo_process_name");?>:</td>	
+					<td><input type="text" name="name"></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="lbl-right">
 						<input class="btn btn-success" type="submit" value="<?php printMLText("nonconfo_add_process");?>">
-					</div>
+					</td>
+				</tr>
+			</table>
 			</form>
 		</div>
 	</div>
@@ -143,11 +147,10 @@ $(document).ready(function() {
 		<?php $this->contentHeading(getMLText("nonconfo_process_list")); ?>
 		<div class="well">
 		<?php if(count($processes) > 0) { ?>
-			<table id="viewfolder-table" class="table table-condensed table-hover">
+			<table id="table1" class="table table-condensed table-hover">
 				<thead>
 					<tr>
 						<th><?php echo getMLText("nonconfo_process_name"); ?></th>
-						<th><?php echo getMLText("nonconfo_process_owner"); ?></th>
 						<th><?php echo getMLText("nonconfo_actions"); ?></th>
 					</tr>
 				</thead>
@@ -156,9 +159,6 @@ $(document).ready(function() {
 						<tr id="table-row-process-<?php echo $process['id']?>">
 							<td>
 								<?php echo $process['name']; ?>
-							</td>
-							<td>
-								<p>ninguno</p>
 							</td>
 							<td>
 								<div class="list-action">

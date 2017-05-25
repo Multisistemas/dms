@@ -31,6 +31,8 @@ require_once("../../../views/$theme/class.Bootstrap.php");
 class SeedDMS_View_AddOwners extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		$selProcess = $this->params['selProcess'];
+
 		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
 function checkForm() {
@@ -58,20 +60,20 @@ $(document).ready(function() {
 		ev.preventDefault();
 	});
 
-	$('body').on('click', 'a.delete-process-btn', function(ev){
+	$('body').on('click', 'a.delete-owner-btn', function(ev){
 		id = $(ev.currentTarget).attr('rel');
 		confirmmsg = $(ev.currentTarget).attr('confirmmsg');
 		msg = $(ev.currentTarget).attr('msg');
-		formtoken = "<?php echo createFormKey('removeprocess'); ?>";
+		formtoken = "<?php echo createFormKey('removeowner'); ?>";
 		bootbox.dialog(confirmmsg, [{
-		"label" : "<i class='icon-remove'></i><?php echo getMLText("nonconfo_rm_process"); ?>",
+		"label" : "<i class='icon-remove'></i><?php echo getMLText("nonconfo_rm_owner"); ?>",
 		"class" : "btn-danger",
 		"callback": function() {
-			$.get('../op/op.DeleteProcess.php',
-				{ command: 'deleteprocess', id: id, formtoken: formtoken },
+			$.get('../op/op.DeleteProcessOwner.php',
+				{ command: 'deleteowner', id: id, formtoken: formtoken },
 							function(data) {
 								if(data.success) {
-									$('#table-row-process-'+id).hide('slow');
+									$('#table-row-owner-'+id).hide('slow');
 									noty({
 										text: data.message,
 										type: 'success',
@@ -100,11 +102,11 @@ $(document).ready(function() {
 					"callback": function() {
 					}
 				}]);
-			});
+	});
 
-			$("#ownerid").change(function() {
-				$('div.ajax').trigger('update', {processid: $(this).val()});
-			});
+	$("#selector").change(function() {
+		$('div.ajax').trigger('update', {processid: $(this).val()});
+	});
 
 });
 
@@ -114,68 +116,98 @@ $(document).ready(function() {
 	function showForm($selProcess) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$allUsers = $this->params['allusers'];
+		$allUsers = $this->params['allUsers'];
+		$userCreator = $this->params['userCreator'];
+		$owners = $this->params['owners'];
 
 		if($selProcess) {
-			
-		
+			$date = new DateTime();
+			$date->setTimestamp($selProcess['created']);
+			$this->contentSubHeading(getMLText("nonconfo_process_info"));
+		?>
+			<hr/>
+			<table class="table-condensed">
+				<tr>
+					<td><?php echo "<b>".getMLText('nonconfo_process_name').":</b> ".$selProcess['name']; ?></td>
+				</tr>
+				<tr>
+					<td><?php echo "<b>".getMLText('nonconfo_created').":</b> ".$date->format('d-m-Y H:i:s'); ?></td>	
+				</tr>
+				<tr>	
+					<td><?php echo "<b>".getMLText('nonconfo_created_by').":</b> "."<a href=\"mailto:".htmlspecialchars($userCreator->getEmail())."\">".htmlspecialchars($userCreator->getFullName())."</a>"; ?></td>
+				</tr>
+			</table>
+			<hr/>
 
-		// <table class="table-condensed"> 
-		
-			/*$members = $group->getUsers();
-			if (count($members) == 0)
-				print "<tr><td>".getMLText("no_group_members")."</td></tr>";
-			else {
-			
-				foreach ($members as $member) {
-				
-					print "<tr>";
-					print "<td><i class=\"icon-user\"></i></td>";
-					print "<td>" . htmlspecialchars($member->getFullName()) . "</td>";
-					print "<td>" . ($group->isMember($member,true)?getMLText("manager"):"&nbsp;") . "</td>";
-					print "<td>";
-					print "<form action=\"../op/op.GroupMgr.php\" method=\"post\" class=\"form-inline\" style=\"display: inline-block; margin-bottom: 0px;\"><input type=\"hidden\" name=\"action\" value=\"rmmember\" /><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('rmmember')."<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
-					print "&nbsp;";
-					print "<form action=\"../op/op.GroupMgr.php\" method=\"post\" class=\"form-inline\" style=\"display: inline-block; margin-bottom: 0px;\"><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"action\" value=\"tmanager\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('tmanager')."<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-random\"></i> ".getMLText("toggle_manager")."</button></form>";
-					print "</td></tr>";
-				}
-			}*/
-		
-		// </table> 
-		
+		<?php
 
 		$this->contentSubHeading(getMLText("nonconfo_add_owners"));
 ?>
 		
 		<form class="form-inline" action="../op/op.AddOwners.php" method="POST" name="form_2" id="form_2">
 			<?php echo createHiddenFieldWithKey('addowner'); ?>
-			<input type="Hidden" name="action" value="addowner">
-			<input type="Hidden" name="processId" value="<?php print $selProcess['id']; ?>">
+			<input type="hidden" name="processId" value="<?php echo $selProcess['id']; ?>">
 			<table class="table-condensed">
 				<tr>
 					<td>
-						<select name="userid" id="userid">
+						<select name="userId" id="userid">
 							<option value="-1"><?php printMLText("select_one");?></option>
 							<?php
 								foreach ($allUsers as $user)
-									//if (!$group->isMember($currUser)) // TODO : Obtener los usuarios de un proceso
+									if (!$user->isAdmin()) {
 										print "<option value=\"".$user->getID()."\">" . htmlspecialchars($user->getLogin()." - ".$user->getFullName()) . "</option>\n";
+									}
 							?>
 						</select>
 					</td>
 					<td>
-						<input type="submit" class="btn" value="<?php printMLText("add"); ?>">
+						<input type="submit" class="btn btn-success" value="<?php printMLText("add"); ?>">
 					</td>
 				</tr>
 			</table>
 		</form>
-<?php
+
+		<hr/>
+	<?php	
+		$this->contentSubHeading(getMLText("nonconfo_owners_added"));
+
+		if ($owners != null) {
+	?>
+			<table id="viewfolder-table" class="table table-condensed table-hover">
+				<thead>
+					<tr>
+						<th><?php echo getMLText("nonconfo_owner"); ?></th>
+						<th><?php echo getMLText("nonconfo_actions"); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ($owners as $owner): ?>
+						<tr id="table-row-owner-<?php echo $owner['id']?>">
+							<td>
+								<?php 
+								$username = $dms->getUser($owner["userId"]);
+								echo $username->getFullName(); 
+								?>
+							</td>
+							<td>
+								<div class="list-action">
+									<a class="delete-owner-btn" rel="<?php echo $owner['id']; ?>" msg="<?php echo getMLText('nonconfo_rm_owner'); ?>"confirmmsg="<?php echo htmlspecialchars(getMLText("nonconfo_confirm_rm_owner", array ("nonconfo_owner" => $username->getFullName())), ENT_QUOTES); ?>" title="<?php echo getMLText("nonconfo_rm_owner"); ?>"><i class="icon-remove"></i></a>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+				</tbody>
+			</table>
+		<?php 
+			} else {
+				echo getMLText("nonconfo_non_process_exists");
+			}
+
 		}
 	} /* }}} */
 
 	function form() { /* {{{ */
 		$selProcess = $this->params['selProcess'];
-
 		$this->showForm($selProcess);
 	} /* }}} */
 
@@ -183,6 +215,9 @@ $(document).ready(function() {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$processes = $this->params['processes'];
+		$selProcess = $this->params['selProcess'];
+		$userCreator = $this->params['userCreator'];
+		$owners = $this->params['owners'];
 
 		$this->htmlAddHeader('<script type="text/javascript" src="/styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
@@ -194,41 +229,34 @@ $(document).ready(function() {
 ?>
 
 <div class="row-fluid">
-
 	<div class="span4">
 		<?php $this->contentHeading(getMLText("nonconfo_add_owners")); ?>
 		<div class="well">
-			<form class="form-horizontal" action="../op/op.AddOwners.php" id="form1" name="form1" method="post">
-					<?php echo createHiddenFieldWithKey('addowners'); ?>
-					<div class="control-group">
-						<label class="control-label"><?php printMLText("nonconfo_select_process");?>:</label>
-						<div class="controls">
-							<select class="chzn-select" name="ownerid">
-								<?php
-									foreach ($processes as $process) {
-										print "<option value=\"".$process['id']."\" data-subtitle=\"\"";
-										print ">" . htmlspecialchars($process['name']) . "</option>\n";
-									}
-								?>
-							</select>
-						</div>
-						<label class="control-label"><?php printMLText("nonconfo_select_owners");?>:</label>
-						<div class="controls">
-
-						</div>
-					</div>
-					<div class="controls">
-						<input class="btn btn-success" type="submit" value="<?php printMLText("nonconfo_add_process");?>">
-					</div>
+			<form class="form-horizontal">
+					<table class="table">
+						<tr>
+							<td><?php printMLText("nonconfo_select_process");?>:</td>
+							<td>
+								<select class="chzn-select" name="selector" id="selector">
+									<option value="-1"><?php echo getMLText("nonconfo_select_process")?></option>
+										<?php
+											foreach ($processes as $process) {
+												print "<option value=\"".$process['id']."\" data-subtitle=\"\"";
+												print ">" . htmlspecialchars($process['name']) . "</option>\n";
+											}
+										?>
+								</select>
+							</td>
+						</tr>
+					</table>
 			</form>
 		</div>
 	</div>
-
 	<div class="span8">
 		<?php $this->contentHeading(getMLText("nonconfo_owners_details")); ?>
 		<div class="well">
-			<div class="ajax" data-view="GroupMgr" data-action="form" <?php echo ($process ? "data-query=\"processid=".$process['id']."\"" : "") ?>></div>
-	</div>
+			<div class="ajax" data-view="AddOwners" data-action="form" <?php echo ($process ? "data-query=\"processid=".$selProcess['id']."\"" : "") ?>></div>
+		</div>
 	</div>
 </div>
 

@@ -27,51 +27,39 @@ function getProcessOwners(){
 	return $ret;
 }
 
-function addProcessOwners($processId, $ownerId){
+function addProcessOwner($processId, $ownerId){
 
 	global $db,$user;
 
-	$queryStr = "INSERT INTO tblProcessOwners (processId, userId) VALUES (".$processId.", ".$ownerId.")";
-	
+	$queryStr = "INSERT INTO tblProcessOwners (processId, userId, createdBy) VALUES (".$processId.", ".$ownerId.", ".$user->getID().")";
+
 	$ret = $db->getResult($queryStr);
 
 	return $ret;
 }
 
-function getProcessOwner($id){
+function getOwnersByProcess($processId){
 
-	if (!is_numeric($id)) return false;
+	if (!is_numeric($processId)) return false;
 
 	global $db;
 	
-	$queryStr = "SELECT * FROM tblProcessOwners WHERE id = " . (int) $id;
+	$queryStr = "SELECT * FROM tblProcessOwners WHERE processId = " . (int) $processId;
 	$ret = $db->getResultArray($queryStr);
 	
 	if (is_bool($ret) && $ret == false) return false;
-	else if (count($ret) != 1) return false;
+	else if (count($ret) <= 0) return false;
 		
-	return $ret[0];	
+	return $ret;	
 }
 
-function editProcessOwner($id, $name){
-
-	if (!is_numeric($id)) return false;
-
-	global $db, $user;
-	
-	$queryStr = "UPDATE tblProcesses SET name = \"".$name."\", modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $id;
-
-	$ret = $db->getResult($queryStr);	
-	return $ret;
-}
-
-function delProcess($id){
+function delProcessOwner($id){
 
 	if (!is_numeric($id)) return false;
 	
 	global $db;
 	
-	$queryStr = "DELETE FROM tblProcesses WHERE id = " . (int) $id;
+	$queryStr = "DELETE FROM tblProcessOwners WHERE id = " . (int) $id;
 	$ret = $db->getResult($queryStr);	
 	return $ret;
 }

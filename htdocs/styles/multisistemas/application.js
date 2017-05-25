@@ -402,7 +402,7 @@ $(document).ready( function() {
 		} else {
 			url += "&"+param1;
 		}
-		element.prepend('<div style="position: absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: '+element.height()+'px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/bootstrap/images/ajax-loader.gif"></div>');
+		element.prepend('<div style="position: absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: '+element.height()+'px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/multisistemas/images/ajax-loader.gif"></div>');
 		$.get(url, function(data) {
 			element.html(data);
 //			$(".chzn-select").chosen();

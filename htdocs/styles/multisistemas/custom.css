@@ -87,6 +87,11 @@ hr {
   min-height: 200px;
 }
 
+.comment_width {
+  width: 100%;
+  min-height: 150px;
+}
+
 /*.btn {
   color: #ffffff !important;
   background: #30a2f6;
