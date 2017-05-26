@@ -2,6 +2,10 @@
 
 $text = array(
 	'nonconfo_title' => 'No conformidades',
+	'nonconfo_save' => 'Guardar',
+	'nonconfo_edit' => 'Editar',
+	'nonconfo_cancel' => 'Cancelar',
+	'nonconfo_delete' => 'Eliminar',
 	'nonconfo_processes' => 'Procesos',
 	'nonconfo_process_name' => 'Nombre del proceso',
 	'nonconfo_add_process' => 'Añadir proceso',
@@ -55,6 +59,17 @@ $text = array(
 	'nonconfo_add_analysis' => 'Crear análisis respectivo',
 	'nonconfo_analysis_description' => 'Descripción del análisis',
 	'nonconfo_attach_file' => 'Adjuntar archivo',
+	'nonconfo_add_analysis' => 'Agregar análisis',
+	'nonconfo_no_analysis_description' => 'La descripción del análisis no puede estar vacía',
+	'nonconfo_analysis_added' => 'Análisis agregado correctamente',
+	'nonconfo_add_actions' => 'Agregar acción',
+	'nonconfo_action_detail' => 'Detalles de la acción',
+	'nonconfo_action_creation' => 'Fecha de creación',
+	'nonconfo_action_date_end' => 'Fecha prevista de finalización',
+	'nonconfo_attached_files' => 'Archivos adjuntos',
+	'nonconfo_add_actions' => 'Agregar acciones',
+	'nonconfo_no_action_description' => 'La descripción de la acción no puede estar vacía',
+	'nonconfo_view' => 'Ver no conformidad',
 );
 
 ?>

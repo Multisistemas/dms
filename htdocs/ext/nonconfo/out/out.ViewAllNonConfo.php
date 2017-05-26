@@ -22,11 +22,17 @@ include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
+include("../inc/inc.Process.php");
+include("../inc/inc.Nonconformities.php");
 include("../../../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
 	UI::exitError(getMLText("edit_process"),getMLText("access_denied"));
 }
+
+$nonconformities = getNonconformities();
+
+$processes = getProcesses();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 
@@ -34,6 +40,8 @@ $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('dms', $dms);
 	$view->setParam('user', $user);
+	$view->setParam('processes', $processes);
+	$view->setParam('nonconformities', $nonconformities);
 	$view($_GET);
 	exit;
 }

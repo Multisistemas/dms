@@ -41,8 +41,6 @@ function addNonconformity($processId, $type, $source, $description){
 		$id = 0;
 	}
 	
-	var_dump($id);
-	
 	return $id;
 }
 

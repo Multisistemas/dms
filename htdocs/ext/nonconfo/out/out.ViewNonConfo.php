@@ -25,6 +25,8 @@ include("../../../inc/inc.ClassUI.php");
 include("../inc/inc.Process.php");
 include("../inc/inc.ProcessOwners.php");
 include("../inc/inc.Nonconformities.php");
+include("../inc/inc.NonConfoAnalysis.php");
+include("../inc/inc.NonConfoAction.php");
 include("../../../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
@@ -44,7 +46,11 @@ if (is_bool($nonconfo) && $nonconfo == false) {
 // Get all users
 $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 
+// Get the analysis for the nonconfo
+$analysis = getNonConfoAnalysis($_GET['nonconfoId']);
+
 $process = getProcess($nonconfo['processId']);
+$actions = getNonConfoActions($_GET['nonconfoId']);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 
@@ -53,6 +59,8 @@ if($view) {
 	$view->setParam('nonconfo', $nonconfo);
 	$view->setParam('process', $process);
 	$view->setParam('allUsers', $allUsers);
+	$view->setParam('analysis', $analysis);
+	$view->setParam('actions', $actions);
 	$view($_GET);
 	exit;
 }

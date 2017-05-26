@@ -31,6 +31,7 @@ require_once("../../../views/$theme/class.Bootstrap.php");
 class SeedDMS_View_ViewNonConfo extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		$nonconfo = $this->params['nonconfo'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
 function checkForm() {
@@ -51,6 +52,7 @@ function checkForm() {
 	else
 		return true;
 }
+
 
 $(document).ready(function() {
 	$('body').on('submit', '#form1', function(ev){
@@ -80,6 +82,8 @@ $(document).ready(function() {
 		$allUsers = $this->params['allUsers'];
 		$nonconfo = $this->params['nonconfo'];
 		$process = $this->params['process'];
+		$analysis = $this->params['analysis'];
+		$actions = $this->params['actions'];
 
 		$this->htmlStartPage(getMLText("nonconfo_title"));
 		$this->globalNavigation();
@@ -93,6 +97,7 @@ $(document).ready(function() {
 		<?php $this->contentHeading(getMLText("nonconfo_view_nonconfo")); ?>
 		<div class="well">
 			<?php echo $this->contentSubHeading(getMLText("nonconfo_general_info")); ?>
+			<div style="overflow-x: auto;">
 			<table class="table table-striped">
 				<?php
 					$date = new DateTime();
@@ -115,6 +120,8 @@ $(document).ready(function() {
 					</tr>
 				</tbody>
 			</table>
+			</div>
+			<div style="overflow-x: auto;">
 			<table class="table">
 				<thead>
 					<tr>
@@ -132,34 +139,47 @@ $(document).ready(function() {
 						</td>
 					</tr>
 					<tr>
-						<td>
-							<div>
-								<a type="button" id="display-analysis" class="btn btn-sm btn-success"><?php echo getMLText('nonconfo_add_analysis'); ?></a>
-							</div>
+						<td class="lbl-right">
+								<?php if($analysis == false ) { 
+								 echo "<a type=\"button\" id=\"display-analysis\" class=\"btn btn-sm btn-warning\">".getMLText('nonconfo_add_analysis')."</a>";
+								} ?>
 						</td>
 					</tr>
 				</tbody>
 			</table>
+			</div>
 		</div>
 	</div>
-	<br/>
-	<div class="" style="display: none;" id="analysis-block">
+</div>
+
+<div class="row-fluid" id="analysis-block" <?php if ($analysis == false) { echo "style=\"display: none;\""; } ?>>
+	<div class="span12">
 		<div class="well">
 		<?php echo $this->contentSubHeading(getMLText("nonconfo_add_analysis")); ?>
 			<form class="form-horizontal" action="../op/op.AddAnalysis.php" id="form1" name="form1" method="post">
+			<?php echo createHiddenFieldWithKey('addanalysis'); ?>
+			<input type="hidden" name="nonconfoId" value="<?php echo $nonconfo['id']; ?>">
+			<div style="overflow-x: auto;">
 				<table class="table">
 						<thead>
 							<tr>
 								<th><?php echo getMLText("nonconfo_analysis_description"); ?>	</th>
+								<th><?php echo getMLText("nonconfo_attached_files"); ?>	</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td>
 									<div class="span8">
-										<textarea class="comment_width" name="description" rows="5" cols="100"></textarea>
+									<?php if($analysis != false ) { 
+											echo "<textarea class=\"comment_width\" name=\"description\" rows=\"5\" cols=\"100\" disabled>".$analysis['comment']."</textarea>";
+										} else {
+											echo "<textarea class=\"comment_width\" name=\"description\" rows=\"5\" cols=\"100\"></textarea>";
+										}
+									?>
 									</div>
 								</td>
+								<td>Ninguno</td>
 							</tr>
 							<tr>
 								<td class=""><?php printMLText("nonconfo_attach_file");?>:
@@ -174,19 +194,73 @@ $(document).ready(function() {
 	                  </div>
 	                </div>
             		</td>
+            		<td></td>
 							</tr>
 							<tr>
 								<td>
-									<a type="button" class="btn btn-sm btn-success"><?php echo getMLText('save'); ?></a>
-									<a type="button" id="cancel-btn" class="btn btn-sm btn-defaul"><?php echo getMLText('cancel'); ?></a>
+								<?php if($analysis == false ) { 
+									echo "<input type=\"submit\" class=\"btn btn-success\" value=\"".getMLText('nonconfo_save')."\">";
+									echo "<a type=\"button\" id=\"cancel-btn\" class=\"btn btn-sm btn-default\">".getMLText('cancel')."</a>";
+								} else {
+									echo "<button type=\"submit\" class=\"btn btn-success\"><i class=\"icon-pencil\"></i> ".getMLText('nonconfo_edit')."</button>";
+								} ?>
+								</td>
+								<td class="lbl-right">
+								<?php if($analysis != false ) { 
+									echo "<a type=\"button\" href=\"../out/out.AddAction.php?nonconfoId=".$nonconfo['id']."\" id=\"add-actions-btn\" class=\"btn btn-sm btn-warning\"><i class=\"icon-plus\"></i> ".getMLText('nonconfo_add_actions')."</a>";
+								} ?>
 								</td>
 							</tr>
 						</tbody>
 					</table>
+					</div>
 				</form>
 		</div>
 	</div>
 </div>
+
+<?php if (false != $actions && count($actions) >= 1 ) { 
+	$i = 0;
+	foreach ($actions as $action => $i) {
+	echo "<div class='row-fluid'>
+		<div class='span12'>
+			<div class='well'>
+				<div style='overflow-x: auto;''>
+					<table class='table table-striped'>
+						<thead>
+							<tr>
+								<th>".getMLText('nonconfo_action_detail')."</th>
+								<th>".getMLText('nonconfo_action_creation')."</th>
+								<th>".getMLText('nonconfo_action_date_end')."</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div class='alert alert-info' role='info'>
+										<strong>".$i['description']."</strong>
+									</div>
+								</td>
+								<td>
+									".gmdate("d-m-Y", $i['dateStart'])."
+								</td>
+								<td>
+									".gmdate("d-m-Y", $i['dateEnd'])."
+								</td>
+								<td>
+										<a type='button' href='../out/out.EditAction.php?actionId=".$i['id']."' class='btn btn-success' rel=' id='btn-edit-action'><i class='icon-pencil'></i> ".getMLText('nonconfo_edit')."</a>
+										<a type='button' href='../op/op.DeleteAction.php?actionId=".$i['id']."' class='btn btn-danger' rel=' id='btn-edit-action'><i class='icon-close'></i> ".getMLText('nonconfo_delete')."</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					</div>
+			</div>
+		</div>
+	</div>";
+	$i++;
+} } ?>
 
 <?php
 

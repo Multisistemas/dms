@@ -102,7 +102,7 @@ $(document).ready(function() {
 						</tr>
 						<tr>
 							<td class="lbl-right"><?php printMLText("nonconfo_request_date");?>:</td>
-							<td><input type="text" name="date" value="<?php echo date("d-m-Y H:i:sa") ?>" size="100" disabled /></td>
+							<td><input type="text" name="date" value="<?php echo date("d-m-Y H:i:sa"); ?>" size="100" disabled /></td>
 						</tr>					
 						<tr>
 							<td class="lbl-right"><?php printMLText("nonconfo_action_type");?>:</td>

@@ -64,19 +64,50 @@ $(document).ready(function() {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$processes = $this->params['processes'];
+		$nonconfos = $this->params['nonconformities'];
 
 		$this->htmlStartPage(getMLText("nonconfo_title"));
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation("nonconfo_title", "nonconfo_view_navigation", "");
 
+		$date = new DateTime();
 ?>
+	
+<div class="row-fluid">
+	<div class="span12">
+		<?php $this->contentHeading(getMLText("nonconfo_title")); ?>
+		<div class="well">
+			<?php echo $this->contentSubHeading(getMLText("nonconfo_general_info")); ?>
+			<div style="overflow-x: auto;">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th><?php echo getMLText("nonconfo_process_name"); ?></th>
+						<th><?php echo getMLText("nonconfo_request_date"); ?></th>
+						<th><?php echo getMLText("nonconfo_action_type"); ?></th>
+						<th><?php echo getMLText("nonconfo_origin_source"); ?></th>
+						<th></th>
+					</tr>	
+				</thead>
+				<tbody>				
+				<?php $i = 0; foreach ($nonconfos as $nonconfo => $i) { ?>
+					<tr>
+						<td><?php echo "Process name"; ?></td>
+						<td><?php $date->setTimestamp($i['created']); echo $date->format('d-m-Y H:i:s'); ?></td>
+						<td><?php echo $i['type']; ?></td>
+						<td><?php echo $i['source']; ?></td>
+						<td><a type="button" class="btn btn-info" href="../out/out.ViewNonConfo.php?nonconfoId=<?php echo $i['id']; ?>"><?php echo getMLText('nonconfo_view'); ?></a></td>
+					</tr>
+				<?php } ?>
+				</tbody>
+			</table>
+			</div>
+		</div>
+	</div>
+</div>
 
-<form class="form-horizontal" action="../op/op.AddProcess.php" id="form1" name="form1" method="post">
-
-		
-
-</form>
 <?php
 		$this->contentContainerEnd();
 		$this->contentEnd();
