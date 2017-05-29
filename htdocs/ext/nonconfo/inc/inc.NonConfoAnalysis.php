@@ -26,7 +26,7 @@ function getAllNonConfoAnalysis(){
 	return $ret;
 }
 
-function addNonConfoAnalysis($nonconfoId, $description, $fileName='', $mimeType){
+function addNonConfoAnalysis($nonconfoId, $description, $fileName='', $mimeType=''){
 
 	global $db,$user;
 
@@ -72,15 +72,23 @@ function getNonConfoAnalysisByNonconfoId($nonconfoid){
 	return $ret[0];	
 }
 
-function editNonconfoAnalysis($id, $source, $description){
+function editNonconfoAnalysis($id, $source, $description, $fileName='', $mimeType=''){
 
 	if (!is_numeric($id)) return false;
 
 	global $db, $user;
 	
-	$queryStr = "UPDATE tblNonconfoAnalysis SET comment = \"".$description."\", modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $id;
-
-	var_dump($queryStr);
+	$queryStr = "UPDATE tblNonconfoAnalysis SET comment = \"".$description."\", modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID();
+	
+	if(!empty($fileName)) {
+		$queryStr .= ", fileName = '$fileName'";
+	}
+	
+	if(!empty($mimeType)) {
+		$queryStr .= ", mimeType = '$mimeType'";
+	}
+	
+	$queryStr .= " WHERE id = ".(int) $id;
 
 	$ret = $db->getResult($queryStr);	
 	return $ret;

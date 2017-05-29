@@ -52,9 +52,21 @@ if(isset($_POST['operation'])) {
 
 $id = $_POST['analysisId'];
 $description = $_POST["description"];
-$files = '';
 
-$res = editNonconfoAnalysis($id, $_POST["nonconfoId"], $description);
+if(isset($_FILES['attach']) && $_FILES['attach']) {
+	foreach($_FILES['attach'] as $key => $val) {
+		if($key == 'name') $name = $val[0];
+		if($key == 'tmp_name') $tmp_name = $val[0];
+		if($key == 'type') $type = $val[0];
+		if($key == 'error') $error = $val[0];
+		if($key == 'size') $size = $val[0];
+	}
+	
+	$fullfile = $settings->_contentDir."nonconfo/$name";
+	move_uploaded_file($tmp_name, $fullfile);
+}
+
+$res = editNonconfoAnalysis($id, $_POST["nonconfoId"], $description, $name, $type);
 
 if (is_bool($res) && !$res) {
 	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("nonconfo_db_error_occured"));
