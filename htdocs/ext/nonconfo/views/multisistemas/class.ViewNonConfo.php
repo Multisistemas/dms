@@ -168,7 +168,7 @@ $(document).ready(function() {
 	<div class="span12">
 		<div class="well">
 		<?php 
-			echo $this->contentSubHeading(getMLText("nonconfo_analysis_title")); 
+			echo $this->contentSubHeading(getMLText("nonconfo_analysis")); 
 			if($operation == 'add') {
 				$action = "../op/op.AddAnalysis.php";
 			} else {
@@ -245,7 +245,7 @@ $(document).ready(function() {
 									}
 								?>
 
-								<?php  if($analysis == false ) { 
+								<?php  /*if($analysis == false ) { 
 									echo "<input type=\"hidden\" name=\"operation\" value=\"add\"></input>";
 									echo "<input type=\"submit\" class=\"btn btn-success\" value=\"".getMLText('nonconfo_save')."\">";
 									echo "<a type=\"button\" id=\"cancel-btn\" class=\"btn btn-sm btn-default\">".getMLText('cancel')."</a>";
@@ -254,7 +254,7 @@ $(document).ready(function() {
 									echo "<input type=\"hidden\" name=\"description\" value=\"".$analysis['comment']."\"></input>";
 									echo "<input type=\"hidden\" name=\"operation\" value=\"edit\"></input>";
 									echo "<button type=\"submit\" class=\"btn btn-success\"><i class=\"icon-pencil\"></i> ".getMLText('nonconfo_edit')."</button>";
-								} ?>
+								} */?>
 
 								</td>
 								<td class="lbl-right">

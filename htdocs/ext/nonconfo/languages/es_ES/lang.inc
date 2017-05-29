@@ -99,6 +99,7 @@ $text = array(
 	'nonconfo_yes' => 'Si',
 	'nonconfo_no' => 'No',
 	'nonconfo_action_finalized' => 'Acción finalizada correctamente',
+	'nonconfo_analysis' => 'Análisis de la no conformidad',
 );
 
 ?>

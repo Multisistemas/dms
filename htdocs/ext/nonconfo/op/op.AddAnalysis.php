@@ -49,7 +49,6 @@ if(isset($_POST['operation'])) {
 	$operation = 'add';
 }
 
-
 $nonconfoId = $_POST['nonconfoId'];
 
 $res = addNonConfoAnalysis($nonconfoId, $_POST['description']);
