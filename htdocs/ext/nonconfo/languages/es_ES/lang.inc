@@ -100,6 +100,8 @@ $text = array(
 	'nonconfo_no' => 'No',
 	'nonconfo_action_finalized' => 'Acción finalizada correctamente',
 	'nonconfo_analysis' => 'Análisis de la no conformidad',
+	'nonconfo_edit_nonconfo_analysis' => 'Editar descripción del análisis',
+	'nonconfo_none' => 'Ninguno',
 );
 
 ?>

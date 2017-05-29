@@ -46,23 +46,11 @@ if ($_POST['type'] == -1) {
 	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("nonconfo_no_type_selected"));
 }
 
-/*
-$nonconfos = getNonconformities();
-
-if (count($nonconfos) == 0 ) {
-	$correlative = 1;
-} else {
-	$correlative = count($nonconfos) + 1;
-}
-*/
-
 $res = addNonconformity($_POST['processId'], $_POST['type'], $_POST['source'], $_POST['description']);
 
 if ($res == 0 || empty($res)) {
 	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("error_occured"));
 }
-
-//$nonconfo = getNonconformity($res);
 
 if (count($nonconfo) != 0) {
 	$owners = getOwnersByProcess($_POST['processId']);

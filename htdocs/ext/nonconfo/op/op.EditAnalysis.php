@@ -45,6 +45,7 @@ if(isset($_POST['operation'])) {
 }
 $id = $_POST['analysisId'];
 $description = $_POST["description"];
+
 if(isset($_FILES['attach']) && $_FILES['attach']) {
 	foreach($_FILES['attach'] as $key => $val) {
 		if($key == 'name') $name = $val[0];

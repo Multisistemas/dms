@@ -64,12 +64,16 @@ $(document).ready(function() {
 
 	/* Show analysis form */
 	$("#display-analysis").on('click', function() {
-   $("#analysis-block").fadeIn('slow');
+   	$("#analysis-block").fadeIn('slow');
 	});
 
 	/* Cancel analysis */
 	$("#cancel-btn").on('click', function() {
-   $("#analysis-block").fadeOut('slow');
+   	$("#analysis-block").fadeOut('slow');
+	});
+
+	$("#enable-comment-btn").on('click', function(){
+		$("#analysis-comment").attr('disabled', false);
 	});
 
 });
@@ -190,16 +194,9 @@ $(document).ready(function() {
 							<tr>
 								<td>
 									<div class="span8">
-									<?php /*if($analysis != false ) { 
-											echo "<textarea class=\"comment_analysis\" name=\"description\" rows=\"5\" cols=\"100\" disabled>".$analysis['comment']."</textarea>"; */
-
+									<?php
 									if($analysis != false) { 
-											echo "<textarea class=\"comment_width\" name=\"description\" rows=\"5\" cols=\"100\" disabled>".$analysis['comment']."</textarea>";
-											echo "<div class=\"list-action\">";
-											echo "<a class=\"enable-comment-btn\" rel=\"1\" msg=\"Edit enabled\" title=\"Editar descripción del análisis\">
-									<i class=\"icon-edit\"></i></a>";
-											echo "</div>";
-
+											echo "<textarea id='analysis-comment' class=\"comment_width\" name=\"description\" rows=\"5\" cols=\"100\" disabled>".$analysis['comment']."</textarea>";
 										} else {
 											echo "<textarea class=\"comment_analysis\" name=\"description\" rows=\"5\" cols=\"100\"></textarea>";
 										}
@@ -211,7 +208,7 @@ $(document).ready(function() {
 									<?php if(!empty($analysis['fileName'])) {
 										echo("<a href='../op/op.ViewAnalysisAttach.php?filename=".$analysis['fileName']."&type=".$analysis['mimeType']."'>".$analysis['fileName']."</a>");
 									} else {
-										echo "Ninguno";
+										echo getMLText('nonconfo_none');
 									}
 									?>
 									</div>
@@ -236,7 +233,7 @@ $(document).ready(function() {
 								<td>
 
 								<?php 
-								if (false != $processOwners) {
+								/*if (false != $processOwners) {
 										for($i = 0; $i < count($processOwners); $i++){
 											if ($user->getID() == $processOwners[$i]['userId']) {
 												if($analysis == false ) { 
@@ -247,10 +244,30 @@ $(document).ready(function() {
 												}
 											}
 										}
+									}*/
+
+									if (false != $processOwners) {
+										for($i = 0; $i < count($processOwners); $i++){
+											if ($user->getID() == $processOwners[$i]['userId']) {
+												if($analysis == false ) { 
+													echo "<input type=\"hidden\" name=\"operation\" value=\"add\"></input>";
+													echo "<input type=\"submit\" class=\"btn btn-primary\" value=\"".getMLText('nonconfo_save')."\">";
+													echo "<a type=\"button\" id=\"cancel-btn\" class=\"btn btn-sm btn-default\">".getMLText('cancel')."</a>";
+												} else {
+													echo "<div class=\"list-action\">";
+													echo "<a class=\"enable-comment-btn\" id='enable-comment-btn' rel=\"1\" msg=\"Edit enabled\" title=\"".getMLText('nonconfo_edit_nonconfo_analysis')."\">
+															<i class=\"icon-edit\"></i></a>";
+													echo "</div>";
+													echo "<input type=\"hidden\" name=\"analysisId\" value=\"".$analysis['id']."\"></input>";
+													echo "<input type=\"hidden\" name=\"operation\" value=\"edit\"></input>";
+													echo "<input type=\"submit\" class=\"btn btn-success\" value='".getMLText('nonconfo_edit')."'>";
+												}
+											}
+										}
 									}
 								?>
 
-								<?php  if($analysis == false ) { 
+								<?php  /*if($analysis == false ) { 
 									echo "<input type=\"hidden\" name=\"operation\" value=\"add\"></input>";
 									echo "<input type=\"submit\" class=\"btn btn-success\" value=\"".getMLText('nonconfo_save')."\">";
 									echo "<a type=\"button\" id=\"cancel-btn\" class=\"btn btn-sm btn-default\">".getMLText('cancel')."</a>";
@@ -259,7 +276,7 @@ $(document).ready(function() {
 									echo "<input type=\"hidden\" name=\"description\" value=\"".$analysis['comment']."\"></input>";
 									echo "<input type=\"hidden\" name=\"operation\" value=\"edit\"></input>";
 									echo "<button type=\"submit\" class=\"btn btn-success\"><i class=\"icon-pencil\"></i> ".getMLText('nonconfo_edit')."</button>";
-								} ?>
+								}*/ ?>
 
 								</td>
 								<td class="lbl-right">

@@ -78,7 +78,7 @@ $(document).ready(function() {
 
 <div class="row-fluid">
 	<div class="span12">
-		<div class="span6">
+		<div class="span8">
 		<?php $this->contentHeading(getMLText("nonconfo_add_nonconfo")); ?>
 		<div class="well">
 			<?php echo $this->contentSubHeading(getMLText("nonconfo_general_info")); ?>
