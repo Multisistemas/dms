@@ -34,7 +34,7 @@ class SeedDMS_View_ViewNonConfo extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$nonconfo = $this->params['nonconfo'];
 		header('Content-Type: application/javascript; charset=UTF-8');
-		echo '<script src="../../styles/application.js"></script>'."\n";
+//		echo '<script src="../../styles/application.js"></script>'."\n";
 ?>
 function checkForm() {
 	msg = new Array();
@@ -175,7 +175,7 @@ $(document).ready(function() {
 				$action = "../op/op.EditAnalysis.php";
 			}
 		?>
-			<form class="form-horizontal" action="<?php echo $action ?>" id="form1" name="form1" method="post">
+			<form class="form-horizontal" action="<?php echo $action ?>" id="form1" name="form1" method="post" enctype="multipart/form-data">
 			<?php echo createHiddenFieldWithKey($operation.'analysis'); ?>
 			<input type="hidden" name="nonconfoId" value="<?php echo $nonconfo['id']; ?>">
 			<div style="overflow-x: auto;">
@@ -208,7 +208,12 @@ $(document).ready(function() {
 								</td>
 								<td>
 									<div class="span4">
-										Ninguno
+									<?php if(!empty($analysis['fileName'])) {
+										echo("<a href='../op/op.ViewAnalysisAttach.php?filename=".$analysis['fileName']."&type=".$analysis['mimeType']."'>".$analysis['fileName']."</a>");
+									} else {
+										echo "Ninguno";
+									}
+									?>
 									</div>
 								</td>
 							</tr>
@@ -245,7 +250,7 @@ $(document).ready(function() {
 									}
 								?>
 
-								<?php  /*if($analysis == false ) { 
+								<?php  if($analysis == false ) { 
 									echo "<input type=\"hidden\" name=\"operation\" value=\"add\"></input>";
 									echo "<input type=\"submit\" class=\"btn btn-success\" value=\"".getMLText('nonconfo_save')."\">";
 									echo "<a type=\"button\" id=\"cancel-btn\" class=\"btn btn-sm btn-default\">".getMLText('cancel')."</a>";
@@ -254,7 +259,7 @@ $(document).ready(function() {
 									echo "<input type=\"hidden\" name=\"description\" value=\"".$analysis['comment']."\"></input>";
 									echo "<input type=\"hidden\" name=\"operation\" value=\"edit\"></input>";
 									echo "<button type=\"submit\" class=\"btn btn-success\"><i class=\"icon-pencil\"></i> ".getMLText('nonconfo_edit')."</button>";
-								} */?>
+								} ?>
 
 								</td>
 								<td class="lbl-right">

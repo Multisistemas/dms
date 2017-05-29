@@ -1,6 +1,9 @@
 <?php
-//    Copyright (C) 2017 Multisistemas e Inversiones S.A. de C.V.
-// 
+//    MyDMS. Document Management System
+//    Copyright (C) 2002-2005  Markus Westphal
+//    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2010-2016 Uwe Steinmann
+//
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation; either version 2 of the License, or
@@ -14,30 +17,30 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 include("../../../inc/inc.Settings.php");
+include("../../../inc/inc.LogInit.php");
 include("../../../inc/inc.Language.php");
-include("../inc/inc.NonConfoLanguages.php");
 include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
-include("../inc/inc.NonConfoAnalysis.php");
+include("../../../inc/inc.ClassController.php");
 include("../../../inc/inc.Authentication.php");
-if ($user->isGuest()) {
-	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("access_denied"));
-}
-if (!isset($_REQUEST['analysisid'])) {
-	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("nonconfo_id_error"));	
-}
-$analysis = getNonConfoAnalysis($_REQUEST['analysisid']);
-if (count($analysis) == 0 || $analysis == false) {
-	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("nonconfo_id_error"));	
-}
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
-if($view) {
-	$view->setParam('analysis', $analysis);;
-	$view($_GET);
-	exit;
-}
-?>
+
+$fileName = $_GET["filename"];
+$fileType = $_GET["type"];
+
+header("Content-Type: " . $fileType);
+
+header("Content-Disposition: filename=\"" . $fileName . "\"");
+header("Content-Length: " . filesize($settings->_contentDir . '/nonconfo/'. $fileName ));
+header("Expires: 0");
+header("Cache-Control: no-cache, must-revalidate");
+header("Pragma: no-cache");
+
+ob_clean();
+readfile($settings->_contentDir . '/nonconfo/'. $fileName );
+
+add_log_line();
+exit;

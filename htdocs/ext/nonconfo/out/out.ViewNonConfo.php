@@ -14,7 +14,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
 include("../../../inc/inc.Settings.php");
 include("../../../inc/inc.Language.php");
 include("../inc/inc.NonConfoLanguages.php");
@@ -27,54 +26,32 @@ include("../inc/inc.ProcessOwners.php");
 include("../inc/inc.Nonconformities.php");
 include("../inc/inc.NonConfoAnalysis.php");
 include("../inc/inc.NonConfoAction.php");
-include("../inc/inc.FollowAction.php");
 include("../../../inc/inc.Authentication.php");
-
 if ($user->isGuest()) {
 	UI::exitError(getMLText("nonconfo_view_nonconfo"),getMLText("access_denied"));
 }
-
 if (!isset($_GET['nonconfoId'])) {
 	UI::exitError(getMLText("nonconfo_view_nonconfo"),getMLText("nonconfo_invalid_id"));
 }
-
 if(isset($_GET['operation'])) {
 	$operation = $_GET['operation'];
 } else {
 	$operation = 'add';
 }
-
 $nonconfo = getNonConfo($_GET['nonconfoId']);
-
 if (is_bool($nonconfo) && $nonconfo == false) {
 	UI::exitError(getMLText("nonconfo_view_nonconfo"),getMLText("nonconfo_not_exists"));
 }
-
 // Get all users
 $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
-
 // Get the analysis for the nonconfo
-$analysis = getNonConfoAnalysis($_GET['nonconfoId']);
-
+$analysis = getNonConfoAnalysisByNonconfoId($_GET['nonconfoId']);
 if(!empty($analysis)) {
 	$operation = 'edit';
 }
-
 $process = getProcess($nonconfo['processId']);
 $actions = getNonConfoActions($_GET['nonconfoId']);
-$processOwners = getAllProcessOwners($nonconfo['processId']);
-
-
-$actionsFollows = array();
-
-if (false != $actions && count($actions) > 0) {
-	for ($i=0; $i < count($actions); $i++) { 
-		array_push($actionsFollows, getActionFollowById($actions[$i]['id']));
-	}
-}
-
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('nonconfo', $nonconfo);
@@ -82,11 +59,8 @@ if($view) {
 	$view->setParam('allUsers', $allUsers);
 	$view->setParam('analysis', $analysis);
 	$view->setParam('actions', $actions);
-	$view->setParam('processOwners', $processOwners);
-	$view->setParam('actionsFollows', $actionsFollows);
 	$view->setParam('operation', $operation);
 	$view($_GET);
 	exit;
 }
-
 ?>
