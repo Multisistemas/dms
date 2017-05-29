@@ -84,6 +84,8 @@ $(document).ready(function() {
 		$process = $this->params['process'];
 		$analysis = $this->params['analysis'];
 		$actions = $this->params['actions'];
+		$processOwners = $this->params['processOwners'];
+		$actionsFollows = $this->params['actionsFollows'];
 
 		$this->htmlStartPage(getMLText("nonconfo_title"));
 		$this->globalNavigation();
@@ -131,7 +133,7 @@ $(document).ready(function() {
 				<tbody>
 					<tr>
 						<td>
-							<div class="span8">
+							<div class="span12">
 								<div class="alert alert-info" role="info">
 									<strong><?php echo $nonconfo['description']; ?></strong>
 								</div>
@@ -140,9 +142,16 @@ $(document).ready(function() {
 					</tr>
 					<tr>
 						<td class="lbl-right">
-								<?php if($analysis == false ) { 
-								 echo "<a type=\"button\" id=\"display-analysis\" class=\"btn btn-sm btn-warning\">".getMLText('nonconfo_add_analysis')."</a>";
-								} ?>
+						<?php if (false != $processOwners) {
+							for($i = 0; $i < count($processOwners); $i++){
+								if ($user->getID() == $processOwners[$i]['userId'] && $analysis == false) {
+									echo "<a type=\"button\" id=\"display-analysis\" class=\"btn btn-sm btn-warning\">".getMLText('nonconfo_add_analysis')."</a>";
+								}
+							}
+						} else { 
+							echo getMLText('nonconfo_non_owner_exists');
+						}
+						?>
 						</td>
 					</tr>
 				</tbody>
@@ -172,14 +181,18 @@ $(document).ready(function() {
 								<td>
 									<div class="span8">
 									<?php if($analysis != false ) { 
-											echo "<textarea class=\"comment_width\" name=\"description\" rows=\"5\" cols=\"100\" disabled>".$analysis['comment']."</textarea>";
+											echo "<textarea class=\"comment_analysis\" name=\"description\" rows=\"5\" cols=\"100\" disabled>".$analysis['comment']."</textarea>";
 										} else {
-											echo "<textarea class=\"comment_width\" name=\"description\" rows=\"5\" cols=\"100\"></textarea>";
+											echo "<textarea class=\"comment_analysis\" name=\"description\" rows=\"5\" cols=\"100\"></textarea>";
 										}
 									?>
 									</div>
 								</td>
-								<td>Ninguno</td>
+								<td>
+									<div class="span4">
+										Ninguno
+									</div>
+								</td>
 							</tr>
 							<tr>
 								<td class=""><?php printMLText("nonconfo_attach_file");?>:
@@ -198,16 +211,37 @@ $(document).ready(function() {
 							</tr>
 							<tr>
 								<td>
-								<?php if($analysis == false ) { 
-									echo "<input type=\"submit\" class=\"btn btn-success\" value=\"".getMLText('nonconfo_save')."\">";
-									echo "<a type=\"button\" id=\"cancel-btn\" class=\"btn btn-sm btn-default\">".getMLText('cancel')."</a>";
-								} else {
-									echo "<button type=\"submit\" class=\"btn btn-success\"><i class=\"icon-pencil\"></i> ".getMLText('nonconfo_edit')."</button>";
-								} ?>
+								<?php 
+								if (false != $processOwners) {
+										for($i = 0; $i < count($processOwners); $i++){
+											if ($user->getID() == $processOwners[$i]['userId']) {
+												if($analysis == false ) { 
+													echo "<input type=\"submit\" class=\"btn btn-success\" value=\"".getMLText('nonconfo_save')."\">";
+													echo "<a type=\"button\" id=\"cancel-btn\" class=\"btn btn-sm btn-default\">".getMLText('cancel')."</a>";
+												} else {
+													echo "<a type=\"button\" href=\"../out/out.EditAnalysis.php?nonconfoId=".$nonconfo['id']."\"	class=\"btn btn-success\"><i class=\"icon-pencil\"></i> ".getMLText('nonconfo_edit')."</button>";
+												}
+											}
+										}
+									}
+								?>
 								</td>
 								<td class="lbl-right">
-								<?php if($analysis != false ) { 
-									echo "<a type=\"button\" href=\"../out/out.AddAction.php?nonconfoId=".$nonconfo['id']."\" id=\"add-actions-btn\" class=\"btn btn-sm btn-warning\"><i class=\"icon-plus\"></i> ".getMLText('nonconfo_add_actions')."</a>";
+								<?php if($analysis != false ) {
+									if (false != $processOwners) {
+										for($i = 0; $i < count($processOwners); $i++){
+											if ($user->getID() == $processOwners[$i]['userId']) {
+												if (false != $actions && count($actions) >= 1) {
+													echo "<a type=\"button\" href=\"\" id=\"send-request-btn\" class=\"btn btn-sm btn-info\"><i class=\"icon-envelope\"></i> ".getMLText('nonconfo_aprovation_request')."</a><br/><br/>";
+												}
+												echo "<a type=\"button\" href=\"../out/out.AddAction.php?nonconfoId=".$nonconfo['id']."\" id=\"add-actions-btn\" class=\"btn btn-sm btn-warning\"><i class=\"icon-plus\"></i> ".getMLText('nonconfo_add_actions')."</a>";
+											}
+										}
+									} 
+									if ($user->getID() == $nonconfo['createdBy'] && count($actions) >= 1) {
+										echo "<a type=\"button\" href=\"\" id=\"send-request2-btn\" class=\"btn btn-sm btn-primary\"><i class=\"icon-envelope\"></i> ".getMLText('nonconfo_approved')."</a><br/><br/>";
+										echo "<a type=\"button\" href=\"\" id=\"send-request3-btn\" class=\"btn btn-sm btn-danger\"><i class=\"icon-envelope\"></i> ".getMLText('nonconfo_disapprove')."</a>";
+									}
 								} ?>
 								</td>
 							</tr>
@@ -221,7 +255,12 @@ $(document).ready(function() {
 
 <?php if (false != $actions && count($actions) >= 1 ) { 
 	$i = 0;
+	$k = 0;
+	$dateStart = new DateTime();
+	$dateEnd = new DateTime();
 	foreach ($actions as $action => $i) {
+	$dateStart->setTimestamp($i['dateStart']);
+	$dateEnd->setTimestamp($i['dateEnd']);
 	echo "<div class='row-fluid'>
 		<div class='span12'>
 			<div class='well'>
@@ -230,36 +269,99 @@ $(document).ready(function() {
 						<thead>
 							<tr>
 								<th>".getMLText('nonconfo_action_detail')."</th>
-								<th>".getMLText('nonconfo_action_creation')."</th>
+								<th>".getMLText('nonconfo_action_date_start')."</th>
 								<th>".getMLText('nonconfo_action_date_end')."</th>
 								<th></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>
-									<div class='alert alert-info' role='info'>
+								<td class='span8'>
+									<div class='comment_width'>
 										<strong>".$i['description']."</strong>
 									</div>
 								</td>
-								<td>
-									".gmdate("d-m-Y", $i['dateStart'])."
-								</td>
-								<td>
-									".gmdate("d-m-Y", $i['dateEnd'])."
-								</td>
-								<td>
-										<a type='button' href='../out/out.EditAction.php?actionId=".$i['id']."' class='btn btn-success' rel=' id='btn-edit-action'><i class='icon-pencil'></i> ".getMLText('nonconfo_edit')."</a>
-										<a type='button' href='../op/op.DeleteAction.php?actionId=".$i['id']."' class='btn btn-danger' rel=' id='btn-edit-action'><i class='icon-close'></i> ".getMLText('nonconfo_delete')."</a>
-								</td>
+								<td><span class='label label-success'>
+									".$dateStart->format('d-m-Y')."
+								</span></td>
+								<td><span class='label label-warning'>
+									".$dateEnd->format('d-m-Y')."
+								</span></td>
+								<td>";
+								if ($i['status'] != 2) {
+									if (false != $processOwners) {
+											for($j = 0; $j < count($processOwners); $j++){
+												if ($user->getID() == $processOwners[$j]['userId']) {
+													if ($i['status'] == 0) {
+														echo "<a type='button' href='../out/out.EditAction.php?actionId=".$i['id']."' class='btn btn-success' rel='' id='btn-edit-action'><i class='icon-pencil'></i> ".getMLText('nonconfo_edit')."</a>";
+														echo "<a type='button' href='../op/op.DeleteAction.php?actionId=".$i['id']."&nonconfoId=".$nonconfo['id']."' class='btn btn-danger' rel='' id='btn-edit-action'><i class='icon-close'></i> ".getMLText('nonconfo_delete')."</a>";
+													} else if ($i['status'] == 1) {
+														echo "<span class='label label-primary'>".getMLText('nonconfo_action_approved')."</span>";
+													}
+											}
+										}
+									}
+
+									if ($user->getID() == $nonconfo['createdBy'] && $i['status'] == 0) {
+										echo "<a type='button' href='../op/op.ApproveAction.php?actionId=".$i['id']."' class='btn btn-info' rel='' id='btn-aprove-action'><i class='icon-check'></i> ".getMLText('nonconfo_approve')."</a>";
+									}
+
+									if ($user->getID() == $nonconfo['createdBy'] && $i['status'] == 1) {
+										echo "<a type='button' href='../out/out.FollowAction.php?actionId=".$i['id']."' class='btn btn-warning' rel='' id='btn-follow-action'><i class='icon-star'></i> ".getMLText('nonconfo_follow')."</a>";
+									}
+
+								} else {
+									echo "<span class='label label-danger'>".getMLText('nonconfo_action_closed')."</span>";
+								}
+	echo 				"</td>
 							</tr>
 						</tbody>
-					</table>
+					</table><hr>"; ?>
+		<?php if ($i['status'] == 2) { 
+					if (false != $actionsFollows && count($actionsFollows) >= 1) { ?>
+					<div style="overflow-x: auto;">
+						<table class="table table-striped">
+							<thead>
+							<tr>
+								<th><?php echo getMLText('nonconfo_follow_detail');?></th>
+								<th><?php echo getMLText('nonconfo_action_date_start'); ?></th>
+								<th><?php echo getMLText('nonconfo_action_real_date_end');?></th>
+								<th><?php echo getMLText('nonconfo_was_efective');?></th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php if (isset($actionsFollows[$k][0]['actionId']) && $actionsFollows[$k][0]['actionId'] == $i['id']) { ?>
+								<tr>
+									<td class="td_follow">
+										<div class="comment_width">
+											<?php echo $actionsFollows[$k][0]['followResult']; ?>											
+										</div>
+									</td>
+									<td class="td_follow">
+										<?php echo $dateStart->format('d-m-Y'); ?>
+									</td>
+									<td class="td_follow">
+										<?php $date = new DateTime();
+													$date->setTimestamp($actionsFollows[$k][0]['realDateEnd']);
+										echo 	$date->format('d-m-Y'); ?>
+									</td>
+									<td class="td_follow">
+										<?php echo $actionsFollows[$k][0]['finalStatus']; ?>
+									</td>
+								</tr>
+							<?php } ?>
+							</tbody>
+						</table>
 					</div>
+					<?php 
+						} 
+					}
+	echo	"</div>
 			</div>
 		</div>
 	</div>";
 	$i++;
+	$k++;
 } } ?>
 
 <?php

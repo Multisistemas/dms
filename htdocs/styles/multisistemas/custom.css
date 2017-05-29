@@ -88,11 +88,21 @@ hr {
 }
 
 .comment_width {
-  width: 100%;
-  min-height: 150px;
+  width: auto;
+  box-sizing: border-box;
+  height: auto;
+  margin:0px;
+  text-align: justify;
 }
 
-/*.btn {
-  color: #ffffff !important;
-  background: #30a2f6;
-}*/
+.td_follow {
+  background: rgb(180, 205, 255) !important;
+}
+
+.comment_analysis {
+  margin: 0px; 
+  width: auto;
+  box-sizing: border-box;
+  height: 100px;
+  text-align: justify;
+}

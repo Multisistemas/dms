@@ -22,58 +22,29 @@ include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
-include("../inc/inc.Process.php");
-include("../inc/inc.ProcessOwners.php");
 include("../inc/inc.Nonconformities.php");
 include("../inc/inc.NonConfoAnalysis.php");
-include("../inc/inc.NonConfoAction.php");
-include("../inc/inc.FollowAction.php");
 include("../../../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
-	UI::exitError(getMLText("nonconfo_view_nonconfo"),getMLText("access_denied"));
+	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("access_denied"));
 }
 
-if (!isset($_GET['nonconfoId'])) {
-	UI::exitError(getMLText("nonconfo_view_nonconfo"),getMLText("nonconfo_invalid_id"));
+if (!isset($_REQUEST['nonconfoId'])) {
+	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("nonconfo_id_error"));	
 }
 
-$nonconfo = getNonConfo($_GET['nonconfoId']);
+$analysis = getNonConfoAnalysis($_REQUEST['nonconfoId']);
 
-if (is_bool($nonconfo) && $nonconfo == false) {
-	UI::exitError(getMLText("nonconfo_view_nonconfo"),getMLText("nonconfo_not_exists"));
-}
-
-// Get all users
-$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
-
-// Get the analysis for the nonconfo
-$analysis = getNonConfoAnalysis($_GET['nonconfoId']);
-
-$process = getProcess($nonconfo['processId']);
-$actions = getNonConfoActions($_GET['nonconfoId']);
-$processOwners = getAllProcessOwners($nonconfo['processId']);
-
-
-$actionsFollows = array();
-
-if (false != $actions && count($actions) > 0) {
-	for ($i=0; $i < count($actions); $i++) { 
-		array_push($actionsFollows, getActionFollowById($actions[$i]['id']));
-	}
+if (count($analysis) <= 0 || $analysis == false) {
+	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("nonconfo_analysis_not_found"));	
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->setParam('nonconfo', $nonconfo);
-	$view->setParam('process', $process);
-	$view->setParam('allUsers', $allUsers);
-	$view->setParam('analysis', $analysis);
-	$view->setParam('actions', $actions);
-	$view->setParam('processOwners', $processOwners);
-	$view->setParam('actionsFollows', $actionsFollows);
+	$view->setParam('analysis', $analysis);;
 	$view($_GET);
 	exit;
 }

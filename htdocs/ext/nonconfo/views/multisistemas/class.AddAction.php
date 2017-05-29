@@ -102,7 +102,7 @@ $(document).ready(function() {
 					<td><textarea class="comment_width" name="description" rows="5" cols="100"></textarea></td>
 				</tr>
 				<tr>
-					<td class="lbl-right"><?php echo getMLText('nonconfo_action_creation');?>:</td>
+					<td class="lbl-right"><?php echo getMLText('nonconfo_action_date_start');?>:</td>
 					<td>
 						<span class="input-append date span12" id="fromdate" data-date="<?php echo $expdate; ?>" data-date-format="yyyy-mm-dd">
 		      		<input class="span6" size="16" name="start" type="text" value="<?php echo $expdate; ?>">

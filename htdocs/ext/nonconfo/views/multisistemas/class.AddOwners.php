@@ -200,7 +200,7 @@ $(document).ready(function() {
 			</table>
 		<?php 
 			} else {
-				echo getMLText("nonconfo_non_process_exists");
+				echo getMLText("nonconfo_non_owner_exists");
 			}
 
 		}

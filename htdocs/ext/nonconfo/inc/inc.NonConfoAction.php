@@ -61,8 +61,23 @@ function getNonConfoActions($nonconfoId){
 	return $ret;	
 }
 
-/*function getNonConfo($id){
+function editNonConfoAction($actionId, $description, $start, $end) {
+
+	if (!is_numeric($actionId)) return false;
+
+	global $db, $user;
+
+	$dateStart = strtotime($start);
+	$dateEnd = strtotime($end);
 	
+	$queryStr = "UPDATE tblActions SET description = \"".$description."\", dateStart = ".$dateStart.", dateEnd = ".$dateEnd.", modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $actionId;
+
+	$ret = $db->getResult($queryStr);	
+	return $ret;
+
+}
+
+function getNonConfoActionById($id){
 	global $db;
 	
 	$queryStr = "SELECT * FROM tblActions WHERE id = ".$id;
@@ -71,22 +86,10 @@ function getNonConfoActions($nonconfoId){
 	if (is_bool($ret) && $ret == false) return false;
 	else if (count($ret) <= 0) return false;
 		
-	return $ret[0];
-}
-
-function editNonconfoAnalysis($id, $source, $description){
-
-	if (!is_numeric($id)) return false;
-
-	global $db, $user;
-	
-	$queryStr = "UPDATE tblActions SET source = \"".$source."\", description = \"".$description."\", modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $id;
-
-	$ret = $db->getResult($queryStr);	
 	return $ret;
 }
 
-function delNonconfoAnalysis($id){
+function delNonconfoAction($id){
 
 	if (!is_numeric($id)) return false;
 	
@@ -95,6 +98,28 @@ function delNonconfoAnalysis($id){
 	$queryStr = "DELETE FROM tblActions WHERE id = " . (int) $id;
 	$ret = $db->getResult($queryStr);	
 	return $ret;
-}*/
+}
+
+function approveNonConfoAction($actionId){
+	if (!is_numeric($actionId)) return false;
+
+	global $db, $user;
+	
+	$queryStr = "UPDATE tblActions SET status = 1 , modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $actionId;
+
+	$ret = $db->getResult($queryStr);	
+	return $ret;
+}
+
+function closeAction($actionId){
+	if (!is_numeric($actionId)) return false;
+
+	global $db, $user;
+	
+	$queryStr = "UPDATE tblActions SET status = 2 , modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $actionId;
+
+	$ret = $db->getResult($queryStr);	
+	return $ret;
+}
 
 ?>

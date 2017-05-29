@@ -18,7 +18,7 @@
 require_once("../../../views/$theme/class.Bootstrap.php");
 
 /**
- * Class which outputs the html page for AddEvent view
+ * Class which outputs the html page for AddProcess view
  *
  * @category   DMS
  * @package    SeedDMS

@@ -119,13 +119,19 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
       $mailer = \Swift_Mailer::newInstance($transport);
 
       //if ($params['sitename'] == null){
-      	$thesubject = getMLText($subject, array(), "", $lang);
+      	$thesubject = getMLText($subject);
 	  /*} else {
       	$thesubject = $params['sitename'];
 	  }*/
 
+	  if(is_object($sender)){
+	  	$thesender = $sender->_email;
+	  } else {
+	  	$thesender = $sender;
+	  }
+
       $themessage = \Swift_Message::newInstance($thesubject)
-              ->setFrom($sender->_email)
+              ->setFrom($thesender)
               ->setTo($to)
               ->addPart($message);
 

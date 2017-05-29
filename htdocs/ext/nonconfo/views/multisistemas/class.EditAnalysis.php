@@ -1,11 +1,12 @@
 <?php
 /**
- * Implementation of ViewAllNonConfo view
+ * Implementation of EditAnalysis view
  *
  * @category   DMS
  * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
+ * @author     Herson Cruz <herson@multisistemas.com.sv>
  * @author     Luis Medrano <lmedrano@multisistemas.com.sv>
  * @copyright  Copyright (C) 2011-2017 Multisistemas,
  * @version    Release: @package_version@
@@ -17,7 +18,7 @@
 require_once("../../../views/$theme/class.Bootstrap.php");
 
 /**
- * Class which outputs the html page for ViewAllNonConfo view
+ * Class which outputs the html page for EditAnalysis view
  *
  * @category   DMS
  * @package    SeedDMS
@@ -27,13 +28,12 @@ require_once("../../../views/$theme/class.Bootstrap.php");
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_View_ViewAllNonConfo extends SeedDMS_Bootstrap_Style {
+class SeedDMS_View_EditAnalysis extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-function checkForm()
-{
+function checkForm() {
 	msg = new Array();
 	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
 
@@ -57,69 +57,61 @@ $(document).ready(function() {
 		if(checkForm()) return;
 		ev.preventDefault();
 	});
+
+	
+
 });
+
 <?php
 	} /* }}} */
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$processes = $this->params['processes'];
-		$nonconfos = $this->params['nonconformities'];
+		$analysis = $this->params['analysis'];
 
 		$this->htmlStartPage(getMLText("nonconfo_title"));
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation("nonconfo_title", "nonconfo_view_navigation", "");
 
-		$date = new DateTime();
 ?>
-	
+
 <div class="row-fluid">
 	<div class="span12">
-		<?php $this->contentHeading(getMLText("nonconfo_title")); ?>
+		<?php $this->contentHeading(getMLText("nonconfo_edit_analysis")); ?>
 		<div class="well">
-			<?php echo $this->contentSubHeading(getMLText("nonconfo_general_info")); ?>
-			<div style="overflow-x: auto;">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th><?php echo getMLText("nonconfo_process_name"); ?></th>
-						<th><?php echo getMLText("nonconfo_request_date"); ?></th>
-						<th><?php echo getMLText("nonconfo_action_type"); ?></th>
-						<th><?php echo getMLText("nonconfo_origin_source"); ?></th>
-						<th></th>
-					</tr>	
-				</thead>
-				<tbody>				
-				<?php $i = 0;
-				foreach ($nonconfos as $nonconfo => $i) { ?>
-					<tr>
-						<td><?php
-						for ($j=0; $j < count($processes); $j++) { 
-							if ($i['processId'] == $processes[$j]['id']) {
-								echo $processes[$j]['name'];
-							}
-						}
-						?></td>
-						<td><?php $date->setTimestamp($i['created']); echo $date->format('d-m-Y H:i:s'); ?></td>
-						<td><?php echo $i['type']; ?></td>
-						<td><?php echo $i['source']; ?></td>
-						<td><a type="button" class="btn btn-info" href="../out/out.ViewNonConfo.php?nonconfoId=<?php echo $i['id']; ?>"><?php echo getMLText('nonconfo_view'); ?></a></td>
-					</tr>
-					
-				<?php } ?>
-				</tbody>
+			<form class="form-horizontal" action="../op/op.EditAnalysis.php" id="form1" name="form1" method="post">
+			<?php echo createHiddenFieldWithKey('editanalysis'); ?>
+			<input type="hidden" name="analysisId" value="<?php echo $analysis['id']; ?>">
+			<table class="table">
+				<tr>
+					<td class="lbl-right">
+							<?php printMLText("nonconfo_analysis_description");?>:</td>		
+					</td>
+					<td class="lbl-right">
+						<div  class="span10">
+							<textarea style="width: 100%;" cols="200" rows="5" name="description"><?php echo $analysis['comment']; ?></textarea>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="" class="comment-width">
+						<input class="btn btn-success" type="submit" value="<?php printMLText("nonconfo_save");?>">
+					</td>
+				</tr>
 			</table>
-			</div>
+			</form>
 		</div>
 	</div>
 </div>
 
 <?php
+
 		$this->contentContainerEnd();
 		$this->contentEnd();
 		$this->htmlEndPage();
+
 	} /* }}} */
 }
 ?>

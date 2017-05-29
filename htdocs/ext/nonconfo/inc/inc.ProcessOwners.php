@@ -64,4 +64,18 @@ function delProcessOwner($id){
 	return $ret;
 }
 
+function getAllProcessOwners($processId) {
+	if (!is_numeric($processId)) return false;
+
+	global $db;
+	
+	$queryStr = "SELECT userId FROM tblProcessOwners WHERE processId = " . (int) $processId;
+	$ret = $db->getResultArray($queryStr);
+	
+	if (is_bool($ret) && $ret == false) return false;
+	else if (count($ret) <= 0) return false;
+
+	return $ret;
+}
+
 ?>

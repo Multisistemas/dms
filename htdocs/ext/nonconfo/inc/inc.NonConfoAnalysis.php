@@ -57,6 +57,31 @@ function getNonConfoAnalysis($nonconfoId){
 	return $ret[0];	
 }
 
+function getNonConfoAnalysisById($analysisId){
+
+	global $db;
+	
+	$queryStr = "SELECT * FROM tblNonconfoAnalysis WHERE id = ".$analysisId;
+	$ret = $db->getResultArray($queryStr);
+	
+	if (is_bool($ret) && $ret == false) return false;
+	else if (count($ret) <= 0) return false;
+		
+	return $ret[0];	
+}
+
+function editNonConfoAnalysis($analysisId, $description) {
+	if (!is_numeric($analysisId)) return false;
+
+	global $db, $user;
+	
+	$queryStr = "UPDATE tblNonconfoAnalysis SET comment = \"".$description."\", modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $analysisId;
+
+	$ret = $db->getResult($queryStr);
+
+	return $ret;
+}
+
 /*function getNonConfo($id){
 	
 	global $db;

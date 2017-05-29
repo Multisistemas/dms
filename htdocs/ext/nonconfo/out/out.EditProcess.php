@@ -36,7 +36,7 @@ if (!isset($_REQUEST['processid'])) {
 $process = getProcess($_REQUEST['processid']);
 
 if (count($process) == 0 || $process == false) {
-	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("nonconfo_id_error"));	
+	UI::exitError(getMLText("nonconfo_edit_process"),getMLText("nonconfo_id_error_process"));	
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
