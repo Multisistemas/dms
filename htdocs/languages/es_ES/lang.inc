@@ -189,7 +189,7 @@ URL: [url]',
 'backup_tools' => 'Herramientas de copia de seguridad',
 'between' => 'entre',
 'bg_BG' => 'Búlgaro',
-'browse' => 'Listar',
+'browse' => 'Examinar',
 'calendar' => 'Calendario',
 'calendar_week' => 'Calendario semanal',
 'cancel' => 'Cancelar',
@@ -1566,9 +1566,12 @@ URL: [url]',
 'zh_TW' => 'Chino (TW)',
 'no_equal_file_extension' => 'El tipo de archivo subido no coincide con el existente en la versión actual',
 'nonconfo' => 'No Conformidades',
-'nonconfo_add_nonconfo' => 'Agregar No Conformidad',
-'nonconfo_view_all' => 'Enlistar No Conformidades',
+'nonconfo_add_nonconfo' => 'Agregar no conformidad',
+'nonconfo_view_all' => 'No conformidades',
 'nonconfo_add_process' => 'Agregar proceso',
 'nonconfo_define_owners' => 'Definir propietarios de procesos',
 );
+
+// TODO: Mover strings de extensión de no conformiadad a su propio archivo de lenguaje.
+
 ?>

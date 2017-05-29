@@ -16,6 +16,7 @@
  * Include parent class
  */
 require_once("../../../views/$theme/class.Bootstrap.php");
+require_once("../op/op.Ajax.php");
 
 /**
  * Class which outputs the html page for AddNonConfo view
@@ -33,6 +34,7 @@ class SeedDMS_View_ViewNonConfo extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$nonconfo = $this->params['nonconfo'];
 		header('Content-Type: application/javascript; charset=UTF-8');
+		echo '<script src="../../styles/application.js"></script>'."\n";
 ?>
 function checkForm() {
 	msg = new Array();
@@ -86,6 +88,7 @@ $(document).ready(function() {
 		$actions = $this->params['actions'];
 		$processOwners = $this->params['processOwners'];
 		$actionsFollows = $this->params['actionsFollows'];
+		$operation = $this->params['operation'];
 
 		$this->htmlStartPage(getMLText("nonconfo_title"));
 		$this->globalNavigation();
@@ -164,9 +167,16 @@ $(document).ready(function() {
 <div class="row-fluid" id="analysis-block" <?php if ($analysis == false) { echo "style=\"display: none;\""; } ?>>
 	<div class="span12">
 		<div class="well">
-		<?php echo $this->contentSubHeading(getMLText("nonconfo_add_analysis")); ?>
-			<form class="form-horizontal" action="../op/op.AddAnalysis.php" id="form1" name="form1" method="post">
-			<?php echo createHiddenFieldWithKey('addanalysis'); ?>
+		<?php 
+			echo $this->contentSubHeading(getMLText("nonconfo_analysis_title")); 
+			if($operation == 'add') {
+				$action = "../op/op.AddAnalysis.php";
+			} else {
+				$action = "../op/op.EditAnalysis.php";
+			}
+		?>
+			<form class="form-horizontal" action="<?php echo $action ?>" id="form1" name="form1" method="post">
+			<?php echo createHiddenFieldWithKey($operation.'analysis'); ?>
 			<input type="hidden" name="nonconfoId" value="<?php echo $nonconfo['id']; ?>">
 			<div style="overflow-x: auto;">
 				<table class="table">
@@ -180,8 +190,16 @@ $(document).ready(function() {
 							<tr>
 								<td>
 									<div class="span8">
-									<?php if($analysis != false ) { 
-											echo "<textarea class=\"comment_analysis\" name=\"description\" rows=\"5\" cols=\"100\" disabled>".$analysis['comment']."</textarea>";
+									<?php /*if($analysis != false ) { 
+											echo "<textarea class=\"comment_analysis\" name=\"description\" rows=\"5\" cols=\"100\" disabled>".$analysis['comment']."</textarea>"; */
+
+									if($analysis != false) { 
+											echo "<textarea class=\"comment_width\" name=\"description\" rows=\"5\" cols=\"100\" disabled>".$analysis['comment']."</textarea>";
+											echo "<div class=\"list-action\">";
+											echo "<a class=\"enable-comment-btn\" rel=\"1\" msg=\"Edit enabled\" title=\"Editar descripción del análisis\">
+									<i class=\"icon-edit\"></i></a>";
+											echo "</div>";
+
 										} else {
 											echo "<textarea class=\"comment_analysis\" name=\"description\" rows=\"5\" cols=\"100\"></textarea>";
 										}
@@ -211,6 +229,7 @@ $(document).ready(function() {
 							</tr>
 							<tr>
 								<td>
+
 								<?php 
 								if (false != $processOwners) {
 										for($i = 0; $i < count($processOwners); $i++){
@@ -225,6 +244,18 @@ $(document).ready(function() {
 										}
 									}
 								?>
+
+								<?php  if($analysis == false ) { 
+									echo "<input type=\"hidden\" name=\"operation\" value=\"add\"></input>";
+									echo "<input type=\"submit\" class=\"btn btn-success\" value=\"".getMLText('nonconfo_save')."\">";
+									echo "<a type=\"button\" id=\"cancel-btn\" class=\"btn btn-sm btn-default\">".getMLText('cancel')."</a>";
+								} else {
+									echo "<input type=\"hidden\" name=\"analysisId\" value=\"".$analysis['id']."\"></input>";
+									echo "<input type=\"hidden\" name=\"description\" value=\"".$analysis['comment']."\"></input>";
+									echo "<input type=\"hidden\" name=\"operation\" value=\"edit\"></input>";
+									echo "<button type=\"submit\" class=\"btn btn-success\"><i class=\"icon-pencil\"></i> ".getMLText('nonconfo_edit')."</button>";
+								} ?>
+
 								</td>
 								<td class="lbl-right">
 								<?php if($analysis != false ) {

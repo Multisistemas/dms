@@ -30,7 +30,7 @@ include("../inc/inc.NonConfoResponsibles.php");
 include("../inc/inc.NonConfoAnalysis.php");
 include("../../../inc/inc.Authentication.php");
 
-if ($user->isGuest()) {
+if($user->isGuest()) {
 	UI::exitError(getMLText("nonconfo_add_analysis"),getMLText("access_denied"));
 }
 
@@ -39,9 +39,16 @@ if(!checkFormKey('addanalysis')) {
 	UI::exitError(getMLText("nonconfo_add_analysis"),getMLText("invalid_request_token"));
 }
 
-if (!isset($_POST['description'])) {
+if(!isset($_POST['description'])) {
 	UI::exitError(getMLText("nonconfo_add_analysis"),getMLText("nonconfo_no_analysis_description"));
 }
+
+if(isset($_POST['operation'])) {
+	$operation = $_POST['operation'];
+} else {
+	$operation = 'add';
+}
+
 
 $nonconfoId = $_POST['nonconfoId'];
 
@@ -55,6 +62,6 @@ $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('nonconfo_analy
 
 add_log_line();
 
-header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$nonconfoId."&analysisId=".$res);
+header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$nonconfoId."&analysisId=".$res."&operation=".$operation);
 
 ?>
