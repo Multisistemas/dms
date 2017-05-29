@@ -37,6 +37,12 @@ if (!isset($_GET['nonconfoId'])) {
 	UI::exitError(getMLText("nonconfo_view_nonconfo"),getMLText("nonconfo_invalid_id"));
 }
 
+if(isset($_GET['operation'])) {
+	$operation = $_GET['operation'];
+} else {
+	$operation = 'add';
+}
+
 $nonconfo = getNonConfo($_GET['nonconfoId']);
 
 if (is_bool($nonconfo) && $nonconfo == false) {
@@ -48,6 +54,10 @@ $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 
 // Get the analysis for the nonconfo
 $analysis = getNonConfoAnalysis($_GET['nonconfoId']);
+
+if(!empty($analysis)) {
+	$operation = 'edit';
+}
 
 $process = getProcess($nonconfo['processId']);
 $actions = getNonConfoActions($_GET['nonconfoId']);
@@ -61,6 +71,7 @@ if($view) {
 	$view->setParam('allUsers', $allUsers);
 	$view->setParam('analysis', $analysis);
 	$view->setParam('actions', $actions);
+	$view->setParam('operation', $operation);
 	$view($_GET);
 	exit;
 }

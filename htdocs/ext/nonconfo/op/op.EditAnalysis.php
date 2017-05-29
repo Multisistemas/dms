@@ -24,23 +24,24 @@ include("../../../inc/inc.Init.php");
 include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
-include("../inc/inc.ProcessOwners.php");
-include("../inc/inc.Nonconformities.php");
-include("../inc/inc.NonConfoResponsibles.php");
 include("../inc/inc.NonConfoAnalysis.php");
 include("../../../inc/inc.Authentication.php");
 
-if($user->isGuest()) {
-	UI::exitError(getMLText("nonconfo_add_analysis"),getMLText("access_denied"));
+if ($user->isGuest()) {
+	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("access_denied"));
 }
 
 /* Check if the form data comes from a trusted request */
-if(!checkFormKey('addanalysis')) {
-	UI::exitError(getMLText("nonconfo_add_analysis"),getMLText("invalid_request_token"));
+if(!checkFormKey('editanalysis')) {
+	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("invalid_request_token"));
 }
 
 if(!isset($_POST['description'])) {
-	UI::exitError(getMLText("nonconfo_add_analysis"),getMLText("nonconfo_no_analysis_description"));
+	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("nonconfo_no_analysis_description"));
+}
+
+if(!isset($_POST['analysisId'])) {
+	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("nonconfo_no_analysis_id"));
 }
 
 if(isset($_POST['operation'])) {
@@ -49,19 +50,19 @@ if(isset($_POST['operation'])) {
 	$operation = 'add';
 }
 
+$id = $_POST['analysisId'];
+$description = $_POST["description"];
+$files = '';
 
-$nonconfoId = $_POST['nonconfoId'];
+$res = editNonconfoAnalysis($id, $_POST["nonconfoId"], $description);
 
-$res = addNonConfoAnalysis($nonconfoId, $_POST['description']);
-
-if ($res == 0 || empty($res)) {
-	UI::exitError(getMLText("nonconfo_add_analysis"),getMLText("error_occured"));
+if (is_bool($res) && !$res) {
+	UI::exitError(getMLText("nonconfo_edit_analysis"),getMLText("nonconfo_db_error_occured"));
 }
 
-$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('nonconfo_analysis_added')));
+add_log_line("?nonconfoid=".$_POST["nonconfoid"]."&description=".$description);
 
-add_log_line();
+header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$_POST["nonconfoId"]);
 
-header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$nonconfoId."&analysisId=".$res."&operation=".$operation);
 
 ?>

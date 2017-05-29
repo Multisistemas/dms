@@ -44,17 +44,31 @@ function addNonConfoAnalysis($nonconfoId, $description){
 	return $id;
 }
 
-function getNonConfoAnalysis($nonconfoId){
+function getNonConfoAnalysis($id){
 
 	global $db;
 	
-	$queryStr = "SELECT * FROM tblNonconfoAnalysis WHERE nonconformityId = ".$nonconfoId;
+	$queryStr = "SELECT * FROM tblNonconfoAnalysis WHERE id = ".$id;
 	$ret = $db->getResultArray($queryStr);
 	
 	if (is_bool($ret) && $ret == false) return false;
 	else if (count($ret) <= 0) return false;
 		
 	return $ret[0];	
+}
+
+function editNonconfoAnalysis($id, $source, $description){
+
+	if (!is_numeric($id)) return false;
+
+	global $db, $user;
+	
+	$queryStr = "UPDATE tblNonconfoAnalysis SET comment = \"".$description."\", modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $id;
+
+	var_dump($queryStr);
+
+	$ret = $db->getResult($queryStr);	
+	return $ret;
 }
 
 /*function getNonConfo($id){
@@ -70,17 +84,6 @@ function getNonConfoAnalysis($nonconfoId){
 	return $ret[0];
 }
 
-function editNonconfoAnalysis($id, $source, $description){
-
-	if (!is_numeric($id)) return false;
-
-	global $db, $user;
-	
-	$queryStr = "UPDATE tblNonconfoAnalysis SET source = \"".$source."\", description = \"".$description."\", modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $id;
-
-	$ret = $db->getResult($queryStr);	
-	return $ret;
-}
 
 function delNonconfoAnalysis($id){
 
