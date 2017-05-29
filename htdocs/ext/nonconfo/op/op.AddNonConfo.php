@@ -27,6 +27,7 @@ include("../../../inc/inc.ClassUI.php");
 include("../inc/inc.ProcessOwners.php");
 include("../inc/inc.Nonconformities.php");
 include("../inc/inc.NonConfoResponsibles.php");
+include("op.NonConfoNotifications.php");
 include("../../../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
@@ -52,7 +53,7 @@ if ($res == 0 || empty($res)) {
 	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("error_occured"));
 }
 
-if (count($nonconfo) != 0) {
+if ($res != 0) {
 	$owners = getOwnersByProcess($_POST['processId']);
 	if (count($owners) != 0) {
 		if (count($owners) > 1) {
@@ -60,7 +61,15 @@ if (count($nonconfo) != 0) {
 				$resp = addNonConfoResponsible($res, $owner['userId']);
 			}
 		} else if (count($owners) == 1) {
-			$resp = addNonConfoResponsible($res, $owners['userId']);
+
+			$resp = addNonConfoResponsible($res, $owners[0]['userId']);
+			/*$notify = sendNotificationNonconfoAdded($owners[0]['userId'], $res);
+
+			if ($notify) {
+				$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('nonconfo_added_success')));
+			} else {
+				$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('nonconfo_error_send')));
+			}*/
 		}
 	}
 }
