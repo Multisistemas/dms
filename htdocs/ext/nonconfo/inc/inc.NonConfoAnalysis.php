@@ -26,12 +26,12 @@ function getAllNonConfoAnalysis(){
 	return $ret;
 }
 
-function addNonConfoAnalysis($nonconfoId, $description){
+function addNonConfoAnalysis($nonconfoId, $description, $fileName='', $mimeType){
 
 	global $db,$user;
 
-	$queryStr = "INSERT INTO tblNonconfoAnalysis (nonconformityId, comment, createdBy) VALUES ".
-		"(".$nonconfoId.", \"".$description."\", ".$user->getID().")";
+	$queryStr = "INSERT INTO tblNonconfoAnalysis (nonconformityId, comment, createdBy, fileName, mimeType) VALUES ".
+		"($nonconfoId, '$description', ".$user->getID().", '$fileName', '$mimeType')";
 	
 	$ret = $db->getResult($queryStr);
 	
@@ -49,6 +49,21 @@ function getNonConfoAnalysis($id){
 	global $db;
 	
 	$queryStr = "SELECT * FROM tblNonconfoAnalysis WHERE id = ".$id;
+	
+	$ret = $db->getResultArray($queryStr);
+	
+	if (is_bool($ret) && $ret == false) return false;
+	else if (count($ret) <= 0) return false;
+		
+	return $ret[0];	
+}
+
+function getNonConfoAnalysisByNonconfoId($nonconfoid){
+
+	global $db;
+	
+	$queryStr = "SELECT * FROM tblNonconfoAnalysis WHERE nonconformityId = ".$nonconfoid;
+	
 	$ret = $db->getResultArray($queryStr);
 	
 	if (is_bool($ret) && $ret == false) return false;

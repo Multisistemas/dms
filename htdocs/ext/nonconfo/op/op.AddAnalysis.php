@@ -49,10 +49,22 @@ if(isset($_POST['operation'])) {
 	$operation = 'add';
 }
 
-
 $nonconfoId = $_POST['nonconfoId'];
 
-$res = addNonConfoAnalysis($nonconfoId, $_POST['description']);
+if(isset($_FILES['attach']) && $_FILES['attach']) {
+	foreach($_FILES['attach'] as $key => $val) {
+		if($key == 'name') $name = $val[0];
+		if($key == 'tmp_name') $tmp_name = $val[0];
+		if($key == 'type') $type = $val[0];
+		if($key == 'error') $error = $val[0];
+		if($key == 'size') $size = $val[0];
+	}
+	
+	$fullfile = $settings->_contentDir."nonconfo/$name";
+	move_uploaded_file($tmp_name, $fullfile);
+}
+
+$res = addNonConfoAnalysis($nonconfoId, $_POST['description'], $name, $type);
 
 if ($res == 0 || empty($res)) {
 	UI::exitError(getMLText("nonconfo_add_analysis"),getMLText("error_occured"));

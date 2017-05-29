@@ -34,7 +34,7 @@ class SeedDMS_View_ViewNonConfo extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$nonconfo = $this->params['nonconfo'];
 		header('Content-Type: application/javascript; charset=UTF-8');
-		echo '<script src="../../styles/application.js"></script>'."\n";
+//		echo '<script src="../../styles/application.js"></script>'."\n";
 ?>
 function checkForm() {
 	msg = new Array();
@@ -166,7 +166,7 @@ $(document).ready(function() {
 				$action = "../op/op.EditAnalysis.php";
 			}
 		?>
-			<form class="form-horizontal" action="<?php echo $action ?>" id="form1" name="form1" method="post">
+			<form class="form-horizontal" action="<?php echo $action ?>" id="form1" name="form1" method="post" enctype="multipart/form-data">
 			<?php echo createHiddenFieldWithKey($operation.'analysis'); ?>
 			<input type="hidden" name="nonconfoId" value="<?php echo $nonconfo['id']; ?>">
 			<div style="overflow-x: auto;">
@@ -193,7 +193,16 @@ $(document).ready(function() {
 									?>
 									</div>
 								</td>
-								<td>Ninguno</td>
+								<td>
+									<div class="span8">
+									<?php if(!empty($analysis['fileName'])) {
+										echo("<a href='../op/op.ViewAnalysisAttach.php?filename=".$analysis['fileName']."&type=".$analysis['mimeType']."'>".$analysis['fileName']."</a>");
+									} else {
+										echo "Ninguno";
+									}
+									?>
+									</div>
+								</td>
 							</tr>
 							<tr>
 								<td class=""><?php printMLText("nonconfo_attach_file");?>:

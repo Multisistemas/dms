@@ -53,7 +53,7 @@ if (is_bool($nonconfo) && $nonconfo == false) {
 $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 
 // Get the analysis for the nonconfo
-$analysis = getNonConfoAnalysis($_GET['nonconfoId']);
+$analysis = getNonConfoAnalysisByNonconfoId($_GET['nonconfoId']);
 
 if(!empty($analysis)) {
 	$operation = 'edit';
