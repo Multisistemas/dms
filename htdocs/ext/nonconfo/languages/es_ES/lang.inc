@@ -105,6 +105,8 @@ $text = array(
 	'nonconfo_request_review_email_subject' => 'Solicitud de revisón de no conformidad',
 	'nonconfo_request_email_body' => 'Cuerpo del mensaje',
 	'nonconfo_error_send' => 'Ha ocurrido un error en el envío',
+	'nonconfo_before' => 'Antes',
+	'nonconfo_after' => 'Después',
 );
 
 ?>

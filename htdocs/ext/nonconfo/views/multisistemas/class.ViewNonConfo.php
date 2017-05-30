@@ -379,6 +379,8 @@ $(document).ready(function() {
 								<th><?php echo getMLText('nonconfo_follow_detail');?></th>
 								<th><?php echo getMLText('nonconfo_action_date_start'); ?></th>
 								<th><?php echo getMLText('nonconfo_action_real_date_end');?></th>
+								<th><?php echo getMLText('nonconfo_before'); ?></th>
+								<th><?php echo getMLText('nonconfo_after'); ?></th>
 								<th><?php echo getMLText('nonconfo_was_efective');?></th>
 							</tr>
 							</thead>
@@ -399,6 +401,12 @@ $(document).ready(function() {
 										echo 	$date->format('d-m-Y'); ?>
 									</td>
 									<td class="td_follow">
+										<?php echo $actionsFollows[$k][0]['indicatorBefore'];?>
+									</td>
+									<td class="td_follow">
+										<?php echo $actionsFollows[$k][0]['indicatorAfter'];?>
+									</td>
+									<td class="td_follow_efective">
 										<?php echo $actionsFollows[$k][0]['finalStatus']; ?>
 									</td>
 								</tr>
