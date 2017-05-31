@@ -25,6 +25,7 @@ include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
 include("../inc/inc.ProcessOwners.php");
+include("../inc/inc.Process.php");
 include("../inc/inc.Nonconformities.php");
 include("../inc/inc.NonConfoResponsibles.php");
 include("op.NonConfoNotifications.php");
@@ -63,13 +64,14 @@ if ($res != 0) {
 		} else if (count($owners) == 1) {
 
 			$resp = addNonConfoResponsible($res, $owners[0]['userId']);
-			/*$notify = sendNotificationNonconfoAdded($owners[0]['userId'], $res);
+			$process = getProcess($_POST['processId']);
+			$notify = sendNotificationNonconfoAdded($owners[0]['userId'], $res, $process['name']);
 
 			if ($notify) {
 				$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('nonconfo_added_success')));
 			} else {
 				$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('nonconfo_error_send')));
-			}*/
+			}
 		}
 	}
 }

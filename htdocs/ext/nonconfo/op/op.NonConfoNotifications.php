@@ -15,7 +15,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-function sendNotificationNonconfoAdded($id, $nonconfoId){
+function sendNotificationNonconfoAdded($id, $nonconfoId, $process){
 	global $db, $dms, $user, $notifier, $settings;
 
 	$sender = "dms@gestiontotal.net";
@@ -23,11 +23,12 @@ function sendNotificationNonconfoAdded($id, $nonconfoId){
 	$recipient = $user->_email;
 
 	$subject = "nonconfo_request_review_email_subject";
-	$message = "nonconfo_request_email_body";
+	$message = "nonconfo_review_request_email_body";
 	$params = array();
-	$params['nonconfo_request'] = 'New non conformity added';
-	$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."ext/nonconfo/out/out.ViewNonConfo.php?nonconfoId".$nonconfoId;
-	$res = $notifier->toIndividual($sender, $user, $subject, $message, $params);
+	$params['process'] = $process;
+	$params['username'] = $user->getFullName();
+	$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."ext/nonconfo/out/out.ViewNonConfo.php?nonconfoId=".$nonconfoId;
 
+	$res = $notifier->toIndividual($sender, $user, $subject, $message, $params);
 	return $res;
 }

@@ -102,11 +102,14 @@ $text = array(
 	'nonconfo_analysis' => 'Análisis de la no conformidad',
 	'nonconfo_edit_nonconfo_analysis' => 'Editar descripción del análisis',
 	'nonconfo_none' => 'Ninguno',
-	'nonconfo_request_review_email_subject' => 'Solicitud de revisón de no conformidad',
-	'nonconfo_request_email_body' => 'Cuerpo del mensaje',
 	'nonconfo_error_send' => 'Ha ocurrido un error en el envío',
 	'nonconfo_before' => 'Antes',
 	'nonconfo_after' => 'Después',
+	'nonconfo_request_review_email_subject' => 'Solicitud de revisón de no conformidad',
+	'nonconfo_review_request_email_body' => 'Petición para revisar nueva no conformidad
+	Proceso: [process]
+	Usuario que creó la no conformidad: [username]
+	URL: [url]'
 );
 
 ?>
