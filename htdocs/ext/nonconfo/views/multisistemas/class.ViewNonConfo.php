@@ -193,7 +193,7 @@ $(document).ready(function() {
 						<tbody>
 							<tr>
 								<td>
-									<div class="span8">
+									<div class="span12">
 									<?php
 									if($analysis != false) { 
 											echo "<textarea id='analysis-comment' class=\"comment_width\" name=\"description\" rows=\"5\" cols=\"100\" disabled>".$analysis['comment']."</textarea>";
@@ -204,7 +204,7 @@ $(document).ready(function() {
 									</div>
 								</td>
 								<td>
-									<div class="span4">
+									<div class="span12">
 									<?php if(!empty($analysis['fileName'])) {
 										echo("<a href='../op/op.ViewAnalysisAttach.php?filename=".$analysis['fileName']."&type=".$analysis['mimeType']."'>".$analysis['fileName']."</a>");
 									} else {
