@@ -29,9 +29,27 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
-	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
+/**
+ * Review the user access mode in the current folder
+ */
+if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
+    $folderid = $settings->_rootFolderID;
 }
+else {
+    $folderid = intval($_POST["folderid"]);
+}
+
+$thefolder = $dms->getFolder($folderid);
+
+$theaccessMode = $thefolder->getAccessMode($user);  //Obtener usuario
+if ($theaccessMode < M_READWRITE ) {  // cambiar por los valores numéricos
+    UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
+}
+// -------------------------------------------------
+
+/*if (!$user->isAdmin()) {
+	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
+}*/
 
 if (!isset($_POST["documentid"]) || !is_numeric($_POST["documentid"]) || intval($_POST["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));

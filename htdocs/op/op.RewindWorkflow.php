@@ -27,9 +27,24 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
+/**
+ * Review the user access mode in the current folder
+ */
+if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
+	$folderid = $settings->_rootFolderID;
+}
+else {
+	$folderid = intval($_POST["folderid"]);
+}
+
+$thefolder = $dms->getFolder($folderid); 
+
+$theaccessMode = $thefolder->getAccessMode($user);  //Obtener usuario
+if ($theaccessMode < M_READWRITE ) {  // cambiar por los valores numéricos
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
+// -------------------
+
 
 /* Check if the form data comes from a trusted request */
 if(!checkFormKey('rewindworkflow')) {
