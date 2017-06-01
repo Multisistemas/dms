@@ -47,8 +47,9 @@ if (!is_object($document)) {
 
 $folder = $document->getFolder();
 $docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docaccess = $document->getAccessMode($user);
 
-if ($document->getAccessMode($user) < M_READWRITE) {
+if ($docaccess < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
@@ -72,12 +73,43 @@ $upload_result = move_uploaded_file($_FILES["filename"]["tmp_name"][0], $target_
 $change_name = rename($target_file, $target_dir.$version->getVersion().$version->_fileType);
 //$result = move_uploaded_file($thename = $_POST["userfile"][0], $file_folder.$version->getVersion().$version->_fileType);
 
-$document->setComment($_POST['version_comment']);
-
+//$document->setComment($_POST['version_comment']);
 $comment = $_POST['version_comment'];
+$version->setComment($comment);
 
-if (($oldcomment = $version->getComment()) != $comment) {
+/*if (($oldcomment = $version->getComment()) != $comment) {
 	$version->setComment($comment);
+}*/
+$workflow = $dms->getWorkflow();
+
+// Send notifications to reviewers
+
+$latestContent = $document->getLatestContent();
+$workflow = $latestContent->getWorkflow();
+
+if($notifier) {
+
+	$notifyList = $document->getNotifyList();
+	$subject = "attribute_changed_email_subject";
+	$message = "attribute_changed_email_body";
+	$params = array();
+	$params['name'] = $document->getName();
+	$params['version'] = $version->getVersion();
+	$params['comment'] = $comment;
+	$params['folder_path'] = $folder->getFolderPathPlain();
+	$params['username'] = $user->getFullName();
+	$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->getVersion();
+
+	if($workflow && $settings->_enableNotificationWorkflow) {
+		foreach($workflow->getNextTransitions($workflow->getInitState()) as $ntransition) {
+			foreach($ntransition->getUsers() as $tuser) {
+				$notifier->toIndividual($user, $tuser->getUser(), $subject, $message, $params);
+			}
+			foreach($ntransition->getGroups() as $tuser) {
+				$notifier->toGroup($user, $tuser->getGroup(), $subject, $message, $params);
+			}
+		}
+	}
 }
 
 //$queryStr = "UPDATE tbl SET modified = " . $db->getCurrentTimestamp() . ", modifiedBy = " . $user->getID() . ", name = " . $db->qstr($name) . " WHERE id = ". (int) $id;

@@ -155,12 +155,12 @@ URL: [url]',
 'attrdef_type_url' => 'URL',
 'attrdef_valueset' => 'Conjunto de valores',
 'attributes' => 'Atributos',
-'attribute_changed_email_body' => 'Atributo modificado
+'attribute_changed_email_body' => 'Se ha modificado el archivo de la versión
 Documento: [name]
 Versión: [version]
-Atributo: [attribute]
+Comentario: [comment]
 Carpeta principal: [folder_path]
-Usario: [username]
+Usuario: [username]
 URL: [url]',
 'attribute_changed_email_subject' => 'Atributo modificado',
 'attribute_count' => 'Cantidad de usos',
