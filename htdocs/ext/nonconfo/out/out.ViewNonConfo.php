@@ -28,6 +28,7 @@ include("../inc/inc.NonConfoAnalysis.php");
 include("../inc/inc.NonConfoAction.php");
 include("../inc/inc.FollowAction.php");
 include("../../../inc/inc.Authentication.php");
+
 if ($user->isGuest()) {
 	UI::exitError(getMLText("nonconfo_view_nonconfo"),getMLText("access_denied"));
 }

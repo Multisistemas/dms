@@ -57,6 +57,51 @@ $(document).ready(function() {
 		if(checkForm()) return;
 		ev.preventDefault();
 	});
+
+	$('body').on('click', 'a#delete-btn', function(ev){
+		id = $(ev.currentTarget).attr('rel');
+		confirmmsg = $(ev.currentTarget).attr('confirmmsg');
+		msg = $(ev.currentTarget).attr('msg');
+		formtoken = "<?php echo createFormKey('deletenonconfo'); ?>";
+		bootbox.dialog(confirmmsg, [{
+		"label" : "<i class='icon-remove'></i><?php echo getMLText("nonconfo_rm_nonconfo"); ?>",
+		"class" : "btn-danger",
+		"callback": function() {
+			$.get('../op/op.DeleteNonConfo.php',
+				{ id: id, formtoken: formtoken },
+							function(data) {
+								if(data.success) {
+									$('#table-row-nonconfo-'+id).hide('slow');
+									noty({
+										text: data.message,
+										type: 'success',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 1500,
+									});
+								} else {
+									noty({
+										text: data.message,
+										type: 'error',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 3500,
+									});
+								}
+							},
+							'json'
+						);
+					}
+				}, {
+					"label" : "<?php echo getMLText("cancel"); ?>",
+					"class" : "btn-cancel",
+					"callback": function() {
+					}
+				}]);
+	});
+
 });
 <?php
 	} /* }}} */
@@ -66,6 +111,9 @@ $(document).ready(function() {
 		$user = $this->params['user'];
 		$processes = $this->params['processes'];
 		$nonconfos = $this->params['nonconformities'];
+		$processOwners = $this->params['processOwners'];
+
+		$this->htmlAddHeader('<script type="text/javascript" src="/styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("nonconfo_title"));
 		$this->globalNavigation();
@@ -95,7 +143,7 @@ $(document).ready(function() {
 				<tbody>				
 				<?php $i = 0; $j = 1;
 				foreach ($nonconfos as $nonconfo => $i) { ?>
-					<tr>
+					<tr id="table-row-nonconfo-<?php echo $i['id']; ?>">
 						<td><?php echo $j; ?></td>
 						<td><?php
 						for ($k=0; $k < count($processes); $k++) { 
@@ -108,9 +156,38 @@ $(document).ready(function() {
 						<td><?php echo $i['type']; ?></td>
 						<td><?php echo $i['source']; ?></td>
 						<td><a type="button" class="btn btn-info" href="../out/out.ViewNonConfo.php?nonconfoId=<?php echo $i['id']; ?>"><i class="icon-eye-open"></i> <?php echo getMLText('nonconfo_view'); ?></a>
-						<a type="button" class="btn btn-danger" href="../out/out.ViewNonConfo.php?nonconfoId=<?php echo $i['id']; ?>"><i class="icon-remove"></i> <?php echo getMLText('nonconfo_delete'); ?></a></td>
+						
+						<a type="button" id="delete-btn" class="btn btn-danger" rel="<?php echo $i['id']; ?>" msg="<?php echo getMLText('nonconfo_rm_nonconfo'); ?>"confirmmsg="<?php echo htmlspecialchars(getMLText("nonconfo_confirm_rm_nonconfo"), ENT_QUOTES); ?>" title="<?php echo getMLText("nonconfo_rm_nonconfo"); ?>"><i class="icon-remove"></i> <?php echo getMLText('nonconfo_delete'); ?></a></td>
 					</tr>
 				<?php $j++; } ?>
+				</tbody>
+			</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<?php $this->contentHeading(getMLText("nonconfo_user_are_responsible")); ?>
+		<div class="well">
+			<?php echo $this->contentSubHeading(getMLText("nonconfo_general_info")); ?>
+			<div style="overflow-x: auto;">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th><?php echo getMLText("nonconfo_process_name"); ?></th>
+						<th><?php echo getMLText("nonconfo_request_date"); ?></th>
+						<th><?php echo getMLText("nonconfo_action_type"); ?></th>
+						<th><?php echo getMLText("nonconfo_origin_source"); ?></th>
+						<th></th>
+					</tr>	
+				</thead>
+				<tbody>
+
+				
+
 				</tbody>
 			</table>
 			</div>

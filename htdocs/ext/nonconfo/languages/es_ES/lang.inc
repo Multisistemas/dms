@@ -3,6 +3,7 @@
 $text = array(
 	'nonconfo_title' => 'No conformidades',
 	'nonconfo_created_by_current_user' => 'No conformidades que usted ha creado',
+	'nonconfo_user_are_responsible' => 'No conformidades de las que es responsable',
 	'nonconfo_save' => 'Guardar',
 	'nonconfo_edit' => 'Editar',
 	'nonconfo_cancel' => 'Cancelar',
@@ -131,7 +132,10 @@ $text = array(
 	Proceso: [process]
 	Usuario responsable: [username]
 	URL: [url]',
-
+	'nonconfo_delete_success' => 'No conformidad borrada exitosamente',
+	'nonconfo_rm_nonconfo' => 'Eliminar no conformidad',
+	'nonconfo_confirm_rm_nonconfo' => '¿Esta seguro de querer eliminar esta no conformidad?
+	Esta acción no ya no se puede deshacer',
 );
 
 ?>

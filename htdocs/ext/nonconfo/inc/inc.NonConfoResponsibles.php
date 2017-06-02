@@ -52,25 +52,13 @@ function getNonConfoResponsible($nonconfoId){
 	return $ret;	
 }
 
-/*function editNonConfoResponsible($id, $nonconfoId, $userId){
-
-	if (!is_numeric($id)) return false;
-
-	global $db, $user;
-	
-	$queryStr = "UPDATE tblNonconfoResponsibles SET nonconformityId = ".$nonconfoId.", userId = ".$userId.", modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $id;
-
-	$ret = $db->getResult($queryStr);	
-	return $ret;
-}*/
-
-function delNonConfoResponsible($userId){
+function delNonConfoResponsible($id){
 
 	if (!is_numeric($id)) return false;
 	
 	global $db;
 	
-	$queryStr = "DELETE FROM tblNonconfoResponsibles WHERE userId = " . (int) $userId;
+	$queryStr = "DELETE FROM tblNonconfoResponsibles WHERE id = " . (int) $id;
 	$ret = $db->getResult($queryStr);	
 	return $ret;
 }

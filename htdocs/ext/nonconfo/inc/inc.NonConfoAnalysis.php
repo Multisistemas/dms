@@ -15,6 +15,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 // DB //////////////////////////////////////////////////////////////////////////
+
 function getAllNonConfoAnalysis(){
 	global $db;
 	
@@ -22,6 +23,7 @@ function getAllNonConfoAnalysis(){
 	$ret = $db->getResultArray($queryStr);
 	return $ret;
 }
+
 function addNonConfoAnalysis($nonconfoId, $description, $fileName='', $mimeType=''){
 	global $db,$user;
 	$queryStr = "INSERT INTO tblNonconfoAnalysis (nonconformityId, comment, createdBy, fileName, mimeType) VALUES ".
@@ -37,6 +39,7 @@ function addNonConfoAnalysis($nonconfoId, $description, $fileName='', $mimeType=
 	
 	return $id;
 }
+
 function getNonConfoAnalysis($id){
 	global $db;
 	
@@ -49,6 +52,7 @@ function getNonConfoAnalysis($id){
 		
 	return $ret[0];	
 }
+
 function getNonConfoAnalysisByNonconfoId($nonconfoid){
 	global $db;
 	
@@ -61,6 +65,7 @@ function getNonConfoAnalysisByNonconfoId($nonconfoid){
 		
 	return $ret[0];	
 }
+
 function editNonconfoAnalysis($id, $source, $description, $fileName='', $mimeType=''){
 	if (!is_numeric($id)) return false;
 	global $db, $user;
@@ -79,19 +84,9 @@ function editNonconfoAnalysis($id, $source, $description, $fileName='', $mimeTyp
 	$ret = $db->getResult($queryStr);	
 	return $ret;
 }
-/*function getNonConfo($id){
-	
-	global $db;
-	
-	$queryStr = "SELECT * FROM tblNonconfoAnalysis WHERE id = ".$id;
-	$ret = $db->getResultArray($queryStr);
-	
-	if (is_bool($ret) && $ret == false) return false;
-	else if (count($ret) <= 0) return false;
-		
-	return $ret[0];
-}
+
 function delNonconfoAnalysis($id){
+
 	if (!is_numeric($id)) return false;
 	
 	global $db;
@@ -99,5 +94,6 @@ function delNonconfoAnalysis($id){
 	$queryStr = "DELETE FROM tblNonconfoAnalysis WHERE id = " . (int) $id;
 	$ret = $db->getResult($queryStr);	
 	return $ret;
-}*/
+}
+
 ?>

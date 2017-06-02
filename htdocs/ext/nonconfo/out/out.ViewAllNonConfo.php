@@ -23,6 +23,7 @@ include("../../../inc/inc.Extension.php");
 include("../../../inc/inc.DBInit.php");
 include("../../../inc/inc.ClassUI.php");
 include("../inc/inc.Process.php");
+include("../inc/inc.ProcessOwners.php");
 include("../inc/inc.Nonconformities.php");
 include("../../../inc/inc.Authentication.php");
 
@@ -33,6 +34,7 @@ if ($user->isGuest()) {
 $nonconformities = getNonconformitiesByCreator($user->getID());
 
 $processes = getProcesses();
+$processOwners = getProcessOwners();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 
@@ -42,6 +44,8 @@ if($view) {
 	$view->setParam('user', $user);
 	$view->setParam('processes', $processes);
 	$view->setParam('nonconformities', $nonconformities);
+	$view->setParam('processOwners', $processOwners);
+
 	$view($_GET);
 	exit;
 }

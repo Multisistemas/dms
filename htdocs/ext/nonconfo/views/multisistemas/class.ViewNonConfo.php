@@ -98,7 +98,7 @@ $(document).ready(function() {
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation("nonconfo_title", "nonconfo_view_navigation", "");
-
+		
 ?>
 
 <div class="row-fluid">
