@@ -20,7 +20,6 @@ function sendNotificationNonconfoAdded($id, $nonconfoId, $process){
 
 	$sender = "dms@gestiontotal.net";
 	$user = $dms->getUser($id);
-	$recipient = $user->_email;
 
 	$subject = "nonconfo_request_review_email_subject";
 	$message = "nonconfo_review_request_email_body";
@@ -29,6 +28,55 @@ function sendNotificationNonconfoAdded($id, $nonconfoId, $process){
 	$params['username'] = $user->getFullName();
 	$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."ext/nonconfo/out/out.ViewNonConfo.php?nonconfoId=".$nonconfoId;
 
-	$res = $notifier->toIndividual($sender, $user, $subject, $message, $params);
-	return $res;
+	$notifier->toIndividual($sender, $user, $subject, $message, $params);
+}
+
+function sendNotificationRequestApprobation($id, $processName, $nonconfoId){
+	global $db, $dms, $user, $notifier, $settings;
+
+	$sender = "dms@gestiontotal.net";
+	$user = $dms->getUser($id);
+
+	$subject = "nonconfo_request_approbation";
+	$message = "nonconfo_request_approbation_email_body";
+	$params = array();
+	$params['process'] = $processName;
+	$params['username'] = $user->getFullName();
+	$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."ext/nonconfo/out/out.ViewNonConfo.php?nonconfoId=".$nonconfoId;
+
+	$notifier->toIndividual($sender, $user, $subject, $message, $params);
+}
+
+function sendNotificationApprovedActions($ownerId, $processName, $nonconfoId){
+	global $db, $dms, $user, $notifier, $settings;
+
+	$sender = "dms@gestiontotal.net";
+	$user = $dms->getUser($ownerId);
+
+	$subject = "nonconfo_notify_approbation";
+	$message = "nonconfo_notify_approbation_email_body";
+	$params = array();
+	$params['process'] = $processName;
+	$params['username'] = $user->getFullName();
+	$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."ext/nonconfo/out/out.ViewNonConfo.php?nonconfoId=".$nonconfoId;
+
+	$notifier->toIndividual($sender, $user, $subject, $message, $params);
+}
+
+function sendNotificationDisapproveActions($ownerId, $processName, $nonconfo) {
+	global $db, $dms, $user, $notifier, $settings;
+
+	$sender = "dms@gestiontotal.net";
+	$userOwner = $dms->getUser($ownerId);
+	$nonconfouser = $dms->getUser($nonconfo['createdBy']);
+
+	$subject = "nonconfo_notify_desapprobation";
+	$message = "nonconfo_notify_desapprobation_email_body";
+	$params = array();
+	$params['email'] = $nonconfouser->_email;
+	$params['process'] = $processName;
+	$params['username'] = $userOwner->getFullName();
+	$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."ext/nonconfo/out/out.ViewNonConfo.php?nonconfoId=".$nonconfo['id'];
+
+	$notifier->toIndividual($sender, $userOwner, $subject, $message, $params);
 }

@@ -162,7 +162,7 @@ Comentario: [comment]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'attribute_changed_email_subject' => 'Atributo modificado',
+'attribute_changed_email_subject' => 'Modificaciones en la versión del documento',
 'attribute_count' => 'Cantidad de usos',
 'attribute_value' => 'Valor del atributo',
 'attribute_value_not_in_valueset' => '',
@@ -324,7 +324,7 @@ URL: [url]',
 'document_comment_changed_email' => 'Comentario modificado',
 'document_comment_changed_email_body' => 'Comentario modificado
 Documento: [name]
-antiguo comentario: [old_comment]
+Antiguo comentario: [old_comment]
 Comentario: [new_comment]
 Carpeta principal: [folder_path]
 Usuario: [username]
@@ -842,11 +842,11 @@ Si continua teniendo problemas de acceso, por favor contacte con el administrado
 'released' => 'Publicado',
 'removed_approver' => 'Ha sido eliminado de la lista de aprobadores.',
 'removed_file_email' => 'Adjuntos eliminados',
-'removed_file_email_body' => 'Eliminar adjunto
+'removed_file_email_body' => 'Se ha eliminado un archivo adjunto
 Documento: [document]
 Usuario: [username]
 URL: [url]',
-'removed_file_email_subject' => '[sitename]: [document] - Eliminar adjunto',
+'removed_file_email_subject' => 'Adjunto eliminado',
 'removed_recipient' => '',
 'removed_reviewer' => 'Ha sido eliminado de la lista de revisores.',
 'removed_revispr' => '',

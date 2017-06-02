@@ -100,16 +100,38 @@ $text = array(
 	'nonconfo_no' => 'No',
 	'nonconfo_action_finalized' => 'Acción finalizada correctamente',
 	'nonconfo_analysis' => 'Análisis de la no conformidad',
-	'nonconfo_edit_nonconfo_analysis' => 'Editar descripción del análisis',
+	'nonconfo_edit_nonconfo_analysis' => 'Para editar el análisis es necesario desbloquear primero
+	la descripción del mismo. Al adjuntar un nuevo archivo, éste reemplaza al anterior.',
 	'nonconfo_none' => 'Ninguno',
-	'nonconfo_error_send' => 'Ha ocurrido un error en el envío',
+	'nonconfo_send_error' => 'Ha ocurrido un error en el envío',
+	'nonconfo_send_success' => 'Notificación enviada correctamente',
+	'nonconfo_invalid_process' => 'Identificador de proceso inválido',
 	'nonconfo_before' => 'Antes',
 	'nonconfo_after' => 'Después',
+	'nonconfo_enable_comment_box' => 'Desbloquear descripción',
 	'nonconfo_request_review_email_subject' => 'Solicitud de revisón de no conformidad',
 	'nonconfo_review_request_email_body' => 'Petición para revisar nueva no conformidad
 	Proceso: [process]
-	Usuario que creó la no conformidad: [username]
-	URL: [url]'
+	Usuario responsable: [username]
+	URL: [url]',
+	'nonconfo_request_approbation' => 'Solicitud de aprobación de acciones',
+	'nonconfo_request_approbation_email_body' => 'Se solicita la revisión y aprobación de acciones para la siguiente no conformidad:
+	Processo: [process]
+	Usuario quien creó la no conformidad: [username]
+	URL: [url]',
+	'nonconfo_notify_approbation' => 'Notificación de aprobación de acciones',
+	'nonconfo_notify_approbation_email_body' => 'Se notifica la aprobación del plan de acciones para la siguiente no conformidad:
+	Proceso: [process]
+	Usuario responsable: [username]
+	URL: [url]
+	Favor de llevar a cabo las acciones dentro del tiempo estipulado.',
+	'nonconfo_notify_desapprobation' => 'Notificación de desaprobación de acciones',
+	'nonconfo_notify_desapprobation_email_body' => 'Se notifica que algunas acciones en la no conformidad no han sido aprobadas.
+	Puede consultar las observaciones al creador de la no conformidad: [email]
+	Proceso: [process]
+	Usuario responsable: [username]
+	URL: [url]',
+
 );
 
 ?>

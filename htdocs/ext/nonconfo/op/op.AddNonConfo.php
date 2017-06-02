@@ -56,22 +56,16 @@ if ($res == 0 || empty($res)) {
 
 if ($res != 0) {
 	$owners = getOwnersByProcess($_POST['processId']);
+	$process = getProcess($_POST['processId']);
 	if (count($owners) != 0) {
 		if (count($owners) > 1) {
 			foreach ($owners as $owner) {
 				$resp = addNonConfoResponsible($res, $owner['userId']);
+				sendNotificationNonconfoAdded($owner['userId'], $res, $process['name']);
 			}
 		} else if (count($owners) == 1) {
-
 			$resp = addNonConfoResponsible($res, $owners[0]['userId']);
-			$process = getProcess($_POST['processId']);
-			$notify = sendNotificationNonconfoAdded($owners[0]['userId'], $res, $process['name']);
-
-			if ($notify) {
-				$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('nonconfo_added_success')));
-			} else {
-				$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('nonconfo_error_send')));
-			}
+			sendNotificationNonconfoAdded($owners[0]['userId'], $res, $process['name']);
 		}
 	}
 }
