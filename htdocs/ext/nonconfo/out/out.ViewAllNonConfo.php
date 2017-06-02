@@ -30,7 +30,7 @@ if ($user->isGuest()) {
 	UI::exitError(getMLText("edit_process"),getMLText("access_denied"));
 }
 
-$nonconformities = getNonconformities();
+$nonconformities = getNonconformitiesByCreator($user->getID());
 
 $processes = getProcesses();
 

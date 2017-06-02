@@ -2,6 +2,7 @@
 
 $text = array(
 	'nonconfo_title' => 'No conformidades',
+	'nonconfo_created_by_current_user' => 'No conformidades que usted ha creado',
 	'nonconfo_save' => 'Guardar',
 	'nonconfo_edit' => 'Editar',
 	'nonconfo_cancel' => 'Cancelar',
@@ -51,7 +52,7 @@ $text = array(
 	'nonconfo_description' => 'Descripción',
 	'nonconfo_no_process_selected' => 'No se asignó ningún proceso a la solicitud',
 	'nonconfo_no_type_selected' => 'No se asignó el tipo de solicitud',
-	'nonconfo_view_nonconfo' => 'Ver no conformidad',
+	'nonconfo_view' => 'Ver',
 	'nonconfo_added_success' => 'No conformidad agregada correctamente',
 	'nonconfo_view_nonconfo' => 'Ver no conformidad',
 	'nonconfo_invalid_id' => 'Identificador de no conformidad inválido',
@@ -69,7 +70,6 @@ $text = array(
 	'nonconfo_attached_files' => 'Archivos adjuntos',
 	'nonconfo_add_actions' => 'Agregar acciones',
 	'nonconfo_no_action_description' => 'La descripción de la acción no puede estar vacía',
-	'nonconfo_view' => 'Ver no conformidad',
 	'nonconfo_action_added' => 'Acción agregada correctamente',
 	'nonconfo_analysis_not_found' => 'El análisis solicitado no existe',
 	'nonconfo_edit_analysis' => 'Editar análisis',

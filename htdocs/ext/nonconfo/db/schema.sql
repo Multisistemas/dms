@@ -100,6 +100,7 @@ CREATE TABLE `tblActions` (
   PRIMARY KEY (`id`),
   KEY `fkActionsCreatedBy` (`createdBy`),
   KEY `fkActionsModifiedBy` (`modifiedBy`),
+  CONSTRAINT `fkActionsnonconformityId` FOREIGN KEY (`nonconformityId`) REFERENCES `tblNonconformities` (`id`),
   CONSTRAINT `fkActionsCreatedBy` FOREIGN KEY (`createdBy`) REFERENCES `tblUsers` (`id`),
   CONSTRAINT `fkActionsModifiedBy` FOREIGN KEY (`modifiedBy`) REFERENCES `tblUsers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

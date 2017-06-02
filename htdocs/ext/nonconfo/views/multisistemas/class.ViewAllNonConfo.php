@@ -77,13 +77,14 @@ $(document).ready(function() {
 	
 <div class="row-fluid">
 	<div class="span12">
-		<?php $this->contentHeading(getMLText("nonconfo_title")); ?>
+		<?php $this->contentHeading(getMLText("nonconfo_created_by_current_user")); ?>
 		<div class="well">
 			<?php echo $this->contentSubHeading(getMLText("nonconfo_general_info")); ?>
 			<div style="overflow-x: auto;">
 			<table class="table table-striped">
 				<thead>
 					<tr>
+						<th>#</th>
 						<th><?php echo getMLText("nonconfo_process_name"); ?></th>
 						<th><?php echo getMLText("nonconfo_request_date"); ?></th>
 						<th><?php echo getMLText("nonconfo_action_type"); ?></th>
@@ -92,23 +93,24 @@ $(document).ready(function() {
 					</tr>	
 				</thead>
 				<tbody>				
-				<?php $i = 0;
+				<?php $i = 0; $j = 1;
 				foreach ($nonconfos as $nonconfo => $i) { ?>
 					<tr>
+						<td><?php echo $j; ?></td>
 						<td><?php
-						for ($j=0; $j < count($processes); $j++) { 
-							if ($i['processId'] == $processes[$j]['id']) {
-								echo $processes[$j]['name'];
+						for ($k=0; $k < count($processes); $k++) { 
+							if ($i['processId'] == $processes[$k]['id']) {
+								echo $processes[$k]['name'];
 							}
 						}
 						?></td>
 						<td><?php $date->setTimestamp($i['created']); echo $date->format('d-m-Y H:i:s'); ?></td>
 						<td><?php echo $i['type']; ?></td>
 						<td><?php echo $i['source']; ?></td>
-						<td><a type="button" class="btn btn-info" href="../out/out.ViewNonConfo.php?nonconfoId=<?php echo $i['id']; ?>"><?php echo getMLText('nonconfo_view'); ?></a></td>
+						<td><a type="button" class="btn btn-info" href="../out/out.ViewNonConfo.php?nonconfoId=<?php echo $i['id']; ?>"><i class="icon-eye-open"></i> <?php echo getMLText('nonconfo_view'); ?></a>
+						<a type="button" class="btn btn-danger" href="../out/out.ViewNonConfo.php?nonconfoId=<?php echo $i['id']; ?>"><i class="icon-remove"></i> <?php echo getMLText('nonconfo_delete'); ?></a></td>
 					</tr>
-					
-				<?php } ?>
+				<?php $j++; } ?>
 				</tbody>
 			</table>
 			</div>

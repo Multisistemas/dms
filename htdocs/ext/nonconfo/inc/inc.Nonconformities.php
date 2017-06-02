@@ -93,4 +93,16 @@ function delNonconformities($id){
 	return $ret;
 }
 
+function getNonconformitiesByCreator($id){
+	global $db;
+	
+	$queryStr = "SELECT * FROM tblNonconformities WHERE createdBy = ".$id;
+	$ret = $db->getResultArray($queryStr);
+	
+	if (is_bool($ret) && $ret == false) return false;
+	else if (count($ret) <= 0) return false;
+	
+	return $ret;
+}
+
 ?>
