@@ -112,6 +112,7 @@ $(document).ready(function() {
 		$processes = $this->params['processes'];
 		$nonconfos = $this->params['nonconformities'];
 		$processOwners = $this->params['processOwners'];
+		$nonconfosByProcess = $this->params['nonconfosByProcess'];
 
 		$this->htmlAddHeader('<script type="text/javascript" src="/styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
@@ -185,9 +186,32 @@ $(document).ready(function() {
 					</tr>	
 				</thead>
 				<tbody>
-
-				
-
+				<?php if(count($nonconfosByProcess) > 0 && $nonconfosByProcess != null){ ?>
+					<?php $l = 1; ?>
+					<?php for($i = 0; $i < count($nonconfosByProcess); $i++) { ?>
+						<?php for($j = 0; $j < count($nonconfosByProcess[$i]); $j++) { ?>
+							<tr>
+								<td><?php echo $l; ?></td>
+								<td>
+								<?php for ($k=0; $k < count($processes); $k++) { 
+									if ($nonconfosByProcess[$i][$j]['processId'] == $processes[$k]['id']) {
+										echo $processes[$k]['name'];
+									}
+								} ?>
+								</td>
+								<td>
+								<?php $date->setTimestamp($nonconfosByProcess[$i][$j]['created']); echo $date->format('d-m-Y H:i:s'); ?>
+								</td>
+								<td><?php echo $nonconfosByProcess[$i][$j]['type']; ?></td>
+								<td><?php echo $nonconfosByProcess[$i][$j]['source']; ?></td>
+								<td>
+									<a type="button" class="btn btn-info" href="../out/out.ViewNonConfo.php?nonconfoId=<?php echo $nonconfosByProcess[$i][$j]['id']; ?>"><i class="icon-eye-open"></i> <?php echo getMLText('nonconfo_view'); ?></a>
+									<a type="button" id="delete-btn" class="btn btn-danger" rel="<?php echo $nonconfosByProcess[$i][$j]['id']; ?>" msg="<?php echo getMLText('nonconfo_rm_nonconfo'); ?>"confirmmsg="<?php echo htmlspecialchars(getMLText("nonconfo_confirm_rm_nonconfo"), ENT_QUOTES); ?>" title="<?php echo getMLText("nonconfo_rm_nonconfo"); ?>"><i class="icon-remove"></i> <?php echo getMLText('nonconfo_delete'); ?></a>
+								</td>
+							</tr>
+						<?php	$l++; } ?>
+					<?php } ?>
+				<?php } ?>
 				</tbody>
 			</table>
 			</div>

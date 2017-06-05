@@ -36,6 +36,24 @@ $nonconformities = getNonconformitiesByCreator($user->getID());
 $processes = getProcesses();
 $processOwners = getProcessOwners();
 
+$theProcesses = array();
+
+if (false != $processOwners) {	
+	foreach($processOwners as $processOwner){
+		if ($user->getID() == $processOwner['userId']) {
+			$theProcesses[] = $processOwner['processId'];
+		}
+	}
+}
+
+$nonconfosByProcess = array();
+
+if(count($theProcesses) > 0){	
+	for ($i=0; $i < count($theProcesses) ; $i++) { 
+		$nonconfosByProcess[] = getNonconformitiesByProcess($theProcesses[$i]);
+	}
+}
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
@@ -44,6 +62,7 @@ if($view) {
 	$view->setParam('user', $user);
 	$view->setParam('processes', $processes);
 	$view->setParam('nonconformities', $nonconformities);
+	$view->setParam('nonconfosByProcess', $nonconfosByProcess);
 	$view->setParam('processOwners', $processOwners);
 
 	$view($_GET);
