@@ -135,7 +135,7 @@ $text = array(
 	'nonconfo_delete_success' => 'No conformidad borrada exitosamente',
 	'nonconfo_rm_nonconfo' => 'Eliminar no conformidad',
 	'nonconfo_confirm_rm_nonconfo' => '¿Esta seguro de querer eliminar esta no conformidad?
-	Esta acción no ya no se puede deshacer',
+	Esta acción no se podrá deshacer',
 );
 
 ?>

@@ -263,7 +263,7 @@ $(document).ready(function() {
 													echo "<a type=\"button\" class=\"btn btn-sm btn-info\" id='enable-comment-btn' title=\"".getMLText('nonconfo_edit_nonconfo_analysis')."\"><i class=\"icon-unlock\"></i> ".getMLText('nonconfo_enable_comment_box')."</a> ";
 													echo "<input type=\"hidden\" name=\"analysisId\" value=\"".$analysis['id']."\"></input>";
 													echo "<input type=\"hidden\" name=\"operation\" value=\"edit\"></input>";
-													echo "<input type=\"submit\" class=\"btn btn-success\" value='".getMLText('nonconfo_edit')."' title=\"".getMLText('nonconfo_edit_nonconfo_analysis')."\">";
+													echo "<input type=\"submit\" class=\"btn btn-success\" value='".getMLText('nonconfo_save')."' title=\"".getMLText('nonconfo_edit_nonconfo_analysis')."\">";
 													echo "</div>";
 												}
 											}

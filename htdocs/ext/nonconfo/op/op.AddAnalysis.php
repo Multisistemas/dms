@@ -55,6 +55,7 @@ if(isset($_FILES['attach']) && $_FILES['attach']) {
 	
 	$fullfile = $settings->_contentDir."nonconfo/$name";
 	move_uploaded_file($tmp_name, $fullfile);
+	chmod($fullfile, 0755);
 }
 $res = addNonConfoAnalysis($nonconfoId, $_POST['description'], $name, $type);
 if ($res == 0 || empty($res)) {

@@ -56,7 +56,11 @@ if(isset($_FILES['attach']) && $_FILES['attach']) {
 	}
 	
 	$fullfile = $settings->_contentDir."nonconfo/$name";
+	if(file_exists($fullfile)){
+		unlink($fullfile);
+	}
 	move_uploaded_file($tmp_name, $fullfile);
+	
 }
 $res = editNonconfoAnalysis($id, $_POST["nonconfoId"], $description, $name, $type);
 if (is_bool($res) && !$res) {

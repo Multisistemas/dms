@@ -43,6 +43,8 @@ if(!isset($_REQUEST['id'])){
 	UI::exitError(getMLText("nonconfo_title"),getMLText("nonconfo_id_error"));
 }
 
+header("Cache-Control: no-cache,no-store");
+
 $nonconfo = getNonconformity($_REQUEST['id']);
 
 $analysis = getNonConfoAnalysisByNonconfoId($_REQUEST['id']);
@@ -64,10 +66,10 @@ if (false != $nonconfo) {
 			}
 		}
 
-		if ($analisis['fileName'] != '') {
-			$thefile = $settings->_contentDir . '/nonconfo/'. $analisis['fileName'];
+		if ($analysis['fileName'] != "") {
+			$thefile = $settings->_contentDir . 'nonconfo/'. $analysis['fileName'];
 			if (file_exists($thefile)) {
-				unlink($thefile);
+			 $ret =	unlink($thefile);
 			}
 		}
 		
