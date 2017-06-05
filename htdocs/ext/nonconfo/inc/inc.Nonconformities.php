@@ -82,17 +82,6 @@ function editNonconformities($id, $source, $description){
 	return $ret;
 }
 
-function delNonconformities($id){
-
-	if (!is_numeric($id)) return false;
-	
-	global $db;
-	
-	$queryStr = "DELETE FROM tblNonconformities WHERE id = " . (int) $id;
-	$ret = $db->getResult($queryStr);	
-	return $ret;
-}
-
 function getNonconformitiesByCreator($id){
 	global $db;
 	
@@ -115,6 +104,78 @@ function getNonconformitiesByProcess($id){
 	else if (count($ret) <= 0) return false;
 	
 	return $ret;
+}
+
+function delNonconformities($id){
+
+	if (!is_numeric($id)) return false;
+	
+	global $db, $settings;
+
+	$db->startTransaction();
+
+	$queryStr1 = "SELECT * FROM `tblActions` WHERE `nonconformityId` = ".(int) $id; //Actions
+	$actions = $db->getResultArray($queryStr1);
+
+	if (is_array($actions) && count($actions) > 0 && $actions != false) {
+		for ($i=0; $i < count($actions); $i++) {
+			$queryStr2 = "SELECT * FROM `tblActionsFollows` WHERE `actionId` = ".(int) $actions[$i]['id']; //Actions
+			$follow = $db->getResultArray($queryStr2);
+			if ($follow != null || $follow != false) {
+				$queryStr3 = "DELETE FROM `tblActionsFollows` WHERE `actionId` = ".(int) $actions[$i]['id'];
+				if (!$db->getResult($queryStr3)) {
+					$db->rollbackTransaction();
+					return false;
+				}	
+			}
+		}
+	}
+
+	if (is_array($actions) && count($actions) > 0 && $actions != false) {
+		$queryStr4 = "DELETE FROM `tblActions` WHERE `nonconformityId` = ".(int) $id; 
+		if (!$db->getResult($queryStr4)) {
+			$db->rollbackTransaction();
+			return false;
+		}	
+	}
+
+	$queryStr5 = "SELECT * FROM `tblNonconfoResponsibles` WHERE `nonconformityId` = ".(int) $id; // Responsibles
+	$responsibles = $db->getResultArray($queryStr5);
+	if (is_array($responsibles) && count($responsibles) > 0 && $responsibles != false) {
+		$queryStr6 = "DELETE FROM `tblNonconfoResponsibles` WHERE `nonconformityId` = ".(int) $id;
+		if (!$db->getResult($queryStr6)) {
+			$db->rollbackTransaction();		
+			return false;
+		}
+	}
+
+	$queryStr7 = "SELECT * FROM `tblNonconfoAnalysis` WHERE `nonconformityId` = ".(int) $id;
+	$analysis = $db->getResultArray($queryStr7);
+	if (is_array($analysis) && count($analysis) > 0 && $analysis != false) {
+		if ($analysis[0]['fileName'] != "") {
+			$thefile = $settings->_contentDir . 'nonconfo/'. $analysis[0]['fileName'];
+			if (file_exists($thefile)) {
+				unlink($thefile);
+			}
+		}
+
+		$queryStr8 = "DELETE FROM `tblNonconfoAnalysis` WHERE `nonconformityId` = ".(int) $id; // Analysis
+		if (!$db->getResult($queryStr8)) {
+			$db->rollbackTransaction();		
+			return false;
+		}
+	}
+
+
+	$queryStr9 = "DELETE FROM `tblNonconformities` WHERE id = " . (int) $id;
+	$result = $db->getResult($queryStr9);
+	if (!$result) {
+		$db->rollbackTransaction();		
+		return false;
+	}
+
+    $db->commitTransaction();
+	return true;
 }
 
 ?>

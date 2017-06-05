@@ -43,61 +43,11 @@ if(!isset($_REQUEST['id'])){
 	UI::exitError(getMLText("nonconfo_title"),getMLText("nonconfo_id_error"));
 }
 
-header("Cache-Control: no-cache,no-store");
-
-$nonconfo = getNonconformity($_REQUEST['id']);
-
-$analysis = getNonConfoAnalysisByNonconfoId($_REQUEST['id']);
-
-$actions = getNonConfoActions($_REQUEST['id']);
-
-if (false != $nonconfo) {
-	if (false != $analysis){
-		if ($actions != 0 || $actions != false) {
-			for ($i=0; $i < count($actions); $i++) { 
-				$follow = getActionFollowById($actions[$i]['id']);
-				if (false != $follow) {
-					delActionFollow($follow['id']);
-				}
-			}
-
-			for ($i=0; $i < count($actions); $i++) {
-				delNonconfoAction($actions[$i]['id']);
-			}
-		}
-
-		if ($analysis['fileName'] != "") {
-			$thefile = $settings->_contentDir . 'nonconfo/'. $analysis['fileName'];
-			if (file_exists($thefile)) {
-			 $ret =	unlink($thefile);
-			}
-		}
-		
-		delNonconfoAnalysis($analysis['id']);
-
-			
-	}
-
-	$responsibles = getNonConfoResponsible($nonconfo['id']);
-		if (false != $responsibles){
-			for ($i=0; $i < count($responsibles); $i++) { 
-				delNonConfoResponsible($responsibles[$i]['id']);
-		}	
-	}
-
-	$res = delNonconformities($_REQUEST['id']);
-	if (is_bool($res) && !$res) {
-		header('Content-Type: application/json');
-		echo json_encode(array('success'=>false, 'message'=>getMLText('error_occured'), 'data'=>''));
-	}
-
+$res = delNonconformities($_REQUEST['id']);
+if (is_bool($res) && !$res) {
 	header('Content-Type: application/json');
-	echo json_encode(array('success'=>true, 'message'=>getMLText('nonconfo_delete_success'), 'data'=>''));
+	echo json_encode(array('success'=>false, 'message'=>getMLText('error_occured'), 'data'=>''));
 }
 
-
-
-
-
-
-
+header('Content-Type: application/json');
+echo json_encode(array('success'=>true, 'message'=>getMLText('nonconfo_delete_success'), 'data'=>''));
