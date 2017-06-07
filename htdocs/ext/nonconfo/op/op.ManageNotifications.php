@@ -57,7 +57,7 @@ switch ($action) {
 
 		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('nonconfo_send_success')));
 
-		header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$_GET['processId']);
+		header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$_GET['nonconfoId']);
 
 		break;
 
