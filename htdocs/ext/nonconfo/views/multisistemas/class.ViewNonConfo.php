@@ -76,6 +76,18 @@ $(document).ready(function() {
 		$("#analysis-comment").attr('disabled', false);
 	});
 
+	$("#send-request-btn").on('click', function(){
+		$(this).attr('disabled', true);
+	});
+
+	$("#send-request2-btn").on('click', function(){
+		$(this).attr('disabled', true);
+	});
+
+	$("#send-request3-btn").on('click', function(){
+		$(this).attr('disabled', true);
+	});
+
 });
 
 <?php

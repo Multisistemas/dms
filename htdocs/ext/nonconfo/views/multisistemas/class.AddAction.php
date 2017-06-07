@@ -70,6 +70,10 @@ $(document).ready(function() {
 		$('#action-counter-'+id).fadeOut('slow');
 	});
 
+	$('#form1').one('submit', function() {
+    $(this).find('input[type="submit"]').attr('disabled','disabled');
+	});
+
 });
 
 <?php
