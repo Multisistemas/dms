@@ -27,6 +27,7 @@ include("../inc/inc.Nonconformities.php");
 include("../inc/inc.NonConfoAnalysis.php");
 include("../inc/inc.NonConfoAction.php");
 include("../inc/inc.FollowAction.php");
+include("../inc/inc.ActionComment.php");
 include("../../../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
@@ -58,10 +59,15 @@ $processOwners = getAllProcessOwners($nonconfo['processId']);
 
 
 $actionsFollows = array();
+$actionsComments = array();
 
 if (false != $actions && count($actions) > 0) {
 	for ($i=0; $i < count($actions); $i++) { 
 		array_push($actionsFollows, getActionFollowById($actions[$i]['id']));
+	}
+
+	for ($i=0; $i < count($actions); $i++) { 
+		array_push($actionsComments, getActionCommentByActionId($actions[$i]['id']));
 	}
 }
 
@@ -76,6 +82,7 @@ if($view) {
 	$view->setParam('operation', $operation);
 	$view->setParam('processOwners', $processOwners);
 	$view->setParam('actionsFollows', $actionsFollows);
+	$view->setParam('actionsComments', $actionsComments);
 	$view($_GET);
 	exit;
 }

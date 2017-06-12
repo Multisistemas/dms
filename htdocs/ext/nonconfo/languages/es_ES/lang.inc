@@ -48,6 +48,7 @@ $text = array(
 	'nonconfo_action_type' => 'Tipo de solicitud',
 	'nonconfo_origin_source' => 'Fuente que la origina',
 	'nonconfo_corrective_action' => 'Acción correctiva',
+	'nonconfo_correction' => 'Corrección',
 	'nonconfo_risk_action' => 'Acción riesgo',
 	'nonconfo_improvement_action' => 'Acción de mejora',
 	'nonconfo_description' => 'Descripción',
@@ -136,6 +137,17 @@ $text = array(
 	'nonconfo_rm_nonconfo' => 'Eliminar no conformidad',
 	'nonconfo_confirm_rm_nonconfo' => '¿Esta seguro de querer eliminar esta no conformidad?
 	Esta acción no se podrá deshacer',
+	'nonconfo_enable_desc_box' => 'Desbloquear descripción',
+	'nonconfo_no_id' => 'El identificador de la no conformidad es incorrecto',
+	'nonconfo_no_description' => 'La descripción no puede estar vacía',
+	'nonconfo_db_error_occured' => 'Ha ocurrido un error, por favor inténtelo de nuevo',
+	'nonconfo_edit_success' => 'No conformidad modificada correctamente',
+	'nonconfo_correlative' => 'Correlativo',
+	'nonconfo_comment' => 'Comentar',
+	'nonconfo_comment_action' => 'Comentar acción',
+	'nonconfo_comment_action_success' => 'Comentario agregado correctamente',
+	'nonconfo_delete_comment' => 'Eliminar comentario',
+	'nonconfo_comment_deleted' => 'Comentario borrado exitosamente',
 );
 
 ?>

@@ -134,6 +134,7 @@ $(document).ready(function() {
 				<thead>
 					<tr>
 						<th>#</th>
+						<th><?php echo getMLText("nonconfo_correlative"); ?></th>
 						<th><?php echo getMLText("nonconfo_process_name"); ?></th>
 						<th><?php echo getMLText("nonconfo_request_date"); ?></th>
 						<th><?php echo getMLText("nonconfo_action_type"); ?></th>
@@ -147,6 +148,7 @@ $(document).ready(function() {
 					foreach ($nonconfos as $nonconfo => $i) { ?>
 						<tr id="table-row-nonconfo-<?php echo $i['id']; ?>">
 							<td><?php echo $j; ?></td>
+							<td><?php echo $i['correlative']; ?></td>
 							<td><?php
 							for ($k=0; $k < count($processes); $k++) { 
 								if ($i['processId'] == $processes[$k]['id']) {
@@ -182,6 +184,7 @@ $(document).ready(function() {
 				<thead>
 					<tr>
 						<th>#</th>
+						<th><?php echo getMLText("nonconfo_correlative"); ?></th>
 						<th><?php echo getMLText("nonconfo_process_name"); ?></th>
 						<th><?php echo getMLText("nonconfo_request_date"); ?></th>
 						<th><?php echo getMLText("nonconfo_action_type"); ?></th>
@@ -197,6 +200,7 @@ $(document).ready(function() {
 							<?php for($j = 0; $j < count($nonconfosByProcess[$i]); $j++) { ?>
 								<tr>
 									<td><?php echo $l; ?></td>
+									<td><?php echo $nonconfosByProcess[$i][$j]['correlative']; ?></td>
 									<td>
 									<?php for ($k=0; $k < count($processes); $k++) { 
 										if ($nonconfosByProcess[$i][$j]['processId'] == $processes[$k]['id']) {

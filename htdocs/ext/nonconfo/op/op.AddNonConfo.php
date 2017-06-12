@@ -48,7 +48,7 @@ if ($_POST['type'] == -1) {
 	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("nonconfo_no_type_selected"));
 }
 
-$res = addNonconformity($_POST['processId'], $_POST['type'], $_POST['source'], $_POST['description']);
+$res = addNonconformity($_POST['correlative'], $_POST['processId'], $_POST['type'], $_POST['source'], $_POST['description']);
 
 if ($res == 0 || empty($res)) {
 	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("error_occured"));

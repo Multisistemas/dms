@@ -26,12 +26,12 @@ function getNonconformities(){
 	return $ret;
 }
 
-function addNonconformity($processId, $type, $source, $description){
+function addNonconformity($correlative, $processId, $type, $source, $description){
 
 	global $db,$user;
 
-	$queryStr = "INSERT INTO tblNonconformities (processId, type, source, description, createdBy) VALUES ".
-		"(".$processId.", \"".$type."\", \"".$source."\", \"".$description."\",".$user->getID().")";
+	$queryStr = "INSERT INTO tblNonconformities (correlative, processId, type, source, description, createdBy) VALUES ".
+		"(\"".$correlative."\", ".$processId.", \"".$type."\", \"".$source."\", \"".$description."\",".$user->getID().")";
 	
 	$ret = $db->getResult($queryStr);
 	
@@ -176,6 +176,17 @@ function delNonconformities($id){
 
     $db->commitTransaction();
 	return true;
+}
+
+function editNonConfo($id, $description){
+	if (!is_numeric($id)) return false;
+
+	global $db, $user;
+	
+	$queryStr = "UPDATE tblNonconformities SET description = \"".$description."\", modified = ".$db->getCurrentTimestamp().", modifiedBy = ".$user->getID()." WHERE id = ".(int) $id;
+
+	$ret = $db->getResult($queryStr);	
+	return $ret;
 }
 
 ?>

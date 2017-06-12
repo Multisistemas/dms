@@ -91,6 +91,10 @@ $(document).ready(function() {
 			<?php echo createHiddenFieldWithKey('addnonconfo'); ?>
 					<table class="table-condensed">
 						<tr>
+							<td class="lbl-right"><?php printMLText("nonconfo_correlative");?>:</td>
+							<td><input type="text" name="correlative" value="" size="100" /></td>
+						</tr>
+						<tr>
 							<td class="lbl-right"><?php printMLText("nonconfo_select_process");?>:</td>
 							<td>
 								<select class="chzn-select" name="processId" id="selector">
@@ -116,6 +120,7 @@ $(document).ready(function() {
 									<option value="<?php printMLText("nonconfo_corrective_action"); ?>"><?php printMLText("nonconfo_corrective_action"); ?></option>
 									<option value="<?php printMLText("nonconfo_risk_action"); ?>"><?php printMLText("nonconfo_risk_action"); ?></option>
 									<option value="<?php printMLText("nonconfo_improvement_action"); ?>"><?php printMLText("nonconfo_improvement_action"); ?></option>
+									<option value="<?php printMLText("nonconfo_correction"); ?>"><?php printMLText("nonconfo_correction"); ?></option>
 								</select>
 							</td>
 						</tr>

@@ -76,6 +76,10 @@ $(document).ready(function() {
 		$("#analysis-comment").attr('disabled', false);
 	});
 
+	$("#enable-desc-btn").on('click', function(){
+		$("#nonconfo-description").attr('disabled', false);
+	});
+
 	$("#send-request-btn").on('click', function(){
 		$(this).attr('disabled', true);
 	});
@@ -87,6 +91,13 @@ $(document).ready(function() {
 	$("#send-request3-btn").on('click', function(){
 		$(this).attr('disabled', true);
 	});
+
+	$("#btn-comment-action").on('click', function(){
+		var id = $(this).attr('rel');
+		$('#action-comment-'+id).show('slow');
+	});
+
+	
 
 });
 
@@ -104,6 +115,7 @@ $(document).ready(function() {
 		$actions = $this->params['actions'];
 		$processOwners = $this->params['processOwners'];
 		$actionsFollows = $this->params['actionsFollows'];
+		$actionsComments = $this->params['actionsComments'];
 		$operation = $this->params['operation'];
 
 		$this->htmlStartPage(getMLText("nonconfo_title"));
@@ -126,6 +138,7 @@ $(document).ready(function() {
 				?>
 				<thead>
 					<tr>
+						<th><?php echo getMLText('nonconfo_correlative'); ?></th>
 						<th><?php echo getMLText("nonconfo_process_name"); ?></th>
 						<th><?php echo getMLText("nonconfo_request_date"); ?></th>
 						<th><?php echo getMLText("nonconfo_action_type"); ?></th>
@@ -134,6 +147,7 @@ $(document).ready(function() {
 				</thead>
 				<tbody>
 					<tr>
+						<td><?php echo $nonconfo['correlative']; ?></td>
 						<td><?php echo $process['name']; ?></td>
 						<td><?php echo $date->format('d-m-Y H:i:s'); ?></td>
 						<td><?php echo $nonconfo['type'] ?></td>
@@ -153,9 +167,20 @@ $(document).ready(function() {
 					<tr>
 						<td>
 							<div class="span12">
-								<div class="alert alert-info" role="info">
-									<strong><?php echo $nonconfo['description']; ?></strong>
-								</div>
+								<form class="form-horizontal" action="<?php echo '../op/op.EditNonConfo.php' ?>" id="form2" name="form2" method="post">
+								<?php echo createHiddenFieldWithKey('editnonconfo'); ?>
+								<?php echo	"<textarea id='nonconfo-description' class='comment_width' name='nonconfo-description' rows='5' cols='100' disabled>".$nonconfo['description']."</textarea>" ?>
+									<?php 
+										if ($user->getID() == $nonconfo['createdBy']) {
+											echo "<div>";
+											echo "<hr>";
+											echo "<a type=\"button\" class=\"btn btn-sm btn-info\" id='enable-desc-btn'><i class=\"icon-unlock\"></i> ".getMLText('nonconfo_enable_desc_box')."</a> ";
+											echo "<input type=\"hidden\" name=\"nonconfoId\" value=\"".$nonconfo['id']."\"></input>";
+											echo "<input type=\"submit\" class=\"btn btn-success\" value='".getMLText('nonconfo_save')."'>";
+											echo "</div>";
+										}
+									?>
+								</form>
 							</div>
 						</td>
 					</tr>
@@ -250,18 +275,6 @@ $(document).ready(function() {
 								<td>
 
 								<?php 
-								/*if (false != $processOwners) {
-										for($i = 0; $i < count($processOwners); $i++){
-											if ($user->getID() == $processOwners[$i]['userId']) {
-												if($analysis == false ) { 
-													echo "<input type=\"submit\" class=\"btn btn-success\" value=\"".getMLText('nonconfo_save')."\">";
-													echo "<a type=\"button\" id=\"cancel-btn\" class=\"btn btn-sm btn-default\">".getMLText('cancel')."</a>";
-												} else {
-													echo "<a type=\"button\" href=\"../out/out.EditAnalysis.php?nonconfoId=".$nonconfo['id']."\"	class=\"btn btn-success\"><i class=\"icon-pencil\"></i> ".getMLText('nonconfo_edit')."</button>";
-												}
-											}
-										}
-									}*/
 
 									if (false != $processOwners) {
 										for($i = 0; $i < count($processOwners); $i++){
@@ -282,17 +295,6 @@ $(document).ready(function() {
 										}
 									}
 								?>
-
-								<?php  /*if($analysis == false ) { 
-									echo "<input type=\"hidden\" name=\"operation\" value=\"add\"></input>";
-									echo "<input type=\"submit\" class=\"btn btn-success\" value=\"".getMLText('nonconfo_save')."\">";
-									echo "<a type=\"button\" id=\"cancel-btn\" class=\"btn btn-sm btn-default\">".getMLText('cancel')."</a>";
-								} else {
-									echo "<input type=\"hidden\" name=\"analysisId\" value=\"".$analysis['id']."\"></input>";
-									echo "<input type=\"hidden\" name=\"description\" value=\"".$analysis['comment']."\"></input>";
-									echo "<input type=\"hidden\" name=\"operation\" value=\"edit\"></input>";
-									echo "<button type=\"submit\" class=\"btn btn-success\"><i class=\"icon-pencil\"></i> ".getMLText('nonconfo_edit')."</button>";
-								}*/ ?>
 
 								</td>
 								<td class="lbl-right">
@@ -376,7 +378,10 @@ $(document).ready(function() {
 									}
 
 									if ($user->getID() == $nonconfo['createdBy'] && $i['status'] == 0) {
-										echo "<a type='button' href='../op/op.ApproveAction.php?actionId=".$i['id']."' class='btn btn-info' rel='' id='btn-aprove-action'><i class='icon-check'></i> ".getMLText('nonconfo_approve')."</a>";
+										echo "<a type='button' href='../op/op.ApproveAction.php?actionId=".$i['id']."' class='btn btn-info' rel='' id='btn-aprove-action'><i class='icon-check'></i> ".getMLText('nonconfo_approve')."</a> ";
+										if (!isset($actionsComments[$k][0]['actionId'])) {
+											echo "<a type='button' class='btn btn-warning' rel='".$i["id"]."' id='btn-comment-action'><i class='icon-pencil'></i> ".getMLText('nonconfo_comment')."</a>";
+										}
 									}
 
 									if ($user->getID() == $nonconfo['createdBy'] && $i['status'] == 1) {
@@ -387,6 +392,32 @@ $(document).ready(function() {
 									echo "<span class='label label-danger'>".getMLText('nonconfo_action_closed')."</span>";
 								}
 	echo 				"</td>
+							</tr>";
+							if (false != $actionsComments && count($actionsComments) >= 1) {
+								if (isset($actionsComments[$k][0]['actionId']) && $actionsComments[$k][0]['actionId'] == $i['id']) {
+								echo "<tr>
+												<td>
+													<div class='alert alert-danger'>".
+														$actionsComments[$k][0]['description']."
+													</div>
+												</td>
+												<td><a type='button' class='btn btn-danger' href='../op/op.DeleteComment.php?commentId=".$actionsComments[$k][0]['id']."&nonconfoId=".$nonconfo['id']."'>".getMLText('nonconfo_delete_comment')."</a>
+												</td>
+											</tr>";
+								}
+							}
+	echo				"<tr id='action-comment-".$i['id']."' style='display:none;'>
+								<form class='form-horizontal' action='../op/op.AddComment.php' method='post'>
+									<td>
+										<textarea class=\"comment_width\" name=\"action-comment\" rows=\"5\" cols=\"100\" ></textarea>
+									</td>
+									<td>
+										<input type=\"hidden\" name=\"nonconfoId\" value=\"".$nonconfo['id']."\"></input>
+										<input type=\"hidden\" name=\"actionId\" value=\"".$i['id']."\"></input>".
+										createHiddenFieldWithKey('addactioncomment')."
+										<input type=\"submit\" class=\"btn btn-primary\" value='".getMLText('nonconfo_save')."'>
+									</td>
+								</form>
 							</tr>
 						</tbody>
 					</table><hr>"; ?>

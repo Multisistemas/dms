@@ -246,6 +246,39 @@ DELIMITER ;;
 DELIMITER ;
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
 
+# Dump of table tblActionsComments
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tblActionsComments`;
+
+CREATE TABLE `tblActionsComments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `actionId` int(11) NOT NULL,
+  `description` varchar(500) NOT NULL DEFAULT '',
+  `created` int(11) NOT NULL DEFAULT 0,
+  `createdBy` int(11) NOT NULL,
+  `modified` int(11) DEFAULT NULL,
+  `modifiedBy` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fkActionsCommentsActionId` (`actionId`),
+  KEY `fkActionsCommentsCreatedBy` (`createdBy`),
+  KEY `fkActionsCommentsModifiedBy` (`modifiedBy`),
+  CONSTRAINT `fkActionsCommentsActionId` FOREIGN KEY (`actionId`) REFERENCES `tblActions` (`id`),
+  CONSTRAINT `fkActionsCommentsCreatedBy` FOREIGN KEY (`createdBy`) REFERENCES `tblUsers` (`id`),
+  CONSTRAINT `fkActionsCommentsModifiedBy` FOREIGN KEY (`modifiedBy`) REFERENCES `tblUsers` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DELIMITER ;;
+/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION" */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `tgActionsCommentsCreated` BEFORE INSERT ON `tblActionsComments` FOR EACH ROW SET new.`created` = UNIX_TIMESTAMP(NOW()) */;;
+/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION" */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `tgActionsCommentsModified` BEFORE UPDATE ON `tblActionsComments` FOR EACH ROW SET new.`modified` = UNIX_TIMESTAMP(NOW()) */;;
+DELIMITER ;
+/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
+
+
+/* Alter tables */
+ALTER TABLE `tblNonconformities` ADD `correlative` VARCHAR(50) NULL DEFAULT NULL AFTER `id`;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -253,3 +286,5 @@ DELIMITER ;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
