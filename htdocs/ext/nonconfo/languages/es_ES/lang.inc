@@ -129,7 +129,7 @@ $text = array(
 	Favor de llevar a cabo las acciones dentro del tiempo estipulado.',
 	'nonconfo_notify_desapprobation' => 'Notificación de desaprobación de acciones',
 	'nonconfo_notify_desapprobation_email_body' => 'Se notifica que algunas acciones en la no conformidad no han sido aprobadas.
-	Puede consultar las observaciones al creador de la no conformidad: [email]
+	Por favor revisar las observaciones realizadas en la no conformidad.
 	Proceso: [process]
 	Usuario responsable: [username]
 	URL: [url]',

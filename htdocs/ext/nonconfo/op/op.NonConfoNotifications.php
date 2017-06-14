@@ -73,7 +73,6 @@ function sendNotificationDisapproveActions($ownerId, $processName, $nonconfo) {
 	$subject = "nonconfo_notify_desapprobation";
 	$message = "nonconfo_notify_desapprobation_email_body";
 	$params = array();
-	$params['email'] = $nonconfouser->_email;
 	$params['process'] = $processName;
 	$params['username'] = $userOwner->getFullName();
 	$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."ext/nonconfo/out/out.ViewNonConfo.php?nonconfoId=".$nonconfo['id'];
