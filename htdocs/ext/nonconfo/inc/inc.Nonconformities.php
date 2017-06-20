@@ -117,9 +117,25 @@ function delNonconformities($id){
 	$queryStr1 = "SELECT * FROM `tblActions` WHERE `nonconformityId` = ".(int) $id; //Actions
 	$actions = $db->getResultArray($queryStr1);
 
+	// For action comments
 	if (is_array($actions) && count($actions) > 0 && $actions != false) {
 		for ($i=0; $i < count($actions); $i++) {
-			$queryStr2 = "SELECT * FROM `tblActionsFollows` WHERE `actionId` = ".(int) $actions[$i]['id']; //Actions
+			$query1 = "SELECT * FROM `tblActionsComments` WHERE `actionId` = ".(int) $actions[$i]['id']; //Action
+			$comment = $db->getResultArray($query1);
+			if ($comment != null || $comment != false) {
+				$query2 = "DELETE FROM `tblActionsComments` WHERE `actionId` = ".(int) $actions[$i]['id'];
+				if (!$db->getResult($query2)) {
+					$db->rollbackTransaction();
+					return false;
+				}	
+			}
+		}
+	}
+
+	// For action follows
+	if (is_array($actions) && count($actions) > 0 && $actions != false) {
+		for ($i=0; $i < count($actions); $i++) {
+			$queryStr2 = "SELECT * FROM `tblActionsFollows` WHERE `actionId` = ".(int) $actions[$i]['id']; //Action
 			$follow = $db->getResultArray($queryStr2);
 			if ($follow != null || $follow != false) {
 				$queryStr3 = "DELETE FROM `tblActionsFollows` WHERE `actionId` = ".(int) $actions[$i]['id'];
