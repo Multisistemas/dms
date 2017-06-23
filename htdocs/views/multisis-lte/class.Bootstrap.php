@@ -129,10 +129,10 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
 			echo '<script src="/styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
 
-
 		echo '<script src="/styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="/styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
 		echo '<script src="/styles/'.$this->theme.'/application.js"></script>'."\n";
+		echo '<script src="/styles/'.$this->theme.'/bootstrap/js/bootstrap-2.min.js"></script>'."\n";
 		if($this->footerjs) {
 			$jscode = "$(document).ready(function () {\n";
 			foreach($this->footerjs as $script) {
@@ -1911,7 +1911,7 @@ $(function() {
 					$comment = $folder->getComment();
 					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
 					$content .= "<tr draggable=\"true\" rel=\"folder_".$folder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
-					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><i class=\"fa fa-folder\"></i></a></td>\n";
 					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
 					if($comment) {
 						$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
@@ -1939,7 +1939,7 @@ $(function() {
 						$content .= "<tr draggable=\"true\" rel=\"document_".$docid."\" class=\"table-row-document\" formtoken=\"".createFormKey('movedocument')."\">";
 
 						if (file_exists($dms->contentDir . $latestContent->getPath())) {
-							$content .= "<td><a draggable=\"false\" href=\"/op/op.Download.php?documentid=".$docid."&version=".$version."\">";
+							$content .= "<td class=\"align-center\"><a draggable=\"false\" href=\"/op/op.Download.php?documentid=".$docid."&version=".$version."\">";
 							if($previewer->hasPreview($latestContent)) {
 								$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"40\"src=\"/op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
@@ -2009,7 +2009,7 @@ $(function() {
 	function printDeleteDocumentButton($document, $msg, $return=false){ /* {{{ */
 		$docid = $document->getID();
 		$content = '';
-    $content .= '<a class="delete-document-btn" rel="'.$docid.'" msg="'.getMLText($msg).'"confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_document", array ("documentname" => $document->getName())), ENT_QUOTES).'"><i class="icon-remove"></i></a>';
+    $content .= '<a class="btn btn-danger btn-sm delete-document-btn" rel="'.$docid.'" msg="'.getMLText($msg).'"confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_document", array ("documentname" => $document->getName())), ENT_QUOTES).'"><i class="fa fa-times"></i></a> ';
 		if($return)
 			return $content;
 		else
@@ -2154,7 +2154,7 @@ $(function() {
 			$title = 'lock_document';
 		}
 		$content = '';
-    $content .= '<a class="lock-document-btn" rel="'.$docid.'" msg="'.getMLText($msg).'" title="'.getMLText($title).'"><i class="icon-'.$icon.'"></i></a>';
+    $content .= ' <a class="btn btn-warning btn-sm lock-document-btn" rel="'.$docid.'" msg="'.getMLText($msg).'" title="'.getMLText($title).'"><i class="fa fa-'.$icon.'"></i></a>';
 		if($return)
 			return $content;
 		else
@@ -2334,7 +2334,7 @@ $(document).ready( function() {
 			$links = $document->getDocumentLinks();
 			$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
-			$content .= "<td>";
+			$content .= "<td class=\"align-center\">";
 			if (file_exists($dms->contentDir . $latestContent->getPath())) { 
 
 				/*************** If the document status is equal to "released" the download will be available ***************/
@@ -2343,6 +2343,7 @@ $(document).ready( function() {
 					if($previewer->hasPreview($latestContent)) {
 						$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"/op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					} else {
+						//$content .= "<i class=\"fa fa-file-pdf-o fa-2x\"></i>";
 						$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					}
 					$content .= "</a>";
@@ -2354,6 +2355,7 @@ $(document).ready( function() {
 					if($previewer->hasPreview($latestContent)) {
 						$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"/op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					} else {
+						//$content .= "<i class=\"fa fa-file-pdf-o fa-2x\"></i>";
 						$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					}
 
@@ -2400,16 +2402,22 @@ $(document).ready( function() {
 				$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
 			}
 			if($document->getAccessMode($user) >= M_READWRITE) {
-				$content .= '<a href="/out/out.EditDocument.php?documentid='.$docID.'" title="'.getMLText("edit_document_props").'"><i class="icon-edit"></i></a>';
-			} else {
-				$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>';
-			}
+				$content .= ' <a type="button" href="/out/out.EditDocument.php?documentid='.$docID.'" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>';
+			} 
+
 			if($document->getAccessMode($user) >= M_READWRITE) {
 				$content .= $this->printLockButton($document, 'splash_document_locked', 'splash_document_unlocked', true);
 			}
 			if($enableClipboard) {
 				$content .= '<a class="addtoclipboard" rel="D'.$docID.'" msg="'.getMLText('splash_added_to_clipboard').'" title="'.getMLText("add_to_clipboard").'"><i class="icon-copy"></i></a>';
 			}
+
+			if ($status['status'] == 2 ) { 
+				$content .= ' <a type="button" href="/op/op.ViewOnline.php?documentid='.$docID.'&version='. $latestContent->getVersion().'" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>';
+			}
+
+			http://dms.dev/op/op.ViewOnline.php?documentid=58&version=2
+
 			$content .= "</div>";
 			$content .= "</td>";
 		}
@@ -2434,7 +2442,7 @@ $(document).ready( function() {
 		$content = '';
 		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" draggable=\"true\" rel=\"folder_".$subFolder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
 	//	$content .= "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-		$content .= "<td><a _rel=\"folder_".$subFolder->getID()."\" draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+		$content .= "<td class=\"align-center\"><a _rel=\"folder_".$subFolder->getID()."\" draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><i class=\"fa fa-folder fa-2x\"></i></a></td>\n";
 		$content .= "<td><a draggable=\"false\" _rel=\"folder_".$subFolder->getID()."\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
 		$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666;\">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $subFolder->getDate())."</b></span>";
 		if($comment) {

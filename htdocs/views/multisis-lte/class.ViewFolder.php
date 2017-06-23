@@ -104,7 +104,8 @@ function folderSelected(id, name) {
 //    $('.ajax-content').html('<hr>Ajax Request Completed !');
 //  }});
 //});
-	
+
+$(document).ready(function(){
 	$(function () {
     $('#viewfolder-table').DataTable({
       "paging": true,
@@ -115,6 +116,22 @@ function folderSelected(id, name) {
       "autoWidth": false
     });
   });
+
+  $("body").on("click","#thebtn",function(){
+  	  	
+    	$("#myModal").modal("show");
+        
+    	$(".blue").addClass("after_modal_appended");
+    
+    	//appending modal background inside the blue div
+    	$('.modal-backdrop').appendTo('.blue');   
+    
+    	//remove the padding right and modal-open class from the body tag which bootstrap adds when a modal is shown
+    
+    	//$('body').removeClass("modal-open")
+   	 	$('body').css("padding-right","");     
+  });
+});
 
 <?php
 		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
@@ -170,151 +187,12 @@ function folderSelected(id, name) {
 
 		echo $this->getFolderPathHTML($folder);
 
-		/*echo "<div class=\"ajax-content\"></div>";
-
-		echo "<button type=\"button\" class=\"btn btn-default btn-lrg ajax\" title=\"Ajax Request\">";
-    echo "<i class=\"fa fa-spin fa-refresh\"></i>&nbsp; Get External Content";
-    echo "</button>";*/
-
-		// dynamic columns - left column removed if no content and right column then fills span12.
-
-		/*if (!($enableFolderTree || $enableClipboard)) {
-			$leftDiv = 0;
-			$rightDiv = 12;
-		} else {
-			$leftDiv = 4;
-			$rightDiv = 8;
-		}
-
-		// Print folder tree // <----------------------------------------------------/
-		if ($leftDiv > 0) {
-
-			echo "<div class=\"col-md-".$leftDiv."\">";
-			echo "<div class=\"box box-success box-solid\">";
-			echo "<div class=\"box-header with-border\">";
-			echo "<h3 class=\"box-title\">".getMLText("folderTree")."</h3>";
-			echo "<div class=\"box-tools pull-right\">";
-      echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>";
-      echo "</button>";
-      echo "</div>";
-      echo "</div>";
-      echo "<div class=\"box-body\" style=\"display: block;\">";
-			if ($enableFolderTree) {
-				if ($showtree==1){
-					$this->printNewTreeNavigationHtml($folderid, M_READ, 0, '', $this->params['expandFolderTree'] == 2, $orderby);
-				} else {
-					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"fa fa-plus-circle\"></i></a>", true);
-				}
-			}
-			echo $this->callHook('leftContent');
-			if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard(), $previewer);
-
-			echo "</div>";
-			echo "</div>";
-			echo "</div>";
-		}*/
-
-		// Print forder info // <----------------------------------------------------/
-
-		/*echo "<div class=\"col-md-".$rightDiv."\">\n";
-
-		// If dropupload is enable
-		if ($enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
-			echo "<div class=\"col-md-12\">";
-			$this->contentHeading(getMLText("dropupload"), true);
-			//			$this->addFooterJS("SeedDMSUpload.setUrl('../op/op.Ajax.php');");
-			//			$this->addFooterJS("SeedDMSUpload.setAbortBtnLabel('".getMLText("cancel")."');");
-			//			$this->addFooterJS("SeedDMSUpload.setEditBtnLabel('".getMLText("edit_document_props")."');");
-			//			$this->addFooterJS("SeedDMSUpload.setMaxFileSize(".SeedDMS_Core_File::parse_filesize(ini_get("upload_max_filesize")).");");
-			//			$this->addFooterJS("SeedDMSUpload.setMaxFileSizeMsg('".getMLText("uploading_maxsize")."');");
-			?>
-			<div id="dragandrophandler" class="well alert" data-target="<?php echo $folder->getID(); ?>" data-formtoken="<?php echo createFormKey('adddocument'); ?>"><?php printMLText('drop_files_here'); ?></div>
-			<?php
-			echo "</div>";
-		}
-
-		echo "<div class=\"box box-warning box-solid\">";
-		echo "<div class=\"box-header with-border\">";
-		echo "<h3 class=\"box-title\">".getMLText("folder_infos")."</h3>";
-		echo "<div class=\"box-tools pull-right\">";
-    echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"remove\"><i class=\"fa fa-times\"></i>";
-    echo "</button>";
-    echo "</div>";
-    echo "</div>";
-    echo "<div class=\"box-body\" style=\"display: block;\">";
-
-		$txt = $this->callHook('folderInfo', $folder);
-		if(is_string($txt))
-			echo $txt;
-		else {
-			$owner = $folder->getOwner();
-			echo "<table class=\"table-condensed\">\n";
-			echo "<tr>";
-			echo "<td>".getMLText("owner").":</td>\n";
-			echo "<td><a href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a></td>\n";
-			echo "</tr>";
-			echo "<tr>";
-			echo "<td>".getMLText("creation_date").":</td>";
-			echo "<td>".getLongReadableDate($folder->getDate())."</td>";
-			echo "</tr>";
-			if($folder->getComment()) {
-				echo "<tr>";
-				echo "<td>".getMLText("comment").":</td>\n";
-				echo "<td>".htmlspecialchars($folder->getComment())."</td>\n";
-				echo "</tr>";
-			}
-
-			if($user->isAdmin()) {
-				echo "<tr>";
-				echo "<td>".getMLText('default_access').":</td>";
-				echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
-				echo "</tr>";
-				if($folder->inheritsAccess()) {
-					echo "<tr>";
-					echo "<td>".getMLText("access_mode").":</td>\n";
-					echo "<td>";
-					echo getMLText("inherited")."<br />";
-					$this->printAccessList($folder);
-					echo "</tr>";
-				} else {
-					echo "<tr>";
-					echo "<td>".getMLText('access_mode').":</td>";
-					echo "<td>";
-					$this->printAccessList($folder);
-					echo "</td>";
-					echo "</tr>";
-				}
-			}
-			$attributes = $folder->getAttributes();
-			if($attributes) {
-				foreach($attributes as $attribute) {
-					$arr = $this->callHook('showFolderAttribute', $folder, $attribute);
-					if(is_array($arr)) {
-						echo $txt;
-						echo "<tr>";
-						echo "<td>".$arr[0].":</td>";
-						echo "<td>".$arr[1].":</td>";
-						echo "</tr>";
-					} else {
-						$attrdef = $attribute->getAttributeDefinition();
-			?>
-					<tr>
-					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-					<td><?php echo htmlspecialchars(implode(', ', $attribute->getValueAsArray())); ?></td>
-					</tr>
-			<?php
-					}
-				}
-			}
-			echo "</table>\n";
-			echo "</div>";
-			echo "</div>";
-		}*/
+		
 
 		//// Folder content ////
 
 		echo "<div class=\"row\">";
-		echo "<div class=\"col-md-12\">\n";
+		echo "<div class=\"col-md-12\">";
 		echo "<div class=\"box box-primary\">";
 		echo "<div class=\"box-header with-border\">";
     echo "<h3 class=\"box-title\">".getMLText("folder_contents")."</h3>";
@@ -375,9 +253,40 @@ function folderSelected(id, name) {
 		echo "</div>";
 		echo "</div>";
 		echo "</div>";
-		echo "</div>"; // End folder content table		
+		echo "</div>"; // End folder content table
+		echo "</div>"; // End of right column div
 
-		echo "</div>\n"; // End of right column div
+		?>
+
+<!-- Button trigger modal
+<div class="blue block">
+			 <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+          </div>
+          <div class="modal-body">
+            <p>Some text in the modal.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+		</div>
+
+<button id="thebtn">
+  Launch demo modal
+</button> -->
+
+
+
+<?php
 		echo "</div>\n"; // End of div around left and right column
 		echo "</div>\n"; // End of row
 
