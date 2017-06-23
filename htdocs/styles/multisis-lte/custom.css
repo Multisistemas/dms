@@ -1,0 +1,87 @@
+/**
+ * File: custom css for multisis-lte, DMS theme
+ * Author: Luis Medrano <lmedrano@multisistemas.com.sv>
+ */
+
+/* ---------- checkboxes style ------------ */
+.material-switch > input[type="checkbox"] {
+    display: none;   
+}
+
+.material-switch > label {
+    cursor: pointer;
+    height: 0px;
+    position: relative; 
+    width: 40px;  
+}
+
+.material-switch > label::before {
+    background: rgb(0, 0, 0);
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    content: '';
+    height: 16px;
+    margin-top: -8px;
+    position:absolute;
+    opacity: 0.3;
+    transition: all 0.4s ease-in-out;
+    width: 40px;
+}
+.material-switch > label::after {
+    background: rgb(255, 255, 255);
+    border-radius: 16px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    content: '';
+    height: 24px;
+    left: -4px;
+    margin-top: -8px;
+    position: absolute;
+    top: -4px;
+    transition: all 0.3s ease-in-out;
+    width: 24px;
+}
+.material-switch > input[type="checkbox"]:checked + label::before {
+    background: inherit;
+    opacity: 0.5;
+}
+.material-switch > input[type="checkbox"]:checked + label::after {
+    background: inherit;
+    left: 20px;
+}
+
+/* --------------------- End ---------------------- */
+
+/* ------------- Profile picture ------------------ */
+
+.img-nav-mini {
+    width: 100% !important;
+    max-width: 25px !important;
+    height: auto;
+}
+
+.navbar-nav>li>a {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+}
+
+.a-fix-height {
+    height: 50px !important;
+}
+
+/* ------------- Control sidebar ------------------ */
+.control-sidebar-heading {
+    text-align: center !important;
+}
+
+.sidebar-menu>li>a {
+    padding: 5px 5px 5px 15px !important; 
+}
+
+/* --------------------- End ---------------------- */
+
+/* ------------- Grids ------------------ */
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+/* --------------------- End ---------------------- */

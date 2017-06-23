@@ -488,7 +488,7 @@ Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
 'folder_deleted_email_subject' => 'Carpeta eliminada',
-'folder_infos' => 'Informaciones de Carpeta',
+'folder_infos' => 'Informaciones de carpeta',
 'folder_moved_email' => 'Carpeta movida',
 'folder_moved_email_body' => 'Carpeta movida
 Carpeta: [name]
@@ -1568,8 +1568,11 @@ URL: [url]',
 'nonconfo' => 'No Conformidades',
 'nonconfo_add_nonconfo' => 'Agregar no conformidad',
 'nonconfo_view_all' => 'No conformidades',
+'nonconfo_view' => 'Ver todas',
 'nonconfo_add_process' => 'Agregar proceso',
 'nonconfo_define_owners' => 'Definir propietarios de procesos',
+'folderTree' => 'Árbol de carpetas',
+'tools' => 'Herramientas',
 );
 
 // TODO: Mover strings de extensión de no conformiadad a su propio archivo de lenguaje.

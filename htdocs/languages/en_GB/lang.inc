@@ -1597,5 +1597,12 @@ URL: [url]',
 'zh_TW' => 'Chinese (TW)',
 'no_equal_file_extension' => 'Uploaded file type does not match with the existing file type in current version',
 'nonconfo' => 'Non Conformities',
+'nonconfo_add_nonconfo' => 'Add nonconformity',
+'nonconfo_view_all' => 'Nonconformities',
+'nonconfo_view' => 'View all',
+'nonconfo_add_process' => 'Add process',
+'nonconfo_define_owners' => 'Add owner process',
+'folderTree' => 'Folder tree',
+'tools' => 'Tools',
 );
 ?>

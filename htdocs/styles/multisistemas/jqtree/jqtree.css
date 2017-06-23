@@ -32,11 +32,11 @@ ul.jqtree-tree .jqtree-toggler {
     line-height: 12px; */
     font-family: arial;  /* fix for ie9 */
     border-bottom: none;
-    color: #333;
+    color: #ddd;
 }
 
 ul.jqtree-tree .jqtree-toggler:hover {
-    color: #000;
+    color: #fff;
 }
 
 ul.jqtree-tree .jqtree-element {
@@ -44,7 +44,7 @@ ul.jqtree-tree .jqtree-element {
 }
 
 ul.jqtree-tree .jqtree-title {
-    color: #1C4257;
+    color: #d2d6de;
     vertical-align: middle;
 }
 
