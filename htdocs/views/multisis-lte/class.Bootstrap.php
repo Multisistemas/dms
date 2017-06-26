@@ -90,7 +90,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		// Js Scripts
 		echo '<link rel="shortcut icon" href="/styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
 		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/plugins/jQuery/jquery-2.2.3.min.js"></script>'."\n";
-		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/plugins/bootbox/bootbox.min.js"></script>'."\n";
+		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/plugins/bootbox/bootbox-4.4.0.min.js"></script>'."\n";
 		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/passwordstrength/jquery.passwordstrength.js"></script>'."\n";
 		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/plugins/noty/jquery.noty.js"></script>'."\n";
 		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/plugins/noty/layouts/topRight.js"></script>'."\n";
@@ -2060,11 +2060,21 @@ $(function() {
 				confirmmsg = $(ev.currentTarget).attr('confirmmsg');
 				msg = $(ev.currentTarget).attr('msg');
 				formtoken = '".createFormKey('removedocument')."';
-				bootbox.dialog(confirmmsg, [{
-					\"label\" : \"<i class='icon-remove'></i> ".getMLText("rm_document")."\",
-					\"class\" : \"btn-danger\",
-					\"callback\": function() {
-						$.get('/op/op.Ajax.php',
+				bootbox.confirm({
+    		message: confirmmsg,
+    		buttons: {
+        	confirm: {
+            label: \"<i class='icon-remove'></i> ".getMLText("rm_document")."\",
+            className: 'btn-danger'
+        	},
+        	cancel: {
+            label: \"".getMLText("cancel")."\",
+            className: 'btn-default'
+        	}
+    		},
+	    		callback: function (result) {
+	    			if (result) {
+	    				$.get('/op/op.Ajax.php',
 							{ command: 'deletedocument', id: id, formtoken: formtoken },
 							function(data) {
 								if(data.success) {
@@ -2089,14 +2099,10 @@ $(function() {
 								}
 							},
 							'json'
-						);
+							);
+	    			}	
 					}
-				}, {
-					\"label\" : \"".getMLText("cancel")."\",
-					\"class\" : \"btn-cancel\",
-					\"callback\": function() {
-					}
-				}]);
+				});
 			});
 		});
 		";
@@ -2134,43 +2140,49 @@ $(function() {
 				confirmmsg = $(ev.currentTarget).attr('confirmmsg');
 				msg = $(ev.currentTarget).attr('msg');
 				formtoken = '".createFormKey('removefolder')."';
-				bootbox.dialog(confirmmsg, [{
-					\"label\" : \"<i class='icon-remove'></i> ".getMLText("rm_folder")."\",
-					\"class\" : \"btn-danger\",
-					\"callback\": function() {
-						$.get('/op/op.Ajax.php',
-							{ command: 'deletefolder', id: id, formtoken: formtoken },
-							function(data) {
-								if(data.success) {
-									$('#table-row-folder-'+id).hide('slow');
-									noty({
-										text: msg,
-										type: 'success',
-										dismissQueue: true,
-										layout: 'topRight',
-										theme: 'defaultTheme',
-										timeout: 1500,
-									});
-								} else {
-									noty({
-										text: data.message,
-										type: 'error',
-										dismissQueue: true,
-										layout: 'topRight',
-										theme: 'defaultTheme',
-										timeout: 3500,
-									});
-								}
-							},
-							'json'
-						);
-					}
-				}, {
-					\"label\" : \"".getMLText("cancel")."\",
-					\"class\" : \"btn-cancel\",
-					\"callback\": function() {
-					}
-				}]);
+				bootbox.confirm({
+    		message: confirmmsg,
+    		buttons: {
+        	confirm: {
+            label: \"<i class='icon-remove'></i> ".getMLText("rm_folder")."\",
+            className: 'btn-danger'
+        	},
+        	cancel: {
+            label: \"".getMLText("cancel")."\",
+            className: 'btn-default'
+        	}
+    		}, 
+	    		callback: function (result) {
+	    			if (result) {
+	    				$.get('/op/op.Ajax.php',
+								{ command: 'deletefolder', id: id, formtoken: formtoken },
+									function(data) {
+										if(data.success) {
+											$('#table-row-folder-'+id).hide('slow');
+												noty({
+												text: msg,
+												type: 'success',
+												dismissQueue: true,
+												layout: 'topRight',
+												theme: 'defaultTheme',
+												timeout: 1500,
+											});
+										} else {
+											noty({
+											text: data.message,
+											type: 'error',
+											dismissQueue: true,
+											layout: 'topRight',
+											theme: 'defaultTheme',
+											timeout: 3500,
+										});
+									}
+								},
+								'json'
+							);
+						}	
+	    		}
+	    	});
 			});
 		});
 		";

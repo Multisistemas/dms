@@ -121,7 +121,7 @@ function checkForm2() {
 	msg = new Array();
 	if (document.form2.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
 	if (document.form2.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-	if (document.form2.expdate.value == "") msg.push("<?php printMLText("js_no_expdate");?>");
+	/*if (document.form2.expdate.value == "") msg.push("<?php printMLText("js_no_expdate");?>");*/
 	if (document.form2.theuserfile.value == "") msg.push("<?php printMLText("js_no_file");?>");
 	if (msg != "") {
   	noty({
@@ -188,7 +188,7 @@ $(document).ready(function(){
 		messages: {
 			name: "<?php printMLText("js_no_name");?>",
 			comment: "<?php printMLText("js_no_comment");?>",
-			expdate: "<?php printMLText("js_no_expdate");?>",
+			/*expdate: "<?php printMLText("js_no_expdate");?>",*/
 			theuserfile: "<?php printMLText("js_no_file");?>",
 		},
 	});
@@ -474,7 +474,7 @@ $(document).ready(function(){
 			        </div>
 			        <div class="checkbox">
 			        	<label>
-									<input type="checkbox" id="expires" name="expires" value="false"><?php printMLText("does_not_expire");?>
+									<input type="checkbox" id="expires" name="expires" value="false" checked="true"><?php printMLText("does_not_expire");?>
 				        </label>
 	        		</div>
 			    	</div>
@@ -643,23 +643,23 @@ $(document).ready(function(){
 			else {
 				echo $this->folderListRow($subFolder);
 			?>
-				<tr id="table-move-folder-<?php echo $subFolder->getID(); ?>" class="table-row-folder odd" style="display:none;">
+				<tr id="table-move-folder-<?php echo $subFolder->getID(); ?>" class="table-row-folder odd tr-border" style="display:none;">
 					<td>
 					<form action="../op/op.MoveFolder.php" name="form3">
 					<input type="hidden" name="documentid" value="<?php print $subFolder->getID();?>">
-						<div class="form-group">
+					</td>
+					<td>
+					<div>
 							<label><?php printMLText("choose_target_folder");?>:</label>
-							<?php $this->printFolderChooserHtml("form1", M_READWRITE, $folder->getID());?>
-						</div>
-						<div class="box-footer">
-							<button class="btn btn-default cancel-folder-mv" rel="<?php echo $subFolder->getID(); ?>"><?php echo getMLText("cancel"); ?></button>
-							<input class="btn btn-success" type="submit" value="<?php printMLText("move"); ?>">
-						</div>
-					</form>
+							<?php $this->printFolderChooserHtml("form3", M_READWRITE, $folder->getID());?>
+					</div>
+					</td>
+					<td>
+						<button class="btn btn-default cancel-folder-mv" rel="<?php echo $subFolder->getID(); ?>"><?php echo getMLText("cancel"); ?></button>
+						<input class="btn btn-success" type="submit" value="<?php printMLText("move"); ?>">
 					</td>
 					<td></td>
-					<td></td>
-					<td></td>
+					</form>
 				</tr>
 				<?php
 			}
@@ -673,18 +673,22 @@ $(document).ready(function(){
 			else {
 				echo $this->documentListRow($document, $previewer);
 				?>
-					<tr id="table-move-document-<?php echo $document->getID(); ?>" class="table-row-document odd" style="display:none;">
-					<td colspan="4">
+					<tr id="table-move-document-<?php echo $document->getID(); ?>" class="table-row-document odd tr-border" style="display:none;">
+					<td>
 					<form action="../op/op.MoveDocument.php" name="form4">
 					<input type="hidden" name="documentid" value="<?php print $document->getID();?>">
-						<div class="form-group">
+					</td>
+					<td>
+						<div>
 							<label><?php printMLText("choose_target_folder");?>:</label>
 							<?php $this->printFolderChooserHtml("form4", M_READWRITE, -1);?>
 						</div>
-						<div class="box-footer">
-							<button class="btn btn-default cancel-doc-mv" rel="<?php echo $document->getID(); ?>"><?php echo getMLText("cancel"); ?></button>
-							<input class="btn btn-success" type="submit" value="<?php printMLText("move"); ?>">
-						</div>
+					</td>
+					<td>
+						<button class="btn btn-default cancel-doc-mv" rel="<?php echo $document->getID(); ?>"><?php echo getMLText("cancel"); ?></button>
+						<input class="btn btn-success" type="submit" value="<?php printMLText("move"); ?>">
+					</td>
+					<td></td>
 					</form>
 					</td>
 					</tr>

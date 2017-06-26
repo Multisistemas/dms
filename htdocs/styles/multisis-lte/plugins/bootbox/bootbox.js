@@ -423,7 +423,7 @@ var bootbox = window.bootbox || (function($) {
         // and https://github.com/twitter/bootstrap/issues/4474
         // for an explanation of the inline overflow: hidden
 
-        var parts = ["<div class='bootbox modal' style='overflow:hidden;'>"];
+        var parts = ["<div class='modal fade modal-danger' style='overflow:hidden;'>"];
 
         if (options['header']) {
             var closeButton = '';
