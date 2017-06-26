@@ -120,14 +120,21 @@ myTA.focus();
 <table>
 
 	<tr>
-		<td valign="top" class="inputDescription"><?php echo getMLText("keywords")?>:</td>
-		<td><textarea id="keywordta" rows="5" cols="30"></textarea></td>
+		<td valign="top" class="inputDescription">
+		<label class="control-label"><?php echo getMLText("keywords")?>:</label></td>
+		<td>
+		<div class="form-group">
+			<textarea id="keywordta" rows="5" cols="30" class="form-control"></textarea></td>
+		</div>
 	</tr>
 	
 	<tr>
-		<td class="inputDescription"><?php echo getMLText("global_default_keywords")?>:</td>
+		<td class="inputDescription">
+		<label class="control-label"><?php echo getMLText("global_default_keywords")?>:</label>
+		</td>
 		<td>
-			<select _onchange="showKeywords(0)" id="categories0">
+			<div class="form-group">
+			<select _onchange="showKeywords(0)" id="categories0" class="form-control">
 				<option value="-1"><?php echo getMLText("choose_category")?>
 <?php
 				foreach ($categories as $category) {
@@ -139,6 +146,7 @@ myTA.focus();
 				}
 ?>
 			</select>
+			</div>
 		</td>
 	</tr>
 <?php
@@ -148,7 +156,9 @@ myTA.focus();
 			continue;
 ?>
 	<tr id="keywords<?php echo $category->getID()?>" style="display : none;">
-		<td valign="top" class="inputDescription"><?php echo getMLText("default_keywords")?>:</td>
+		<td valign="top" class="inputDescription">
+		<label class="control-label"><?php echo getMLText("default_keywords")?>:</label>
+		</td>
 		<td>
 			<?php
 				$lists = $category->getKeywordLists();
@@ -166,9 +176,11 @@ myTA.focus();
 	</tr>
 <?php } ?>
 	<tr>
-		<td class="inputDescription"><?php echo getMLText("personal_default_keywords")?>:</td>
+		<td class="inputDescription">
+		<label class="control-label"><?php echo getMLText("personal_default_keywords")?>:</label></td>
 		<td>
-			<select _onchange="showKeywords(1)" id="categories1">
+		<div class="form-group">
+			<select _onchange="showKeywords(1)" id="categories1" class="form-control">
 				<option value="-1"><?php echo getMLText("choose_category")?>
 <?php
 				foreach ($categories as $category) {
@@ -180,6 +192,7 @@ myTA.focus();
 				}
 ?>
 			</select>
+			</div>
 		</td>
 	</tr>
 <?php
@@ -189,7 +202,8 @@ myTA.focus();
 				continue;
 ?>
 		<tr id="keywords<?php echo $category->getID()?>" style="display : none;">
-			<td valign="top" class="inputDescription"><?php echo getMLText("default_keywords")?>:</td>
+			<td valign="top" class="inputDescription">
+			<label class="control-label"><?php echo getMLText("default_keywords")?>:</td></label>
 			<td class="standardText">
 <?php
 					$lists = $category->getKeywordLists();				

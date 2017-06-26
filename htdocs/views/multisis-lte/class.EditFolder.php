@@ -32,9 +32,16 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_EditFolder extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
 		$strictformcheck = $this->params['strictformcheck'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
+
+function folderSelected(id, name) {
+	window.location = '../out/out.ViewFolder.php?folderid=' + id;
+}
+
 function checkForm()
 {
 	msg = new Array();
@@ -84,6 +91,7 @@ $(document).ready(function() {
 	});
 });
 <?php
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 0, "");
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -97,12 +105,29 @@ $(document).ready(function() {
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
 
-		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
+		/*$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 		$this->globalNavigation($folder);
 		$this->contentStart();
 		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
 		$this->contentHeading(getMLText("edit_folder_props"));
-		$this->contentContainerStart();
+		$this->contentContainerStart();*/
+
+		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();
+		echo $this->getDefaultFolderPathHTML($folder);
+
+		//// Folder content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+		echo "<div class=\"box box-primary\">";
+		echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".getMLText("edit_folder_props")."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body no-padding\">";
+    
 ?>
 <form class="form-horizontal" action="../op/op.EditFolder.php" id="form1" name="form1" method="post">
 		<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
@@ -157,8 +182,16 @@ $(document).ready(function() {
 			</div>
 </form>
 <?php
-		$this->contentContainerEnd();
+		
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

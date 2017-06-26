@@ -93,10 +93,50 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		header('Content-Type: application/javascript; charset=UTF-8');
 		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder'));
 ?>
+
 function folderSelected(id, name) {
 	window.location = '../out/out.ViewFolder.php?folderid=' + id;
 }
 
+function checkForm() {
+	msg = new Array();
+	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+
+function checkForm2() {
+	msg = new Array();
+	if (document.form2.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	if (document.form2.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if (document.form2.expdate.value == "") msg.push("<?php printMLText("js_no_expdate");?>");
+	if (document.form2.theuserfile.value == "") msg.push("<?php printMLText("js_no_file");?>");
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
 
 //$(document).ajaxStart(function() { Pace.restart(); });
 //  $('.ajax').click(function(){
@@ -106,6 +146,102 @@ function folderSelected(id, name) {
 //});
 
 $(document).ready(function(){
+	
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
+
+	$('body').on('submit', '#form2', function(ev){
+		if(checkForm2()) return;
+		ev.preventDefault();
+	});
+
+	$("#form1").validate({
+		invalidHandler: function(e, validator) {
+			noty({
+				text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
+				type: 'error',
+				dismissQueue: true,
+				layout: 'topRight',
+				theme: 'defaultTheme',
+				timeout: 1500,
+			});
+		},
+		messages: {
+			name: "<?php printMLText("js_no_name");?>",
+			comment: "<?php printMLText("js_no_comment");?>"
+		},
+	});
+
+	$("#form2").validate({
+		invalidHandler: function(e, validator) {
+			noty({
+				text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
+				type: 'error',
+				dismissQueue: true,
+				layout: 'topRight',
+				theme: 'defaultTheme',
+				timeout: 1500,
+			});
+		},
+		messages: {
+			name: "<?php printMLText("js_no_name");?>",
+			comment: "<?php printMLText("js_no_comment");?>",
+			expdate: "<?php printMLText("js_no_expdate");?>",
+			theuserfile: "<?php printMLText("js_no_file");?>",
+		},
+	});
+
+	$("#add-folder").on("click", function(){
+ 		  $("#div-add-folder").show('slow');
+  });
+
+  $("#cancel-add-folder").on("click", function(){
+ 		  $("#div-add-folder").hide('slow');
+  });
+
+  $("#add-document").on("click", function(){
+ 		  $("#div-add-document").show('slow');
+  });
+
+  $(".cancel-add-document").on("click", function(){
+ 		  $("#div-add-document").hide('slow');
+  });
+
+  $(".move-doc-btn").on("click", function(ev){
+  	id = $(ev.currentTarget).attr('rel');
+ 		$("#table-move-document-"+id).show('slow');
+  });
+
+  $(".cancel-doc-mv").on("click", function(ev){
+  	id = $(ev.currentTarget).attr('rel');
+ 		$("#table-move-document-"+id).hide('slow');
+  });
+
+  $(".move-folder-btn").on("click", function(ev){
+  	id = $(ev.currentTarget).attr('rel');
+ 		$("#table-move-folder-"+id).show('slow');
+  });
+
+  $(".cancel-folder-mv").on("click", function(ev){
+  	id = $(ev.currentTarget).attr('rel');
+ 		$("#table-move-folder-"+id).hide('slow');
+  });
+
+  $("#btn-next-1").on("click", function(){
+  	$("#nav-tab-1").removeClass("active");
+  	$("#nav-tab-2").addClass("active");
+  	$('html, body').animate({scrollTop: 0}, 800);
+  });
+
+  $("#btn-next-2").on("click", function(){
+  	$("#nav-tab-2").removeClass("active");
+  	$("#nav-tab-3").addClass("active");
+  	$('html, body').animate({scrollTop: 0}, 800);
+  });
+
+  /* ---- For datatables ---- */
 	$(function () {
     $('#viewfolder-table').DataTable({
       "paging": true,
@@ -113,25 +249,13 @@ $(document).ready(function(){
       "searching": true,
       "ordering": false,
       "info": false,
-      "autoWidth": false
+      "autoWidth": true
     });
   });
 
-  $("body").on("click","#thebtn",function(){
-  	  	
-    	$("#myModal").modal("show");
-        
-    	$(".blue").addClass("after_modal_appended");
-    
-    	//appending modal background inside the blue div
-    	$('.modal-backdrop').appendTo('.blue');   
-    
-    	//remove the padding right and modal-open class from the body tag which bootstrap adds when a modal is shown
-    
-    	//$('body').removeClass("modal-open")
-   	 	$('body').css("padding-right","");     
-  });
 });
+
+	
 
 <?php
 		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
@@ -146,6 +270,9 @@ $(document).ready(function(){
 
 		$this->printDeleteFolderButtonJs();
 		$this->printDeleteDocumentButtonJs();
+		$this->printKeywordChooserJs("form2");
+		$this->printFolderChooserJs("form3");
+		$this->printFolderChooserJs("form4");
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -170,7 +297,7 @@ $(document).ready(function(){
 		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet">'."\n", 'css');
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/datatables/jquery.dataTables.min.js"></script>'."\n", 'js');
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/datatables/dataTables.bootstrap.min.js"></script>'."\n", 'js');
-
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
 		echo $this->callHook('startPage');
 
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))), "skin-blue sidebar-mini");
@@ -187,11 +314,296 @@ $(document).ready(function(){
 
 		echo $this->getFolderPathHTML($folder);
 
-		
+		echo "<div class=\"row\">";
+
+		//// Add Folder ////
+		echo "<div class=\"col-md-12 div-hidden\" id=\"div-add-folder\">";
+		echo "<div class=\"box box-success div-green-border\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".getMLText("add_subfolder")."</h3>";
+    echo "<div class=\"box-tools pull-right\">";
+    echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"remove\"><i class=\"fa fa-times\"></i></button>";
+    echo "</div>";
+    echo "<!-- /.box-tools -->";
+    echo "</div>";
+    echo "<!-- /.box-header -->";
+    echo "<div class=\"box-body\">";
+    ?>
+    <form class="form-horizontal" action="../op/op.AddSubFolder.php" id="form1" name="form1" method="post">
+			<?php echo createHiddenFieldWithKey('addsubfolder'); ?>
+			<input type="hidden" name="folderid" value="<?php print $folder->getId();?>">
+			<input type="hidden" name="showtree" value="<?php echo showtree();?>">
+			<div class="box-body">
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label"><?php printMLText("name");?>:</label>
+					<div class="col-sm-10"><input class="form-control" type="text" name="name" size="60" required></div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label"><?php printMLText("comment");?>:</label>
+					<div class="col-sm-10"><textarea class="form-control" name="comment" rows="4" cols="80"></textarea></div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label"><?php printMLText("sequence");?>:</label>
+					<div class="col-sm-10">
+						<?php $this->printSequenceChooser($folder->getSubFolders('s')); if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off');?>
+					</div>
+				</div>
+				<?php
+					$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_folder, SeedDMS_Core_AttributeDefinition::objtype_all));
+					if($attrdefs) {
+						foreach($attrdefs as $attrdef) {
+						?>
+						<div class="form-group">
+							<label class="col-sm-2 control-label"><?php echo htmlspecialchars($attrdef->getName()); ?>:</label>
+							<div class="col-sm-10"><?php $this->printAttributeEditField($attrdef, '') ?></div>
+						</div>
+						<?php
+						}
+					}
+				?>
+				<div class="box-footer">
+					<a id="cancel-add-folder" type="button" class="btn btn-default"><?php echo getMLText("cancel"); ?></a type="button">
+					<button type="submit" class="btn btn-info pull-right"><i class="fa fa-save"></i> <?php printMLText("save")?></button>
+				</div>
+		</div>
+		</form>
+    <?php
+    echo "</div>";
+    echo "<!-- /.box-body -->";
+    echo "</div>";
+		echo "</div>";
+
+		//// Add Document ////
+		echo "<div class=\"col-md-12 div-hidden\" id=\"div-add-document\">";
+		echo "<div class=\"box box-warning div-bkg-color\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".getMLText("add_document")."</h3>";
+    echo "<div class=\"box-tools pull-right\">";
+    echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"remove\"><i class=\"fa fa-times\"></i></button>";
+    echo "</div>";
+    echo "<!-- /.box-tools -->";
+    echo "</div>";
+    echo "<!-- /.box-header -->";
+    echo "<div class=\"box-body\">";
+    ?>
+
+   	<form action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" id="form2" name="form2">
+		<?php echo createHiddenFieldWithKey('adddocument'); ?>
+		<input type="hidden" name="folderid" value="<?php print $folderid; ?>">
+		<input type="hidden" name="showtree" value="<?php echo showtree();?>">
+			<div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+          <li class="active" id="nav-tab-1"><a href="#tab_1" data-toggle="tab" aria-expanded="true">1 - <?php echo getMLText("document_infos"); ?></a></li>
+          <li class="" id="nav-tab-2"><a href="#tab_2" data-toggle="tab" aria-expanded="false">2 - <?php echo getMLText("version_info"); ?></a></li>
+          <li class="" id="nav-tab-3"><a href="#tab_3" data-toggle="tab" aria-expanded="false">3 - <?php echo getMLText("add_document_notify"); ?></a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab_1">
+			    	<div class="form-group">
+	            <label><?php echo getMLText("name"); ?>: <span class="is-required">*</span></label>
+	            <input type="text" class="form-control" name="name" id="" placeholder="" required>
+	          </div>
+	          <div class="form-group">
+	            <label><?php echo getMLText("comment"); ?>: <span class="is-required">*</span></label>
+	            <textarea name="comment" class="form-control" rows="3" placeholder="" required></textarea>
+	          </div>
+	          <div class="form-group">
+	            <label><?php echo getMLText("keywords");?>:</label>
+	            <?php $this->printKeywordChooserHtml("form2");?>
+	          </div>
+	          <div class="form-group">
+	            <label><?php printMLText("categories")?>:</label>
+	            <select class="form-control chzn-select" name="categories[]" multiple="multiple" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
+							<?php
+								$categories = $dms->getDocumentCategories();
+								foreach($categories as $category) {
+									echo "<option value=\"".$category->getID()."\"";
+									echo ">".$category->getName()."</option>";	
+								}
+							?>
+							</select>
+	          </div>
+	          <div class="form-group">
+	            <label><?php printMLText("sequence");?>:</label>
+	            <?php $this->printSequenceChooser($folder->getDocuments('s')); if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off'); ?>
+	          </div>
+	          <div class="form-group">
+	          	<?php if($user->isAdmin()) { ?>
+							<label><?php printMLText("owner");?>:</label>
+							<select class="chzn-select form-control" name="ownerid">
+							<?php
+							$allUsers = $dms->getAllUsers();
+							foreach ($allUsers as $currUser) {
+								if ($currUser->isGuest())
+									continue;
+								print "<option value=\"".$currUser->getID()."\" ".($currUser->getID()==$user->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($currUser->getFullName())."\"";
+								print ">" . htmlspecialchars($currUser->getLogin()) . "</option>\n";
+							}
+							?>
+							</select>
+						<?php } ?>
+	          </div>
+
+	          <div class="form-group">
+	          	<?php
+							$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_all));
+							if($attrdefs) {
+								foreach($attrdefs as $attrdef) {
+									$arr = $this->callHook('editDocumentAttribute', null, $attrdef);
+									if(is_array($arr)) {
+										echo "<label>".$arr[0].":</label>";
+										echo $arr[1];
+									} else {
+							?>
+							<label><?php echo htmlspecialchars($attrdef->getName()); ?></label>
+							<?php $this->printAttributeEditField($attrdef, ''); ?>
+							<?php
+									}
+								}
+							}
+							?>
+						</div>
+						<div class="form-group">
+							<label><?php printMLText("expires");?>: <span class="is-required">*</span></label>
+			        <div class="input-append date span12" id="expirationdate" data-date="" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>" data-checkbox="#expires">
+			          <input class="form-control" size="16" name="expdate" type="text" value="">
+			          <span class="add-on"></span>
+			        </div>
+			        <div class="checkbox">
+			        	<label>
+									<input type="checkbox" id="expires" name="expires" value="false"><?php printMLText("does_not_expire");?>
+				        </label>
+	        		</div>
+			    	</div>
+			    	<div class="box-footer">
+							<a type="button" class="btn btn-default cancel-add-document"><?php echo getMLText("cancel"); ?></a>
+							<a id="btn-next-1" href="#tab_2" data-toggle="tab" type="button" class="btn btn-info pull-right"><?php echo getMLText("next"); ?> <i class="fa fa-arrow-right"></i></a>
+						</div>
+          </div>
+          <!-- /.tab-pane -->
+          <div class="tab-pane" id="tab_2">
+          	<div class="form-group">
+	            <label><?php printMLText("version");?>:</label>
+	            <input type="text" class="form-control" name="reqversion" value="1">
+	          </div>
+	          <?php $msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize"); ?>
+   					<?php $this->warningMsg($msg); ?>
+	          <div class="form-group">
+	            <label><?php printMLText("local_file");?>: <span class="is-required">*</span></label>
+	            <?php
+								$this->printFileChooser('userfile[]', false);
+							?>
+	          </div>
+	          <div class="form-group">
+	          	<label><?php printMLText("comment_for_current_version");?>:</label>
+	          	<textarea class="form-control" name="version_comment" rows="3" cols="80"></textarea>
+	          	<div class="checkbox">
+	          		<label><input type="checkbox" name="use_comment" value="1" /> <?php printMLText("use_comment_of_document"); ?></label>
+	          	</div>
+	          </div>
+						<?php
+							$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
+								if($attrdefs) {
+									foreach($attrdefs as $attrdef) {
+										$arr = $this->callHook('editDocumentAttribute', null, $attrdef);
+										if(is_array($arr)) {
+											echo "<label>".$arr[0].":</label>";
+											echo $arr[1];
+										} else {
+									?>
+										<label><?php echo htmlspecialchars($attrdef->getName()); ?></label>
+										<?php $this->printAttributeEditField($attrdef, '', 'attributes_version') ?>
+										<?php
+										}
+									}
+								}
+						if($workflowmode == 'advanced') { ?>
+							<div class="form-group">
+								<label><?php printMLText("workflow");?>:</label>
+								<?php
+								$mandatoryworkflows = $user->getMandatoryWorkflows();
+								if($mandatoryworkflows) {
+									if(count($mandatoryworkflows) == 1) { ?>
+										<?php echo htmlspecialchars($mandatoryworkflows[0]->getName()); ?>
+										<input type="hidden" name="workflow" value="<?php echo $mandatoryworkflows[0]->getID(); ?>">
+									<?php
+									} else { ?>
+						        <select class="_chzn-select-deselect span9 form-control" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+										<?php
+											foreach ($mandatoryworkflows as $workflow) {
+												print "<option value=\"".$workflow->getID()."\"";
+												print ">". htmlspecialchars($workflow->getName())."</option>";
+											} ?>
+						        </select>
+										<?php
+											}
+										} else { ?>
+						        <select class="_chzn-select-deselect span9 form-control" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+										<?php
+											$workflows=$dms->getAllWorkflows();
+											print "<option value=\"\">"."</option>";
+											foreach ($workflows as $workflow) {
+												print "<option value=\"".$workflow->getID()."\"";
+												print ">". htmlspecialchars($workflow->getName())."</option>";
+											} ?>
+						        </select>
+										<?php } ?>
+									<br/>
+									<?php $this->infoMsg(getMLText("add_doc_workflow_warning")); ?>
+						<?php } else { echo $this->warningMsg("This theme only works with advanced workflows"); }?>
+						</div>
+						<div class="box-footer">
+							<a type="button" class="btn btn-default cancel-add-document"><?php echo getMLText("cancel"); ?></a>
+							<a id="btn-next-2" href="#tab_3" data-toggle="tab" aria-expanded="true" type="button" class="btn btn-info pull-right"><?php echo getMLText("next"); ?> <i class="fa fa-arrow-right"></i></a>
+						</div>
+          </div>
+              <!-- /.tab-pane -->
+          <div class="tab-pane" id="tab_3">
+            <div class="form-group">
+            	<label><?php printMLText("individuals");?>:</label>
+            	<select class="chzn-select span9 form-control" name="notification_users[]" multiple="multiple"">
+								<?php
+									$allUsers = $dms->getAllUsers($sortusersinlist);
+									foreach ($allUsers as $userObj) {
+										if (!$userObj->isGuest() && $folder->getAccessMode($userObj) >= M_READ)
+											print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "\n";
+									}
+								?>
+							</select>
+            </div>
+            <div class="form-group">
+							<label><?php printMLText("groups");?>:</label>
+							<select class="chzn-select span9" name="notification_groups[]" multiple="multiple">
+								<?php
+									$allGroups = $dms->getAllGroups();
+									foreach ($allGroups as $groupObj) {
+										if ($folder->getGroupAccessMode($groupObj) >= M_READ)
+											print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "\n";
+									}
+								?>
+							</select>
+						</div>
+						<div class="box-footer">
+							<a type="button" class="btn btn-default cancel-add-document"><?php echo getMLText("cancel"); ?></a>
+							<button type="submit" class="btn btn-info pull-right"><i class="fa fa-save"></i> <?php echo getMLText("save"); ?></button>
+						</div>	
+          </div>
+          <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+      </div>
+   	</form>
+
+    <?php
+    echo "</div>";
+    echo "<!-- /.box-body -->";
+    echo "</div>";
+		echo "</div>";
 
 		//// Folder content ////
-
-		echo "<div class=\"row\">";
 		echo "<div class=\"col-md-12\">";
 		echo "<div class=\"box box-primary\">";
 		echo "<div class=\"box-header with-border\">";
@@ -230,6 +642,26 @@ $(document).ready(function(){
 				echo $txt;
 			else {
 				echo $this->folderListRow($subFolder);
+			?>
+				<tr id="table-move-folder-<?php echo $subFolder->getID(); ?>" class="table-row-folder odd" style="display:none;">
+					<td>
+					<form action="../op/op.MoveFolder.php" name="form3">
+					<input type="hidden" name="documentid" value="<?php print $subFolder->getID();?>">
+						<div class="form-group">
+							<label><?php printMLText("choose_target_folder");?>:</label>
+							<?php $this->printFolderChooserHtml("form1", M_READWRITE, $folder->getID());?>
+						</div>
+						<div class="box-footer">
+							<button class="btn btn-default cancel-folder-mv" rel="<?php echo $subFolder->getID(); ?>"><?php echo getMLText("cancel"); ?></button>
+							<input class="btn btn-success" type="submit" value="<?php printMLText("move"); ?>">
+						</div>
+					</form>
+					</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<?php
 			}
 		}
 
@@ -240,6 +672,23 @@ $(document).ready(function(){
 				echo $txt;
 			else {
 				echo $this->documentListRow($document, $previewer);
+				?>
+					<tr id="table-move-document-<?php echo $document->getID(); ?>" class="table-row-document odd" style="display:none;">
+					<td colspan="4">
+					<form action="../op/op.MoveDocument.php" name="form4">
+					<input type="hidden" name="documentid" value="<?php print $document->getID();?>">
+						<div class="form-group">
+							<label><?php printMLText("choose_target_folder");?>:</label>
+							<?php $this->printFolderChooserHtml("form4", M_READWRITE, -1);?>
+						</div>
+						<div class="box-footer">
+							<button class="btn btn-default cancel-doc-mv" rel="<?php echo $document->getID(); ?>"><?php echo getMLText("cancel"); ?></button>
+							<input class="btn btn-success" type="submit" value="<?php printMLText("move"); ?>">
+						</div>
+					</form>
+					</td>
+					</tr>
+				<?php
 			}
 		}
 
@@ -257,34 +706,6 @@ $(document).ready(function(){
 		echo "</div>"; // End of right column div
 
 		?>
-
-<!-- Button trigger modal
-<div class="blue block">
-			 <div id="myModal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
-          </div>
-          <div class="modal-body">
-            <p>Some text in the modal.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-		</div>
-
-<button id="thebtn">
-  Launch demo modal
-</button> -->
-
-
 
 <?php
 		echo "</div>\n"; // End of div around left and right column

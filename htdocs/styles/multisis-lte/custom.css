@@ -89,6 +89,23 @@
     text-align: center !important;
 }
 
+.div-hidden {
+    display: none;
+}
+
+.div-bkg-color {
+    background-color: rgba(210, 214, 222, 0.48) !important;
+    border-bottom: 1px solid #f39c12;
+    border-left: 1px solid #f39c12;
+    border-right: 1px solid #f39c12;
+}
+
+.div-green-border {
+    border-bottom: 1px solid #00a65a;
+    border-left: 1px solid #00a65a;
+    border-right: 1px solid #00a65a;
+}
+
 /* --------------------- End ---------------------- */
 
 /* ------------- Modals ------------------ */
@@ -106,5 +123,40 @@
 .modal, .modal-backdrop {
     position: absolute !important;
 }*/
+
+.modal-dialog {
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+.inputDescription {
+    color: #777 !important;
+}
+
 /* --------------------- End ---------------------- */
 
+/* ------------- Breadcrumb ------------------ */
+.breadcrumb-btn:before {
+    content: "" !important;
+}
+
+.breadcrumb {
+    padding: 5px 15px 15px 15px !important;
+}
+
+/* --------------------- End ---------------------- */
+
+/* ------------- Forms ------------------ */
+.is-required {
+    color: red !important;
+}
+
+.select2-container--default .select2-selection--single {
+    border-radius: 0px !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border-radius: 0px !important;
+}
+
+/* --------------------- End ---------------------- */

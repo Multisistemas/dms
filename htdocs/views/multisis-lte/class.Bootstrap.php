@@ -119,7 +119,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function htmlEndPage($nofooter=false) { /* {{{ */
-		echo '<script src="/styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
+		//echo '<script src="/styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
 		echo '<script src="/styles/'.$this->theme.'/dist/js/app.min.js"></script>'."\n";
 		echo "<script src=\"/styles/".$this->theme."/plugins/slimScroll/jquery.slimscroll.min.js\"></script>";
 		echo "<script src=\"/styles/".$this->theme."/plugins/fastclick/fastclick.js\"></script>";
@@ -132,7 +132,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script src="/styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="/styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
 		echo '<script src="/styles/'.$this->theme.'/application.js"></script>'."\n";
-		echo '<script src="/styles/'.$this->theme.'/bootstrap/js/bootstrap-2.min.js"></script>'."\n";
+		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/bootstrap/js/bootstrap-2.min.js"></script>'."\n";
+		
 		if($this->footerjs) {
 			$jscode = "$(document).ready(function () {\n";
 			foreach($this->footerjs as $script) {
@@ -535,7 +536,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<ul class=\"treeview-menu menu-open\">";
     echo "<li>";
     echo "<a>";
-    $this->printNewTreeNavigationHtml($this->params['rootfolderid'], M_READ, 0, '', $this->params['expandFolderTree'] == 2, "");
+    $this->printNewTreeNavigationHTML($this->params['rootfolderid'], M_READ, 0, '', 2, "");
     echo "</a>";
 		echo "</li>";
     echo "</ul>";
@@ -649,7 +650,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function globalNavigation($folder=null) { /* {{{ */
-		/*$dms = $this->params['dms'];
+		$dms = $this->params['dms'];
 		echo "<div class=\"navbar navbar-default navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container-fluid\">\n";
@@ -725,9 +726,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 			//Link to non-conformities extension 
 
-			/*if (!$this->params['user']->isGuest()) {
+			if (!$this->params['user']->isGuest()) {
 					echo "<li><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("nonconfo")."</a></li>\n";
-			}	*/		
+			}	
 			
 	//		echo "    <li id=\"first\"><a href=\"/out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
 	//		echo "    <li><a href=\"/out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
@@ -750,20 +751,45 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			echo "      <input name=\"query\" class=\"search-query\" id=\"searchfield\" data-provide=\"typeahead\" type=\"text\" style=\"width: 150px;\" placeholder=\"".getMLText("search")."\"/>";
 			if($this->params['defaultsearchmethod'] == 'fulltext')
 				echo "      <input type=\"hidden\" name=\"fullsearch\" value=\"1\" />";
-//			if($this->params['enablefullsearch']) {
-//				echo "      <label class=\"checkbox\" style=\"color: #999999;\"><input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch')."</label>";
-//			}
-	//		echo "      <input type=\"submit\" value=\"".getMLText("search")."\" id=\"searchButton\" class=\"btn\"/>";
-	//		echo "</form>\n";
-	//		echo "    </div>\n";
-	//	}
-	//	echo "  </div>\n";
-	//	echo " </div>\n";
-	//	echo "</div>\n";
-	//	return;
+			if($this->params['enablefullsearch']) {
+				echo "      <label class=\"checkbox\" style=\"color: #999999;\"><input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch')."</label>";
+			}
+			echo "      <input type=\"submit\" value=\"".getMLText("search")."\" id=\"searchButton\" class=\"btn\"/>";
+			echo "</form>\n";
+			echo "    </div>\n";
+		}
+		echo "  </div>\n";
+		echo " </div>\n";
+		echo "</div>\n";
+		return;
 	} /* }}} */
 
 	function getFolderPathHTML($folder, $tagAll=false, $document=null) { /* {{{ */
+		$path = $folder->getPath();
+		$txtpath = "";
+		for ($i = 0; $i < count($path); $i++) {
+			$txtpath .= "<li>";
+			if ($i +1 < count($path)) {
+				$txtpath .= "<a href=\"/out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\" rel=\"folder_".$path[$i]->getID()."\" class=\"table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">".
+					htmlspecialchars($path[$i]->getName())."</a>";
+			}
+			else {
+				$txtpath .= ($tagAll ? "<a href=\"/out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\">".
+										 htmlspecialchars($path[$i]->getName())."</a>" : htmlspecialchars($path[$i]->getName()));
+			}
+			//$txtpath .= " <span class=\"divider\">/</span></li>";
+		}
+		if($document)
+			$txtpath .= "<li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
+			
+		$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-document\" type=\"button\" class=\"btn btn-warning btn-sm\" ><i class=\"fa fa-plus\"></i> <i class=\"fa fa-file\"></i></a> </li>";
+		$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-folder\" type=\"button\" class=\"btn btn-success btn-sm\" ><i class=\"fa fa-plus\"></i> <i class=\"fa fa-folder\"></i></a></li>";
+			//$txtpath .= "<li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
+
+		return '<ul class="breadcrumb">'.$txtpath.'</ul>';
+	} /* }}} */
+
+	function getDefaultFolderPathHTML($folder, $tagAll=false, $document=null) { /* {{{ */
 		$path = $folder->getPath();
 		$txtpath = "";
 		for ($i = 0; $i < count($path); $i++) {
@@ -1293,9 +1319,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	<div id="upload-files">
 		<div id="upload-file">
 			<div class="input-append">
-				<input type="text" class="form-control" readonly>
-				<span class="btn btn-default btn-file">
-					<?php printMLText("browse");?>&hellip; <input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
+				<input type="text" class="form-control" name="theuserfile" readonly>
+				<span class="btn btn-primary btn-file">
+					<?php printMLText("browse");?> <i class="fa fa-search"></i><input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
 				</span>
 			</div>
 		</div>
@@ -1348,7 +1374,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		else {
 			$max = 1.0;
 		}
-		print "<select name=\"sequence\">\n";
+		print "<select class=\"form-control\" name=\"sequence\">\n";
 		if ($keepID != -1) {
 			print "  <option value=\"keep\">" . getMLText("seq_keep");
 		}
@@ -1416,24 +1442,27 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		if(!$formname)
 			$formname = "targetid";
 		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
-		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\"/>";
-		print "<button type=\"button\" class=\"btn\" id=\"clearfolder".$form."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "<div class=\"form-group\">\n";
+		print "<input class=\"form-control\" type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\" required/>";
+		print "<button type=\"button\" class=\"btn btn-default\" id=\"clearfolder".$form."\"><i class=\"fa fa-times\"></i></button>";
+		//print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal hide" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
-  </div>
-  <div class="modal-body">
-		<p><?php printMLText('tree_loading') ?></p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-  </div>
+<div class="modal fade" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 class="modal-title" id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
+	  </div>
+	  <div class="modal-body">
+			<p><?php printMLText('tree_loading') ?></p>
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+	  </div>
+	 </div>
 </div>
+
 <?php
 	} /* }}} */
 
@@ -1503,7 +1532,7 @@ $(document).ready(function() {
 		print "<a data-target=\"#categoryChooser\" href=\"out.CategoryChooser.php?form=form1&cats=".implode(',', $ids)."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("category")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal hide" id="categoryChooser" tabindex="-1" role="dialog" aria-labelledby="categoryChooserLabel" aria-hidden="true">
+<div class="modal fade" id="categoryChooser" tabindex="-1" role="dialog" aria-labelledby="categoryChooserLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="categoryChooserLabel"><?php printMLText("choose_target_category") ?></h3>
@@ -1520,25 +1549,30 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function printKeywordChooserHtml($formName, $keywords='', $fieldname='keywords') { /* {{{ */
-		$strictformcheck = $this->params['strictformcheck'];
+		//$strictformcheck = $this->params['strictformcheck'];
 ?>
-		    <div class="input-append">
-				<input type="text" name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>" value="<?php print htmlspecialchars($keywords);?>"<?php echo $strictformcheck ? ' required' : ''; ?> />
-				<a data-target="#keywordChooser" role="button" class="btn" data-toggle="modal" href="out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
-		    </div>
-<div class="modal hide" id="keywordChooser" tabindex="-1" role="dialog" aria-labelledby="keywordChooserLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="keywordChooserLabel"><?php printMLText("use_default_keywords") ?></h3>
-  </div>
-  <div class="modal-body">
-		<p><?php printMLText('keywords_loading') ?></p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" id="acceptkeywords"><i class="icon-save"></i> <?php printMLText("save") ?></button>
-  </div>
+<div class="input-group">
+	<input type="text" class="form-control" name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>" value="<?php echo htmlspecialchars($keywords);?>"<?php //echo $strictformcheck ? ' required' : ''; ?> />
+	<span class="input-group-btn">
+  	<a data-target="#keywordChooser" type="button" role="button" class="btn btn-default" data-toggle="modal" href="out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
+  </span>
 </div>
+<div class="modal fade modal-primary" id="keywordChooser" tabindex="-1" role="dialog" aria-labelledby="keywordChooserLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3 class="modal-title" id="keywordChooserLabel"><?php printMLText("use_default_keywords") ?></h3>
+		  </div>
+		  <div class="modal-body">
+				<p><?php printMLText('keywords_loading') ?></p>
+		  </div>
+		  <div class="modal-footer">
+		    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+		    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true" id="acceptkeywords"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+		  </div>
+	</div>
+</div>
+
 <?php
 	} /* }}} */
 
@@ -1567,25 +1601,25 @@ $(document).ready(function() {
 		switch($attrdef->getType()) {
 		case SeedDMS_Core_AttributeDefinition::type_boolean:
 			echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"0\" />";
-			echo "<input type=\"checkbox\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
+			echo "<input class=\"form-control\" type=\"checkbox\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 ?>
         <span class="input-append date datepicker" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-					<input id="<?php echo $fieldname."_".$attrdef->getId();?>" class="span9" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
+					<input class="form-control" id="<?php echo $fieldname."_".$attrdef->getId();?>" class="span9" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
 				</span>
 <?php
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_email:
 			$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
-			echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').' data-rule-email="true"'." />";
+			echo "<input class=\"form-control\" type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').' data-rule-email="true"'." />";
 			break;
 		default:
 			if($valueset = $attrdef->getValueSetAsArray()) {
 				echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
-				echo "<select id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]";
+				echo "<select class=\"form-control\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]";
 				if($attrdef->getMultipleValues()) {
 					echo "[]\" multiple";
 				} else {
@@ -1610,9 +1644,9 @@ $(document).ready(function() {
 			} else {
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 				if(strlen($objvalue) > 80) {
-					echo "<textarea id=\"".$fieldname."_".$attrdef->getId()."\" class=\"input-xxlarge\" name=\"".$fieldname."[".$attrdef->getId()."]\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
+					echo "<textarea class=\"form-control\" id=\"".$fieldname."_".$attrdef->getId()."\" class=\"input-xxlarge\" name=\"".$fieldname."[".$attrdef->getId()."]\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
 				} else {
-					echo "<input type=\"text\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
+					echo "<input class=\"form-control\" type=\"text\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
 				}
 			}
 			break;
@@ -2416,14 +2450,25 @@ $(document).ready( function() {
 				$content .= ' <a type="button" href="/op/op.ViewOnline.php?documentid='.$docID.'&version='. $latestContent->getVersion().'" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>';
 			}
 
-			http://dms.dev/op/op.ViewOnline.php?documentid=58&version=2
+			if($document->getAccessMode($user) >= M_READWRITE) {
+				$content .= ' <a type="button" class="btn btn-primary btn-sm move-doc-btn" rel="'.$docID.'"><i class="fa fa-arrows"></i></a>';				
+			}
 
 			$content .= "</div>";
 			$content .= "</td>";
 		}
 		if(!$skipcont)
 			$content .= "</tr>\n";
+
 		return $content;
+	} /* }}} */
+
+	function documentMoveOption($document){ /* {{{ */
+		$content = '';
+		$content .= "<tr>";
+		$content .= "<td>";
+		$content .= "</td>";
+		$content .= "</tr>";
 	} /* }}} */
 
 	function folderListRow($subFolder) { /* {{{ */
@@ -2488,6 +2533,10 @@ $(document).ready( function() {
 		}
 		if($subFolder->getAccessMode($user) >= M_READWRITE) {
 			$content .= ' <a type="button" href="/out/out.EditFolder.php?folderid='.$subFolder->getID().'" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>';
+		}
+
+		if($subFolder->getAccessMode($user) >= M_READWRITE) {
+			$content .= ' <a type="button" class="btn btn-primary btn-sm move-folder-btn" rel="'.$subFolder->getID().'"><i class="fa fa-arrows"></i></a>';
 		}
 
 		if($enableClipboard) {
