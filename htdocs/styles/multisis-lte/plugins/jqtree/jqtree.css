@@ -36,7 +36,7 @@ ul.jqtree-tree .jqtree-toggler {
 }
 
 ul.jqtree-tree .jqtree-toggler:hover {
-    color: #fff;
+    color: #aaa;
 }
 
 ul.jqtree-tree .jqtree-element {
@@ -44,7 +44,7 @@ ul.jqtree-tree .jqtree-element {
 }
 
 ul.jqtree-tree .jqtree-title {
-    color: #d2d6de;
+    color: #999;
     /*vertical-align: middle;*/
 }
 
