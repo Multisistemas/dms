@@ -1575,6 +1575,7 @@ URL: [url]',
 'folderTree' => 'Árbol de carpetas',
 'tools' => 'Herramientas',
 'next' => 'Siguiente',
+'please_standby' => 'Por favor espere...'
 );
 
 // TODO: Mover strings de extensión de no conformiadad a su propio archivo de lenguaje.

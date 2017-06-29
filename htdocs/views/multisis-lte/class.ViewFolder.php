@@ -91,7 +91,10 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$enableDropUpload = $this->params['enableDropUpload'];
 
 		header('Content-Type: application/javascript; charset=UTF-8');
-		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder'));
+		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder', 'please_standby'));
+
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
+
 ?>
 
 function folderSelected(id, name) {
@@ -148,13 +151,19 @@ $(document).ajaxStart(function() { Pace.restart(); });
 $(document).ready(function(){
 	
 	$('body').on('submit', '#form1', function(ev){
-		if(checkForm()) return;
-		ev.preventDefault();
+		if(!checkForm()) {
+			ev.preventDefault();
+		} else {
+			$("#box-form1").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i><div><p class=\"standby\"><?php printMLText("please_standby");?></p></div></div>");
+		}
 	});
 
 	$('body').on('submit', '#form2', function(ev){
-		if(checkForm2()) return;
-		ev.preventDefault();
+		if(!checkForm2()){
+			ev.preventDefault();
+		} else {
+			$("#box-form2").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i><div><p class=\"standby\"><?php printMLText("please_standby");?></p></div></div>");
+		}
 	});
 
 	$("#form1").validate({
@@ -241,6 +250,26 @@ $(document).ready(function(){
   	$('html, body').animate({scrollTop: 0}, 800);
   });
 
+  /* ---- For document previews ---- */
+
+  $(".preview-doc-btn").on("click", function(){
+  	$("#div-add-folder").hide();
+		$("#div-add-document").hide();
+  	$("#folder-content").hide();
+
+  	var docID = $(this).attr("id");
+  	var version = $(this).attr("rel");
+  	$("#doc-title").text($(this).attr("title"));
+  	$("#document-previewer").show('slow');
+  	$("#iframe-charger").attr("src","../pdfviewer/web/viewer.html?file=..%2F..%2Fop%2Fop.Download.php%3Fdocumentid%3D"+docID+"%26version%3D"+version);
+  });
+
+  $(".close-doc-preview").on("click", function(){
+  	$("#document-previewer").hide();
+  	$("#iframe-charger").attr("src","");
+  	$("#folder-content").show('slow');
+  });
+  
   /* ---- For datatables ---- */
 	$(function () {
     $('#viewfolder-table').DataTable({
@@ -254,11 +283,7 @@ $(document).ready(function(){
   });
 
 });
-
-	
-
 <?php
-		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
 
 		if ($enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
 			echo "SeedDMSUpload.setUrl('../op/op.Ajax.php');";
@@ -298,8 +323,8 @@ $(document).ready(function(){
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/datatables/jquery.dataTables.min.js"></script>'."\n", 'js');
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/datatables/dataTables.bootstrap.min.js"></script>'."\n", 'js');
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
+		
 		echo $this->callHook('startPage');
-
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))), "skin-blue sidebar-mini");
 
 		$this->containerStart();
@@ -318,7 +343,7 @@ $(document).ready(function(){
 
 		//// Add Folder ////
 		echo "<div class=\"col-md-12 div-hidden\" id=\"div-add-folder\">";
-		echo "<div class=\"box box-success div-green-border\">";
+		echo "<div class=\"box box-success div-green-border\" id=\"box-form1\">";
     echo "<div class=\"box-header with-border\">";
     echo "<h3 class=\"box-title\">".getMLText("add_subfolder")."</h3>";
     echo "<div class=\"box-tools pull-right\">";
@@ -378,7 +403,7 @@ $(document).ready(function(){
 
 		//// Add Document ////
 		echo "<div class=\"col-md-12 div-hidden\" id=\"div-add-document\">";
-		echo "<div class=\"box box-warning div-bkg-color\">";
+		echo "<div class=\"box box-warning div-bkg-color\" id=\"box-form2\">";
     echo "<div class=\"box-header with-border\">";
     echo "<h3 class=\"box-title\">".getMLText("add_document")."</h3>";
     echo "<div class=\"box-tools pull-right\">";
@@ -604,7 +629,7 @@ $(document).ready(function(){
 		echo "</div>";
 
 		//// Folder content ////
-		echo "<div class=\"col-md-12\">";
+		echo "<div class=\"col-md-12\" id=\"folder-content\">";
 		echo "<div class=\"box box-primary\">";
 		echo "<div class=\"box-header with-border\">";
     echo "<h3 class=\"box-title\">".getMLText("folder_contents")."</h3>";
@@ -622,7 +647,7 @@ $(document).ready(function(){
 			if(is_string($txt))
 				echo $txt;
 			else {
-				print "<table id=\"viewfolder-table\" class=\"table table-hover table-striped\">";
+				print "<table id=\"viewfolder-table\" class=\"table table-hover table-striped table-condensed\">";
 				print "<thead>\n<tr>\n";
 				print "<th></th>\n";	
 				print "<th>".getMLText("name")."</th>\n";
@@ -706,14 +731,31 @@ $(document).ready(function(){
 		echo "</div>";
 		echo "</div>";
 		echo "</div>";
-		echo "</div>"; // End folder content table
-		echo "</div>"; // End of right column div
+		echo "</div>"; 
+
+		//// Document preview ////
+		echo "<div class=\"col-md-12 div-hidden\" id=\"document-previewer\">";
+		echo "<div class=\"box box-info\">";
+		echo "<div class=\"box-header with-border\">";
+    echo "<h3 id=\"doc-title\" class=\"box-title\"></h3>";
+    echo "<span class=\"pull-right\">";
+    //echo "<a class=\"btn btn-sm btn-primary\"><i class=\"fa fa-chevron-left\"></i></a>";
+    //echo "<a class=\"btn btn-sm btn-primary\"><i class=\"fa fa-chevron-right\"></i></a>";
+    echo "<a class=\"btn btn-sm btn-danger close-doc-preview\">".getMLText("close")."</a>";
+    echo "</span>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+    echo "<iframe id=\"iframe-charger\" src=\"\" width=\"100%\" height=\"700px\"></iframe>";
+    echo "</div>";
+		echo "</div>";
+		echo "</div>"; // End document preview
+
 
 		?>
 
 <?php
-		echo "</div>\n"; // End of div around left and right column
 		echo "</div>\n"; // End of row
+		echo "</div>\n"; // End of container
 
 		echo $this->callHook('postContent');
 

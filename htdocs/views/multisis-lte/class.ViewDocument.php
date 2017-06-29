@@ -337,7 +337,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			case 'application/pdf':
 				$this->contentHeading(getMLText("preview"));
 	?>
-				<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.Download.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
+				<iframe id="este-es-el-id" src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.Download.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
 	<?php
 				break;
 			case 'image/svg+xml':

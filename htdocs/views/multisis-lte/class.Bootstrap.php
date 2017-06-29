@@ -2482,8 +2482,10 @@ $(document).ready( function() {
 				$content .= '<a class="addtoclipboard" rel="D'.$docID.'" msg="'.getMLText('splash_added_to_clipboard').'" title="'.getMLText("add_to_clipboard").'"><i class="icon-copy"></i></a>';
 			}
 
-			if ($status['status'] == 2 ) { 
-				$content .= ' <a type="button" href="/op/op.ViewOnline.php?documentid='.$docID.'&version='. $latestContent->getVersion().'" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>';
+			if ($status['status'] == 2 ) {
+				if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
+					$content .= ' <a type="button" title="'.htmlspecialchars($document->getName()).' - '.getMLText('current_version').': '.$latestContent->getVersion().'" class="btn btn-info btn-sm preview-doc-btn" id="'.$docID.'" rel="'.$latestContent->getVersion().'"><i class="fa fa-eye"></i></a>';
+				}	
 			}
 
 			if($document->getAccessMode($user) >= M_READWRITE) {
@@ -2571,8 +2573,12 @@ $(document).ready( function() {
 			$content .= ' <a type="button" href="/out/out.EditFolder.php?folderid='.$subFolder->getID().'" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i></a>';
 		}
 
-		if($subFolder->getAccessMode($user) >= M_READWRITE) {
+		if($subFolder->getAccessMode($user) >= M_ALL) {
 			$content .= ' <a type="button" class="btn btn-primary btn-sm move-folder-btn" rel="'.$subFolder->getID().'"><i class="fa fa-arrows"></i></a>';
+		}
+
+		if($subFolder->getAccessMode($user) >= M_ALL) {
+			$content .= ' <a type="button" class="btn btn-warning btn-sm access-folder-btn" rel="'.$subFolder->getID().'"><i class="fa fa-user-times"></i></a>';
 		}
 
 		if($enableClipboard) {
