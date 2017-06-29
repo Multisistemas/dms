@@ -274,7 +274,7 @@ $(document).ready(function(){
 	$(function () {
     $('#viewfolder-table').DataTable({
       "paging": true,
-      "lengthChange": false,
+      "lengthChange": true,
       "searching": true,
       "ordering": false,
       "info": false,
@@ -667,16 +667,17 @@ $(document).ready(function(){
 				echo $txt;
 			else {
 				echo $this->folderListRow($subFolder);
+			$formFol = "formFol".$subFolder->getID();
 			?>
 				<tr id="table-move-folder-<?php echo $subFolder->getID(); ?>" class="table-row-folder odd tr-border" style="display:none;">
 					<td>
-					<form action="../op/op.MoveFolder.php" name="form3">
-					<input type="hidden" name="documentid" value="<?php print $subFolder->getID();?>">
+					<form action="../op/op.MoveFolder.php" name="<?php echo $formFol; ?>">
+					<input type="hidden" name="folderid" value="<?php print $subFolder->getID();?>">
 					</td>
 					<td>
 					<div>
 							<label><?php printMLText("choose_target_folder");?>:</label>
-							<?php $this->printFolderChooserHtml("form3", M_READWRITE, $folder->getID());?>
+							<?php $this->printFolderChooserHtml($formFol, M_READWRITE, $subFolder->getID(), null);?>
 					</div>
 					</td>
 					<td>
@@ -697,16 +698,17 @@ $(document).ready(function(){
 				echo $txt;
 			else {
 				echo $this->documentListRow($document, $previewer);
+			$formDoc = "formDoc".$document->getID();
 				?>
 					<tr id="table-move-document-<?php echo $document->getID(); ?>" class="table-row-document odd tr-border" style="display:none;">
 					<td>
-					<form action="../op/op.MoveDocument.php" name="form4">
+					<form action="../op/op.MoveDocument.php" name="<?php echo $formDoc; ?>">
 					<input type="hidden" name="documentid" value="<?php print $document->getID();?>">
 					</td>
 					<td>
 						<div>
 							<label><?php printMLText("choose_target_folder");?>:</label>
-							<?php $this->printFolderChooserHtml("form4", M_READWRITE, -1);?>
+							<?php $this->printFolderChooserHtml($formDoc, M_READWRITE, -1);?>
 						</div>
 					</td>
 					<td>
@@ -736,12 +738,12 @@ $(document).ready(function(){
 		//// Document preview ////
 		echo "<div class=\"col-md-12 div-hidden\" id=\"document-previewer\">";
 		echo "<div class=\"box box-info\">";
-		echo "<div class=\"box-header with-border\">";
-    echo "<h3 id=\"doc-title\" class=\"box-title\"></h3>";
+		echo "<div class=\"box-header with-border box-header-doc-preview\">";
+    echo "<span id=\"doc-title\" class=\"box-title\"></span>";
     echo "<span class=\"pull-right\">";
     //echo "<a class=\"btn btn-sm btn-primary\"><i class=\"fa fa-chevron-left\"></i></a>";
     //echo "<a class=\"btn btn-sm btn-primary\"><i class=\"fa fa-chevron-right\"></i></a>";
-    echo "<a class=\"btn btn-sm btn-danger close-doc-preview\">".getMLText("close")."</a>";
+    echo "<a class=\"close-doc-preview\"><i class=\"fa fa-times\"></i></a>";
     echo "</span>";
     echo "</div>";
     echo "<div class=\"box-body\">";

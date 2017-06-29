@@ -164,12 +164,19 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$document = $this->params['document'];
+		$folder = $this->params['folder'];
 
 		header('Content-Type: application/javascript');
 		if($user->isAdmin()) {
 			$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
 		}
 		$this->printDocumentChooserJs("form1");
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 2, "");
+		?>
+			function folderSelected(id, name) {
+				window.location = '../out/out.ViewFolder.php?folderid=' + id;
+			}
+		<?php
 	} /* }}} */
 
 	function documentInfos() { /* {{{ */
@@ -387,14 +394,27 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		$versions = $document->getContent();
 
-		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/timeline/timeline.css" rel="stylesheet">'."\n", 'css');
-		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/timeline/timeline-min.js"></script>'."\n", 'js');
-		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/timeline/timeline-locales.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/plugins/timeline/timeline.css" rel="stylesheet">'."\n", 'css');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/timeline/timeline-min.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/timeline/timeline-locales.js"></script>'."\n", 'js');
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
+
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		//$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
+		//$this->globalNavigation($folder);
+		//$this->contentStart();
+		//$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 
 		if ($document->isLocked()) {
 			$lockingUser = $document->getLockingUser();
@@ -1431,8 +1451,17 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		  </div>
 		</div>
 <?php
+		
+		echo "<div class=\"gap-40\"></div>";
+		echo "</div>\n"; // End of row
+		echo "</div>\n"; // End of container
+		echo "</div>\n"; // End of container
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
+
 	} /* }}} */
 }
 ?>

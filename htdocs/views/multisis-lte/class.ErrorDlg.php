@@ -32,16 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_ErrorDlg extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
-		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))), "skin-blue sidebar-mini");
-		$this->containerStart();
-		$this->mainHeader();
-		$this->mainSideBar();
-
-		$this->contentStart();
-		$this->contentEnd();
-		$this->mainFooter();		
-		$this->containerEnd();
-		$this->htmlEndPage();
+		
 	} /* }}} */
 }
 ?>

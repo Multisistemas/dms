@@ -118,6 +118,8 @@ $(document).ready( function() {
 		$enableThemeSelector = $this->params['enablethemeselector'];
 
 		$this->htmlAddHeader('<link rel="stylesheet" href="../../styles/'.$this->theme.'/plugins/iCheck/square/blue.css">'."\n", 'css');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
+		
 		$this->htmlStartPage(getMLText("sign_in"), "hold-transition login-page");
 		
 		$this->startLoginContent();
@@ -168,16 +170,14 @@ $(document).ready( function() {
 <?php } ?>
 	
 	<div class="row">
-    <div class="col-xs-4">
-    	<span class="pull-left">Remember </span><br>
+    <div class="col-xs-6">
       <div class="material-switch ">
+      Remember me
         <input id="someSwitchOptionSuccess" name="someSwitchOption001" type="checkbox"/>
-      	<label for="someSwitchOptionSuccess" class="label-success"></label>
       </div>    
     </div>
     <!-- /.col -->
-    <div class="col-xs-4"></div>
-    <div class="col-xs-4">
+    <div class="col-xs-6 pull-right">
       <button type="submit" class="btn btn-primary btn-block btn-flat"><?php printMLText("submit_login") ?></button>
     </div>
     <!-- /.col -->
