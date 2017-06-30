@@ -295,7 +295,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$sitename = trim(strip_tags($this->params['sitename']));
 
 		echo "<header class=\"main-header\">";
-    echo "<a href=\"/\" class=\"logo\">";
+    echo "<a href=\"/out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."&showtree=1\" class=\"logo\">";
     echo "<!-- mini logo for sidebar mini 50x50 pixels -->";
     echo "<span class=\"logo-mini\"><b><i class=\"fa fa-home\"></i></b></span>"; // TODO: change for mini logo 
     echo "<!-- logo for regular state and mobile devices -->";

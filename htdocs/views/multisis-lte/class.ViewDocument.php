@@ -184,8 +184,18 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$document = $this->params['document'];
 
-		$this->contentHeading(getMLText("document_infos"));
-		$this->contentContainerStart();
+		//$this->contentHeading(getMLText("document_infos"));
+		//$this->contentContainerStart();
+		?>
+		<div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title"><?php echo getMLText("document_infos"); ?></h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
+      </div>
+      <div class="box-body">
+		<?php
 		$txt = $this->callHook('preDocumentInfos', $document);
 		if(is_string($txt))
 			echo $txt;
@@ -310,7 +320,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$txt = $this->callHook('postDocumentInfos', $document);
 		if(is_string($txt))
 			echo $txt;
-		$this->contentContainerEnd();
+		//$this->contentContainerEnd();
+
+		echo "</div>";
+		echo "</div>";
 	} /* }}} */
 
 	function preview() { /* {{{ */
@@ -464,36 +477,37 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 
 <div class="row-fluid">
-<div class="span4">
+<div class="col-md-4">
 <?php
 		$this->documentInfos();
-		$this->preview();
+		//$this->preview();
 ?>
 </div>
-<div class="span8">
+<div class="col-md-8">
+	<div class="nav-tabs-custom">
     <ul class="nav nav-tabs" id="docinfotab">
-		  <li class="<?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('current_version'); ?></a></li>
+		  <li class="<?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>"><a href="#docinfo" data-toggle="tab" aria-expanded="true"><?php printMLText('current_version'); ?></a></li>
 			<?php if (count($versions)>1) { ?>
-		  <li class="<?php if($currenttab == 'previous') echo 'active'; ?>"><a data-target="#previous" data-toggle="tab"><?php printMLText('previous_versions'); ?></a></li>
+		  <li class="<?php if($currenttab == 'previous') echo 'active'; ?>"><a href="#previous" data-toggle="tab" aria-expanded="false"><?php printMLText('previous_versions'); ?></a></li>
 <?php
 			}
 			if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
 				if((is_array($reviewStatus) && count($reviewStatus)>0) ||
 					(is_array($approvalStatus) && count($approvalStatus)>0)) {
 ?>
-		  <li class="<?php if($currenttab == 'revapp') echo 'active'; ?>"><a data-target="#revapp" data-toggle="tab"><?php if($workflowmode == 'traditional') echo getMLText('reviewers')."/"; echo getMLText('approvers'); ?></a></li>
+		  <li class="<?php if($currenttab == 'revapp') echo 'active'; ?>"><a href="#revapp" data-toggle="tab" aria-expanded="false"><?php if($workflowmode == 'traditional') echo getMLText('reviewers')."/"; echo getMLText('approvers'); ?></a></li>
 <?php
 				}
 			} else {
 				if($workflow) {
 ?>
-		  <li class="<?php if($currenttab == 'workflow') echo 'active'; ?>"><a data-target="#workflow" data-toggle="tab"><?php echo getMLText('workflow'); ?></a></li>
+		  <li class="<?php if($currenttab == 'workflow') echo 'active'; ?>"><a href="#workflow" data-toggle="tab" aria-expanded="false"><?php echo getMLText('workflow'); ?></a></li>
 <?php
 				}
 			}
 ?>
-		  <li class="<?php if($currenttab == 'attachments') echo 'active'; ?>"><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
-			<li class="<?php if($currenttab == 'links') echo 'active'; ?>"><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
+		  <li class="<?php if($currenttab == 'attachments') echo 'active'; ?>"><a href="#attachments" data-toggle="tab" aria-expanded="false"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
+			<li class="<?php if($currenttab == 'links') echo 'active'; ?>"><a href="#links" data-toggle="tab" aria-expanded="false"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
 		</ul>
 		<div class="tab-content">
 		  <div class="tab-pane <?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>" id="docinfo">
@@ -714,6 +728,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 ?>
 		</div>
+
 <?php
 		if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
 			if((is_array($reviewStatus) && count($reviewStatus)>0) ||
@@ -1420,6 +1435,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 			</div>
 		</div>
+	</div>
 <?php
 		if($user->isAdmin()) {
 			$timeline = $document->getTimeline();
