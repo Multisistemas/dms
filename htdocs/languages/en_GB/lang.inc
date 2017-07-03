@@ -1606,6 +1606,7 @@ URL: [url]',
 'folderTree' => 'Folder tree',
 'tools' => 'Tools',
 'next' => 'Next',
-'please_standby' => 'Please standby...'
+'please_standby' => 'Please standby...',
+'see' => 'Preview',
 );
 ?>

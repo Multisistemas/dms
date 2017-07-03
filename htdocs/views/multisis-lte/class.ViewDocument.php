@@ -1436,36 +1436,52 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			</div>
 		</div>
 	</div>
+</div>
 <?php
-		if($user->isAdmin()) {
-			$timeline = $document->getTimeline();
-			if($timeline) {
-				$this->contentHeading(getMLText("timeline"));
-				foreach($timeline as &$item) {
-					switch($item['type']) {
-					case 'add_version':
-						$msg = getMLText('timeline_'.$item['type'], array('document'=>$item['document']->getName(), 'version'=> $item['version']));
-						break;
-					case 'add_file':
-						$msg = getMLText('timeline_'.$item['type'], array('document'=>$item['document']->getName()));
-						break;
-					case 'status_change':
-						$msg = getMLText('timeline_'.$item['type'], array('document'=>$item['document']->getName(), 'version'=> $item['version'], 'status'=> getOverallStatusText($item['status'])));
-						break;
-					default:
-						$msg = $this->callHook('getTimelineMsg', $document, $item);
-						if(!is_string($msg))
-							$msg = '???';
+if($user->isAdmin()) {
+$timeline = $document->getTimeline(); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="box box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title"><?php echo getMLText("timeline"); ?></h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
+      </div>
+      <div class="box-body">
+      	<?php
+      		if($timeline) {
+						$this->contentHeading(getMLText("timeline"));
+						foreach($timeline as &$item) {
+							switch($item['type']) {
+							case 'add_version':
+								$msg = getMLText('timeline_'.$item['type'], array('document'=>$item['document']->getName(), 'version'=> $item['version']));
+								break;
+							case 'add_file':
+								$msg = getMLText('timeline_'.$item['type'], array('document'=>$item['document']->getName()));
+								break;
+							case 'status_change':
+								$msg = getMLText('timeline_'.$item['type'], array('document'=>$item['document']->getName(), 'version'=> $item['version'], 'status'=> getOverallStatusText($item['status'])));
+								break;
+							default:
+								$msg = $this->callHook('getTimelineMsg', $document, $item);
+								if(!is_string($msg))
+									$msg = '???';
+							}
+							$item['msg'] = $msg;
+						}
+		//				$this->printTimeline('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
+						$this->printTimelineHtml(300);
 					}
-					$item['msg'] = $msg;
-				}
-//				$this->printTimeline('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
-				$this->printTimelineHtml(300);
-			}
-		}
-?>
-		  </div>
-		</div>
+				?>
+      </div>
+	</div>
+</div>
+</div>
+</div>
+<?php } ?>
+		
 <?php
 		
 		echo "<div class=\"gap-40\"></div>";

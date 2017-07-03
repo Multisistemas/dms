@@ -13,6 +13,7 @@ ul.jqtree-tree ul.jqtree_common {
     display: block;
     margin-left: 10px;
     margin-right: 0;
+    white-space: normal;
 }
 ul.jqtree-tree li.jqtree-closed > ul.jqtree_common {
     display: none;

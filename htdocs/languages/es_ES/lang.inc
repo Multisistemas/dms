@@ -837,7 +837,7 @@ Si continua teniendo problemas de acceso, por favor contacte con el administrado
 'reception_noaction' => '',
 'reception_rejected' => '',
 'recipients' => '',
-'redraw' => '',
+'redraw' => 'Redibujar',
 'refresh' => 'Actualizar',
 'rejected' => 'Rechazado',
 'released' => 'Publicado',
@@ -1575,7 +1575,8 @@ URL: [url]',
 'folderTree' => 'Árbol de carpetas',
 'tools' => 'Herramientas',
 'next' => 'Siguiente',
-'please_standby' => 'Por favor espere...'
+'please_standby' => 'Por favor espere...',
+'see' => 'Visualizar',
 );
 
 // TODO: Mover strings de extensión de no conformiadad a su propio archivo de lenguaje.

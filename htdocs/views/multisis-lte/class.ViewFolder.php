@@ -273,8 +273,8 @@ $(document).ready(function(){
   /* ---- For datatables ---- */
 	$(function () {
     $('#viewfolder-table').DataTable({
-      "paging": true,
-      "lengthChange": true,
+      "paging": false,
+      "lengthChange": false,
       "searching": true,
       "ordering": false,
       "info": false,
@@ -591,7 +591,7 @@ $(document).ready(function(){
             	<label><?php printMLText("individuals");?>:</label>
             	<select class="chzn-select span9 form-control" name="notification_users[]" multiple="multiple"">
 								<?php
-									$allUsers = $dms->getAllUsers($sortusersinlist);
+									$allUsers = $dms->getAllUsers("");
 									foreach ($allUsers as $userObj) {
 										if (!$userObj->isGuest() && $folder->getAccessMode($userObj) >= M_READ)
 											print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "\n";
@@ -631,9 +631,6 @@ $(document).ready(function(){
 		//// Folder content ////
 		echo "<div class=\"col-md-12\" id=\"folder-content\">";
 		echo "<div class=\"box box-primary\">";
-		echo "<div class=\"box-header with-border\">";
-    echo "<h3 class=\"box-title\">".getMLText("folder_contents")."</h3>";
-    echo "</div>";
     echo "<div class=\"box-body no-padding\">";
     echo "<div class=\"table-responsive\">";
 
@@ -681,7 +678,7 @@ $(document).ready(function(){
 					</div>
 					</td>
 					<td>
-						<button class="btn btn-default cancel-folder-mv" rel="<?php echo $subFolder->getID(); ?>"><?php echo getMLText("cancel"); ?></button>
+						<a class="btn btn-default cancel-folder-mv" rel="<?php echo $subFolder->getID(); ?>"><?php echo getMLText("cancel"); ?></a>
 						<input class="btn btn-success" type="submit" value="<?php printMLText("move"); ?>">
 					</td>
 					<td></td>
@@ -712,7 +709,7 @@ $(document).ready(function(){
 						</div>
 					</td>
 					<td>
-						<button class="btn btn-default cancel-doc-mv" rel="<?php echo $document->getID(); ?>"><?php echo getMLText("cancel"); ?></button>
+						<a class="btn btn-default cancel-doc-mv" rel="<?php echo $document->getID(); ?>"><?php echo getMLText("cancel"); ?></a>
 						<input class="btn btn-success" type="submit" value="<?php printMLText("move"); ?>">
 					</td>
 					<td></td>

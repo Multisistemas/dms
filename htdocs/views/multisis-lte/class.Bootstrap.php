@@ -124,6 +124,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<script src=\"/styles/".$this->theme."/plugins/slimScroll/jquery.slimscroll.min.js\"></script>";
 		echo "<script src=\"/styles/".$this->theme."/plugins/fastclick/fastclick.js\"></script>";
 		echo "<script src=\"/styles/".$this->theme."/plugins/pace/pace.min.js\"></script>";
+		
 
 		echo '<script src="/styles/'.$this->theme.'/datepicker/js/bootstrap-datepicker.js"></script>'."\n";
 		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
@@ -450,7 +451,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     $thename = $this->params['user']->getFullName();
     $firstname = explode(" ", $thename);
 
-    echo "<span class=\"hidden-xs\">".$firstname[0]."</span>";
+    echo "<span class=\"hidden-xs\">".$this->params['user']->getFullName()."</span>";
     echo "</a>";
     echo "<ul class=\"dropdown-menu\">";
     echo "<!-- The user image in the menu -->";
@@ -515,8 +516,6 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	function mainSideBar(){ /* {{{ */
 		echo "<aside class=\"main-sidebar\">";
-
-    echo "<!-- sidebar: style can be found in sidebar.less -->";
     echo "<section class=\"sidebar\">";
 
     echo "<!-- Sidebar user panel (optional) -->";
@@ -532,7 +531,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     echo "</div>";
     echo "<div class=\"pull-left info\">";
-    echo "<p>".$this->params['user']->getFullName()."</p>";
+    $thename = $this->params['user']->getFullName();
+    $firstname = explode(" ", $thename);
+    echo "<p>".$firstname[0]."</p>";
     echo "<!-- Status -->";
     echo "<a href=\"#\"><i class=\"fa fa-circle text-success\"></i> Online</a>";
     echo "</div>";
@@ -556,13 +557,13 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 		// View tree
 
-		echo "<li class=\"treeview\">";
+		echo "<li class=\"treeview active\">";
     echo "<a href=\"#\"><i class=\"fa fa-sitemap\"></i> <span>".getMLText("folderTree")."</span>";
     echo "<span class=\"pull-right-container\">";
     echo "<i class=\"fa fa-angle-left pull-right\"></i>";
     echo "</span>";
     echo "</a>";
-    echo "<ul class=\"treeview-menu\">";
+    echo "<ul class=\"treeview-menu menu-open\">";
     echo "<li>";
     echo "<a>";
     $this->printNewTreeNavigationHTML($this->params['rootfolderid'], M_READ, 0, '', 2, "");
@@ -622,7 +623,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function controlSideBar(){ /* {{{ */
-		echo "<aside class=\"control-sidebar control-sidebar-dark\">";
+		echo "<aside class=\"control-sidebar control-sidebar-dark aside-fixed\">";
 		echo "<ul class=\"nav nav-tabs nav-justified control-sidebar-tabs\">";
 		echo "<li class=\"active\"><a href=\"#control-sidebar-theme-demo-options-tab\" data-toggle=\"tab\"><i class=\"fa fa-wrench\"></i></a></li>";
 		if($this->params['user']->isAdmin()) {
@@ -827,8 +828,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		if($document)
 			$txtpath .= "<li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
 			
-		$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-document\" type=\"button\" class=\"btn btn-warning btn-sm\" ><i class=\"fa fa-plus\"></i> <i class=\"fa fa-file\"></i></a> </li>";
-		$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-folder\" type=\"button\" class=\"btn btn-success btn-sm\" ><i class=\"fa fa-plus\"></i> <i class=\"fa fa-folder\"></i></a></li>";
+		$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-document\" type=\"button\" class=\"btn btn-warning btn-sm\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("add_document")."\"><i class=\"fa fa-plus\"></i> <i class=\"fa fa-file\"></i></a> </li>";
+		$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-folder\" type=\"button\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("add_subfolder")."\"><i class=\"fa fa-plus\"></i> <i class=\"fa fa-folder\"></i></a></li>";
 			//$txtpath .= "<li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
 
 		return '<ul class="breadcrumb">'.$txtpath.'</ul>';
@@ -1937,8 +1938,8 @@ $(function() {
 		saveState: true,
 		data: data,
 		saveState: 'jqtree<?php echo $formid; ?>',
-		openedIcon: '<i class="fa fa-minus-circle"></i>',
-		closedIcon: '<i class="fa fa-plus-circle"></i>',
+		openedIcon: $('<i class="fa fa-arrow-circle-down"></i>'),
+		closedIcon: $('<i class="fa fa-arrow-circle-right"></i>'),
 		_onCanSelectNode: function(node) {
 			if(node.is_folder) {
 				folderSelected<?php echo $formid ?>(node.id, node.name);
@@ -2106,7 +2107,7 @@ $(function() {
 	function printDeleteDocumentButton($document, $msg, $return=false){ /* {{{ */
 		$docid = $document->getID();
 		$content = '';
-    $content .= '<a class="btn btn-danger btn-sm delete-document-btn btn-action" rel="'.$docid.'" msg="'.getMLText($msg).'"confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_document", array ("documentname" => $document->getName())), ENT_QUOTES).'"><i class="fa fa-times"></i></a>';
+    $content .= '<a class="btn btn-danger btn-sm delete-document-btn btn-action" rel="'.$docid.'" msg="'.getMLText($msg).'" confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_document", array ("documentname" => $document->getName())), ENT_QUOTES).'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("rm_document").'"><i class="fa fa-times"></i></a>';
 		if($return)
 			return $content;
 		else
@@ -2185,7 +2186,7 @@ $(function() {
 	function printDeleteFolderButton($folder, $msg, $return=false){ /* {{{ */
 		$folderid = $folder->getID();
 		$content = '';
-		$content .= '<a type="button" class="btn btn-danger btn-sm delete-folder-btn btn-action" rel="'.$folderid.'" msg="'.getMLText($msg).'" confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_folder", array ("foldername" => $folder->getName())), ENT_QUOTES).'"><i class="fa fa-times"></i></a>';
+		$content .= '<a type="button" class="btn btn-danger btn-sm delete-folder-btn btn-action" rel="'.$folderid.'" msg="'.getMLText($msg).'" confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_folder", array ("foldername" => $folder->getName())), ENT_QUOTES).'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("rm_folder").'"><i class="fa fa-times"></i></a>';
 		if($return)
 			return $content;
 		
@@ -2263,7 +2264,7 @@ $(function() {
 			$title = 'lock_document';
 		}
 		$content = '';
-    $content .= '<a class="btn btn-warning btn-sm lock-document-btn btn-action" rel="'.$docid.'" msg="'.getMLText($msg).'" title="'.getMLText($title).'"><i class="fa fa-'.$icon.'"></i></a>';
+    $content .= '<a class="btn btn-warning btn-sm lock-document-btn btn-action" rel="'.$docid.'" msg="'.getMLText($msg).'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText($title).'"><i class="fa fa-'.$icon.'"></i></a>';
 		if($return)
 			return $content;
 		else
@@ -2511,24 +2512,24 @@ $(document).ready( function() {
 				$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
 			}
 			if($document->getAccessMode($user) >= M_READWRITE) {
-				$content .= '<a type="button" href="/out/out.EditDocument.php?documentid='.$docID.'" class="btn btn-success btn-sm btn-action"><i class="fa fa-pencil"></i></a>';
+				$content .= '<a type="button" href="/out/out.EditDocument.php?documentid='.$docID.'" class="btn btn-success btn-sm btn-action" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_document_props").'"><i class="fa fa-pencil"></i></a>';
 			} 
 
 			if($document->getAccessMode($user) >= M_READWRITE) {
 				$content .= $this->printLockButton($document, 'splash_document_locked', 'splash_document_unlocked', true);
 			}
 			if($enableClipboard) {
-				$content .= '<a type="button" class="btn btn-success btn-sm addtoclipboard btn-action" rel="D'.$docID.'" msg="'.getMLText('splash_added_to_clipboard').'" title="'.getMLText("add_to_clipboard").'"><i class="icon-copy"></i></a>';
+				$content .= '<a type="button" class="btn btn-success btn-sm addtoclipboard btn-action" rel="D'.$docID.'" msg="'.getMLText('splash_added_to_clipboard').'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("add_to_clipboard").'"><i class="icon-copy"></i></a>';
 			}
 
 			if ($status['status'] == 2 ) {
 				if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
-					$content .= '<a type="button" title="'.htmlspecialchars($document->getName()).' - '.getMLText('current_version').': '.$latestContent->getVersion().'" class="btn btn-info btn-sm preview-doc-btn btn-action" id="'.$docID.'" rel="'.$latestContent->getVersion().'"><i class="fa fa-eye"></i></a>';
+					$content .= '<a type="button" class="btn btn-info btn-sm preview-doc-btn btn-action" id="'.$docID.'" rel="'.$latestContent->getVersion().'" title="'.htmlspecialchars($document->getName()).' - '.getMLText('current_version').': '.$latestContent->getVersion().'"><i class="fa fa-eye"></i></a>';
 				}	
 			}
 
 			if($document->getAccessMode($user) >= M_READWRITE) {
-				$content .= '<a type="button" class="btn btn-primary btn-sm move-doc-btn btn-action" rel="'.$docID.'"><i class="fa fa-arrows"></i></a>';				
+				$content .= '<a type="button" class="btn btn-primary btn-sm move-doc-btn btn-action" rel="'.$docID.'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("move_document").'"><i class="fa fa-arrows"></i></a>';				
 			}
 
 			$content .= "</div>";
@@ -2609,19 +2610,19 @@ $(document).ready( function() {
 			$content .= '<span style="padding: 2px; color: #CCC;"><i class="fa fa-times"></i></span>';
 		}
 		if($subFolder->getAccessMode($user) >= M_READWRITE) {
-			$content .= '<a type="button" href="/out/out.EditFolder.php?folderid='.$subFolder->getID().'" class="btn btn-success btn-sm btn-action "><i class="fa fa-pencil"></i></a>';
+			$content .= '<a type="button" href="/out/out.EditFolder.php?folderid='.$subFolder->getID().'" class="btn btn-success btn-sm btn-action " data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_folder_props").'"><i class="fa fa-pencil"></i></a>';
 		}
 
 		if($subFolder->getAccessMode($user) >= M_ALL) {
-			$content .= '<a type="button" class="btn btn-primary btn-sm move-folder-btn btn-action" rel="'.$subFolder->getID().'"><i class="fa fa-arrows"></i></a>';
+			$content .= '<a type="button" class="btn btn-primary btn-sm move-folder-btn btn-action" rel="'.$subFolder->getID().'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("move_folder").'"><i class="fa fa-arrows"></i></a>';
 		}
 
 		if($subFolder->getAccessMode($user) >= M_ALL) {
-			$content .= '<a type="button" class="btn btn-warning btn-sm access-folder-btn btn-action " rel="'.$subFolder->getID().'"><i class="fa fa-user-times"></i></a>';
+			$content .= '<a type="button" class="btn btn-warning btn-sm access-folder-btn btn-action " rel="'.$subFolder->getID().'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_folder_access").'"><i class="fa fa-user-times"></i></a>';
 		}
 
 		if($enableClipboard) {
-			$content .= '<a type="button" class="btn btn-default btn-sm addtoclipboard btn-action" rel="F'.$subFolder->getID().'" msg="'.getMLText('splash_added_to_clipboard').'" title="'.getMLText("add_to_clipboard").'"><i class="fa fa-clone"></i></a>';
+			$content .= '<a type="button" class="btn btn-default btn-sm addtoclipboard btn-action" rel="F'.$subFolder->getID().'" msg="'.getMLText('splash_added_to_clipboard').'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("add_to_clipboard").'"><i class="fa fa-clone"></i></a>';
 		}
 		$content .= "</div>";
 		$content .= "</td>";

@@ -138,6 +138,13 @@
     height: 40px;
 }
 
+.aside-fixed {
+    position: fixed;
+    max-height: 100%;
+    overflow: auto;
+    padding-bottom: 50px;
+}
+
 /* --------------------- End ---------------------- */
 
 /* ------------- Modals ------------------ */
