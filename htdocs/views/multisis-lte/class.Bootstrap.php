@@ -1441,21 +1441,23 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	function printDocumentChooserHtml($formName) { /* {{{ */
 		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosedocsearch".$formName."\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-		print "<a data-target=\"#docChooser".$formName."\" href=\"/out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
+		print "<input type=\"text\" class=\"custom-input-text-search\" id=\"choosedocsearch".$formName."\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
+		print "<a type=\"button\" data-target=\"#docChooser".$formName."\" href=\"/out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn btn-primary btn-flat\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal hide" id="docChooser<?php echo $formName ?>" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="docChooserLabel"><?php printMLText("choose_target_document") ?></h3>
-  </div>
-  <div class="modal-body">
-		<p><?php printMLText('tree_loading') ?></p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-  </div>
+<div class="modal fade" id="docChooser<?php echo $formName ?>" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
+	<div class="modal-dialog modal-primary" role="document">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 id="docChooserLabel"><?php printMLText("choose_target_document") ?></h3>
+	  </div>
+	  <div class="modal-body">
+			<p><?php printMLText('tree_loading') ?></p>
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+	  </div>
+ 	</div>
 </div>
 <?php 
 	} /* }}} */
@@ -1777,7 +1779,8 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function infoMsg($msg) { /* {{{ */
-		echo "<div class=\"alert alert-info\">\n";
+		echo "<div class=\"callout callout-info alert-dismissible\">";
+		echo "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\"><i class=\"fa fa-times\"></i></button>";
 		echo $msg;
 		echo "</div>\n";
 	} /* }}} */
@@ -2606,9 +2609,8 @@ $(document).ready( function() {
 		$content .= "<div class=\"list-action\">";
 		if($subFolder->getAccessMode($user) >= M_ALL) {
 			$content .= $this->printDeleteFolderButton($subFolder, 'splash_rm_folder', true);
-		} else {
-			$content .= '<span style="padding: 2px; color: #CCC;"><i class="fa fa-times"></i></span>';
 		}
+
 		if($subFolder->getAccessMode($user) >= M_READWRITE) {
 			$content .= '<a type="button" href="/out/out.EditFolder.php?folderid='.$subFolder->getID().'" class="btn btn-success btn-sm btn-action " data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_folder_props").'"><i class="fa fa-pencil"></i></a>';
 		}

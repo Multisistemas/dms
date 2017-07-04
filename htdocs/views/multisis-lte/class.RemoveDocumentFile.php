@@ -31,6 +31,20 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_RemoveDocumentFile extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		header('Content-Type: application/javascript; charset=UTF-8');
+?>
+
+function folderSelected(id, name) {
+	window.location = '../out/out.ViewFolder.php?folderid=' + id;
+}
+
+<?php 
+	$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 0, "");
+} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -38,25 +52,47 @@ class SeedDMS_View_RemoveDocumentFile extends SeedDMS_Bootstrap_Style {
 		$document = $this->params['document'];
 		$file = $this->params['file'];
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("rm_file"));
-		$this->contentContainerStart();
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
 
+		//// Remove attached file ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		echo "<div class=\"box box-danger\">";
+		echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".getMLText("rm_file")."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
 ?>
+
 <form action="../op/op.RemoveDocumentFile.php" name="form1" method="post">
   <?php echo createHiddenFieldWithKey('removedocumentfile'); ?>
 	<input type="Hidden" name="documentid" value="<?php echo $document->getID()?>">
 	<input type="Hidden" name="fileid" value="<?php echo $file->getID()?>">
 	<p><?php printMLText("confirm_rm_file", array ("documentname" => htmlspecialchars($document->getName()), "name" => htmlspecialchars($file->getName())));?></p>
-	<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_file");?></button>
+	<div class="box-footer">
+		<button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> <?php printMLText("rm_file");?></button>
+	</div>
 </form>
+
 <?php
-		$this->contentContainerEnd();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
+
 	} /* }}} */
 }
 ?>

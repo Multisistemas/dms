@@ -32,8 +32,15 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_AddFile extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
 		header('Content-Type: application/javascript');
+
 ?>
+function folderSelected(id, name) {
+	window.location = '../out/out.ViewFolder.php?folderid=' + id;
+}
+
 function checkForm()
 {
 	msg = new Array();
@@ -69,6 +76,7 @@ $(document).ready( function() {
 	});
 });
 <?php
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 0, "");
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -79,30 +87,51 @@ $(document).ready( function() {
 		$strictformcheck = $this->params['strictformcheck'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
 
-		$this->contentHeading(getMLText("linked_files"));
-?>
-<div class="alert alert-warning">
-<?php echo getMLText("max_upload_size").": ".ini_get( "upload_max_filesize"); ?>
-<?php
-	if($enablelargefileupload) {
-  	printf('<p>'.getMLText('link_alt_updatedocument').'</p>', "out.AddFile2.php?documentid=".$document->getId());
-	}
-?>
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();
+		echo $this->getDefaultFolderPathHTML($folder);
+
+		//// Atach file ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		?>
+
+<div class="callout callout-warning alert-dismissible">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+	<?php echo getMLText("max_upload_size").": ".ini_get( "upload_max_filesize"); ?>
+	<?php
+		if($enablelargefileupload) {
+	  	printf('<p>'.getMLText('link_alt_updatedocument').'</p>', "out.AddFile2.php?documentid=".$document->getId());
+		}
+	?>
 </div>
+
 <?php
-		$this->contentContainerStart();
+		echo "<div class=\"box box-primary\">";
+		echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".getMLText("linked_files")."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
 ?>
+
+<div class="form-group">
+			<label><?php printMLText("name");?>:</label>
+			<div class="controls">
+				<input class="form-control" type="text" name="name" value="<?php print htmlspecialchars($folder->getName());?>" required>
+			</div>
+		</div>
 
 <form class="form-horizontal" action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" id="fileupload">
 <input type="hidden" name="documentid" value="<?php print $document->getId(); ?>">
 
 <div class="control-group">
-	<label class="control-label"><?php printMLText("local_file");?>:</label>
+	<label><?php printMLText("local_file");?>:</label>
 	<div class="controls">
 		<?php $this->printFileChooser('userfile', false); ?>
 	</div>
@@ -110,29 +139,40 @@ $(document).ready( function() {
 
 
 <div class="control-group">
-	<label class="control-label"><?php printMLText("name");?>:</label>
+	<label><?php printMLText("name");?>:</label>
 	<div class="controls">
-		<input type="text" name="name" id="name" size="60">
+		<input class="form-control" type="text" name="name" id="name" size="60">
 	</div>
 </div>
 
 
 <div class="control-group">
-	<label class="control-label"><?php printMLText("comment");?>:</label>
+	<label><?php printMLText("comment");?>:</label>
 	<div class="controls">
-		<textarea name="comment" id="comment" rows="4" cols="80"></textarea>
+		<textarea class="form-control" name="comment" id="comment" rows="4" cols="80"></textarea>
 	</div>
 </div>
 
 
-<div class="controls">
-	<input class="btn" type="submit" value="<?php printMLText("add");?>">
+<div class="box-footer">
+	<button class="btn btn-info" type="submit"><i class="fa fa-save"></i> <?php printMLText("add");?></button>
 </div>
 
 </form>
+
+
+
 <?php
-		$this->contentContainerEnd();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 
 	} /* }}} */

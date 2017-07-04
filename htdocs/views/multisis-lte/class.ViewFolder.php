@@ -629,17 +629,16 @@ $(document).ready(function(){
 		echo "</div>";
 
 		//// Folder content ////
-		echo "<div class=\"col-md-12\" id=\"folder-content\">";
-		echo "<div class=\"box box-primary\">";
-    echo "<div class=\"box-body no-padding\">";
-    echo "<div class=\"table-responsive\">";
-
 		$subFolders = $folder->getSubFolders($orderby);
 		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
 		$documents = $folder->getDocuments($orderby);
 		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
-
+		
 		if ((count($subFolders) > 0)||(count($documents) > 0)){
+			echo "<div class=\"col-md-12\" id=\"folder-content\">";
+			echo "<div class=\"box box-primary\">";
+	    echo "<div class=\"box-body no-padding\">";
+			echo "<div class=\"table-responsive\">";
 			$txt = $this->callHook('folderListHeader', $folder, $orderby);
 			if(is_string($txt))
 				echo $txt;
@@ -654,8 +653,7 @@ $(document).ready(function(){
 				print "<th>".getMLText("action")."</th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
 			}
-		}
-		else printMLText("empty_folder_list");
+		  
 
 
 		foreach($subFolders as $subFolder) {
@@ -731,6 +729,12 @@ $(document).ready(function(){
 		echo "</div>";
 		echo "</div>";
 		echo "</div>"; 
+
+		} else {
+			echo "<div class=\"col-md-12\">";
+			$this->infoMsg(getMLText("empty_folder_list"));
+			echo "</div>";
+		}
 
 		//// Document preview ////
 		echo "<div class=\"col-md-12 div-hidden\" id=\"document-previewer\">";

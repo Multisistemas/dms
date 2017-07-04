@@ -105,13 +105,6 @@ $(document).ready(function() {
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
 
-		/*$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
-		$this->contentHeading(getMLText("edit_folder_props"));
-		$this->contentContainerStart();*/
-
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))), "skin-blue sidebar-mini");
 		$this->containerStart();
 		$this->mainHeader();
