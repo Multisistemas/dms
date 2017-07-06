@@ -12,17 +12,14 @@
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-
 /**
  * Include parent class
  */
 require_once("class.Bootstrap.php");
-
 /**
  * Include class to preview documents
  */
 require_once("SeedDMS/Preview.php");
-
 /**
  * Class which outputs the html page for ViewFolder view
  *
@@ -35,7 +32,6 @@ require_once("SeedDMS/Preview.php");
  * @version    Release: @package_version@
  */
 class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
-
 	function getAccessModeText($defMode) { /* {{{ */
 		switch($defMode) {
 			case M_NONE:
@@ -52,12 +48,10 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				break;
 		}
 	} /* }}} */
-
 	function printAccessList($obj) { /* {{{ */
 		$accessList = $obj->getAccessList();
 		if (count($accessList["users"]) == 0 && count($accessList["groups"]) == 0)
 			return;
-
 		$content = '';
 		for ($i = 0; $i < count($accessList["groups"]); $i++)
 		{
@@ -75,26 +69,21 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			if ($i+1 < count($accessList["users"]))
 				$content .= "<br />";
 		}
-
 		if(count($accessList["groups"]) + count($accessList["users"]) > 3) {
 			$this->printPopupBox(getMLText('list_access_rights'), $content);
 		} else {
 			echo $content;
 		}
 	} /* }}} */
-
 	function js() { /* {{{ */
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
 		$orderby = $this->params['orderby'];
 		$expandFolderTree = $this->params['expandFolderTree'];
 		$enableDropUpload = $this->params['enableDropUpload'];
-
 		header('Content-Type: application/javascript; charset=UTF-8');
-		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder', 'please_standby'));
-
+		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder'));
 		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
-
 ?>
 
 function folderSelected(id, name) {
@@ -154,7 +143,7 @@ $(document).ready(function(){
 		if(!checkForm()) {
 			ev.preventDefault();
 		} else {
-			$("#box-form1").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i><div><p class=\"standby\"><?php printMLText("please_standby");?></p></div></div>");
+			$("#box-form1").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i></div>");
 		}
 	});
 
@@ -162,7 +151,7 @@ $(document).ready(function(){
 		if(!checkForm2()){
 			ev.preventDefault();
 		} else {
-			$("#box-form2").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i><div><p class=\"standby\"><?php printMLText("please_standby");?></p></div></div>");
+			$("#box-form2").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i>></div>");
 		}
 	});
 
@@ -273,7 +262,7 @@ $(document).ready(function(){
   /* ---- For datatables ---- */
 	$(function () {
     $('#viewfolder-table').DataTable({
-      "paging": true,
+      "paging": false,
       "lengthChange": false,
       "searching": true,
       "ordering": false,
@@ -284,7 +273,6 @@ $(document).ready(function(){
 
 });
 <?php
-
 		if ($enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
 			echo "SeedDMSUpload.setUrl('../op/op.Ajax.php');";
 			echo "SeedDMSUpload.setAbortBtnLabel('".getMLText("cancel")."');";
@@ -292,14 +280,12 @@ $(document).ready(function(){
 			echo "SeedDMSUpload.setMaxFileSize(".SeedDMS_Core_File::parse_filesize(ini_get("upload_max_filesize")).");";
 			echo "SeedDMSUpload.setMaxFileSizeMsg('".getMLText("uploading_maxsize")."');";
 		}
-
 		$this->printDeleteFolderButtonJs();
 		$this->printDeleteDocumentButtonJs();
 		$this->printKeywordChooserJs("form2");
 		$this->printFolderChooserJs("form3");
 		$this->printFolderChooserJs("form4");
 	} /* }}} */
-
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -316,9 +302,7 @@ $(document).ready(function(){
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
 		$previewwidth = $this->params['previewWidthList'];
 		$timeout = $this->params['timeout'];
-
 		$folderid = $folder->getId();
-
 		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet">'."\n", 'css');
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/datatables/jquery.dataTables.min.js"></script>'."\n", 'js');
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/datatables/dataTables.bootstrap.min.js"></script>'."\n", 'js');
@@ -326,21 +310,14 @@ $(document).ready(function(){
 		
 		echo $this->callHook('startPage');
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))), "skin-blue sidebar-mini");
-
 		$this->containerStart();
 		$this->mainHeader();
 		$this->mainSideBar();
-
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
-
 		echo $this->callHook('preContent');
-
 		$this->contentStart();		
-
 		echo $this->getFolderPathHTML($folder);
-
 		echo "<div class=\"row\">";
-
 		//// Add Folder ////
 		echo "<div class=\"col-md-12 div-hidden\" id=\"div-add-folder\">";
 		echo "<div class=\"box box-success div-green-border\" id=\"box-form1\">";
@@ -400,7 +377,6 @@ $(document).ready(function(){
     echo "<!-- /.box-body -->";
     echo "</div>";
 		echo "</div>";
-
 		//// Add Document ////
 		echo "<div class=\"col-md-12 div-hidden\" id=\"div-add-document\">";
 		echo "<div class=\"box box-warning div-bkg-color\" id=\"box-form2\">";
@@ -591,7 +567,7 @@ $(document).ready(function(){
             	<label><?php printMLText("individuals");?>:</label>
             	<select class="chzn-select span9 form-control" name="notification_users[]" multiple="multiple"">
 								<?php
-									$allUsers = $dms->getAllUsers($sortusersinlist);
+									$allUsers = $dms->getAllUsers("");
 									foreach ($allUsers as $userObj) {
 										if (!$userObj->isGuest() && $folder->getAccessMode($userObj) >= M_READ)
 											print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "\n";
@@ -621,28 +597,22 @@ $(document).ready(function(){
         <!-- /.tab-content -->
       </div>
    	</form>
-
     <?php
     echo "</div>";
     echo "<!-- /.box-body -->";
     echo "</div>";
 		echo "</div>";
-
 		//// Folder content ////
-		echo "<div class=\"col-md-12\" id=\"folder-content\">";
-		echo "<div class=\"box box-primary\">";
-		echo "<div class=\"box-header with-border\">";
-    echo "<h3 class=\"box-title\">".getMLText("folder_contents")."</h3>";
-    echo "</div>";
-    echo "<div class=\"box-body no-padding\">";
-    echo "<div class=\"table-responsive\">";
-
 		$subFolders = $folder->getSubFolders($orderby);
 		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
 		$documents = $folder->getDocuments($orderby);
 		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
-
+		
 		if ((count($subFolders) > 0)||(count($documents) > 0)){
+			echo "<div class=\"col-md-12\" id=\"folder-content\">";
+			echo "<div class=\"box box-primary\">";
+	    echo "<div class=\"box-body no-padding\">";
+			echo "<div class=\"table-responsive\">";
 			$txt = $this->callHook('folderListHeader', $folder, $orderby);
 			if(is_string($txt))
 				echo $txt;
@@ -657,10 +627,7 @@ $(document).ready(function(){
 				print "<th>".getMLText("action")."</th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
 			}
-		}
-		else printMLText("empty_folder_list");
-
-
+		  
 		foreach($subFolders as $subFolder) {
 			$txt = $this->callHook('folderListItem', $subFolder);
 			if(is_string($txt))
@@ -681,7 +648,7 @@ $(document).ready(function(){
 					</div>
 					</td>
 					<td>
-						<button class="btn btn-default cancel-folder-mv" rel="<?php echo $subFolder->getID(); ?>"><?php echo getMLText("cancel"); ?></button>
+						<a class="btn btn-default cancel-folder-mv" rel="<?php echo $subFolder->getID(); ?>"><?php echo getMLText("cancel"); ?></a>
 						<input class="btn btn-success" type="submit" value="<?php printMLText("move"); ?>">
 					</td>
 					<td></td>
@@ -690,7 +657,6 @@ $(document).ready(function(){
 				<?php
 			}
 		}
-
 		foreach($documents as $document) {
 			$document->verifyLastestContentExpriry();
 			$txt = $this->callHook('documentListItem', $document, $previewer);
@@ -712,7 +678,7 @@ $(document).ready(function(){
 						</div>
 					</td>
 					<td>
-						<button class="btn btn-default cancel-doc-mv" rel="<?php echo $document->getID(); ?>"><?php echo getMLText("cancel"); ?></button>
+						<a class="btn btn-default cancel-doc-mv" rel="<?php echo $document->getID(); ?>"><?php echo getMLText("cancel"); ?></a>
 						<input class="btn btn-success" type="submit" value="<?php printMLText("move"); ?>">
 					</td>
 					<td></td>
@@ -722,7 +688,6 @@ $(document).ready(function(){
 				<?php
 			}
 		}
-
 		if ((count($subFolders) > 0)||(count($documents) > 0)) {
 			$txt = $this->callHook('folderListFooter', $folder);
 			if(is_string($txt))
@@ -734,16 +699,20 @@ $(document).ready(function(){
 		echo "</div>";
 		echo "</div>";
 		echo "</div>"; 
-
+		} else {
+			echo "<div class=\"col-md-12\">";
+			$this->infoMsg(getMLText("empty_folder_list"));
+			echo "</div>";
+		}
 		//// Document preview ////
 		echo "<div class=\"col-md-12 div-hidden\" id=\"document-previewer\">";
 		echo "<div class=\"box box-info\">";
-		echo "<div class=\"box-header with-border\">";
-    echo "<h3 id=\"doc-title\" class=\"box-title\"></h3>";
+		echo "<div class=\"box-header with-border box-header-doc-preview\">";
+    echo "<span id=\"doc-title\" class=\"box-title\"></span>";
     echo "<span class=\"pull-right\">";
     //echo "<a class=\"btn btn-sm btn-primary\"><i class=\"fa fa-chevron-left\"></i></a>";
     //echo "<a class=\"btn btn-sm btn-primary\"><i class=\"fa fa-chevron-right\"></i></a>";
-    echo "<a class=\"btn btn-sm btn-danger close-doc-preview\">".getMLText("close")."</a>";
+    echo "<a class=\"close-doc-preview\"><i class=\"fa fa-times\"></i></a>";
     echo "</span>";
     echo "</div>";
     echo "<div class=\"box-body\">";
@@ -751,10 +720,7 @@ $(document).ready(function(){
     echo "</div>";
 		echo "</div>";
 		echo "</div>"; // End document preview
-
-
 		?>
-
 <?php
 		echo "</div>\n"; // End of row
 		echo "</div>\n"; // End of container

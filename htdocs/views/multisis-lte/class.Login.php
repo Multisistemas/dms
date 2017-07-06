@@ -111,7 +111,7 @@ $(document).ready( function() {
 	function show() { /* {{{ */
 		$enableguestlogin = $this->params['enableguestlogin'];
 		$enablepasswordforgotten = $this->params['enablepasswordforgotten'];
-		$refer = $this->params['referrer'];
+		$refer = "/out/out.ViewFolder.php?folderid=1&showtree=1";
 		$themes = $this->params['themes'];
 		$languages = $this->params['languages'];
 		$enableLanguageSelector = $this->params['enablelanguageselector'];

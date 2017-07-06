@@ -31,7 +31,7 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_FolderAccess extends SeedDMS_Bootstrap_Style {
 	function printAccessModeSelection($defMode) { /* {{{ */
-		print "<select name=\"mode\">\n";
+		print "<select name=\"mode\" class=\"form-control\">\n";
 		print "\t<option value=\"".M_NONE."\"" . (($defMode == M_NONE) ? " selected" : "") . ">" . getMLText("access_mode_none") . "\n";
 		print "\t<option value=\"".M_READ."\"" . (($defMode == M_READ) ? " selected" : "") . ">" . getMLText("access_mode_read") . "\n";
 		print "\t<option value=\"".M_READWRITE."\"" . (($defMode == M_READWRITE) ? " selected" : "") . ">" . getMLText("access_mode_readwrite") . "\n";
@@ -40,8 +40,15 @@ class SeedDMS_View_FolderAccess extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function js() { /* {{{ */
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
 		header('Content-Type: application/javascript; charset=UTF-8');
+
 ?>
+function folderSelected(id, name) {
+	window.location = '../out/out.ViewFolder.php?folderid=' + id;
+}
+
 function checkForm()
 {
 	msg = new Array()
@@ -69,6 +76,7 @@ $(document).ready(function() {
 	});
 });
 <?php
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 1, "");
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -79,103 +87,154 @@ $(document).ready(function() {
 		$allGroups = $this->params['allgroups'];
 		$rootfolderid = $this->params['rootfolderid'];
 
-		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
-		$this->globalNavigation($folder);
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
+
+		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
+		echo $this->getDefaultFolderPathHTML($folder);
 
-		$this->contentHeading(getMLText("edit_folder_access"));
-		$this->contentContainerStart();
+		/* Set owner ----------------------------------------------------- */
 
-		if ($user->isAdmin()) {
+		if ($folder->getAccessMode($user) >= M_ALL) {
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-6\">";
+		echo "<div class=\"box box-primary\">";
+		echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".getMLText("set_owner")."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
 
-			$this->contentSubHeading(getMLText("set_owner"));
-?>
-	<form class="form-inline" action="../op/op.FolderAccess.php">
-	<?php echo createHiddenFieldWithKey('folderaccess'); ?>
-	<input type="Hidden" name="action" value="setowner">
-	<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
-	<select name="ownerid">
-<?php
-			$owner = $folder->getOwner();
-			foreach ($allUsers as $currUser) {
-				if ($currUser->isGuest())
-					continue;
-				print "<option value=\"".$currUser->getID()."\"";
-				if ($currUser->getID() == $owner->getID())
-					print " selected";
-				print ">" . htmlspecialchars($currUser->getLogin() . " - " . $currUser->getFullname()) . "</option>\n";
-			}
-?>
-	</select>
-	<button type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("save")?></button>
-	</form>
-	<?php
-		}
+    ?>
+			<form class="form-horizontal" action="../op/op.FolderAccess.php">
+			<?php echo createHiddenFieldWithKey('folderaccess'); ?>
+			<input type="Hidden" name="action" value="setowner">
+			<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
+			<select name="ownerid" class="form-control">
+			<?php
+					$owner = $folder->getOwner();
+					foreach ($allUsers as $currUser) {
+						if ($currUser->isGuest())
+							continue;
+						print "<option value=\"".$currUser->getID()."\"";
+						if ($currUser->getID() == $owner->getID())
+							print " selected";
+						print ">" . htmlspecialchars($currUser->getLogin() . " - " . $currUser->getFullname()) . "</option>\n";
+					}
+			?>
+			</select>
+			<div class="box-footer">
+				<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save")?></button>
+			</div>
+			</form>
+		<?php
+			echo "</div>";
+			echo "</div>";
+			echo "</div>";
+		} 
+
+		/* Ends set owner ----------------------------------------------------- */
+
 
 		if ($folder->getID() != $rootfolderid && $folder->getParent()){
-
-			$this->contentSubHeading(getMLText("access_inheritance"));
+			echo "<div class=\"col-md-6\">";
+			echo "<div class=\"box box-info\">";
+			echo "<div class=\"box-header with-border\">";
+	    echo "<h3 class=\"box-title\">".getMLText("access_inheritance")."</h3>";
+	    echo "</div>";
+	    echo "<div class=\"box-body\">";
 			
 			if ($folder->inheritsAccess()) {
 				printMLText("inherits_access_msg");
-?>
-  <p>
-	<form class="form-inline" action="../op/op.FolderAccess.php">
-  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
-	<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
-	<input type="hidden" name="action" value="notinherit">
-	<input type="hidden" name="mode" value="copy">
-	<input type="submit" class="btn" value="<?php printMLText("inherits_access_copy_msg")?>">
-	</form>
-	<form action="../op/op.FolderAccess.php" style="display: inline-block;">
-  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
-	<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
-	<input type="hidden" name="action" value="notinherit">
-	<input type="hidden" name="mode" value="empty">
-	<input type="submit" class="btn" value="<?php printMLText("inherits_access_empty_msg")?>">
-	</form>
-	</p>
-<?php
-				$this->contentContainerEnd();
+				?>
+				  <p>
+					<form class="form-horizontal" action="../op/op.FolderAccess.php">
+				  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
+					<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
+					<input type="hidden" name="action" value="notinherit">
+					<input type="hidden" name="mode" value="copy">
+					<button type="submit" class="btn btn-info" ><i class="fa fa-copy"></i> <?php printMLText("inherits_access_copy_msg")?></button>
+					</form>
+					</p>
+					<p>
+					<form action="../op/op.FolderAccess.php" style="display: inline-block;">
+				  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
+					<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
+					<input type="hidden" name="action" value="notinherit">
+					<input type="hidden" name="mode" value="empty">
+					<button type="submit" class="btn btn-primary" ><i class="fa fa-star"></i> <?php printMLText("inherits_access_empty_msg")?></button>
+					</form>
+					</p>
+				<?php
+				echo "</div>";
+				echo "</div>";
+				echo "</div>";
+				echo "</div>";
+				echo "</div>";
 				$this->contentEnd();
+				$this->mainFooter();		
+				$this->containerEnd();
 				$this->htmlEndPage();
 				return;
 			}
-?>
-	<form action="../op/op.FolderAccess.php">
-  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
-	<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
-	<input type="hidden" name="action" value="inherit">
-	<input type="submit" class="btn" value="<?php printMLText("does_not_inherit_access_msg")?>">
-	</form>
-<?php
+			?>
+				<form action="../op/op.FolderAccess.php">
+			  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
+				<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
+				<input type="hidden" name="action" value="inherit">
+				<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("does_not_inherit_access_msg")?></button>
+				</form>
+			<?php
+
+			echo "</div>";
+			echo "</div>";
+			echo "</div>";
 		}
+		echo "</div>"; /* Ends first row */ 
 
 		$accessList = $folder->getAccessList();
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-6\">";
+		echo "<div class=\"box box-warning\">";
+		echo "<div class=\"box-header with-border\">";
+	  echo "<h3 class=\"box-title\">".getMLText("default_access")."</h3>";
+	  echo "</div>";
+	  echo "<div class=\"box-body\">";
+		
+		?>
+		<form class="form-horizontal" action="../op/op.FolderAccess.php">
+		  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
+			<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
+			<input type="hidden" name="action" value="setdefault">
+			<?php $this->printAccessModeSelection($folder->getDefaultAccess()); ?>
+			<div class="box-footer">
+				<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save")?></button>	
+			</div>
+		</form>
+		<?php
 
-		$this->contentSubHeading(getMLText("default_access"));
-?>
-<form class="form-inline" action="../op/op.FolderAccess.php">
-  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
-	<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
-	<input type="hidden" name="action" value="setdefault">
-	<?php $this->printAccessModeSelection($folder->getDefaultAccess()); ?>
-	<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
-</form>
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
 
-<?php
-
-		$this->contentSubHeading(getMLText("edit_existing_access"));
+		echo "<div class=\"col-md-6\">";
+		echo "<div class=\"box box-success\">";
+		echo "<div class=\"box-header with-border\">";
+	  echo "<h3 class=\"box-title\">".getMLText("edit_existing_access")."</h3>";
+	  echo "</div>";
+	  echo "<div class=\"box-body\">";
 
 		if ((count($accessList["users"]) != 0) || (count($accessList["groups"]) != 0)) {
 
-			print "<table class=\"table-condensed\">";
+			print "<div class=\"table-responsive\">";
+			print "<table class=\"table\">";
 
 			foreach ($accessList["users"] as $userAccess) {
 				$userObj = $userAccess->getUser();
 				print "<tr>\n";
-				print "<td><i class=\"icon-user\"></i></td>\n";
+				print "<td><i class=\"fa fa-user\"></i></td>\n";
 				print "<td>". htmlspecialchars($userObj->getFullName()) . "</td>\n";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
 				echo createHiddenFieldWithKey('folderaccess')."\n";
@@ -186,7 +245,7 @@ $(document).ready(function() {
 				$this->printAccessModeSelection($userAccess->getMode());
 				print "</td>\n";
 				print "<td>\n";
-				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-save\"></i> ".getMLText("save")."</button>";
+				print "<button type=\"submit\" class=\"btn btn-sm btn-info\"><i class=\"fa fa-save\"></i> ".getMLText("save")."</button>";
 				print "</td>\n";
 				print "</form>\n";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
@@ -195,7 +254,7 @@ $(document).ready(function() {
 				print "<input type=\"hidden\" name=\"action\" value=\"delaccess\">\n";
 				print "<input type=\"hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 				print "<td>\n";
-				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
+				print "<button type=\"submit\" class=\"btn btn-sm btn-danger\"><i class=\"fa fa-times\"></i> ".getMLText("delete")."</button>";
 				print "</td>\n";
 				print "</form>\n";
 				print "</tr>\n";
@@ -205,7 +264,7 @@ $(document).ready(function() {
 				$groupObj = $groupAccess->getGroup();
 				$mode = $groupAccess->getMode();
 				print "<tr>";
-				print "<td><i class=\"icon-group\"></i></td>";
+				print "<td><i class=\"fa fa-group\"></i></td>";
 				print "<td>". htmlspecialchars($groupObj->getName()) . "</td>";
 				print "<form action=\"../op/op.FolderAccess.php\">";
 				echo createHiddenFieldWithKey('folderaccess')."\n";
@@ -216,7 +275,7 @@ $(document).ready(function() {
 				$this->printAccessModeSelection($groupAccess->getMode());
 				print "</td>\n";
 				print "<td><span class=\"actions\">\n";
-				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-save\"></i> ".getMLText("save")."</button>";
+				print "<button type=\"submit\" class=\"btn btn-sm btn-info\"><i class=\"fa fa-save\"></i> ".getMLText("save")."</button>";
 				print "</span></td>\n";
 				print "</form>";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
@@ -225,67 +284,78 @@ $(document).ready(function() {
 				print "<input type=\"hidden\" name=\"action\" value=\"delaccess\">\n";
 				print "<input type=\"hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">\n";
 				print "<td>";
-				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
+				print "<button type=\"submit\" class=\"btn btn-sm btn-danger\"><i class=\"fa fa-times\"></i> ".getMLText("delete")."</button>";
 				print "</td>\n";
 				print "</form>";
 				print "</tr>\n";
 			}
 			
-			print "</table><br>";
+			print "</table>";
+			print "</div>";
 		}
-?>
-<form action="../op/op.FolderAccess.php" id="form1" name="form1">
-<?php echo createHiddenFieldWithKey('folderaccess'); ?>
-<input type="hidden" name="folderid" value="<?php print $folder->getID()?>">
-<input type="hidden" name="action" value="addaccess">
-<table class="table-condensed">
-<tr>
-<td><?php printMLText("user");?>:</td>
-<td>
-<select name="userid">
-<option value="-1"><?php printMLText("select_one");?>
-<?php
-		foreach ($allUsers as $userObj) {
-			if ($userObj->isGuest()) {
-				continue;
-			}
-			print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "</option>\n";
-		}
-?>
-</select>
-</td>
-</tr>
-<tr>
-<td class="inputDescription"><?php printMLText("group");?>:</td>
-<td>
-<select name="groupid">
-<option value="-1"><?php printMLText("select_one");?>
-<?php
-		foreach ($allGroups as $groupObj) {
-			print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "\n";
-		}
-?>
-</select>
-</td>
-</tr>
-<tr>
-<td class="inputDescription"><?php printMLText("access_mode");?>:</td>
-<td>
-<?php
-		$this->printAccessModeSelection(M_READ);
-?>
-</td>
-</tr>
-<tr>
-<td></td>
-<td><input type="submit" class="btn btn-success" value="<?php printMLText("add");?>"></td>
-</tr>
-</table>
-</form>
+		?>
+		<form action="../op/op.FolderAccess.php" id="form1" name="form1">
+		<?php echo createHiddenFieldWithKey('folderaccess'); ?>
+		<input type="hidden" name="folderid" value="<?php print $folder->getID()?>">
+		<input type="hidden" name="action" value="addaccess">
+		<table class="table-condensed">
+		<tr>
+		<td><?php printMLText("user");?>:</td>
+		<td>
+		<select name="userid" class="form-control">
+		<option value="-1"><?php printMLText("select_one");?>
+		<?php
+				foreach ($allUsers as $userObj) {
+					if ($userObj->isGuest()) {
+						continue;
+					}
+					print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "</option>\n";
+				}
+		?>
+		</select>
+		</td>
+		</tr>
+		<tr>
+		<td class="inputDescription"><?php printMLText("group");?>:</td>
+		<td>
+		<select name="groupid" class="form-control">
+		<option value="-1"><?php printMLText("select_one");?>
+		<?php
+				foreach ($allGroups as $groupObj) {
+					print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "\n";
+				}
+		?>
+		</select>
+		</td>
+		</tr>
+		<tr>
+		<td class="inputDescription"><?php printMLText("access_mode");?>:</td>
+		<td>
+		<?php
+				$this->printAccessModeSelection(M_READ);
+		?>
+		</td>
+		</tr>
+		<tr>
+		<td></td>
+		<td>
+			<button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> <?php printMLText("add")?></button>	
+		</td>
+		</tr>
+		</table>
+		</form>
 
 <?php
-		$this->contentContainerEnd();
+
+		print "</div>";
+		print "</div>";
+		print "</div>";
+		print "</div>";
+		print "</div>";
+		
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

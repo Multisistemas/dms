@@ -13,6 +13,7 @@ ul.jqtree-tree ul.jqtree_common {
     display: block;
     margin-left: 10px;
     margin-right: 0;
+    white-space: normal;
 }
 ul.jqtree-tree li.jqtree-closed > ul.jqtree_common {
     display: none;
@@ -44,8 +45,12 @@ ul.jqtree-tree .jqtree-element {
 }
 
 ul.jqtree-tree .jqtree-title {
-    color: #999;
+    color: #ccc;
     /*vertical-align: middle;*/
+}
+
+ul.jqtree-tree .jqtree-title:hover {
+    color: #aaa;
 }
 
 ul.jqtree-tree li.jqtree-folder {

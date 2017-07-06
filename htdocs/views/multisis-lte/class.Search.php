@@ -54,12 +54,19 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript; charset=UTF-8');
+		?>
+			function folderSelected(id, name) {
+				window.location = '../out/out.ViewFolder.php?folderid=' + id;
+			}
+		<?php
 
 		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder'));
 
 		$this->printFolderChooserJs("form1");
 		$this->printDeleteFolderButtonJs();
 		$this->printDeleteDocumentButtonJs();
+
+		$this->printNewTreeNavigationJs(1, M_READ, 0, '', 1, "");
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -98,17 +105,20 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$previewwidth = $this->params['previewWidthList'];
 		$timeout = $this->params['timeout'];
 
-		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
-		$this->htmlStartPage(getMLText("search_results"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("search_results"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();		
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("search_results"), "");
 
-		echo "<div class=\"row-fluid\">\n";
-		echo "<div class=\"span4\">\n";
+		echo "<div class=\"row\">";
+		echo "<div class=\"gap-20\"></div>";
+		echo "<div class=\"col-md-6\">";
 //echo "<pre>";print_r($_GET);echo "</pre>";
 ?>
+<div class="nav-tabs-custom">
   <ul class="nav nav-tabs" id="searchtab">
 	  <li <?php echo ($fullsearch == false) ? 'class="active"' : ''; ?>><a data-target="#database" data-toggle="tab"><?php printMLText('databasesearch'); ?></a></li>
 <?php
@@ -124,33 +134,40 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <form action="../out/out.Search.php" name="form1">
 <?php
 // Database search Form {{{
-		$this->contentContainerStart();
+//$this->contentContainerStart();
+
 ?>
-<table class="table-condensed">
+<div class="table-responsive">
+<table class="table">
 <tr>
 <td><?php printMLText("search_query");?>:</td>
 <td>
-<input type="text" name="query" value="<?php echo htmlspecialchars($this->query); ?>" />
-<select name="mode">
+<div class="input-group">
+<input type="text" class="form-control" name="query" value="<?php echo htmlspecialchars($this->query); ?>" />
+<select name="mode" class="form-control">
 <option value="1" <?php echo ($mode=='AND') ? "selected" : ""; ?>><?php printMLText("search_mode_and");?>
 <option value="0"<?php echo ($mode=='OR') ? "selected" : ""; ?>><?php printMLText("search_mode_or");?>
 </select>
+</div>
 </td>
 </tr>
 <tr>
 <td><?php printMLText("search_in");?>:</td>
 <td>
+<div class="input-group">
 <label class="checkbox" for="keywords"><input type="checkbox" id="keywords" name="searchin[]" value="1" <?php if(in_array('1', $searchin)) echo " checked"; ?>><?php printMLText("keywords");?> (<?php printMLText('documents_only'); ?>)</label>
 <label class="checkbox" for="searchName"><input type="checkbox" name="searchin[]" id="searchName" value="2" <?php if(in_array('2', $searchin)) echo " checked"; ?>><?php printMLText("name");?></label>
 <label class="checkbox" for="comment"><input type="checkbox" name="searchin[]" id="comment" value="3" <?php if(in_array('3', $searchin)) echo " checked"; ?>><?php printMLText("comment");?></label>
 <label class="checkbox" for="attributes"><input type="checkbox" name="searchin[]" id="attributes" value="4" <?php if(in_array('4', $searchin)) echo " checked"; ?>><?php printMLText("attributes");?></label>
 <label class="checkbox" for="id"><input type="checkbox" name="searchin[]" id="id" value="5" <?php if(in_array('5', $searchin)) echo " checked"; ?>><?php printMLText("id");?></label>
+</div>
 </td>
 </tr>
 <tr>
 <td><?php printMLText("owner");?>:</td>
 <td>
-<select class="chzn-select-deselect" name="ownerid" data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
+<div class="">
+<select class="chzn-select-deselect form-control" name="ownerid" data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <option value="-1"></option>
 <?php
 		foreach ($allUsers as $userObj) {
@@ -160,12 +177,13 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		}
 ?>
 </select>
+</div>
 </td>
 </tr>
 <tr>
 <td><?php printMLText("search_resultmode");?>:</td>
 <td>
-<select name="resultmode">
+<select name="resultmode" class="form-control">
 <option value="3" <?php echo ($resultmode=='3') ? "selected" : ""; ?>><?php printMLText("search_resultmode_both");?>
 <option value="2"<?php echo ($resultmode=='2') ? "selected" : ""; ?>><?php printMLText("search_mode_folders");?>
 <option value="1"<?php echo ($resultmode=='1') ? "selected" : ""; ?>><?php printMLText("search_mode_documents");?>
@@ -179,16 +197,16 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <tr>
 <td><?php printMLText("creation_date");?>:</td>
 <td>
-        <label class="checkbox inline">
+        <label class="checkbox">
 				  <input type="checkbox" name="creationdate" value="true" <?php if($creationdate) echo "checked"; ?>/><?php printMLText("between");?>
         </label><br />
-        <span class="input-append date" style="display: inline;" id="createstartdate" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-          <input class="span4" size="16" name="createstart" type="text" value="<?php if($startdate) printf("%04d-%02d-%02d", $startdate['year'], $startdate['month'], $startdate['day']); else echo date('Y-m-d'); ?>">
+        <span class="input-append date" id="createstartdate" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+          <input class="span4 form-control" size="16" name="createstart" type="text" value="<?php if($startdate) printf("%04d-%02d-%02d", $startdate['year'], $startdate['month'], $startdate['day']); else echo date('Y-m-d'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
-        </span>&nbsp;
-				<?php printMLText("and"); ?>
-        <span class="input-append date" style="display: inline;" id="createenddate" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-          <input class="span4" size="16" name="createend" type="text" value="<?php if($stopdate) printf("%04d-%02d-%02d", $stopdate['year'], $stopdate['month'], $stopdate['day']); else echo date('Y-m-d'); ?>">
+        </span>
+				<p class="align-center"><i class="fa fa-arrow-down"></i></p>
+        <span class="input-append date" id="createenddate" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+          <input class="span4 form-control" size="16" name="createend" type="text" value="<?php if($stopdate) printf("%04d-%02d-%02d", $stopdate['year'], $stopdate['month'], $stopdate['day']); else echo date('Y-m-d'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>
 </td>
@@ -212,12 +230,14 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 ?>
 
 <tr>
-<td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button></td>
+<td></td><td><button type="submit" class="btn btn-info"><i class="fa fa-search"></i> <?php printMLText("search"); ?></button></td>
 </tr>
 
 </table>
+</div>
+<div class="gap-20"></div>
 <?php
-		$this->contentContainerEnd();
+
 // }}}
 
 		/* First check if any of the folder filters are set. If it is,
@@ -240,89 +260,88 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		if($expirationdate)
 			$openfilterdlg = true;
 ?>
-<div class="accordion" id="accordion2">
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-        <?php printMLText('filter_for_documents'); ?>
-      </a>
+<div class="box box-primary collapsed-box" id="">
+  <div class="box-header with-border">
+    <h3 class="box-title"><?php printMLText('filter_for_documents'); ?></h3>
+		<div class="box-tools pull-right">
+    	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
     </div>
-    <div id="collapseOne" class="accordion-body <?php if(!$openfilterdlg) echo "collapse";?>" style="_height: 0px;">
-      <div class="accordion-inner">
-<table class="table-condensed">
-<tr>
-<td><?php printMLText("category");?>:</td>
-<td>
-<select class="chzn-select" name="categoryids[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
-<!--
-<option value="-1"><?php printMLText("all_categories");?>
--->
-<?php
-		$tmpcatids = array();
-		foreach($categories as $tmpcat)
-			$tmpcatids[] = $tmpcat->getID();
-		foreach ($allCats as $catObj) {
-			print "<option value=\"".$catObj->getID()."\" ".(in_array($catObj->getID(), $tmpcatids) ? "selected" : "").">" . htmlspecialchars($catObj->getName()) . "\n";
-		}
-?>
-</select>
-</td>
-</tr>
-<tr>
-<td><?php printMLText("status");?>:</td>
-<td>
-<?php if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') { ?>
-<?php if($workflowmode == 'traditional') { ?>
-<label class="checkbox" for='pendingReview'><input type="checkbox" id="pendingReview" name="pendingReview" value="1" <?php echo in_array(S_DRAFT_REV, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_DRAFT_REV);?></label>
-<?php } ?>
-<label class="checkbox" for='pendingApproval'><input type="checkbox" id="pendingApproval" name="pendingApproval" value="1" <?php echo in_array(S_DRAFT_APP, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_DRAFT_APP);?></label>
-<?php } else { ?>
-<label class="checkbox" for='inWorkflow'><input type="checkbox" id="inWorkflow" name="inWorkflow" value="1" <?php echo in_array(S_IN_WORKFLOW, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_IN_WORKFLOW);?></label>
-<?php } ?>
-<label class="checkbox" for='released'><input type="checkbox" id="released" name="released" value="1" <?php echo in_array(S_RELEASED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_RELEASED);?></label>
-<label class="checkbox" for='rejected'><input type="checkbox" id="rejected" name="rejected" value="1" <?php echo in_array(S_REJECTED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_REJECTED);?></label>
-<label class="checkbox" for='obsolete'><input type="checkbox" id="obsolete" name="obsolete" value="1" <?php echo in_array(S_OBSOLETE, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_OBSOLETE);?></label>
-<label class="checkbox" for='expired'><input type="checkbox" id="expired" name="expired" value="1" <?php echo in_array(S_EXPIRED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_EXPIRED);?></label>
-</td>
-</tr>
-<tr>
-<td><?php printMLText("expires");?>:</td>
-<td>
-        <label class="checkbox inline">
-				  <input type="checkbox" name="expirationdate" value="true" <?php if($expirationdate) echo "checked"; ?>/><?php printMLText("between");?>
-        </label><br />
-        <span class="input-append date" style="display: inline;" id="expirationstartdate" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-          <input class="span4" size="16" name="expirationstart" type="text" value="<?php if($expstartdate) printf("%04d-%02d-%02d", $expstartdate['year'], $expstartdate['month'], $expstartdate['day']); else echo date('Y-m-d'); ?>">
-          <span class="add-on"><i class="icon-calendar"></i></span>
-        </span>&nbsp;
-				<?php printMLText("and"); ?>
-        <span class="input-append date" style="display: inline;" id="expirationenddate" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-          <input class="span4" size="16" name="expirationend" type="text" value="<?php if($expstopdate) printf("%04d-%02d-%02d", $expstopdate['year'], $expstopdate['month'], $expstopdate['day']); else echo date('Y-m-d'); ?>">
-          <span class="add-on"><i class="icon-calendar"></i></span>
-        </span>
-</td>
-</tr>
-<?php
-		if($attrdefs) {
-			foreach($attrdefs as $attrdef) {
-				$attricon = '';
-				if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document || $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
-?>
-<tr>
-	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '', 'attributes', true) ?></td>
-</tr>
+  </div>
+  <div class="box-body">
+				<table class="table">
+				<tr>
+				<td><?php printMLText("category");?>:</td>
+				<td>
+				<select class="chzn-select form-control" name="categoryids[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
+				<!--
+				<option value="-1"><?php printMLText("all_categories");?>
+				-->
+				<?php
+						$tmpcatids = array();
+						foreach($categories as $tmpcat)
+							$tmpcatids[] = $tmpcat->getID();
+						foreach ($allCats as $catObj) {
+							print "<option value=\"".$catObj->getID()."\" ".(in_array($catObj->getID(), $tmpcatids) ? "selected" : "").">" . htmlspecialchars($catObj->getName()) . "\n";
+						}
+				?>
+				</select>
+				</td>
+				</tr>
+				<tr>
+				<td><?php printMLText("status");?>:</td>
+				<td>
+				<?php if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') { ?>
+				<?php if($workflowmode == 'traditional') { ?>
+				<label class="checkbox" for='pendingReview'><input type="checkbox" id="pendingReview" name="pendingReview" value="1" <?php echo in_array(S_DRAFT_REV, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_DRAFT_REV);?></label>
+				<?php } ?>
+				<label class="checkbox" for='pendingApproval'><input type="checkbox" id="pendingApproval" name="pendingApproval" value="1" <?php echo in_array(S_DRAFT_APP, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_DRAFT_APP);?></label>
+				<?php } else { ?>
+				<label class="checkbox" for='inWorkflow'><input type="checkbox" id="inWorkflow" name="inWorkflow" value="1" <?php echo in_array(S_IN_WORKFLOW, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_IN_WORKFLOW);?></label>
+				<?php } ?>
+				<label class="checkbox" for='released'><input type="checkbox" id="released" name="released" value="1" <?php echo in_array(S_RELEASED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_RELEASED);?></label>
+				<label class="checkbox" for='rejected'><input type="checkbox" id="rejected" name="rejected" value="1" <?php echo in_array(S_REJECTED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_REJECTED);?></label>
+				<label class="checkbox" for='obsolete'><input type="checkbox" id="obsolete" name="obsolete" value="1" <?php echo in_array(S_OBSOLETE, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_OBSOLETE);?></label>
+				<label class="checkbox" for='expired'><input type="checkbox" id="expired" name="expired" value="1" <?php echo in_array(S_EXPIRED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_EXPIRED);?></label>
+				</td>
+				</tr>
+				<tr>
+				<td><?php printMLText("expires");?>:</td>
+				<td>
+				        <label class="checkbox">
+								  <input type="checkbox" name="expirationdate" value="true" <?php if($expirationdate) echo "checked"; ?>/><?php printMLText("between");?>
+				        </label><br />
+				        <span class="input-append date" style="display: inline;" id="expirationstartdate" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+				          <input class="span4 form-control" size="16" name="expirationstart" type="text" value="<?php if($expstartdate) printf("%04d-%02d-%02d", $expstartdate['year'], $expstartdate['month'], $expstartdate['day']); else echo date('Y-m-d'); ?>">
+				          <span class="add-on"><i class="icon-calendar"></i></span>
+				        </span>
+				        <p class="align-center"><i class="fa fa-arrow-down"></i></p>
+				        <span class="input-append date" style="display: inline;" id="expirationenddate" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+				          <input class="span4 form-control" size="16" name="expirationend" type="text" value="<?php if($expstopdate) printf("%04d-%02d-%02d", $expstopdate['year'], $expstopdate['month'], $expstopdate['day']); else echo date('Y-m-d'); ?>">
+				          <span class="add-on"><i class="icon-calendar"></i></span>
+				        </span>
+				</td>
+				</tr>
+				<?php
+						if($attrdefs) {
+							foreach($attrdefs as $attrdef) {
+								$attricon = '';
+								if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document || $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
+				?>
+				<tr>
+					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+					<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '', 'attributes', true) ?></td>
+				</tr>
 
-<?php
-				}
-			}
-		}
-?>
-</table>
-      </div>
+				<?php
+								}
+							}
+						}
+				?>
+				</table>
     </div>
   </div>
 </div>
+
 <?php
 		/* First check if any of the folder filters are set. If it is,
 		 * open the accordion.
@@ -338,39 +357,39 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			}
 		}
 ?>
-<div class="accordion" id="accordion3">
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapseFolder">
-        <?php printMLText('filter_for_folders'); ?>
-      </a>
-    </div>
-    <div id="collapseFolder" class="accordion-body <?php if(!$openfilterdlg) echo "collapse";?>" style="_height: 0px;">
-      <div class="accordion-inner">
-<table class="table-condensed">
-<?php
-		if($attrdefs) {
-			foreach($attrdefs as $attrdef) {
-				$attricon = '';
-				if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) {
-?>
-<tr>
-	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '', 'attributes', true) ?></td>
-</tr>
-<?php
-				}
-			}
-		}
-?>
-</table>
-      </div>
+<div class="box box-primary collapsed-box" id="">
+  <div class="box-header with-border">
+    <h3 class="box-title"><?php printMLText('filter_for_folders'); ?></h3>
+		<div class="box-tools pull-right">
+    	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
     </div>
   </div>
-</div>
+  <div class="box-body">
+				<table class="table-condensed">
+				<?php
+						if($attrdefs) {
+							foreach($attrdefs as $attrdef) {
+								$attricon = '';
+								if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) {
+				?>
+				<tr>
+					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+					<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '', 'attributes', true) ?></td>
+				</tr>
+				<?php
+								}
+							}
+						}
+				?>
+				</table>
+      </div>
+    </div>
 </form>
-		</div>
+</div>
+
+
 <?php
+/* ----------------------- second tab ---------------------------------------------------------------------------------- */
 		if($enablefullsearch) {
 	  	echo "<div class=\"tab-pane ".(($fullsearch == true) ? 'active' : '')."\" id=\"fulltext\">\n";
 	$this->contentContainerStart();
@@ -437,7 +456,9 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	</div>
 <?php
 		echo "</div>\n";
-		echo "<div class=\"span8\">\n";
+
+/* ---------------------------------------------- Search Result ------------------------------------------------------------------*/
+		echo "<div class=\"col-md-6\">\n";
 // Search Result {{{
 		$foldercount = $doccount = 0;
 		if($entries) {
@@ -450,17 +471,20 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 				}
 			}
 			 */
+			$this->infoMsg(getMLText("search_report", array("doccount" => $totaldocs, "foldercount" => $totalfolders, 'searchtime'=>$searchTime)));
+
 			print "<div class=\"alert\">".getMLText("search_report", array("doccount" => $totaldocs, "foldercount" => $totalfolders, 'searchtime'=>$searchTime))."</div>";
+			
 			$this->pageList($pageNumber, $totalpages, "../out/out.Search.php", $urlparams);
 //			$this->contentContainerStart();
-
-			print "<table class=\"table table-hover\">";
+			$this->startBoxPrimary(getMLText("search_results"));
+			print "<table class=\"table table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th></th>\n";
 			print "<th>".getMLText("name")."</th>\n";
 			print "<th>".getMLText("attributes")."</th>\n";
 			print "<th>".getMLText("status")."</th>\n";
-			print "<th>".getMLText("action")."</th>\n";
+			//print "<th>".getMLText("action")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 
 			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
@@ -532,7 +556,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 
 						$display_status=$lc->getStatus();
 						print "<td>".getOverallStatusText($display_status["status"]). "</td>";
-						print "<td>";
+						/*print "<td>";
 						print "<div class=\"list-action\">";
 						if($document->getAccessMode($user) >= M_ALL) {
 							$this->printDeleteDocumentButton($document, 'splash_rm_document');
@@ -556,7 +580,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <?php
 						}
 						print "</div>";
-						print "</td>";
+						print "</td>";*/
 						print "</tr>\n";
 					}
 				} elseif(get_class($entry) == $dms->getClassname('folder')) {
@@ -596,7 +620,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					}
 					print "</td>";
 					print "<td></td>";
-					print "<td>";
+					/*print "<td>";
 					print "<div class=\"list-action\">";
 					if($folder->getAccessMode($user) >= M_ALL) {
 						$this->printDeleteFolderButton($folder, 'splash_rm_folder');
@@ -620,11 +644,12 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <?php
 					}
 					print "</div>";
-					print "</td>";
+					print "</td>";*/
 					print "</tr>\n";
 				}
 			}
 			print "</tbody></table>\n";
+			$this->endsBoxPrimary();
 //			$this->contentContainerEnd();
 			$this->pageList($pageNumber, $totalpages, "../out/out.Search.php", $_GET);
 		} else {
@@ -634,9 +659,15 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			}
 		}
 // }}}
+		
 		echo "</div>";
 		echo "</div>";
+		echo "<div class=\"gap-20\"></div>";
+		echo "</div>";
+		
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

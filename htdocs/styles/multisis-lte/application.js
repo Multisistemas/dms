@@ -723,7 +723,51 @@ $(document).ready(function() { /* {{{ */
 //		source_id = e.originalEvent.dataTransfer.getData("id");
 //		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
 		if(source_type == 'document') {
-			bootbox.dialog(trans.confirm_move_document, [{
+			bootbox.confirm({
+    		message: trans.confirm_move_document,
+    		buttons: {
+        	confirm: {
+            label: "<i class='fa fa-arrows'></i> "+trans.move_document,
+            className: 'btn-success'
+        	},
+        	cancel: {
+            label: trans.cancel,
+            className: 'btn-default'
+        	}
+    		}, 
+	    		callback: function (result) {
+	    			if (result) {
+	    				$.get('../op/op.Ajax.php',
+								{ command: 'movedocument', docid: source_id, targetfolderid: target_id, formtoken: formtoken },
+								function(data) {
+									if(data.success) {
+										$('#table-row-document-'+source_id).hide('slow');
+										noty({
+											text: data.message,
+											type: 'success',
+											dismissQueue: true,
+											layout: 'topRight',
+											theme: 'defaultTheme',
+											timeout: 1500,
+										});
+									} else {
+										noty({
+											text: data.message,
+											type: 'error',
+											dismissQueue: true,
+											layout: 'topRight',
+											theme: 'defaultTheme',
+											timeout: 3500,
+										});
+									}
+								},
+								'json'
+							);
+						}	
+	    		}
+	    	});
+
+			/*bootbox.dialog(trans.confirm_move_document, [{
 				"label" : "<i class='icon-remove'></i> "+trans.move_document,
 				"class" : "btn-danger",
 				"callback": function() {
@@ -759,12 +803,57 @@ $(document).ready(function() { /* {{{ */
 				"class" : "btn-cancel",
 				"callback": function() {
 				}
-			}]);
+			}]);*/
 
 			url = "../out/out.MoveDocument.php?documentid="+source_id+"&targetid="+target_id;
 //			document.location = url;
 		} else if(source_type == 'folder' && source_id != target_id) {
-			bootbox.dialog(trans.confirm_move_folder, [{
+
+			bootbox.confirm({
+    		message: trans.confirm_move_folder,
+    		buttons: {
+        	confirm: {
+            label: "<i class='fa fa-arrows'></i> "+trans.move_folder,
+            className: 'btn-success'
+        	},
+        	cancel: {
+            label: trans.cancel,
+            className: 'btn-default'
+        	}
+    		}, 
+	    		callback: function (result) {
+	    			if (result) {
+	    				$.get('../op/op.Ajax.php',
+								{ command: 'movefolder', folderid: source_id, targetfolderid: target_id, formtoken: formtoken },
+								function(data) {
+									if(data.success) {
+										$('#table-row-folder-'+source_id).hide('slow');
+										noty({
+											text: data.message,
+											type: 'success',
+											dismissQueue: true,
+											layout: 'topRight',
+											theme: 'defaultTheme',
+											timeout: 1500,
+										});
+									} else {
+										noty({
+											text: data.message,
+											type: 'error',
+											dismissQueue: true,
+											layout: 'topRight',
+											theme: 'defaultTheme',
+											timeout: 3500,
+										});
+									}
+								},
+								'json'
+							);
+						}	
+	    		}
+	    	});
+
+			/*bootbox.dialog(trans.confirm_move_folder, [{
 				"label" : "<i class='icon-remove'></i> "+trans.move_folder,
 				"class" : "btn-danger",
 				"callback": function() {
@@ -800,7 +889,7 @@ $(document).ready(function() { /* {{{ */
 				"class" : "btn-cancel",
 				"callback": function() {
 				}
-			}]);
+			}]);*/
 
 			url = "../out/out.MoveFolder.php?folderid="+source_id+"&targetid="+target_id;
 //			document.location = url;
@@ -890,7 +979,52 @@ $(document).ready(function() { /* {{{ */
 //		source_id = e.originalEvent.dataTransfer.getData("id");
 //		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
 		if(source_type == 'document') {
-			bootbox.dialog(trans.confirm_move_document, [{
+
+			bootbox.confirm({
+    		message: trans.confirm_move_document,
+    		buttons: {
+        	confirm: {
+            label: "<i class='fa fa-arrows'></i> "+trans.move_document,
+            className: 'btn-success'
+        	},
+        	cancel: {
+            label: trans.cancel,
+            className: 'btn-default'
+        	}
+    		}, 
+	    		callback: function (result) {
+	    			if (result) {
+	    				$.get('../op/op.Ajax.php',
+								{ command: 'movedocument', docid: source_id, targetfolderid: target_id, formtoken: formtoken },
+								function(data) {
+									if(data.success) {
+										$('#table-row-document-'+source_id).hide('slow');
+										noty({
+											text: data.message,
+											type: 'success',
+											dismissQueue: true,
+											layout: 'topRight',
+											theme: 'defaultTheme',
+											timeout: 1500,
+										});
+									} else {
+										noty({
+											text: data.message,
+											type: 'error',
+											dismissQueue: true,
+											layout: 'topRight',
+											theme: 'defaultTheme',
+											timeout: 3500,
+										});
+									}
+								},
+								'json'
+							);
+						}	
+	    		}
+	    	});
+
+			/*bootbox.dialog(trans.confirm_move_document, [{
 				"label" : "<i class='icon-remove'></i> "+trans.move_document,
 				"class" : "btn-danger",
 				"callback": function() {
@@ -926,12 +1060,57 @@ $(document).ready(function() { /* {{{ */
 				"class" : "btn-cancel",
 				"callback": function() {
 				}
-			}]);
+			}]);*/
 
 			url = "../out/out.MoveDocument.php?documentid="+source_id+"&targetid="+target_id;
 //			document.location = url;
 		} else if(source_type == 'folder' && source_id != target_id) {
-			bootbox.dialog(trans.confirm_move_folder, [{
+
+			bootbox.confirm({
+    		message: trans.confirm_move_folder,
+    		buttons: {
+        	confirm: {
+            label: "<i class='fa fa-arrows'></i> "+trans.move_folder,
+            className: 'btn-success'
+        	},
+        	cancel: {
+            label: trans.cancel,
+            className: 'btn-default'
+        	}
+    		}, 
+	    		callback: function (result) {
+	    			if (result) {
+	    				$.get('../op/op.Ajax.php',
+								{ command: 'movefolder', folderid: source_id, targetfolderid: target_id, formtoken: formtoken },
+								function(data) {
+									if(data.success) {
+										$('#table-row-folder-'+source_id).hide('slow');
+										noty({
+											text: data.message,
+											type: 'success',
+											dismissQueue: true,
+											layout: 'topRight',
+											theme: 'defaultTheme',
+											timeout: 1500,
+										});
+									} else {
+										noty({
+											text: data.message,
+											type: 'error',
+											dismissQueue: true,
+											layout: 'topRight',
+											theme: 'defaultTheme',
+											timeout: 3500,
+										});
+									}
+								},
+								'json'
+							);
+						}	
+	    		}
+	    	});
+
+			/*bootbox.dialog(trans.confirm_move_folder, [{
 				"label" : "<i class='icon-remove'></i> "+trans.move_folder,
 				"class" : "btn-danger",
 				"callback": function() {
@@ -967,7 +1146,7 @@ $(document).ready(function() { /* {{{ */
 				"class" : "btn-cancel",
 				"callback": function() {
 				}
-			}]);
+			}]);*/
 
 			url = "../out/out.MoveFolder.php?folderid="+source_id+"&targetid="+target_id;
 //			document.location = url;

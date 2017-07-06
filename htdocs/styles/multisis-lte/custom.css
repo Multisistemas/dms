@@ -74,7 +74,7 @@
 }
 
 .sidebar-menu>li>a {
-    padding: 5px 5px 5px 15px !important; 
+    /*padding: 5px 5px 5px 15px !important; */
 }
 
 /* --------------------- End ---------------------- */
@@ -83,6 +83,14 @@
 .row {
     margin-left: 0 !important;
     margin-right: 0 !important;
+}
+
+#doc-title {
+    font-size: 14px !important;
+}
+
+.box-header-doc-preview{
+    padding: 5px !important;
 }
 
 .align-center {
@@ -130,6 +138,29 @@
     height: 40px;
 }
 
+.aside-fixed {
+    position: fixed;
+    max-height: 100%;
+    overflow: auto;
+    padding-bottom: 50px;
+}
+
+.delete-wokflow-div {
+    margin-bottom: 10px;
+}
+
+.col-no-padding {
+    padding: 0px !important;
+}
+
+#workflow-information {
+    margin-bottom: 0px !important;
+}
+
+.splash {
+    display: none;
+}
+
 /* --------------------- End ---------------------- */
 
 /* ------------- Modals ------------------ */
@@ -166,6 +197,7 @@
 
 .breadcrumb {
     padding: 5px 15px 15px 15px !important;
+    margin-bottom: 10px !important;
 }
 
 /* --------------------- End ---------------------- */
@@ -192,6 +224,13 @@
     padding: 5px !important;
 }
 
+.custom-input-text-search {
+    vertical-align: middle;
+    display: inline-block;
+    height: 34px;
+    padding: 6px 12px;
+}
+
 /* --------------------- End ---------------------- */
 
 /* ------------- Lists ------------------ */
@@ -200,3 +239,37 @@ ul.unstyled {
     text-decoration: none;
 }
 /* --------------------- End ---------------------- */
+
+/* --------------------- Tables ------------------- */
+
+.align-center {
+    text-align: center;
+}
+
+.th-info-background {
+    background-color: rgba(90, 206, 234, 0.54);
+}
+
+.td-warning-background {
+    background-color: rgba(243, 156, 18, 0.65);
+}
+
+.td-success-background {
+    background-color: rgba(0, 166, 90, 0.37);
+}
+
+.td-action-bkg-one {
+    background-color: #39CCCC;
+    color: #ffffff;
+}
+
+.td-action-bkg-two {
+    background-color: #605ca8;
+    color: #ffffff;
+}
+
+.float-left {
+    float: left;
+}
+
+/* ------------------------------------------------ */
