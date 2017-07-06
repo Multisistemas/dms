@@ -36,12 +36,17 @@ class SeedDMS_View_Help extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$context = $this->params['context'];
 
-		$this->htmlStartPage(getMLText("help"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("help").": ".getMLText('help_'.strtolower($context), array(), $context), "");
 
-		$this->contentContainerStart('help');
+		$this->htmlStartPage(getMLText("help"), "skin-blue sidebar-mini sidebar-collapse");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->contentStart();
+
+		echo "<div class=\"row\">";
+		echo "<div class=\"gap-20\"></div>";
+		echo "<div class=\"col-md-12\">";
+
+		$this->startBoxPrimary(getMLText("help"));
 
 		$helpfile = "../languages/".$this->params['session']->getLanguage()."/help/".$context.".html";
 		if(file_exists($helpfile))
@@ -49,8 +54,15 @@ class SeedDMS_View_Help extends SeedDMS_Bootstrap_Style {
 		else
 			readfile("../languages/".$this->params['session']->getLanguage()."/help.htm");
 
-		$this->contentContainerEnd();
+		$this->endsBoxPrimary();
+
+		print "</div>";
+		print "</div>";
+		print "</div>";
+		
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

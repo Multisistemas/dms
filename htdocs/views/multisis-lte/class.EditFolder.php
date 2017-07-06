@@ -91,7 +91,7 @@ $(document).ready(function() {
 	});
 });
 <?php
-		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 0, "");
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 1, "");
 	} /* }}} */
 
 	function show() { /* {{{ */

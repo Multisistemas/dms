@@ -157,6 +157,10 @@
     margin-bottom: 0px !important;
 }
 
+.splash {
+    display: none;
+}
+
 /* --------------------- End ---------------------- */
 
 /* ------------- Modals ------------------ */
@@ -262,6 +266,10 @@ ul.unstyled {
 .td-action-bkg-two {
     background-color: #605ca8;
     color: #ffffff;
+}
+
+.float-left {
+    float: left;
 }
 
 /* ------------------------------------------------ */

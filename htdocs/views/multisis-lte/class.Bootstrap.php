@@ -243,6 +243,52 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "</div>\n";
 	} /* }}} */
 
+	function startBoxPrimary($title = "") { /* {{{ */
+		echo "<div class=\"box box-primary\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+	} /* }}} */
+
+	function endsBoxPrimary(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function startBoxCollapsablePrimary($title = "") { /* {{{ */
+		echo "<div class=\"box box-primary\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "<div class=\"box-tools pull-right\">";
+    echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>";
+    echo "</button>";
+    echo "</div>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+	} /* }}} */
+
+	function endsBoxCollapsablePrimary(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function startBoxRemovablePrimary($title = "") {
+		echo "<div class=\"box box-primary\">";
+	  echo "<div class=\"box-header with-border\">";
+	  echo "<h3 class=\"box-title\">".$title."</h3>";
+	  echo "<div class=\"box-tools pull-right\">";
+	  echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"remove\"><i class=\"fa fa-times\"></i></button>";
+	  echo "</div>";
+	  echo "</div>";
+	  echo "<div class=\"box-body\">";
+  } /* }}} */
+
+  function endsBoxRemovablePrimary(){ /* {{{ */
+  	echo "</div>";
+    echo "</div>";
+  } /* }}} */
+
 	function globalBanner() { /* {{{ */
 		echo "<div class=\"navbar navbar-default navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
@@ -539,7 +585,25 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</div>";
     echo "</div>";
 
-    echo "<!-- search form (Optional) -->";
+    ?>
+    	<form class="sidebar-form" action="../out/out.Search.php" method="get" name="form1">
+    	<div class="input-group">
+			<input type="text" name="query" class="form-control" placeholder="<?php echo getMLText("search"); ?>">
+			<input type="hidden" name="mode" value="1">
+			<input type="hidden" name="ownerid" value="-1">
+			<input type="hidden" name="resultmode" value="3">
+			<input type="hidden" name="targetid" value="1">
+			<input type="hidden" name="targetnameform1" value="">
+			<span class="input-group-btn">
+			<button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+			</span>
+    	</div>
+			</form>
+    <?php
+
+
+    // Original search
+    /*echo "<!-- search form (Optional) -->";
     echo "<form action=\"#\" method=\"get\" class=\"sidebar-form\">";
     echo "<div class=\"input-group\">";
     echo "<input type=\"text\" name=\"q\" class=\"form-control\" placeholder=\"".getMLText("search")."\">";
@@ -549,7 +613,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</span>";
     echo "</div>";
     echo "</form>";
-    echo "<!-- /.search form -->";
+    echo "<!-- /.search form -->";*/
+    /////////////////////////////////////
 
     echo "<!-- Sidebar Menu -->";
     echo "<ul class=\"sidebar-menu\">";
@@ -588,19 +653,27 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</li>";
 
     // Calendar
-    echo "<li class=\"treeview\">";
-    echo "<a href=\"#\"><i class=\"fa fa-calendar\"></i> <span>".getMLText("calendar")."</span>";
-    echo "<span class=\"pull-right-container\">";
-    echo "<i class=\"fa fa-angle-left pull-right\"></i>";
-    echo "</span>";
-    echo "</a>";
-    echo "<ul class=\"treeview-menu\">";
-    echo "<li><a href=\"#\">".getMLText("week_view")."</a></li>";
-    echo "<li><a href=\"#\">".getMLText("month_view")."</a></li>";
-    echo "<li><a href=\"#\">".getMLText("year_view")."</a></li>";
-    echo "<li><a href=\"#\">".getMLText("add_event")."</a></li>";
-    echo "</ul>";
-    echo "</li>";
+    if ($this->params['enablecalendar']){
+	    echo "<li class=\"treeview\">";
+	    echo "<a href=\"#\"><i class=\"fa fa-calendar\"></i> <span>".getMLText("calendar")."</span>";
+	    echo "<span class=\"pull-right-container\">";
+	    echo "<i class=\"fa fa-angle-left pull-right\"></i>";
+	    echo "</span>";
+	    echo "</a>";
+	    echo "<ul class=\"treeview-menu\">";
+	    echo "<li><a href=\"#\">".getMLText("week_view")."</a></li>";
+	    echo "<li><a href=\"#\">".getMLText("month_view")."</a></li>";
+	    echo "<li><a href=\"#\">".getMLText("year_view")."</a></li>";
+	    echo "<li><a href=\"#\">".getMLText("add_event")."</a></li>";
+	    echo "</ul>";
+	    echo "</li>";
+	  }
+
+	  // Help
+	  if($this->params['enablehelp']) {
+			$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+			echo "<li><a href=\"/out/out.Help.php?context=".$tmp[1]."\"><i class=\"fa fa-info-circle\"></i> <span>".getMLText("help")."</span></a></li>";
+		}
 
     echo "</ul>";
     echo "<!-- /.sidebar-menu -->";
@@ -812,6 +885,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	function getFolderPathHTML($folder, $tagAll=false, $document=null) { /* {{{ */
 		$path = $folder->getPath();
+		$user = $this->params['user'];
 		$txtpath = "";
 		for ($i = 0; $i < count($path); $i++) {
 			$txtpath .= "<li>";
@@ -827,10 +901,12 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		}
 		if($document)
 			$txtpath .= "<li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
-			
-		$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-document\" type=\"button\" class=\"btn btn-warning btn-sm\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("add_document")."\"><i class=\"fa fa-plus\"></i> <i class=\"fa fa-file\"></i></a> </li>";
-		$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-folder\" type=\"button\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("add_subfolder")."\"><i class=\"fa fa-plus\"></i> <i class=\"fa fa-folder\"></i></a></li>";
-			//$txtpath .= "<li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
+		
+		if($folder->getAccessMode($user) >= M_READWRITE) {
+			$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-document\" type=\"button\" class=\"btn btn-warning btn-sm\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("add_document")."\"><i class=\"fa fa-plus\"></i> <i class=\"fa fa-file\"></i></a> </li>";
+			$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-folder\" type=\"button\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("add_subfolder")."\"><i class=\"fa fa-plus\"></i> <i class=\"fa fa-folder\"></i></a></li>";
+				//$txtpath .= "<li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
+		}
 
 		return '<ul class="breadcrumb">'.$txtpath.'</ul>';
 	} /* }}} */
@@ -1491,7 +1567,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 			$formname = "targetid";
 		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"form-group\">\n";
-		print "<input class=\"form-control\" type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\" required/>";
+		print "<input class=\"custom-input-text-search\" type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\" required/>";
 		print "<button type=\"button\" class=\"btn btn-default\" id=\"clearfolder".$form."\"><i class=\"fa fa-times\"></i></button>";
 		//print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
@@ -2515,7 +2591,7 @@ $(document).ready( function() {
 				$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
 			}
 			if($document->getAccessMode($user) >= M_READWRITE) {
-				$content .= '<a type="button" href="/out/out.EditDocument.php?documentid='.$docID.'" class="btn btn-success btn-sm btn-action" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_document_props").'"><i class="fa fa-pencil"></i></a>';
+				$content .= '<a type="button" href="/out/out.EditDocument.php?documentid='.$docID.'&showtree=1" class="btn btn-success btn-sm btn-action" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_document_props").'"><i class="fa fa-pencil"></i></a>';
 			} 
 
 			if($document->getAccessMode($user) >= M_READWRITE) {
@@ -2529,6 +2605,10 @@ $(document).ready( function() {
 				if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
 					$content .= '<a type="button" class="btn btn-info btn-sm preview-doc-btn btn-action" id="'.$docID.'" rel="'.$latestContent->getVersion().'" title="'.htmlspecialchars($document->getName()).' - '.getMLText('current_version').': '.$latestContent->getVersion().'"><i class="fa fa-eye"></i></a>';
 				}	
+			}
+
+			if($document->getAccessMode($user) >= M_ALL) {
+				$content .= '<a type="button" href="/out/out.DocumentAccess.php?documentid='.$docID.'&showtree=1" class="btn btn-success btn-sm access-folder-btn btn-action " rel="'.$docID.'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_document_access").'"><i class="fa fa-user-times"></i></a>';
 			}
 
 			if($document->getAccessMode($user) >= M_READWRITE) {
@@ -2620,7 +2700,7 @@ $(document).ready( function() {
 		}
 
 		if($subFolder->getAccessMode($user) >= M_ALL) {
-			$content .= '<a type="button" class="btn btn-warning btn-sm access-folder-btn btn-action " rel="'.$subFolder->getID().'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_folder_access").'"><i class="fa fa-user-times"></i></a>';
+			$content .= '<a type="button" href="/out/out.FolderAccess.php?folderid='.$subFolder->getID().'&showtree=1" class="btn btn-warning btn-sm access-folder-btn btn-action " rel="'.$subFolder->getID().'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_folder_access").'"><i class="fa fa-user-times"></i></a>';
 		}
 
 		if($enableClipboard) {
@@ -3080,7 +3160,8 @@ mayscript>
 			'editable': false,
 			'selectable': true,
 			'style': 'box',
-			'locale': '<?php echo $this->params['session']->getLanguage() ?>'
+			'locale': '<?php echo $this->params['session']->getLanguage() ?>',
+
 		};
 
 		function onselect() {
@@ -3088,8 +3169,9 @@ mayscript>
 			if (sel.length) {
 				if (sel[0].row != undefined) {
 					var row = sel[0].row;
-					console.log(timeline.getItem(sel[0].row));
+					/*console.log(timeline.getItem(sel[0].row));*/
 					item = timeline.getItem(sel[0].row);
+					console.log(item);
 					$('div.ajax').trigger('update', {documentid: item.docid, version: item.version, statusid: item.statusid, statuslogid: item.statuslogid, fileid: item.fileid});
 				}
 			}

@@ -171,7 +171,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
 		}
 		$this->printDocumentChooserJs("form1");
-		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 2, "");
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 1, "");
 		?>
 			function folderSelected(id, name) {
 				window.location = '../out/out.ViewFolder.php?folderid=' + id;
@@ -218,7 +218,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			echo $txt;
 		else {
 ?>
-		<table class="table table-bordered">
+		<table class="table table-striped">
 <?php
 		if($user->isAdmin()) {
 			echo "<tr>";
@@ -546,7 +546,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$file_exists=file_exists($dms->contentDir . $latestContent->getPath());
 
 		print "<div class=\"table-responsive\">";
-		print "<table class=\"table table-bordered\">";
+		print "<table class=\"table table-striped\">";
 		print "<thead>\n<tr>\n";
 		print "<th width='*' class='align-center th-info-background'></th>\n";
 		print "<th width='*' class='align-center th-info-background'>".getMLText("file")."</th>\n";
@@ -974,7 +974,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				echo "<p>Sub workflow of '".$parentworkflow->getName()."'</p>";
 			}
 
-			echo "<table class=\"table table-bordered\">\n";
+			echo "<table class=\"table table-striped\">\n";
 			echo "<tr>";
 			echo "<td><strong>".getMLText('next_state').":</strong></td>";
 			foreach($transitions as $transition) {
@@ -1169,7 +1169,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 			//$this->contentContainerStart();
 			print "<div class=\"table-responsive\">";
-			print "<table class=\"table table-bordered\">";
+			print "<table class=\"table table-striped\">";
 			print "<thead>\n<tr>\n";
 			print "<th width='10%'></th>\n";
 			print "<th width='30%'>".getMLText("file")."</th>\n";
@@ -1273,7 +1273,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		if (count($files) > 0) {
 			print "<div class=\"table-responsive\">";
-			print "<table class=\"table table-bordered\">";
+			print "<table class=\"table table-striped\">";
 			print "<thead>\n<tr>\n";
 			print "<th width='20%' class='align-center td-warning-background'></th>\n";
 			print "<th width='20%' class='align-center td-warning-background'>".getMLText("file")."</th>\n";
@@ -1354,7 +1354,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		
 		if (count($links) > 0) {
 			print "<div class=\"table-responsive\">";
-			print "<table class=\"table table-bordered\">";
+			print "<table class=\"table table-striped\">";
 			print "<thead>\n<tr>\n";
 			print "<th width='10%' class='align-center td-success-background'></th>\n";
 			print "<th width='10%' class='align-center td-success-background'>".getMLText("document")."</th>\n";
@@ -1429,13 +1429,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
       print "<div class=\"box-body\">";
 
 			print "<div class=\"table-responsive\">";
-			print "<table class=\"table table-bordered\">";
+			print "<table class=\"table table-striped\">";
 			print "<thead>\n<tr>\n";
-			print "<th width='10%' class='align-center td-warning-background'></th>\n";
-			print "<th width='10%' class='align-center td-warning-background'>".getMLText("document")."</th>\n";
-			print "<th width='40%' class='align-center td-warning-background'>".getMLText("comment")."</th>\n";
-			print "<th width='40%' class='align-center td-warning-background'>".getMLText("details")."</th>\n";
-			print "<th width='10%' class='align-center td-warning-background'>".getMLText("actions")."</th>\n";
+			print "<th width='10%' class='align-center th-info-background'></th>\n";
+			print "<th width='10%' class='align-center th-info-background'>".getMLText("document")."</th>\n";
+			print "<th width='40%' class='align-center th-info-background'>".getMLText("comment")."</th>\n";
+			print "<th width='40%' class='align-center th-info-background'>".getMLText("details")."</th>\n";
+			//print "<th width='10%' class='align-center td-info-background'>".getMLText("actions")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 
 			foreach($reverselinks as $link) {
@@ -1445,7 +1445,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				$previewer->createPreview($sourcelc, $previewwidthlist);
 				print "<tr>";
-				print "<td><a href=\"../op/op.Download.php?documentid=".$sourceDoc->getID()."&version=".$sourcelc->getVersion()."\">";
+				print "<td><a href=\"#\">";
 				if($previewer->hasPreview($sourcelc)) {
 					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\"src=\"../op/op.Preview.php?documentid=".$sourceDoc->getID()."&version=".$sourcelc->getVersion()."&width=".$previewwidthlist."\" title=\"".htmlspecialchars($sourcelc->getMimeType())."\">";
 				} else {
@@ -1458,10 +1458,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
 					print "<br />".getMLText("document_link_public").": ".(($link->isPublic()) ? getMLText("yes") : getMLText("no"));
 				print "</td>";
-				print "<td><span class=\"actions\">";
+				/*print "<td><span class=\"actions\">";
 				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
 					print "<form action=\"../op/op.RemoveDocumentLink.php\" method=\"post\">".createHiddenFieldWithKey('removedocumentlink')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"linkid\" value=\"".$link->getID()."\" /><button type=\"submit\" class=\"btn btn-sm btn-danger\"><i class=\"fa fa-times\"></i></button></form>";
-				print "</span></td>";
+				print "</span></td>";*/
 				print "</tr>";
 			}
 			print "</tbody>\n</table>\n";

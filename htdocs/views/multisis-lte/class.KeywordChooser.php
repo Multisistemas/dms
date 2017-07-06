@@ -121,7 +121,7 @@ myTA.focus();
 
 	<tr>
 		<td valign="top" class="inputDescription">
-		<label class="control-label"><?php echo getMLText("keywords")?>:</label></td>
+		<label class=""><?php echo getMLText("keywords")?>:</label></td>
 		<td>
 		<div class="form-group">
 			<textarea id="keywordta" rows="5" cols="30" class="form-control"></textarea></td>
@@ -130,7 +130,7 @@ myTA.focus();
 	
 	<tr>
 		<td class="inputDescription">
-		<label class="control-label"><?php echo getMLText("global_default_keywords")?>:</label>
+		<label class=""><?php echo getMLText("global_default_keywords")?>:</label>
 		</td>
 		<td>
 			<div class="form-group">
@@ -157,7 +157,7 @@ myTA.focus();
 ?>
 	<tr id="keywords<?php echo $category->getID()?>" style="display : none;">
 		<td valign="top" class="inputDescription">
-		<label class="control-label"><?php echo getMLText("default_keywords")?>:</label>
+		<label class=""><?php echo getMLText("default_keywords")?>:</label>
 		</td>
 		<td>
 			<?php
@@ -177,7 +177,7 @@ myTA.focus();
 <?php } ?>
 	<tr>
 		<td class="inputDescription">
-		<label class="control-label"><?php echo getMLText("personal_default_keywords")?>:</label></td>
+		<label class=""><?php echo getMLText("personal_default_keywords")?>:</label></td>
 		<td>
 		<div class="form-group">
 			<select _onchange="showKeywords(1)" id="categories1" class="form-control">
@@ -203,7 +203,7 @@ myTA.focus();
 ?>
 		<tr id="keywords<?php echo $category->getID()?>" style="display : none;">
 			<td valign="top" class="inputDescription">
-			<label class="control-label"><?php echo getMLText("default_keywords")?>:</td></label>
+			<label class=""><?php echo getMLText("default_keywords")?>:</td></label>
 			<td class="standardText">
 <?php
 					$lists = $category->getKeywordLists();				

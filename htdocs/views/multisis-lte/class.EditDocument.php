@@ -34,8 +34,12 @@ class SeedDMS_View_EditDocument extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
 		header('Content-Type: application/javascript');
-		$this->printKeywordChooserJs('form1');
+
 ?>
+function folderSelected(id, name) {
+	window.location = '../out/out.ViewFolder.php?folderid=' + id;
+}
+
 function checkForm()
 {
 	msg = new Array();
@@ -90,6 +94,8 @@ $(document).ready( function() {
 	});
 });
 <?php
+		$this->printKeywordChooserJs('form1');
+		$this->printNewTreeNavigationJs(1, M_READ, 0, '', 1, "s");
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -103,42 +109,50 @@ $(document).ready( function() {
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
 
-		$this->contentHeading(getMLText("edit_document_props"));
-		$this->contentContainerStart();
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
+
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Document content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		$this->startBoxPrimary(getMLText("edit_document_props"));
 
 		if($document->expires())
 			$expdate = date('Y-m-d', $document->getExpires());
 		else
 			$expdate = '';
 ?>
+<div class="table-responsive">
 <form action="../op/op.EditDocument.php" name="form1" id="form1" method="post">
 	<input type="hidden" name="documentid" value="<?php echo $document->getID() ?>">
-	<table cellpadding="3">
+	<table class="table-condensed">
 		<tr>
-			<td class="inputDescription"><?php printMLText("name");?>:</td>
-			<td><input type="text" name="name" id="name" value="<?php print htmlspecialchars($document->getName());?>" size="60" required></td>
+			<td class=""><?php printMLText("name");?>:</td>
+			<td><input class="form-control" type="text" name="name" id="name" value="<?php print htmlspecialchars($document->getName());?>" size="60" required></td>
 		</tr>
 		<tr>
-			<td valign="top" class="inputDescription"><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" id="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>><?php print htmlspecialchars($document->getComment());?></textarea></td>
+			<td valign="top" class=""><?php printMLText("comment");?>:</td>
+			<td><textarea class="form-control" name="comment" id="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>><?php print htmlspecialchars($document->getComment());?></textarea></td>
 		</tr>
-		<tr>
-			<td valign="top" class="inputDescription"><?php printMLText("keywords");?>:</td>
-			<td class="standardText">
-<?php
-	$this->printKeywordChooserHtml('form1', $document->getKeywords());
-?>
-			</td>
-		</tr>
+		<!--	<tr>
+		<td valign="top" class=""><?php //printMLText("keywords");?>:</td>
+			<td class="standardText"> -->
+				<?php
+					//$this->printKeywordChooserHtml('form1', $document->getKeywords());
+				?>
+		<!--	</td>
+		</tr> -->
 		<tr>
 			<td><?php printMLText("categories")?>:</td>
 			<td>
-        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
+        <select class="chzn-select form-control" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
 <?php
 			$categories = $dms->getDocumentCategories();
 			foreach($categories as $category) {
@@ -152,10 +166,10 @@ $(document).ready( function() {
       </td>
 		</tr>
 		<tr>
-			<td><?php printMLText("expires");?>:</td>
+			<td class="float-left"><?php printMLText("expires");?>:</td>
 			<td>
         <span class="input-append date span12" id="expirationdate" data-date="<?php echo $expdate; ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>" data-checkbox="#expires">
-          <input class="span3" size="16" name="expdate" type="text" value="<?php echo $expdate; ?>">
+          <input class="span3 form-control" size="16" name="expdate" type="text" value="<?php echo $expdate; ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span><br />
         <label class="checkbox inline">
@@ -166,7 +180,7 @@ $(document).ready( function() {
 <?php
 		if ($folder->getAccessMode($user) > M_READ) {
 			print "<tr>";
-			print "<td class=\"inputDescription\">" . getMLText("sequence") . ":</td>";
+			print "<td class=\"\">" . getMLText("sequence") . ":</td>";
 			print "<td>";
 			$this->printSequenceChooser($folder->getDocuments('s'), $document->getID());
 			if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off'); 
@@ -193,13 +207,22 @@ $(document).ready( function() {
 ?>
 		<tr>
 			<td></td>
-			<td><button type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
+			<td><button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save")?></button></td>
 		</tr>
 	</table>
 </form>
+</div>
 <?php
-		$this->contentContainerEnd();
+	
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>"; 
+		echo "</div>"; // Ends row
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

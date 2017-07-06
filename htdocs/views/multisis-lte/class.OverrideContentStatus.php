@@ -73,14 +73,18 @@ $(document).ready(function() {
 		$reviewStatus = $content->getReviewStatus();
 		$approvalStatus = $content->getApprovalStatus();
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
 
-		$this->contentHeading(getMLText("change_status"));
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
 
-		$this->contentContainerStart();
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		$this->startBoxPrimary(getMLText("change_status"));
 
 // Display the Review form.
 ?>
@@ -88,13 +92,13 @@ $(document).ready(function() {
 	<div class="control-group">
 		<label class="control-label"><?php echo(printMLText("comment"));?>:</label>
 		<div class="controls">
-			<textarea name="comment" cols="40" rows="4"></textarea>
+			<textarea class="form-control" name="comment" cols="40" rows="4"></textarea>
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label"><?php echo(printMLText("status")); ?>:</label>
 		<div class="controls">
-			<select name="overrideStatus">
+			<select class="form-control" name="overrideStatus">
 				<option value=''></option>
 	<?php
 
@@ -104,15 +108,23 @@ $(document).ready(function() {
 	?>
 	</select>
 	</div></div>
-	<div class="controls">
+	<div class="box-footer">
 		<input type='hidden' name='documentid' value='<?php echo $document->getID() ?>'/>
 		<input type='hidden' name='version' value='<?php echo $content->getVersion() ?>'/>
-		<input type='submit' class="btn" name='overrideContentStatus' value='<?php echo(printMLText("update")); ?>'/>
+		<button type='submit' class="btn btn-info" name='overrideContentStatus'><i class="fa fa-save"></i><?php echo(printMLText("update")); ?></button>
 	</div>
 </form>
 <?php
-		$this->contentContainerEnd();
+		
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>"; 
+		echo "</div>"; // Ends row
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
