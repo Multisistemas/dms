@@ -83,7 +83,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$enableDropUpload = $this->params['enableDropUpload'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder'));
-		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 1, '', $expandFolderTree == 2, $orderby);
 ?>
 
 function folderSelected(id, name) {
@@ -286,6 +286,7 @@ $(document).ready(function(){
 		$this->printFolderChooserJs("form3");
 		$this->printFolderChooserJs("form4");
 	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -318,6 +319,7 @@ $(document).ready(function(){
 		$this->contentStart();		
 		echo $this->getFolderPathHTML($folder);
 		echo "<div class=\"row\">";
+
 		//// Add Folder ////
 		echo "<div class=\"col-md-12 div-hidden\" id=\"div-add-folder\">";
 		echo "<div class=\"box box-success div-green-border\" id=\"box-form1\">";

@@ -560,6 +560,24 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	} /* }}} */
 
+	function printTheTree($tree){ /* {{{ */
+			foreach ($tree as $key => $treeNode) {
+				echo "<li class=\"treeview\">";
+			  echo "<a href=\"#\"><i class=\"fa fa-folder\"></i> <span>".$treeNode['label']." (".count($treeNode['children']).") </span>";
+			  echo "<span class=\"pull-right-container\">";
+			  echo "<i class=\"fa fa-angle-left pull-right\"></i>";
+			  echo "</span>";
+			  echo "</a>";
+				if (count($treeNode['children']) > 0) {
+					$children = $treeNode['children'];
+			    echo "<ul class=\"treeview-menu\">";
+					$this->printTheTree($children);
+					echo "</ul>";
+				}
+			  echo "</li>";
+			}
+	} /* }}} */
+
 	function mainSideBar(){ /* {{{ */
 		echo "<aside class=\"main-sidebar\">";
     echo "<section class=\"sidebar\">";
@@ -622,7 +640,13 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 		// View tree
 
+		$rootFolder = $this->printTree(1, M_READ, 0,'', 1, 's');
 		echo "<li class=\"treeview active\">";
+		$this->printTheTree($rootFolder);
+
+    //TreeView Old 
+
+		/*echo "<li class=\"treeview active\">";
     echo "<a href=\"#\"><i class=\"fa fa-sitemap\"></i> <span>".getMLText("folderTree")."</span>";
     echo "<span class=\"pull-right-container\">";
     echo "<i class=\"fa fa-angle-left pull-right\"></i>";
@@ -635,7 +659,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</a>";
 		echo "</li>";
     echo "</ul>";
-    echo "</li>";
+    echo "</li>";*/
 
     // Non conformities
     echo "<li class=\"treeview\">";
@@ -3249,5 +3273,82 @@ $("body").on("click", "span.openpopupbox", function(e) {
     </div>
 <?php
 	} /* }}} */
+
+	/*  testing */
+	function printTree($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0, $orderby='') { /* {{{ */
+		function tree($path, $folder, $user, $accessmode, $showdocs=1, $expandtree=0, $orderby='') {
+			if($path || $expandtree) {
+				if($path)
+					$pathfolder = array_shift($path);
+				$subfolders = $folder->getSubFolders($orderby);
+				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, $accessmode);
+				$children = array();
+				foreach($subfolders as $subfolder) {
+					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>($subfolder->hasSubFolders() || ($subfolder->hasDocuments() && $showdocs)) ? true : false, 'is_folder'=>true);
+					if($expandtree || $pathfolder->getID() == $subfolder->getID()) {
+						if($showdocs) {
+							$documents = $folder->getDocuments($orderby);
+							$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, $accessmode);
+							foreach($documents as $document) {
+								$node2 = array('label'=>$document->getName(), 'id'=>$document->getID(), 'is_folder'=>false);
+								$children[] = $node2;
+							}
+						}
+						$node['children'] = tree($path, $subfolder, $user, $accessmode, $showdocs, $expandtree, $orderby);
+					}
+					$children[] = $node;
+				}
+				return $children;
+			} else {
+				$subfolders = $folder->getSubFolders($orderby);
+				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, $accessmode);
+				$children = array();
+				foreach($subfolders as $subfolder) {
+					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>($subfolder->hasSubFolders() || ($subfolder->hasDocuments() && $showdocs)) ? true : false, 'is_folder'=>true);
+					$children[] = $node;
+				}
+				return $children;
+
+			}
+			return array();
+		}
+
+		if($folderid) {
+			$folder = $this->params['dms']->getFolder($folderid);
+			$path = $folder->getPath();
+			$folder = array_shift($path);
+			$node = array('label'=>$folder->getName(), 'id'=>$folder->getID(), 'is_folder'=>true);
+			if(!$folder->hasSubFolders()) {
+				$node['load_on_demand'] = false;
+				$node['children'] = array();
+			} else {
+				$node['children'] = tree($path, $folder, $this->params['user'], $accessmode, $showdocs, $expandtree, $orderby);
+				if($showdocs) {
+					$documents = $folder->getDocuments($orderby);
+					$documents = SeedDMS_Core_DMS::filterAccess($documents, $this->params['user'], $accessmode);
+					foreach($documents as $document) {
+						$node2 = array('label'=>$document->getName(), 'id'=>$document->getID(), 'is_folder'=>false);
+						$node['children'][] = $node2;
+					}
+				}
+			}
+			/* Nasty hack to remove the highest folder */
+			if(isset($this->params['remove_root_from_tree']) && $this->params['remove_root_from_tree']) {
+				foreach($node['children'] as $n)
+					$tree[] = $n;
+			} else {
+				$tree[] = $node;
+			}
+			
+		} else {
+			$root = $this->params['dms']->getFolder($this->params['rootfolderid']);
+			$tree = array(array('label'=>$root->getName(), 'id'=>$root->getID(), 'is_folder'=>true));
+		}
+
+		return $tree;
+
+	} /* }}} */
+
+
 }
 ?>
