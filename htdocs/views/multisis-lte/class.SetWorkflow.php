@@ -61,20 +61,23 @@ $(document).ready( function() {
 
 		$latestContent = $document->getLatestContent();
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("set_workflow"));
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
 
-		$this->contentContainerStart();
-		// Display the Workflow form.
-?>
-	<div class="row-fluid">
-	<div class="span4">
-<?php
-				$workflows = $dms->getAllWorkflows();
-				if($workflows) {
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
+
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Document content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		$this->startBoxPrimary(getMLText("set_workflow"));
+
+		$workflows = $dms->getAllWorkflows();
+		if($workflows) {
 ?>
 		<form class="form-horizontal" action="../op/op.SetWorkflow.php" method="post" name="form1">
 		<?php echo createHiddenFieldWithKey('setworkflow'); ?>
@@ -88,7 +91,7 @@ $(document).ready( function() {
       		</label>
       		<div class="controls">
 <?php
-					echo "<select id=\"selector\" class=\"_chzn-select-deselect\" name=\"workflow\" data-placeholder=\"".getMLText('select_workflow')."\">";
+					echo "<select id=\"selector\" class=\"_chzn-select-deselect form-control\" name=\"workflow\" data-placeholder=\"".getMLText('select_workflow')."\">";
 					$mandatoryworkflow = $user->getMandatoryWorkflow();
 					$workflows=$dms->getAllWorkflows();
 					foreach ($workflows as $workflow) {
@@ -102,8 +105,8 @@ $(document).ready( function() {
 			</div>
 		</div>
 
-		<div class="controls">
-			<input type="submit" class="btn" value="<?php printMLText("set_workflow");?>">
+		<div class="box-footer">
+			<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("set_workflow");?></button>
 		</div>
 
 		</form>
@@ -114,14 +117,20 @@ $(document).ready( function() {
 <?php
 				}
 ?>
-	</div>
+
 	<div id="workflowgraph" class="span8" style="display: none;">
 	<iframe src="" width="100%" height="500" style="border: 1px solid #AAA;"></iframe>
 	</div>
-	</div>
+
 <?php
-		$this->contentContainerEnd();
+
+		$this->endsBoxPrimary();
+		echo "</div>";
+		echo "</div>"; 
+		echo "</div>"; // Ends row
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

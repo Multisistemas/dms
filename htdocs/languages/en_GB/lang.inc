@@ -1608,5 +1608,11 @@ URL: [url]',
 'next' => 'Next',
 'please_standby' => 'Please standby...',
 'see' => 'Preview',
+'status_from' => 'From',
+'status_to' => 'To',
+'status_date_record_one' => 'The state was entered at ',
+'status_date_record_two' => ' which was ',
+'status_current_info' => 'The document is currently in state: ',
+'change_logo' => 'Your brand',
 );
 ?>

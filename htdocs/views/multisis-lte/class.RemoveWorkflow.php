@@ -36,31 +36,44 @@ class SeedDMS_View_RemoveWorkflow extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$workflow = $this->params['workflow'];
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($workflow->getName()))));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("rm_workflow"));
-		$this->contentContainerStart();
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
+
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Document content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+		$this->startBoxPrimary(getMLText("rm_workflow"));
 		// Display the Workflow form.
 ?>
-	<div class="row-fluid">
-	<div class="span4">
-	<p><?php printMLText("rm_workflow_warning"); ?></p>
-	<form method="post" action="../op/op.RemoveWorkflow.php" name="form1">
-	<?php echo createHiddenFieldWithKey('removeworkflow'); ?>
-	<input type='hidden' name='workflowid' value='<?php echo $workflow->getId(); ?>'/>
-	<button type='submit' class="btn"><i class="icon-remove"></i> <?php printMLText("rm_workflow"); ?></button>
-	</form>
+	<?php $this->warningMsg(getMLText("rm_workflow_warning")); ?>
+	<div class="col-md-6">
+		<form method="post" action="../op/op.RemoveWorkflow.php" name="form1">
+			<?php echo createHiddenFieldWithKey('removeworkflow'); ?>
+			<input type='hidden' name='workflowid' value='<?php echo $workflow->getId(); ?>'/>
+			<div class="box-footer">
+				<button type='submit' class="btn btn-danger"><i class="fa fa-times"></i> <?php printMLText("rm_workflow"); ?></button>	
+			</div>
+		</form>
 	</div>
-	<div id="workflowgraph" class="span8">
-	<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?>" width="100%" height="661" style="border: 1px solid #AAA;"></iframe>
-	</div>
-	</div>
-<?php
-		$this->contentContainerEnd();
 
+	<div id="workflowgraph" class="col-md-6">
+		<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?>" width="100%" height="661" style="border: 1px solid #AAA;"></iframe>
+	</div>
+	
+<?php
+		
+		$this->endsBoxPrimary();
+		echo "</div>";
+		echo "</div>"; 
+		echo "</div>"; // Ends row
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

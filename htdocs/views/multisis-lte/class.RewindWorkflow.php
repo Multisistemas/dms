@@ -39,17 +39,24 @@ class SeedDMS_View_RewindWorkflow extends SeedDMS_Bootstrap_Style {
 
 		$latestContent = $document->getLatestContent();
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("rewind_workflow"));
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
+
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Document content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+		$this->startBoxPrimary(getMLText("rewind_workflow"));
 
 		$currentstate = $latestContent->getWorkflowState();
 		$wkflog = $latestContent->getWorkflowLog();
 		$workflow = $latestContent->getWorkflow();
 
-		$msg = "The document is currently in state: ".$currentstate->getName()."<br />";
+		$msg = getMLText("status_current_info").$currentstate->getName()."<br />";
 		if($wkflog) {
 			foreach($wkflog as $entry) {
 				if($entry->getTransition()->getNextState()->getID() == $currentstate->getID()) {
@@ -57,40 +64,39 @@ class SeedDMS_View_RewindWorkflow extends SeedDMS_Bootstrap_Style {
 					$enterts = makeTsFromLongDate($enterdate);
 				}
 			}
-			$msg .= "The state was entered at ".$enterdate." which was ";
-			$msg .= getReadableDuration((time()-$enterts))." ago.<br />";
+			$msg .= getMLText("status_date_record_one").$enterdate.getMLText("status_date_record_two");
+			$msg .= getReadableDuration((time()-$enterts)).".<br />";
 		}
-		$msg .= "The document may stay in this state for ".$currentstate->getMaxTime()." sec.";
+		//$msg .= "The document may stay in this state for ".$currentstate->getMaxTime()." sec.";
 		$this->infoMsg($msg);
 
-		$this->contentContainerStart();
 		// Display the Workflow form.
 ?>
-	<div class="row-fluid">
-	<div class="span4">
-	<p><?php printMLText("rewind_workflow_warning"); ?></p>
-	<form method="post" action="../op/op.RewindWorkflow.php" name="form1">
-	<?php echo createHiddenFieldWithKey('rewindworkflow'); ?>
-	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
-	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
-    <input type='hidden' name='folderid' value='<?php echo $folder->getId(); ?>' />
-	<input type='submit' class="btn" value='<?php printMLText("rewind_workflow"); ?>'/>
-	</form>
+
+	<?php $this->warningMsg(getMLText("rewind_workflow_warning")); ?>
+	<div class="col-md-4">
+		<form method="post" action="../op/op.RewindWorkflow.php" name="form1">
+			<?php echo createHiddenFieldWithKey('rewindworkflow'); ?>
+			<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
+			<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
+		    <input type='hidden' name='folderid' value='<?php echo $folder->getId(); ?>' />
+		  <div class="">
+		  	<button type='submit' class="btn btn-info"><i class="fa fa-refresh"></i> <?php printMLText("rewind_workflow"); ?></button>
+		  </div>
+		</form>
 	</div>
-	<div id="workflowgraph" class="span8">
-	<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?>" width="100%" height="400" style="border: 1px solid #AAA;"></iframe>
-	</div>
-	</div>
-<?php
-		$this->contentContainerEnd();
+
+	<?php
+
 
 		if($wkflog) {
-			$this->contentContainerStart();
-			echo "<table class=\"table-condensed\">";
-			echo "<tr><th>".getMLText('action')."</th><th>Start state</th><th>End state</th><th>".getMLText('date')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>";
+			echo "<div class=\"col-md-8\">";
+			echo "<div class=\"table-responsive\">";
+			echo "<table class=\"table table-striped table-bordered\">";
+			echo "<tr><th class=\"align-center th-info-background\">".getMLText('action')."</th><th class=\"align-center th-info-background\">".getMLText('status_from')."</th><th class=\"align-center th-info-background\">".getMLText('status_to')."</th><th class=\"align-center th-info-background\">".getMLText('date')."</th><th class=\"align-center th-info-background\">".getMLText('user')."</th><th class=\"align-center th-info-background\">".getMLText('comment')."</th></tr>";
 			foreach($wkflog as $entry) {
 				echo "<tr>";
-				echo "<td>".getMLText('action_'.$entry->getTransition()->getAction()->getName())."</td>";
+				echo "<td>".getMLText('action')." ".$entry->getTransition()->getAction()->getName()."</td>";
 				echo "<td>".$entry->getTransition()->getState()->getName()."</td>";
 				echo "<td>".$entry->getTransition()->getNextState()->getName()."</td>";
 				echo "<td>".$entry->getDate()."</td>";
@@ -99,10 +105,17 @@ class SeedDMS_View_RewindWorkflow extends SeedDMS_Bootstrap_Style {
 				echo "</tr>";
 			}
 			echo "</table>\n";
-			$this->contentContainerEnd();
+			echo "</div>";
+			echo "</div>";
 		}
 
+		$this->endsBoxPrimary();
+		echo "</div>";
+		echo "</div>"; 
+		echo "</div>"; // Ends row
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

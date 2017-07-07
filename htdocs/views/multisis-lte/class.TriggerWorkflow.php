@@ -71,14 +71,19 @@ $(document).ready(function() {
 
 		$latestContent = $document->getLatestContent();
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("trigger_workflow"));
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
+
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Document content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+		$this->startBoxPrimary(getMLText("trigger_workflow"));
 ?>
-<script language="JavaScript">
-</script>
 
 <?php
 
@@ -87,7 +92,7 @@ $(document).ready(function() {
 		$wkflog = $latestContent->getWorkflowLog();
 		$workflow = $latestContent->getWorkflow();
 
-		$msg = "The document is currently in state: ".$currentstate->getName()."<br />";
+		$msg = getMLText("status_current_info").$currentstate->getName()."<br />";
 		if($wkflog) {
 			foreach($wkflog as $entry) {
 				if($entry->getTransition()->getNextState()->getID() == $currentstate->getID()) {
@@ -95,47 +100,47 @@ $(document).ready(function() {
 					$enterts = makeTsFromLongDate($enterdate);
 				}
 			}
-			$msg .= "The state was entered at ".$enterdate." which was ";
-			$msg .= getReadableDuration((time()-$enterts))." ago.<br />";
+			$msg .= getMLText("status_date_record_one").$enterdate.getMLText("status_date_record_two");
+			$msg .= getReadableDuration((time()-$enterts)).".<br />";
 		}
-		$msg .= "The document may stay in this state for ".$currentstate->getMaxTime()." sec.";
+		//$msg .= "The document may stay in this state for ".$currentstate->getMaxTime()." sec.";
 		$this->infoMsg($msg);
 
-		$this->contentContainerStart();
+'status_date_record_one' => 'El estado fue ingresado el ',
+'status_date_record_two' => ' y ha estado así ',
+'status_current_info' => 'El documento se encuentra actualmente en estado: '
+
 		// Display the Workflow form.
 ?>
-	<div class="row-fluid">
-	<div class="span6">
+	
+	<div class="col-md-6">
 	<form class="form-horizontal" method="post" action="../op/op.TriggerWorkflow.php" id="form1" name="form1">
 	<?php echo createHiddenFieldWithKey('triggerworkflow'); ?>
 	<div class="control-group">
 		<label class="control-label"><?php printMLText('comment'); ?>:</label>
 		<div class="controls">
-			<textarea name="comment" cols="80" rows="4" id="trigger_workflow_comment"></textarea>
+			<textarea class="form-control" name="comment" cols="80" rows="4" id="trigger_workflow_comment"></textarea>
 		</div>
 	</div>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
 	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
 	<input type='hidden' name='transition' value='<?php echo $transition->getID(); ?>'/>
-	<div class="controls">
-		<input type='submit' class="btn btn-info" value='<?php printMLText("action_".strtolower($action->getName()), array(), $action->getName()); ?>'/>
+	<div class="box-footer">
+	<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("action_".strtolower($action->getName()), array(), $action->getName()); ?></button>
 	</div>
 	</form>
 	</div>
-	<div id="workflowgraph" class="span6">
-	<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?>&transition=<?php echo $transition->getID(); ?>&documentid=<?php echo $document->getID(); ?>" width="100%" height="500" style="border: 1px solid #AAA;"></iframe>
-	</div>
-	</div>
+
 <?php
-		$this->contentContainerEnd();
 
 		if($wkflog) {
-			$this->contentContainerStart();
-			echo "<table class=\"table-condensed\">";
-			echo "<tr><th>".getMLText('action')."</th><th>Start state</th><th>End state</th><th>".getMLText('date')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>";
+			echo "<div class=\"col-md-6\">";
+			echo "<div class=\"table-responsive\">";
+			echo "<table class=\"table table-condensed\">";
+			echo "<tr><th class=\"align-center th-info-background\">".getMLText('action')."</th><th class=\"align-center th-info-background\">".getMLText('status_from')."</th><th class=\"align-center th-info-background\">".getMLText('status_to')."</th><th class=\"align-center th-info-background\">".getMLText('date')."</th><th class=\"align-center th-info-background\">".getMLText('user')."</th><th class=\"align-center th-info-background\">".getMLText('comment')."</th></tr>";
 			foreach($wkflog as $entry) {
 				echo "<tr>";
-				echo "<td>".getMLText('action_'.strtolower($entry->getTransition()->getAction()->getName()), array(), $entry->getTransition()->getAction()->getName())."</td>";
+				echo "<td>".getMLText('action')." ".strtolower($entry->getTransition()->getAction()->getName()), array(), $entry->getTransition()->getAction()->getName()."</td>";
 				echo "<td>".$entry->getTransition()->getState()->getName()."</td>";
 				echo "<td>".$entry->getTransition()->getNextState()->getName()."</td>";
 				echo "<td>".$entry->getDate()."</td>";
@@ -144,10 +149,18 @@ $(document).ready(function() {
 				echo "</tr>";
 			}
 			echo "</table>\n";
-			$this->contentContainerEnd();
+			echo "</div>";
+			echo "</div>";
 		}
 
+
+		$this->endsBoxPrimary();
+		echo "</div>";
+		echo "</div>"; 
+		echo "</div>"; // Ends row
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

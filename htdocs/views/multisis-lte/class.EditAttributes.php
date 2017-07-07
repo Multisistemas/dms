@@ -75,13 +75,19 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
 		$version = $this->params['version'];
 		$attrdefs = $this->params['attrdefs'];
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+    $this->containerStart();
+    $this->mainHeader();
+    $this->mainSideBar();
+    $this->contentStart();    
 
-		$this->contentHeading(getMLText("edit_attributes"));
-		$this->contentContainerStart();
+    echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+    //// Document content ////
+    echo "<div class=\"row\">";
+    echo "<div class=\"col-md-12\">";
+
+    $this->startBoxSuccess(getMLText("edit_attributes"));
 ?>
 <form class="form-horizontal" action="../op/op.EditAttributes.php" name="form1" id="form1" method="POST" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('editattributes'); ?>
@@ -108,9 +114,9 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
                     <div id="upload-file">
                         <div class="input-append">
                             <input type="text" class="form-control" readonly>
-                            <span class="btn btn-default btn-file">
-					        <?php printMLText("browse");?>&hellip; <input id="filename" type="file" name="filename[]">
-				</span>
+                            <span class="btn btn-primary btn-file">
+					                   <i class="fa fa-search"></i> <?php printMLText("browse");?> <input id="filename" type="file" name="filename[]">
+				                    </span>
                         </div>
                     </div>
                 </div>
@@ -118,21 +124,27 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
         </tr>
         <tr>
             <td class="lbl-right"><?php printMLText("comment_for_current_version");?>:</td>
-            <td><textarea name="version_comment" rows="6" cols="80"></textarea><br />
+            <td><textarea class="form-control" name="version_comment" rows="6" cols="80"></textarea><br />
         </tr>
         <tr>
             <td>
                 <div class="controls">
-                    <button type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> <?php printMLText("save") ?></button>
                 </div>
             </td>
         </tr>
     </table>
 </form>
 <?php
-		$this->contentContainerEnd();
-		$this->contentEnd();
-		$this->htmlEndPage();
+
+		$this->endsBoxSuccess();
+    echo "</div>";
+    echo "</div>"; 
+    echo "</div>"; // Ends row
+    $this->contentEnd();
+    $this->mainFooter();    
+    $this->containerEnd();
+    $this->htmlEndPage();
 	} /* }}} */
 }
 ?>

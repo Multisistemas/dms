@@ -251,7 +251,33 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<div class=\"box-body\">";
 	} /* }}} */
 
+	function startBoxDanger($title = "") { /* {{{ */
+		echo "<div class=\"box box-danger\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+	} /* }}} */
+
+	function startBoxSuccess($title = "") { /* {{{ */
+		echo "<div class=\"box box-success\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+	} /* }}} */
+
 	function endsBoxPrimary(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function endsBoxDanger(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function endsBoxSuccess(){ /* {{{ */
 		echo "</div>";
     echo "</div>";
 	} /* }}} */
@@ -560,22 +586,35 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	} /* }}} */
 
-	function printTheTree($tree){ /* {{{ */
+	/* Generate folder tree widget */
+
+	function printTheTree($tree, $i = 0){ /* {{{ */
+
 			foreach ($tree as $key => $treeNode) {
-				echo "<li class=\"treeview\">";
-			  echo "<a href=\"#\"><i class=\"fa fa-folder\"></i> <span>".$treeNode['label']." (".count($treeNode['children']).") </span>";
-			  echo "<span class=\"pull-right-container\">";
-			  echo "<i class=\"fa fa-angle-left pull-right\"></i>";
-			  echo "</span>";
+				if ($i == 0) {
+					echo "<li class=\"treeview active\">";
+				} else {
+					echo "<li class=\"treeview\">";
+				}
+			  echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"fix-width\"><i class=\"fa fa-folder\"></i> <span class=\"wrap-normal\">".$treeNode['label']." (".count($treeNode['children']).") </span>";
+
+			  if (count($treeNode['children']) > 0) {
+			  	echo "<span class=\"pull-right-container\">";
+			  	echo "<i class=\"fa fa-angle-left pull-right\"></i>";
+			  	echo "</span>";	
+			  }
 			  echo "</a>";
+
 				if (count($treeNode['children']) > 0) {
 					$children = $treeNode['children'];
 			    echo "<ul class=\"treeview-menu\">";
-					$this->printTheTree($children);
+			    $i++;
+					$this->printTheTree($children, $i);
 					echo "</ul>";
 				}
 			  echo "</li>";
 			}
+
 	} /* }}} */
 
 	function mainSideBar(){ /* {{{ */
@@ -642,7 +681,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 		$rootFolder = $this->printTree(1, M_READ, 0,'', 1, 's');
 		echo "<li class=\"treeview active\">";
-		$this->printTheTree($rootFolder);
+		$this->printTheTree($rootFolder, 0);
 
     //TreeView Old 
 
@@ -725,6 +764,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<li class=\"active\"><a href=\"#control-sidebar-theme-demo-options-tab\" data-toggle=\"tab\"><i class=\"fa fa-wrench\"></i></a></li>";
 		if($this->params['user']->isAdmin()) {
 			echo "<li><a href=\"#control-sidebar-home-tab\" data-toggle=\"tab\"><i class=\"fa fa-gears\"></i></a></li>";
+			echo "<li><a href=\"#control-sidebar-logo-tab\" data-toggle=\"tab\"><i class=\"fa fa-flag\"></i></a></li>";
 		}
     echo "</ul>";
     echo "<!-- Sidebar Menu -->";
@@ -786,6 +826,24 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
   			<ul class="list-unstyled clearfix"><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9;"></span><span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Blue</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix"><span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe;"></span><span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Black</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span><span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Purple</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span><span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Green</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span><span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Red</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span><span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Yellow</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9;"></span><span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px">Blue Light</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix"><span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe;"></span><span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px">Black Light</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span><span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px">Purple Light</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span><span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px">Green Light</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span><span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px">Red Light</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span><span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px;">Yellow Light</p></li></ul>
   		</div>
   	</div>
+  	<div class="tab-pane" id="control-sidebar-logo-tab">
+    	<h3 class="control-sidebar-heading"><?php echo getMLText("change_logo"); ?></h3>
+    	<div>
+    		<ul class="list-unstyled clearfix">
+    		
+    		<?php
+    			$path_to_file = "/views/".$this->theme."/images/logo.png";
+    			?>
+    				<li class="align-center"><img class="thelogo" src="<?php echo $path_to_file; ?>"></li>
+    		<?php
+    		 /*
+    			$this->getImgPath("lock.png")
+    			$path_to_file = "/out/images/logo.png";
+    			var_dump(file_exists($path_to_file));*/
+    		?>
+    		</ul>
+    	</div>
+    </div>
   	<?php
     echo "</div>";
   	echo "</aside>";

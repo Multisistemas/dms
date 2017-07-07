@@ -76,13 +76,19 @@ $(document).ready(function() {
 		$version = $this->params['version'];
 		$strictformcheck = $this->params['strictformcheck'];
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
 
-		$this->contentHeading(getMLText("edit_comment"));
-		$this->contentContainerStart();
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Document content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		$this->startBoxSuccess(getMLText("edit_comment"));
 ?>
 <form class="form-horizontal" action="../op/op.EditComment.php" id="form1" name="form1" method="post">
 	<?php echo createHiddenFieldWithKey('editcomment'); ?>
@@ -91,16 +97,22 @@ $(document).ready(function() {
 	<div class="control-group">
 			<label class="control-label"><?php printMLText("comment");?>:</label>
 			<div class="controls">
-				<textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($version->getComment());?></textarea>
+				<textarea name="comment" class="form-control" rows="4" cols="80"><?php print htmlspecialchars($version->getComment());?></textarea>
 			</div>
 	</div>
-	<div class="controls">
-		<button type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+	<div class="box-footer">
+		<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> <?php printMLText("save") ?></button>
 	</div>
 </form>
 <?php
-		$this->contentContainerEnd();
+		
+		$this->endsBoxSuccess();
+		echo "</div>";
+		echo "</div>"; 
+		echo "</div>"; // Ends row
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

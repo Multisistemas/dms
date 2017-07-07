@@ -931,7 +931,7 @@ Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
 'rewind_workflow_email_subject' => 'El flujo de trabajo fue retrocedido',
-'rewind_workflow_warning' => 'Si su flujo de trabajo fue retrocedido a su estado inicial, todo el log del flujo de trabajo de este documento será borrado y no se podrá recuperar.',
+'rewind_workflow_warning' => 'Si su flujo de trabajo es retrocedido a su estado inicial, todo el log del flujo de trabajo de este documento será borrado y no se podrá recuperar.',
 'rm_attrdef' => 'Eliminar definición de atributo',
 'rm_attrdefgroup' => '',
 'rm_default_keyword_category' => 'Eliminar categoría',
@@ -1577,6 +1577,12 @@ URL: [url]',
 'next' => 'Siguiente',
 'please_standby' => 'Por favor espere...',
 'see' => 'Visualizar',
+'status_from' => 'Desde',
+'status_to' => 'Hasta',
+'status_date_record_one' => 'El estado fue ingresado el ',
+'status_date_record_two' => ' y ha estado así ',
+'status_current_info' => 'El documento se encuentra actualmente en estado: ',
+'change_logo' => 'Logo',
 );
 
 // TODO: Mover strings de extensión de no conformiadad a su propio archivo de lenguaje.

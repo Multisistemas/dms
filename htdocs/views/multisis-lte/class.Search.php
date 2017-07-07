@@ -54,19 +54,13 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript; charset=UTF-8');
-		?>
-			function folderSelected(id, name) {
-				window.location = '../out/out.ViewFolder.php?folderid=' + id;
-			}
-		<?php
 
 		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder'));
 
 		$this->printFolderChooserJs("form1");
 		$this->printDeleteFolderButtonJs();
 		$this->printDeleteDocumentButtonJs();
-
-		$this->printNewTreeNavigationJs(1, M_READ, 0, '', 1, "");
+		
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -473,7 +467,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			 */
 			$this->infoMsg(getMLText("search_report", array("doccount" => $totaldocs, "foldercount" => $totalfolders, 'searchtime'=>$searchTime)));
 
-			print "<div class=\"alert\">".getMLText("search_report", array("doccount" => $totaldocs, "foldercount" => $totalfolders, 'searchtime'=>$searchTime))."</div>";
+			//print "<div class=\"alert\">".getMLText("search_report", array("doccount" => $totaldocs, "foldercount" => $totalfolders, 'searchtime'=>$searchTime))."</div>";
 			
 			$this->pageList($pageNumber, $totalpages, "../out/out.Search.php", $urlparams);
 //			$this->contentContainerStart();

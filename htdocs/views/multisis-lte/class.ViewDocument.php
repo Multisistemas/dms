@@ -171,12 +171,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
 		}
 		$this->printDocumentChooserJs("form1");
-		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 1, "");
+	
 		?>
-			function folderSelected(id, name) {
-				window.location = '../out/out.ViewFolder.php?folderid=' + id;
-			}
-
 			$(document).on("ready", function(){
 				$("#document-info-widget").on("click", function(){
 					$("#document-info").addClass("div-hidden");
@@ -951,7 +947,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				/* Block for rewind the workflow status */
 
 				$theaccessMode = $folder->getAccessMode($this->params['user']);
-				if ($theaccessMode == M_READWRITE || $theaccessMode == M_ALL ) {
+				if ($theaccessMode >= M_READWRITE ) {
 					if (!$this->params['user']->isGuest()) {
 						if(!(SeedDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState()))) {
 							print "<form action=\"../out/out.RewindWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('rewindworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"folderid\" value=\"".$folder->getId()."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn btn-danger\"><i class=\"fa fa-refresh\"></i> ".getMLText('rewind_workflow')."</button></form>";

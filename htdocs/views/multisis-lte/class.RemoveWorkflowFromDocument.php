@@ -39,11 +39,17 @@ class SeedDMS_View_RemoveWorkflowFromDocument extends SeedDMS_Bootstrap_Style {
 
 		$latestContent = $document->getLatestContent();
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("rm_workflow"));
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
+
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Document content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
 
 		$currentstate = $latestContent->getWorkflowState();
 		$wkflog = $latestContent->getWorkflowLog();
@@ -63,28 +69,31 @@ class SeedDMS_View_RemoveWorkflowFromDocument extends SeedDMS_Bootstrap_Style {
 		$msg .= "The document may stay in this state for ".$currentstate->getMaxTime()." sec.";
 		$this->infoMsg($msg);
 
-		$this->contentContainerStart();
+		$this->startBoxDanger(getMLText("rm_workflow"));
 		// Display the Workflow form.
 ?>
-	<div class="row-fluid">
-	<div class="span4">
-	<p><?php printMLText("rm_workflow_warning"); ?></p>
-	<form method="post" action="../op/op.RemoveWorkflowFromDocument.php" name="form1">
-	<?php echo createHiddenFieldWithKey('removeworkflowfromdocument'); ?>
-	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
-	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
-	<button type='submit' class="btn"><i class="icon-remove"></i> <?php printMLText("rm_workflow"); ?></button>
-	</form>
+
+	<?php $this->warningMsg(getMLText("rm_workflow_warning")); ?>
+	<div class="col-md-6">
+		<form method="post" action="../op/op.RemoveWorkflowFromDocument.php" name="form1">
+		<?php echo createHiddenFieldWithKey('removeworkflowfromdocument'); ?>
+		<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
+		<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
+		<div class="box-footer">
+			<button type='submit' class="btn btn-danger"><i class="fa fa-times"></i> <?php printMLText("rm_workflow"); ?></button>
+		</div>
+		</form>
 	</div>
-	<div id="workflowgraph" class="span8">
-	<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?>" width="100%" height="500" style="border: 1px solid #AAA;"></iframe>
+
+	<div id="workflowgraph" class="col-md-6">
+		<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?>" width="100%" height="400" style="border: 1px solid #c0c0c0;"></iframe>
 	</div>
-	</div>
+
 <?php
-		$this->contentContainerEnd();
+
 
 		if($wkflog) {
-			$this->contentContainerStart();
+
 			echo "<table class=\"table-condensed\">";
 			echo "<tr><th>".getMLText('action')."</th><th>Start state</th><th>End state</th><th>".getMLText('date')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>";
 			foreach($wkflog as $entry) {
@@ -98,10 +107,16 @@ class SeedDMS_View_RemoveWorkflowFromDocument extends SeedDMS_Bootstrap_Style {
 				echo "</tr>";
 			}
 			echo "</table>\n";
-			$this->contentContainerEnd();
+
 		}
 
+		$this->endsBoxDanger();
+		echo "</div>";
+		echo "</div>"; 
+		echo "</div>"; // Ends row
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
