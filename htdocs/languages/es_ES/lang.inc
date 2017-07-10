@@ -1583,6 +1583,7 @@ URL: [url]',
 'status_date_record_two' => ' y ha estado así ',
 'status_current_info' => 'El documento se encuentra actualmente en estado: ',
 'change_logo' => 'Logo',
+'upload' => 'Subir',
 );
 
 // TODO: Mover strings de extensión de no conformiadad a su propio archivo de lenguaje.

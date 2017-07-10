@@ -1,7 +1,5 @@
-/**
- * File: custom css for multisis-lte, DMS theme
- * Author: Luis Medrano <lmedrano@multisistemas.com.sv>
- */
+/**  * File: custom css for multisis-lte, DMS theme  * Author: Luis Medrano
+<lmedrano@multisistemas.com.sv>  */
 
 /* ---------- checkboxes style ------------ */
 .material-switch > input[type="checkbox"] {
@@ -161,7 +159,9 @@
     display: none;
 }
 
-
+.comment-width {
+    max-width: 400px;
+}
 
 /* ------------- Modals ------------------ */
 /*.after_modal_appended
@@ -195,11 +195,15 @@
     content: "" !important;
 }
 
-.breadcrumb {
+.default-bread {
     padding: 5px 15px 15px 15px !important;
     margin-bottom: 10px !important;
 }
 
+.nonconfo-bread {
+    padding: 5px 15px 5px 15px !important;
+    margin-bottom: 10px !important;
+}
 
 
 /* ------------- Forms ------------------ */
@@ -283,8 +287,45 @@ span.wrap-normal {
     white-space: normal;
 }
 
+.link-to-folder {  
+    float: right;
+    z-index: 100;
+    border-left-color: transparent !important;
+    left: -5px !important;
+}
+
 /* ------------------- The logo ----------------------- */
 
 .thelogo {
+    max-width: 100px;
+}
+
+.thebrand{
+    max-width: 200px;
+}
+
+.li-logo {
+    padding-bottom: 10px;
+}
+
+.header-logo {
     max-width: 30px;
+    max-height: 30px;
+}
+
+.header-brand {
+    max-width: 200px;
+    max-height: 45px;
+}
+
+.login-brand {
+    max-width: 300px;
+    height: auto;
+}
+
+.guest-access {
+    background-color: #fff;
+    margin-top: 10px;
+    padding: 10px;
+    text-align: center;
 }

@@ -191,9 +191,9 @@ $(document).ready( function() {
 		if ($enablepasswordforgotten)
 			$tmpfoot[] = "<a href=\"../out/out.PasswordForgotten.php\">" . getMLText("password_forgotten") . "</a>\n";
 		if($tmpfoot) {
-			print "<div class=\"row\"><div class=\"col-xs-12\"><p>";
+			print "<div class=\"row\"><div class=\"col-md-12 guest-access\"><div class=\"\">";
 			print implode(' | ', $tmpfoot);
-			print "</p></div></div>";
+			print "</div></div></div>";
 		}
 		
 		$this->endLoginContent();
