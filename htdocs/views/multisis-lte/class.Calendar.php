@@ -105,26 +105,32 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 		$this->adjustDate($day,$month,$year);
 
 		$daysInMonth = $this->getDaysInMonth($month, $year);
+
 		$date = getdate(mktime(12, 0, 0, $month, 1, $year));
 
 		$first = $date["wday"];
 		$monthName = $this->monthNames[$month - 1];
 
-		$s  = "<table class=\"table\">\n";
+		$s = "<table class=\"table table-bordered table-condensed background-white \">\n";
 		
 		$s .= "<tr>\n";
-		$s .= "<td style=\"border-top: 0px;\" colspan=\"7\"><a href=\"../out/out.Calendar.php?mode=m&year=".$year."&month=".$month."\">".$monthName."</a></td>\n"; ;
+		$s .= "<td style=\"border-top: 0px;\" class=\"align-center th-info-background\" colspan=\"7\"><a class=\"color-month\" href=\"../out/out.Calendar.php?mode=m&year=".$year."&month=".$month."\">".$monthName."</a></td>\n"; ;
 		$s .= "</tr>\n";
 
 		$s .= "<tr>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+1)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+2)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+3)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+4)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+5)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+6)%7] . "</th>\n";
+		$s .= "<th class=\"header align-center\">" . $this->dayNames[($startDay)%7] . "</th>\n";
+		$s .= "<th class=\"header align-center\">" . $this->dayNames[($startDay+1)%7] . "</th>\n";
+		$s .= "<th class=\"header align-center\">" . $this->dayNames[($startDay+2)%7] . "</th>\n";
+		$s .= "<th class=\"header align-center\">" . $this->dayNames[($startDay+3)%7] . "</th>\n";
+		$s .= "<th class=\"header align-center\">" . $this->dayNames[($startDay+4)%7] . "</th>\n";
+		$s .= "<th class=\"header align-center\">" . $this->dayNames[($startDay+5)%7] . "</th>\n";
+		$s .= "<th class=\"header align-center\">" . $this->dayNames[($startDay+6)%7] . "</th>\n";
 		$s .= "</tr>\n";
+
+		// Get the events for the month
+		$events = getEventsInInterval(mktime(0,0,0, $month, 1, $year), mktime(23,59,59, $month, $daysInMonth, $year));
+		$eventClass = "";
+		$eventTitle = "";
 
 		// We need to work out what date to start at so that the first appears in the correct column
 		$d = $startDay + 1 - $first;
@@ -135,32 +141,100 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 
 		while ($d <= $daysInMonth)
 		{
-			$s .= "<tr>\n";       
-				
+			$s .= "<tr>\n";
+
 			for ($i = 0; $i < 7; $i++){
-			
+
 				$class = ($year == $today["year"] && $month == $today["mon"] && $d == $today["mday"]) ? "today" : "";
-				$s .= "<td class=\"$class\">";   
+
+				//Scan events for highlight
+				$xdate=mktime(0, 0, 0, $month, $d, $year); // Current date in the cicle
+
+				foreach ($events as $event){
+					if ($d > 0 && $d <= $daysInMonth){
+						if (((int)$xdate >= (int)$event["start"]) && ((int)$xdate <= (int)$event["stop"])){
+							$eventClass = "is-event";
+							$start = date('d/m/Y', $event["start"]);
+							$stop = date('d/m/Y', $event["stop"]);
+							$eventTitle = getMLText("event").": ".$event["name"].". ";
+							$eventTitle .= getMLText("event_start_date").": ".$start.". ";
+							$eventTitle .= getMLText("event_stop_date").": ".$stop.".";
+						} else {
+							$eventClass = "";
+						}
+					}
+				}
+				
+				if ($eventTitle != "") {
+					$s .= "<td class=\"".$class." ".$eventClass." align-center\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".$eventTitle."\">";
+				} else {
+					$s .= "<td class=\"".$class." ".$eventClass." align-center\">";	
+				}   
 						
 				if ($d > 0 && $d <= $daysInMonth){
-
 					$s .= "<a href=\"../out/out.Calendar.php?mode=w&year=".$year."&month=".$month."&day=".$d."\">".$d."</a>";
-							}
+				}
 				else $s .= "&nbsp;";
 				
 				$s .= "</td>\n";       
 				$d++;
+				$eventTitle = ""; 
 			}
 			$s .= "</tr>\n";    
 		}
 
 		$s .= "</table>\n";
 
+		//////
+		//$events = getEventsInInterval(mktime(0,0,0, $month, 1, $year), mktime(23,59,59, $month, $daysInMonth, $year));
+		//var_dump($events);
+		/*$xdate=mktime(0, 0, 0, $month, $i, $year);
+				foreach ($events as $event){
+					echo "<div>";
+					if (($event["start"]<=$xdate)&&($event["stop"]>=$xdate)){
+					
+						if (strlen($event['name']) > 25) $event['name'] = substr($event['name'], 0, 22) . "...";
+						print "<i class=\"fa fa-check\"></i> <a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".htmlspecialchars($event['name'])."</a>";
+					}
+					echo "</div>";
+				}*/
+		///////
+
 		return $s;  	
 	} /* }}} */
 
 	function printYearTable($year) { /* {{{ */
-		print "<table class=\"table-condensed\">\n";
+
+		print "<div class=\"row\">\n";
+	
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(1 , $year) ."</div>\n";
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(2 , $year) ."</div>\n";
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(3 , $year) ."</div>\n";
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(4 , $year) ."</div>\n";
+
+		print "</div>\n";
+
+		print "<div class=\"row\">\n";
+
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(5 , $year) ."</div>\n";
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(6 , $year) ."</div>\n";
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(7 , $year) ."</div>\n";
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(8 , $year) ."</div>\n";
+
+		print "</div>\n";
+
+		print "<div class=\"row\">\n";
+
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(9 , $year) ."</div>\n";
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(10, $year) ."</div>\n";
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(11, $year) ."</div>\n";
+		print "<div class=\"col-md-3\" valign=\"top\">" . $this->getMonthHTML(12, $year) ."</div>\n";
+
+		print "</div>\n";
+
+
+		/*
+		print "<table class=\"table table-bordered table-condensed\">\n";
 		print "<tr>";
 		print "<td valign=\"top\">" . $this->getMonthHTML(1 , $year) ."</td>\n";
 		print "<td valign=\"top\">" . $this->getMonthHTML(2 , $year) ."</td>\n";
@@ -179,167 +253,13 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 		print "<td valign=\"top\">" . $this->getMonthHTML(11, $year) ."</td>\n";
 		print "<td valign=\"top\">" . $this->getMonthHTML(12, $year) ."</td>\n";
 		print "</tr>\n";
-		print "</table>\n";
+		print "</table>\n";*/
 	} /* }}} */
 
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript');
 		?>
-		$(function () {
-
-    /* initialize the external events
-     -----------------------------------------------------------------*/
-    function ini_events(ele) {
-      ele.each(function () {
-
-        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-        // it doesn't need to have a start or end
-        var eventObject = {
-          title: $.trim($(this).text()) // use the element's text as the event title
-        };
-
-        // store the Event Object in the DOM element so we can get to it later
-        $(this).data('eventObject', eventObject);
-
-        // make the event draggable using jQuery UI
-        $(this).draggable({
-          zIndex: 1070,
-          revert: true, // will cause the event to go back to its
-          revertDuration: 0  //  original position after the drag
-        });
-
-      });
-    }
-
-    ini_events($('#external-events div.external-event'));
-
-    /* initialize the calendar
-     -----------------------------------------------------------------*/
-    //Date for the calendar events (dummy data)
-    var date = new Date();
-    var d = date.getDate(),
-        m = date.getMonth(),
-        y = date.getFullYear();
-    $('#calendar').fullCalendar({
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,agendaWeek,agendaDay'
-      },
-      buttonText: {
-        today: 'today',
-        month: 'month',
-        week: 'week',
-        day: 'day'
-      },
-      //Random default events
-      events: [
-        {
-          title: 'All Day Event',
-          start: new Date(y, m, 1),
-          backgroundColor: "#f56954", //red
-          borderColor: "#f56954" //red
-        },
-        {
-          title: 'Long Event',
-          start: new Date(y, m, d - 5),
-          end: new Date(y, m, d - 2),
-          backgroundColor: "#f39c12", //yellow
-          borderColor: "#f39c12" //yellow
-        },
-        {
-          title: 'Meeting',
-          start: new Date(y, m, d, 10, 30),
-          allDay: false,
-          backgroundColor: "#0073b7", //Blue
-          borderColor: "#0073b7" //Blue
-        },
-        {
-          title: 'Lunch',
-          start: new Date(y, m, d, 12, 0),
-          end: new Date(y, m, d, 14, 0),
-          allDay: false,
-          backgroundColor: "#00c0ef", //Info (aqua)
-          borderColor: "#00c0ef" //Info (aqua)
-        },
-        {
-          title: 'Birthday Party',
-          start: new Date(y, m, d + 1, 19, 0),
-          end: new Date(y, m, d + 1, 22, 30),
-          allDay: false,
-          backgroundColor: "#00a65a", //Success (green)
-          borderColor: "#00a65a" //Success (green)
-        },
-        {
-          title: 'Click for Google',
-          start: new Date(y, m, 28),
-          end: new Date(y, m, 29),
-          url: 'http://google.com/',
-          backgroundColor: "#3c8dbc", //Primary (light-blue)
-          borderColor: "#3c8dbc" //Primary (light-blue)
-        }
-      ],
-      editable: true,
-      droppable: true, // this allows things to be dropped onto the calendar !!!
-      drop: function (date, allDay) { // this function is called when something is dropped
-
-        // retrieve the dropped element's stored Event Object
-        var originalEventObject = $(this).data('eventObject');
-
-        // we need to copy it, so that multiple events don't have a reference to the same object
-        var copiedEventObject = $.extend({}, originalEventObject);
-
-        // assign it the date that was reported
-        copiedEventObject.start = date;
-        copiedEventObject.allDay = allDay;
-        copiedEventObject.backgroundColor = $(this).css("background-color");
-        copiedEventObject.borderColor = $(this).css("border-color");
-
-        // render the event on the calendar
-        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
-        // is the "remove after drop" checkbox checked?
-        if ($('#drop-remove').is(':checked')) {
-          // if so, remove the element from the "Draggable Events" list
-          $(this).remove();
-        }
-
-      }
-    });
-
-    /* ADDING EVENTS */
-    var currColor = "#3c8dbc"; //Red by default
-    //Color chooser button
-    var colorChooser = $("#color-chooser-btn");
-    $("#color-chooser > li > a").click(function (e) {
-      e.preventDefault();
-      //Save color
-      currColor = $(this).css("color");
-      //Add color effect to button
-      $('#add-new-event').css({"background-color": currColor, "border-color": currColor});
-    });
-    $("#add-new-event").click(function (e) {
-      e.preventDefault();
-      //Get value and make sure it is not null
-      var val = $("#new-event").val();
-      if (val.length == 0) {
-        return;
-      }
-
-      //Create events
-      var event = $("<div />");
-      event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"}).addClass("external-event");
-      event.html(val);
-      $('#external-events').prepend(event);
-
-      //Add draggable funtionality
-      ini_events(event);
-
-      //Remove event from text input
-      $("#new-event").val("");
-    });
-  });
+		
 		<?php
 	} /* }}} */
 
@@ -364,92 +284,116 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
     <div class="gap-10"></div>
     <div class="row">
     <div class="col-md-12">
-    <?php $this->startBoxSolidSuccess(getMLText("calendar"));
 
-		if ($mode=="y"){
+    <?php 
+    $pagination = "";
 
-			$this->contentHeading(getMLText("year_view").": ".$year);
-			
-			echo "<div class=\"pagination\">";
-			echo "<ul>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=y&year=".($year-1)."\"><i style=\"color: black;\" class=\"fa fa-arrow-left\"></i></a></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=y\"><i style=\"color: black;\" class=\"fa fa-circle\"></i></a></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=y&year=".($year+1)."\"><i style=\"color: black;\" class=\"fa fa-arrow-right\"></i></a></li>";
-			echo "</ul>";
-			echo "</div>";
+    if ($mode=="y") { 
 
-			$this->contentContainerStart();
+			$pagination .= "<div class=\"pull-right\">";
+			$pagination .= "<div class=\"btn-group\">";
+			$pagination .= "<a type=\"button\" class=\"btn btn-primary btn-sm btn-flat\" href=\"/out/out.Calendar.php?mode=y&year=".($year-1)."\"><i class=\"fa fa-chevron-left\"></i></a>";
+			$pagination .= "<a type=\"button\" class=\"btn btn-primary btn-sm btn-flat\" href=\"/out/out.Calendar.php?mode=y\"><i class=\"fa fa-calendar\"></i></a>";
+			$pagination .= "<a type=\"button\" class=\"btn btn-primary btn-sm btn-flat\" href=\"/out/out.Calendar.php?mode=y&year=".($year+1)."\"><i class=\"fa fa-chevron-right\"></i></a>";
+			$pagination .= "</div>";
+			$pagination .= "</div>";
+
+    	$this->startCalendarBox(getMLText("year_view").": ".$year, $pagination);	
+
+    } else if ($mode=="m") {
+
+    	if (!isset($this->monthNames)) $this->generateCalendarArrays();
+
+    	$pagination .= "<div class=\"pull-right\">";
+			$pagination .= "<div class=\"btn-group\">";
+			$pagination .= "<a type=\"button\" class=\"btn btn-primary btn-sm btn-flat\" href=\"../out/out.Calendar.php?mode=m&year=".($year)."&month=".($month-1)."\"><i class=\"fa fa-chevron-left\"></i></a>";
+			$pagination .= "<a type=\"button\" class=\"btn btn-primary btn-sm btn-flat\" href=\"../out/out.Calendar.php?mode=m\"><i class=\"fa fa-calendar\"></i></li>";
+			$pagination .= "<a type=\"button\" class=\"btn btn-primary btn-sm btn-flat\" href=\"../out/out.Calendar.php?mode=m&year=".($year)."&month=".($month+1)."\"><i class=\"fa fa-chevron-right\"></i></a>";
+			$pagination .= "</div>";
+			$pagination .= "</div>";
+
+    	$this->startCalendarBox(getMLText("month_view").": ".$this->monthNames[$month-1]. " ".$year, $pagination);
+
+    } else {
+
+    	$pagination .= "<div class=\"pull-right\">";
+			$pagination .= "<div class=\"btn-group\">";
+			$pagination .= "<a type=\"button\" class=\"btn btn-primary btn-sm btn-flat\" href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($day-7)."\"><i class=\"fa fa-chevron-left\"></i></a>";
+			$pagination .= "<a type=\"button\" class=\"btn btn-primary btn-sm btn-flat\" href=\"../out/out.Calendar.php?mode=w\"><i class=\"fa fa-calendar\"></i></a>";
+			$pagination .= "<a type=\"button\" class=\"btn btn-primary btn-sm btn-flat\" href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($day+7)."\"><i class=\"fa fa-chevron-right\"></i></a>";
+			$pagination .= "</div>";
+			$pagination .= "</div>";
+
+    	$this->startCalendarBox(getMLText("week_view").": ".getReadableDate(mktime(12, 0, 0, $month, $day, $year)), $pagination);
+    }
+
+
+    
+    /* ------------------------------- Generate the views ------------------------------------- */
+		if ($mode=="y"){ // Year view
+
 			$this->printYearTable($year);
-			$this->contentContainerEnd();
 
-		}else if ($mode=="m"){
+		}else if ($mode=="m"){ // Month view
 
 			if (!isset($this->dayNamesLong)) $this->generateCalendarArrays();
 			if (!isset($this->monthNames)) $this->generateCalendarArrays();
-			
-			$this->contentHeading(getMLText("month_view").": ".$this->monthNames[$month-1]. " ".$year);
-			
-			echo "<div class=\"pagination pagination-small\">";
-			echo "<ul>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=m&year=".($year)."&month=".($month-1)."\"><i style=\"color: black;\" class=\"icon-arrow-left\"></i></a></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=m\"><i style=\"color: black;\" class=\"icon-circle-blank\"></i></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=m&year=".($year)."&month=".($month+1)."\"><i style=\"color: black;\" class=\"icon-arrow-right\"></i></a></li>";
-			echo "</ul>";
-			echo "</div>";
-//			$this->contentContainerStart();
-			
+					
 			$days=$this->getDaysInMonth($month, $year);
 			$today = getdate(time());
 			
 			$events = getEventsInInterval(mktime(0,0,0, $month, 1, $year), mktime(23,59,59, $month, $days, $year));
 
-			echo "<div class=\"row-fluid\">";
-			echo "<div class=\"span2\">";
-			echo "<h4><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=1\">".date('W', mktime(12, 0, 0, $month, 1, $year)).". ".getMLText('calendar_week')."</a></h4>";
-			echo "<div class=\"well\">";
+			$this->startBoxCollapsablePrimary("<a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=1\">".date('W', mktime(12, 0, 0, $month, 1, $year)).". ".getMLText('calendar_week')."</a>", "collapsed-box");
+
 			$fd = getdate(mktime(12, 0, 0, $month, 1, $year));
 			for($i=0; $i<$fd['wday']-1; $i++)
-				echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
+				echo "<tr><td colspan=\"2\"></td></tr>";
 			
 			for ($i=1; $i<=$days; $i++){
 			
 				// separate weeks
 				$date = getdate(mktime(12, 0, 0, $month, $i, $year));
 				if (($date["wday"]==$this->firstdayofweek) && ($i!=1)) {
-					echo "</div>";
-					echo "</div>";
-					echo "<div class=\"span2\">";
-					echo "<h4><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($i)."\">".date('W', mktime(12, 0, 0, $month, $i, $year)).". ".getMLText('calendar_week')."</a></h4>";
-					echo "<div class=\"well\">";
+					$this->endsBoxCollapsablePrimary();
+					
+					$this->startBoxCollapsablePrimary("<a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($i)."\">".date('W', mktime(12, 0, 0, $month, $i, $year)).". ".getMLText('calendar_week')."</a>", "collapsed-box");
 				}
 				
 				// highlight today
 				$class = ($year == $today["year"] && $month == $today["mon"] && $i == $today["mday"]) ? "todayHeader" : "header";
-				
-				echo "<h5>".$i.". - ".$this->dayNamesLong[$date["wday"]]."</h5>";
-				
-				if ($class=="todayHeader") $class="today";
-				else $class="";
+				if ($class=="todayHeader") $class="today-week";
+				else $class="today-week-default";
+
+				echo "<div>";
+				echo "<h5 class=\"".$class."\">".$i.". - ".$this->dayNamesLong[$date["wday"]]."</h5>";
 				
 				$xdate=mktime(0, 0, 0, $month, $i, $year);
 				foreach ($events as $event){
-					echo "<div>";
-					if (($event["start"]<=$xdate)&&($event["stop"]>=$xdate)){
 					
-						if (strlen($event['name']) > 25) $event['name'] = substr($event['name'], 0, 22) . "...";
-						print "<i class=\"icon-lightbulb\"></i> <a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".htmlspecialchars($event['name'])."</a>";
+					if (($event["start"]<=$xdate)&&($event["stop"]>=$xdate)){
+						print "<table class=\"table table-bordered table-striped\">";
+						print "<tr>";
+						print "<td width='20%'>";
+						print "<i class=\"fa fa-calendar\"></i> ".getMLText("event").": ";
+						print "</td>";
+						print "<td width='80%'>";
+						if (strlen($event['name']) > 25) $event['name'] = substr($event['name'], 0, 50) . "...";
+						print "<a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".htmlspecialchars($event['name'])."</a>";
+						print "</td>";
+						print "</tr>";
+						print "</table>";
 					}
-					echo "</div>";
+					
 				}
+				echo "</div>";
 				
 			}
-			echo "</div>";
-			echo "</div>\n";
-			echo "</div>\n";
+			$this->endsBoxCollapsablePrimary();
 
-//			$this->contentContainerEnd();
+
 			
-		}else{
+		}else {  // Week view
 
 			if (!isset($this->dayNamesLong)) $this->generateCalendarArrays();
 			if (!isset($this->monthNames)) $this->generateCalendarArrays();
@@ -474,17 +418,6 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 			
 			$today = getdate(time());
 			$events = getEventsInInterval($starttime,$stoptime);
-			
-			$this->contentHeading(getMLText("week_view").": ".getReadableDate(mktime(12, 0, 0, $month, $day, $year)));
-			
-			echo "<div class=\"pagination pagination-small\">";
-			echo "<ul>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($day-7)."\"><i style=\"color: black;\" class=\"icon-arrow-left\"></i></a></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=w\"><i style=\"color: black;\" class=\"icon-circle-blank\"></i></a></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($day+7)."\"><i style=\"color: black;\" class=\"icon-arrow-right\"></i></a></li>";
-			echo "</ul>";
-			echo "</div>";
-			$this->contentContainerStart();
 			
 			echo "<table class='table table-condensed'>\n";
 			
@@ -513,8 +446,8 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 						if($event['comment'])
 							echo "<br /><em>".htmlspecialchars($event['comment'])."</em>";
 						print "</td>";
-						echo "<td><a class=\"btn btn-mini\" href=\"../out/out.RemoveEvent.php?id=".$event['id']."\"><i class=\"icon-remove\"></i> ".getMLText('delete')."</a></td>";
-						echo "<td><a class=\"btn btn-mini\" href=\"../out/out.EditEvent.php?id=".$event['id']."\">".getMLText('update')."</a></td>";
+						echo "<td><a type=\"button\" class=\"btn btn-danger\" href=\"../out/out.RemoveEvent.php?id=".$event['id']."\"><i class=\"fa fa-times\"></i> ".getMLText('delete')."</a></td>";
+						echo "<td><a type=\"button\" class=\"btn btn-success\" href=\"../out/out.EditEvent.php?id=".$event['id']."\"><i class=\"fa fa-pencil\"></i> ".getMLText('update')."</a></td>";
 						echo "</tr>\n";	
 					}
 				}
@@ -523,10 +456,9 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 			}
 			echo "</table>\n";
 
-			$this->contentContainerEnd();
 		}
 
-    $this->endsBoxSolidSuccess();
+    $this->endsCalendarBox();
 
     echo "</div>";
     echo "</div>";

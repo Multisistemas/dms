@@ -401,7 +401,7 @@ URL: [url]',
 'dump_list' => 'Ficheros de volcado existentes',
 'dump_remove' => 'Eliminar fichero de volcado',
 'duplicate_content' => 'Contenido duplicado',
-'edit' => 'editar',
+'edit' => 'Editar',
 'edit_attributes' => 'Editar archivo actual',
 'edit_comment' => 'Editar comentario',
 'edit_default_keywords' => 'Editar palabras clave',
@@ -1584,6 +1584,9 @@ URL: [url]',
 'status_current_info' => 'El documento se encuentra actualmente en estado: ',
 'change_logo' => 'Logo',
 'upload' => 'Subir',
+'event' => 'Evento',
+'event_start_date' => 'Fecha de inicio',
+'event_stop_date' => 'Fecha de finalización',
 );
 
 // TODO: Mover strings de extensión de no conformiadad a su propio archivo de lenguaje.

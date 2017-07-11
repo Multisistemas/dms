@@ -256,6 +256,39 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<div class=\"box-body\">";
 	} /* }}} */
 
+	function startCalendarBox($title = "", $pagination = null){ /* {{{ */
+		echo "<div class=\"box box-success\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+
+    if ($pagination != null) {
+    	echo $pagination;	
+    }
+    
+    echo "<div class=\"pull-right\">";
+		echo "<div class=\"btn-group\">";
+
+		$currDate = time();
+		$year = (int)date("Y", $currDate);
+		$month = (int)date("m", $currDate);
+		$day = (int)date("d", $currDate);
+
+		echo "<a type=\"button\" class=\"btn btn-info btn-sm btn-flat\" href=\"/out/out.AddEvent.php\"><i class=\"fa fa-calendar-plus-o\"></i> ".getMLText("add_event")."</a>";
+		echo "<a type=\"button\" class=\"btn btn-success btn-sm btn-flat\" href=\"/out/out.Calendar.php?mode=y\"><i class=\"fa fa-calendar\"></i> ".$year."</a>";
+		echo "<a type=\"button\" class=\"btn btn-success btn-sm btn-flat\" href=\"/out/out.Calendar.php?mode=m\"><i class=\"fa fa-calendar\"></i> ".$month."</a>";
+		echo "<a type=\"button\" class=\"btn btn-success btn-sm btn-flat\" href=\"/out/out.Calendar.php?mode=w\"><i class=\"fa fa-calendar\"></i> ".$day."</a>";
+		echo "</div>";
+		echo "</div>";
+
+    echo "</div>";
+    echo "<div class=\"box-body box-calendar-background\">";
+	} /* }}} */
+
+	function endsCalendarBox(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
 	function startBoxDanger($title = "") { /* {{{ */
 		echo "<div class=\"box box-danger\">";
     echo "<div class=\"box-header with-border\">";
@@ -287,16 +320,26 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</div>";
 	} /* }}} */
 
-	function startBoxCollapsablePrimary($title = "") { /* {{{ */
-		echo "<div class=\"box box-primary box-solid\">";
+	function startBoxCollapsablePrimary($title = "", $collapsed = "") { /* {{{ */
+		echo "<div class=\"box box-primary box-solid ".$collapsed."\">";
     echo "<div class=\"box-header with-border\">";
     echo "<h3 class=\"box-title\">".$title."</h3>";
     echo "<div class=\"box-tools pull-right\">";
-    echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>";
+    if ($collapsed != "") {
+    	echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-plus\"></i>";
+    } else {
+    	echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>";
+    }
+    
     echo "</button>";
     echo "</div>";
     echo "</div>";
-    echo "<div class=\"box-body\">";
+    if ($collapsed != "") {
+    	echo "<div class=\"box-body\" style=\"display:none;\">";	
+    } else {
+    	echo "<div class=\"box-body\">";
+    }
+    
 	} /* }}} */
 
 	function startBoxCollapsableSuccess($title = "") { /* {{{ */
@@ -777,10 +820,10 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	    echo "</span>";
 	    echo "</a>";
 	    echo "<ul class=\"treeview-menu\">";
-	    echo "<li><a href=\"#\">".getMLText("week_view")."</a></li>";
-	    echo "<li><a href=\"#\">".getMLText("month_view")."</a></li>";
-	    echo "<li><a href=\"#\">".getMLText("year_view")."</a></li>";
-	    echo "<li><a href=\"#\">".getMLText("add_event")."</a></li>";
+	    echo "<li><a href=\"/out/out.Calendar.php?mode=w\">".getMLText("week_view")."</a></li>";
+	    echo "<li><a href=\"/out/out.Calendar.php?mode=m\">".getMLText("month_view")."</a></li>";
+	    echo "<li><a href=\"/out/out.Calendar.php?mode=y\">".getMLText("year_view")."</a></li>";
+	    echo "<li><a href=\"/out/out.AddEvent.php\">".getMLText("add_event")."</a></li>";
 	    echo "</ul>";
 	    echo "</li>";
 	  }

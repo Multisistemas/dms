@@ -124,6 +124,10 @@
     height: 10px;
 }
 
+.gap-15 {
+    height: 15px;
+}
+
 .gap-20 {
     height: 20px;
 }
@@ -274,6 +278,46 @@ ul.unstyled {
 
 .float-left {
     float: left;
+}
+
+.background-white {
+    background-color: #ffffff !important;
+}
+
+.color-month {
+    color: #565454 !important;
+}
+
+.box-calendar-background {    
+    background-color: rgba(236, 240, 245, 0.51) !important;
+}
+
+.today {
+    background-color: #cff5ff;
+    border-top: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+    border-left: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
+}
+
+.today-week {
+    background-color: #5fdaa2;
+    border: none;
+    padding: 10px;
+}
+
+.today-week-default {
+    background-color: #cff5ff;
+    border: none;
+    padding: 10px;
+}
+
+.is-event {
+    background-color: #b8f1b8;;
+    border-top: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+    border-left: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
 }
 
 /* ------------------- My folders tree ----------------------- */

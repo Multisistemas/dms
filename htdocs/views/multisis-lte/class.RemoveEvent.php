@@ -36,24 +36,34 @@ class SeedDMS_View_RemoveEvent extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$event = $this->params['event'];
 
-		$this->htmlStartPage(getMLText("calendar"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("delete"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("calendar"), "calendar");
-
-		$this->contentHeading(getMLText("edit_event"));
-		$this->contentContainerStart();
 
 ?>
+<div class="gap-15"></div>
+<div class="row">
+<div class="col-md-12">
+<?php $this->startBoxDanger(getMLText("delete")); ?>
+
 <form action="../op/op.RemoveEvent.php" name="form1" method="post">
   <?php echo createHiddenFieldWithKey('removeevent'); ?>
 	<input type="hidden" name="eventid" value="<?php echo intval($event["id"]); ?>">
 	<p><?php printMLText("confirm_rm_event", array ("name" => htmlspecialchars($event["name"])));?></p>
-	<button class="btn" type="submit"><i class="icon-remove"></i> <?php printMLText("delete");?></button>
+	<button class="btn btn-danger" type="submit"><i class="fa fa-times"></i> <?php printMLText("delete");?></button>
 </form>
+<?php $this->endsBoxSuccess(); ?>
+</div>
+</div>
 <?php
-		$this->contentContainerEnd();
+		
+		echo "</div>";
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

@@ -67,38 +67,41 @@ $(document).ready(function() {
 		$user = $this->params['user'];
 		$process = $this->params['process'];
 
-		$this->htmlStartPage(getMLText("nonconfo_title"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("nonconfo_title"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation("nonconfo_title", "nonconfo_view_navigation", "");
+		$this->getNonconfoPathHTML();
 
 ?>
 
-<div class="row-fluid">
-	<div class="span4">
-		<?php $this->contentHeading(getMLText("nonconfo_edit_process")); ?>
-		<div class="well">
-			<form class="form-horizontal" action="../op/op.EditProcess.php" id="form1" name="form1" method="post">
+<div class="row">
+	<div class="col-md-12">
+		<?php $this->startBoxSuccess(getMLText("nonconfo_edit_process")); ?>
+			<form action="../op/op.EditProcess.php" id="form1" name="form1" method="post">
 					<?php echo createHiddenFieldWithKey('editprocess'); ?>
-					<div class="control-group">
+					<div class="form-group">
 						<input type="hidden" name="processid" value="<?php echo $process['id']; ?>">
-						<label class="control-label"><?php printMLText("nonconfo_process_name");?>:</label>
-						<div class="controls">
-							<input type="text" name="name" size="100" value="<?php echo $process['name']; ?>">
-						</div>
+						<label><?php printMLText("nonconfo_process_name");?>:</label>
+						<input type="text" class="form-control" name="name" size="100" value="<?php echo $process['name']; ?>">
 					</div>
-					<div class="controls">
-						<input class="btn btn-success" type="submit" value="<?php printMLText("save");?>">
+					<div class="box-footer">
+						<button class="btn history-back"><?php echo getMLText('back'); ?></button>
+						<button class="btn btn-info" type="submit"><i class="fa fa-save"></i> <?php printMLText("nonconfo_save");?></button>
 					</div>
 			</form>
-		</div>
+		<?php $this->endsBoxPrimary(); ?>
 	</div>
 </div>
 
 <?php
 
-		$this->contentContainerEnd();
+		echo "</div>";
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 
 	} /* }}} */

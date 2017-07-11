@@ -1614,5 +1614,8 @@ URL: [url]',
 'status_date_record_two' => ' which was ',
 'status_current_info' => 'The document is currently in state: ',
 'upload' => 'Upload',
+'event' => 'Event',
+'event_start_date' => 'Date start',
+'event_stop_date' => 'Date end',
 );
 ?>

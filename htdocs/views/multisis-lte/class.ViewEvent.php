@@ -36,45 +36,51 @@ class SeedDMS_View_ViewEvent extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$event = $this->params['event'];
 
-		$this->htmlStartPage(getMLText("calendar"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("calendar"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("calendar"), "calendar");
 
-		$this->contentHeading(getMLText("event_details"));
-		$this->contentContainerStart();
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startCalendarBox(getMLText("event_details"));
 
 		$u=$dms->getUser($event["userID"]);
 
-		echo "<table class=\"table-condensed\">";
+		echo "<table class=\"table table-bordered table-striped\">";
 
 		echo "<tr>";
-		echo "<td>".getMLText("name").": </td>";
+		echo "<td><strong>".getMLText("name").": </strong></td>";
 		echo "<td>".htmlspecialchars($event["name"])."</td>";
 		echo "</tr>";
 
 		echo "<tr>";
-		echo "<td>".getMLText("comment").": </td>";
+		echo "<td><strong>".getMLText("comment").": </strong></td>";
 		echo "<td>".htmlspecialchars($event["comment"])."</td>";
 		echo "</tr>";
 
 		echo "<tr>";
-		echo "<td>".getMLText("from").": </td>";
+		echo "<td><strong>".getMLText("from").": </strong></td>";
 		echo "<td>".getReadableDate($event["start"])."</td>";
 		echo "</tr>";
 
 		echo "<tr>";
-		echo "<td>".getMLText("to").": </td>";
+		echo "<td><strong>".getMLText("to").": </strong></td>";
 		echo "<td>".getReadableDate($event["stop"])."</td>";
 		echo "</tr>";
 
 		echo "<tr>";
-		echo "<td>".getMLText("last_update").": </td>";
+		echo "<td><strong>".getMLText("last_update").": </strong></td>";
 		echo "<td>".getLongReadableDate($event["date"])."</td>";
 		echo "</tr>";
 
 		echo "<tr>";
-		echo "<td>".getMLText("user").": </td>";
+		echo "<td><strong>".getMLText("user").": </strong></td>";
 		echo "<td>".(is_object($u)?htmlspecialchars($u->getFullName()):getMLText("unknown_user"))."</td>";
 		echo "</tr>";
 
@@ -82,16 +88,22 @@ class SeedDMS_View_ViewEvent extends SeedDMS_Bootstrap_Style {
 			echo "<tr>";
 			echo "<td></td>";
 			echo "<td>";
-			print "<a href=\"../out/out.RemoveEvent.php?id=".$event["id"]."\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a> ";
-			print "<a href=\"../out/out.EditEvent.php?id=".$event["id"]."\" class=\"btn\"><i class=\"icon-edit\"></i> ".getMLText("edit")."</a>";
+			print "<a href=\"../out/out.RemoveEvent.php?id=".$event["id"]."\" class=\"btn btn-danger\"><i class=\"fa fa-times\"></i> ".getMLText("delete")."</a> ";
+			print "<a href=\"../out/out.EditEvent.php?id=".$event["id"]."\" class=\"btn btn-success\"><i class=\"fa fa-pencil\"></i> ".getMLText("edit")."</a>";
 			echo "</tr>";
 		}
 
 		echo "</table>";
 
-		$this->contentContainerEnd();
+		$this->endsCalendarBox();
 
-		$this->contentEnd();
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
