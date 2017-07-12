@@ -632,32 +632,50 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     //echo "<small>Member since Nov. 2012</small>";
     echo "</p>";
     echo "</li>";
-    echo "<!-- Menu Body -->";
-    /*echo "<li class=\"user-body\">";
+
+    echo "<li class=\"user-footer\">";
     echo "<div class=\"row\">";
-    echo "<div class=\"col-xs-4 text-center\">";
-    echo "<a href=\"#\">Followers</a>";
-    echo "</div>";
-    echo "<div class=\"col-xs-4 text-center\">";
-    echo "<a href=\"#\">Sales</a>";
-    echo "</div>";
-    echo "<div class=\"col-xs-4 text-center\">";
-    echo "<a href=\"#\">Friends</a>";
-    echo "</div>";
+    if ($this->params['user']->isAdmin()) {
+	    echo "<div class=\"col-xs-3 text-center\">"; 
+	    echo "<a class=\"btn btn-info btn-flat\" href=\"/out/out.MyAccount.php\" title=\"".getMLText("my_account")."\"><i class=\"fa fa-user\"></i></a>";
+	    echo "</div>";
+
+	    echo "<div class=\"col-xs-3 text-center\">";
+	    echo "<a class=\"btn btn-success btn-flat\" href=\"/out/out.MyDocuments.php?inProcess=1\" title=\"".getMLText("my_documents")."\"><i class=\"fa fa-file\"></i></a>";
+	    echo "</div>";
+
+    	echo "<div class=\"col-xs-3 text-center\">";
+    	echo "<a class=\"btn btn-primary btn-flat\" href=\"/out/out.SubstituteUser.php\" title=\"".getMLText("substitute_user")."\"><i class=\"fa fa-exchange\"></i></a>";
+    	echo "</div>";
+
+    	echo "<div class=\"col-xs-3 text-center\">";
+    	echo "<a href=\"/op/op.Logout.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out")."\"><i class=\"fa fa-sign-out\"></i></a>";
+    	echo "</div>";
+
+    } else {
+
+    	echo "<div class=\"col-xs-4 text-center\">"; 
+	    echo "<a class=\"btn btn-info btn-flat\" href=\"/out/out.MyAccount.php\" title=\"".getMLText("my_account")."\"><i class=\"fa fa-user\"></i></a>";
+	    echo "</div>";
+
+	    echo "<div class=\"col-xs-4 text-center\">";
+	    echo "<a class=\"btn btn-success btn-flat\" href=\"/out/out.MyDocuments.php?inProcess=1\" title=\"".getMLText("my_documents")."\"><i class=\"fa fa-file\"></i></a>";
+	    echo "</div>";
+
+	    echo "<div class=\"col-xs-4 text-center\">";
+    	echo "<a href=\"/op/op.Logout.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out")."\"><i class=\"fa fa-sign-out\"></i></a>";
+    	echo "</div>";
+
+    }
+
+    echo "<!-- Menu Footer-->";
     echo "</div>";
     echo "<!-- /.row -->";
-    echo "</li>";*/
-    echo "<!-- Menu Footer-->";
-    echo "<li class=\"user-footer\">";
-    echo "<div class=\"pull-left\">";
-    echo "<a href=\"/out/out.MyAccount.php\" class=\"btn btn-info btn-flat\">".getMLText("my_account")."</a>";
-    echo "</div>";
-    echo "<div class=\"pull-right\">";
-    echo "<a href=\"/op/op.Logout.php\" class=\"btn btn-danger btn-flat\">".getMLText("sign_out")."</a>"; ////////////////////////////
-    echo "</div>";
     echo "</li>";
     echo "</ul>";
     echo "</li>";
+
+
     echo "<!-- Control Sidebar Toggle Button -->";
     if ($this->params['user']->isAdmin()) {
     	echo "<li>";
@@ -931,12 +949,12 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     		<?php
     			$path_to_file_logo = $this->getLogo();
     			?>
-    				<li class="align-center li-logo"><img class="thelogo" src="<?php echo $path_to_file_logo; ?>"></li>
+    				<li class="align-center li-logo"><img class="thelogo" data-toggle="tooltip" data-placement="bottom" title="<?php echo getMLText("img_logo_recomendation"); ?>" src="<?php echo $path_to_file_logo; ?>"></li>
     				<li>
-    					<form enctype="multipart/form-data" method="POST" id="formupload1" name="formupload1" action="<?php echo "/views/".$this->theme."/validate.php"; ?>">
-    					<input type="hidden" name="MAX_FILE_SIZE" value="10000" />
-    					<input type="hidden" name="command" value="validateLogo" />
-	    					<?php $this->printLogoChooser("logofile[]", false); ?>
+    					<form enctype="multipart/form-data" method="post" id="formupload1" name="formupload1" action="<?php echo "/views/".$this->theme."/validate.php"; ?>">
+    					<input type="hidden" name="command" value="validatelogo" />
+
+	    					<?php $this->printLogoChooser("logofile", false); ?>
 						 	</form>
     				</li>
     		</ul>
@@ -947,11 +965,10 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     		<?php
     			$path_to_file_brand = $this->getBrand();
     			?>
-    				<li class="align-center li-logo"><img class="thebrand" src="<?php echo $path_to_file_brand; ?>"></li>
+    				<li class="align-center li-logo"><img class="thebrand" data-toggle="tooltip" data-placement="bottom" title="<?php echo getMLText("img_brand_recomendation"); ?>" src="<?php echo $path_to_file_brand; ?>"></li>
     				<li>
-    					<form enctype="multipart/form-data" method="POST" id="formupload2" name="formupload2" action="<?php echo "/views/".$this->theme."/validate.php"; ?>">
-    					<input type="hidden" name="MAX_FILE_SIZE" value="300000" />
-    					<input type="hidden" name="command" value="validateBrand" />
+    					<form enctype="multipart/form-data" method="post" id="formupload2" name="formupload2" action="<?php echo "/views/".$this->theme."/validate.php"; ?>">
+    					<input type="hidden" name="command" value="validatebrand" />
 	    					<?php $this->printLogoChooser("brandfile", false); ?>
 						 	</form>
     				</li>
@@ -1673,14 +1690,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 <?php
 	} /* }}} */
 
-	function printLogoChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
+	function printLogoChooser($varname) { /* {{{ */
 ?>
 	<div id="upload-files">
 		<div id="upload-file">
 			<div class="input-append">
 				<input type="text" class="form-control" name="theuserfile" readonly>
 				<span class="btn btn-primary btn-file">
-					<?php printMLText("browse");?> <i class="fa fa-search"></i><input id="<?php echo $varname; ?>" type="file" required name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
+					<?php printMLText("browse");?> <i class="fa fa-search"></i><input type="file" id="<?php echo $varname; ?>" name="<?php echo $varname; ?>">
 				</span>
 				<button type="submit" class="btn btn-success pull-right"><i class="fa fa-upload"></i> <?php echo getMLText("upload") ?></button>
 			</div>

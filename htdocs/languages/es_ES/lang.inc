@@ -1587,6 +1587,13 @@ URL: [url]',
 'event' => 'Evento',
 'event_start_date' => 'Fecha de inicio',
 'event_stop_date' => 'Fecha de finalización',
+'no_event' => 'No hay eventos',
+'img_success' => 'Imagen subida correctamente',
+'img_validate_ext' => 'Lo siento, solo se permiten archivos JPG, JPEG, PNG',
+'img_validate_error' => 'Se ha producido un error al cargar su archivo',
+'img_validate_too_large' => 'Lo siento, su archivo es demasiado grande',
+'img_logo_recomendation' => 'Sólo se permiten PNG, JPG, JPEG. Dimensiones recomendadas: 250x250',
+'img_brand_recomendation' => 'Sólo se permiten PNG, JPG, JPEG. Dimensiones recomendadas: 325x75',
 );
 
 // TODO: Mover strings de extensión de no conformiadad a su propio archivo de lenguaje.

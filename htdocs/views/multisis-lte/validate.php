@@ -1,58 +1,118 @@
 <?php
 include("../../inc/inc.Settings.php");
+include("../../inc/inc.LogInit.php");
+include("../../inc/inc.Utils.php");
 include("../../inc/inc.Language.php");
 include("../../inc/inc.Init.php");
+include("../../inc/inc.DBInit.php");
 include("../../inc/inc.ClassUI.php");
-
-//global $dms;
-var_dump($_FILES);	
-exit;
+include("../../inc/inc.Authentication.php");
 
 if (isset($_POST["command"])) {
 	$target_dir = $settings->_rootDir."/views/multisis-lte/images/";
 	switch ($_POST["command"]) {
-	case 'validateLogo':
-		var_dump($_FILES["logofile"]["name"]);
-		var_dump(pathinfo_extension($_FILES["logofile"]["name"]));
 
-		if (pathinfo_extension($_FILES["logofile"]["name"]) == "png") {
+	case 'validatelogo':
 
-			//TODO : Validate the image size
-			//$userfiletmp = $_FILES["logofile"]["tmp_name"][0];
-			//var_dump(filesize($userfiletmp));
-			var_dump($_FILES);	
-			var_dump($_FILES["logofile"]["name"]);
-			var_dump($settings->_rootDir);
-			exit;
+		$target_dir =$settings->_rootDir."/views/multisis-lte/images/";
+		$target_file = $target_dir . basename($_FILES["logofile"]["name"]);
+		$uploadOk = 1;
+		$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
 
-			$target_file = $target_dir . basename($_FILES["logofile"]["name"]);
-			$upload_result = move_uploaded_file($_FILES["logofile"]["tmp_name"], $target_file);
-			$change_name = rename($target_file, $target_dir."logo.png");
-			var_dump($change_name);
-			exit;
-
-			header("Location:../../out/out.ViewFolder.php?folderid=1");
-			
-		} else {
-			UI::exitError(getMLText("error_ocurred"));
+		// Check if image file is a actual image or fake image
+		if(isset($_POST["submit"])) {
+		    $check = getimagesize($_FILES["logofile"]["tmp_name"]);
+		    if($check !== false) {
+		        $uploadOk = 1;
+		    } else {
+		      $session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('img_validate_error')));
+				  header("Location:../../out/out.ViewFolder.php?folderid=1");
+				  die();
+		    }
 		}
 
-		/*if (true) {
-			$target_dir = $folder->_dms->contentDir.$documentid."/";
-
-			$target_file = $target_dir . basename($_FILES["filename"]["name"][0]);
-
-			$upload_result = move_uploaded_file($_FILES["filename"]["tmp_name"][0], $target_file);
-
-			$change_name = rename($target_file, $target_dir.$version->getVersion().$version->_fileType);
-
-			header("Location:../out/out.ViewFolder.php?folderid=1");
-
+		// Check if file already exists
+		/*if (file_exists($target_file)) {
+		    echo "Sorry, file already exists.";
+		    $uploadOk = 0;
 		}*/
-		break;
-	case 'validateBrand':
 
-		break;
+		// Allow certain file formats
+		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+			$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('img_validate_ext')));
+		  header("Location:../../out/out.ViewFolder.php?folderid=1");
+		  die();
+		}
+
+		// Check file size
+		if ($_FILES["logofile"]["size"] > 500000) {
+			$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('img_validate_too_large')));
+		  header("Location:../../out/out.ViewFolder.php?folderid=1");
+		  die();
+		}
+
+		// If everything is ok, try to upload file
+		if (move_uploaded_file($_FILES["logofile"]["tmp_name"], $target_file)) {
+		  rename($target_file, $target_dir."logo.png");
+		  clearstatcache();
+		  $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('img_success')));
+		  header("Location:../../out/out.ViewFolder.php?folderid=1");
+		  
+		} else {
+			$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('img_validate_error')));
+		  header("Location:../../out/out.ViewFolder.php?folderid=1");
+		  die();
+		}
+
+	break;
+
+	case 'validatebrand':
+
+		$target_dir =$settings->_rootDir."/views/multisis-lte/images/";
+		$target_file = $target_dir . basename($_FILES["brandfile"]["name"]);
+		$uploadOk = 1;
+		$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+
+		// Check if image file is a actual image or fake image
+		if(isset($_POST["submit"])) {
+		    $check = getimagesize($_FILES["brandfile"]["tmp_name"]);
+		    if($check !== false) {
+		        $uploadOk = 1;
+		    } else {
+					$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('img_validate_error')));
+				  header("Location:../../out/out.ViewFolder.php?folderid=1");
+				  die();
+		    }
+		}
+
+		// Allow certain file formats
+		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+		  $session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('img_validate_ext')));
+		  header("Location:../../out/out.ViewFolder.php?folderid=1");
+		  die();
+		}
+
+		// Check file size
+		if ($_FILES["brandfile"]["size"] > 500000) {
+		  $session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('img_validate_too_large')));
+		  header("Location:../../out/out.ViewFolder.php?folderid=1");
+		  die();
+		}
+
+		// If everything is ok, try to upload file
+		if (move_uploaded_file($_FILES["brandfile"]["tmp_name"], $target_file)) {
+		  rename($target_file, $target_dir."brand.png");
+		  clearstatcache();
+		  $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('img_success')));
+		  header("Location:../../out/out.ViewFolder.php?folderid=1");
+		  
+		} else {
+		  $session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('img_validate_error')));
+		  header("Location:../../out/out.ViewFolder.php?folderid=1");
+		  die();
+		}
+
+	break;
 	}	
 }
 

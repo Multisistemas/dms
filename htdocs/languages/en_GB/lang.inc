@@ -1617,5 +1617,12 @@ URL: [url]',
 'event' => 'Event',
 'event_start_date' => 'Date start',
 'event_stop_date' => 'Date end',
+'no_event' => 'Any event added',
+'img_success' => 'Image uploaded successfully',
+'img_validate_ext' => 'Sorry, only JPG, JPEG, PNG files are allowed',
+'img_validate_error' => 'Sorry, there was an error uploading your file',
+'img_validate_too_large' => 'Sorry, your file is too large',
+'img_logo_recomendation' => 'Only JPG, JPEG, PNG files are allowed. Recommended dimensions: 250x250',
+'img_brand_recomendation' => 'Only JPG, JPEG, PNG files are allowed. Recommended dimensions: 325x75',
 );
 ?>

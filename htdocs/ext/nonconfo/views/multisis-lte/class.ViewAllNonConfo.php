@@ -189,13 +189,13 @@ $(document).ready(function() {
 			<table class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<th>#</th>
-						<th><?php echo getMLText("nonconfo_correlative"); ?></th>
-						<th><?php echo getMLText("nonconfo_process_name"); ?></th>
-						<th><?php echo getMLText("nonconfo_request_date"); ?></th>
-						<th><?php echo getMLText("nonconfo_action_type"); ?></th>
-						<th><?php echo getMLText("nonconfo_origin_source"); ?></th>
-						<th></th>
+						<th class="align-center">#</th>
+						<th class="align-center"><?php echo getMLText("nonconfo_correlative"); ?></th>
+						<th class="align-center"><?php echo getMLText("nonconfo_process_name"); ?></th>
+						<th class="align-center"><?php echo getMLText("nonconfo_request_date"); ?></th>
+						<th class="align-center"><?php echo getMLText("nonconfo_action_type"); ?></th>
+						<th class="align-center"><?php echo getMLText("nonconfo_origin_source"); ?></th>
+						<th class="align-center"></th>
 					</tr>	
 				</thead>
 				<tbody>

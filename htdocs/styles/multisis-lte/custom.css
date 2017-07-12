@@ -294,10 +294,6 @@ ul.unstyled {
 
 .today {
     background-color: #cff5ff;
-    border-top: 1px solid #000 !important;
-    border-bottom: 1px solid #000 !important;
-    border-left: 1px solid #000 !important;
-    border-right: 1px solid #000 !important;
 }
 
 .today-week {
@@ -307,17 +303,26 @@ ul.unstyled {
 }
 
 .today-week-default {
-    background-color: #cff5ff;
+    background-color: #e6f6ff;
     border: none;
     padding: 10px;
 }
 
 .is-event {
-    background-color: #b8f1b8;;
-    border-top: 1px solid #000 !important;
-    border-bottom: 1px solid #000 !important;
-    border-left: 1px solid #000 !important;
-    border-right: 1px solid #000 !important;
+    background-color: #b8f1b8;
+}
+
+.table-no-margin{
+    margin-bottom: 0px !important;
+}
+
+.h5-no-margin {
+    margin: 0px !important;
+}
+
+.week-day-border {
+    border: 1px solid #e0e0e0;
+    margin-bottom: 10px;
 }
 
 /* ------------------- My folders tree ----------------------- */
