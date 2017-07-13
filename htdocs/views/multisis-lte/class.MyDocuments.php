@@ -49,16 +49,34 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 		$db = $dms->getDB();
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 
-		$this->htmlStartPage(getMLText("my_documents"));
-		$this->globalNavigation();
+
+		$this->htmlStartPage(getMLText("my_documents"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("my_documents"), "my_documents");
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php
+
+    $this->startBoxPrimary(getMLText("my_documents"));
 
 		if ($showInProcess){
 
 			if (!$db->createTemporaryTable("ttstatid") || !$db->createTemporaryTable("ttcontentid")) {
-				$this->contentHeading(getMLText("warning"));
-				$this->contentContainer(getMLText("internal_error_exit"));
+				$this->errorMsg(getMLText("internal_error_exit"));
+				$this->endsBoxPrimary();
+				?>
+		    </div>
+		    </div>
+		    </div>
+		    <?php
+		    $this->contentEnd();
+				$this->mainFooter();		
+				$this->containerEnd();
 				$this->htmlEndPage();
 				exit;
 			}
@@ -172,7 +190,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 								print "<tr>\n";
 								$latestContent = $document->getLatestContent();
 								$previewer->createPreview($latestContent);
-								print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
+								print "<td><a href=\"#\">";
 								if($previewer->hasPreview($latestContent)) {
 									print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 								} else {
@@ -210,7 +228,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 								print "<tr>\n";
 								$latestContent = $document->getLatestContent();
 								$previewer->createPreview($latestContent);
-								print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
+								print "<td><a href=\"#\">";
 								if($previewer->hasPreview($latestContent)) {
 									print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 								} else {
@@ -260,7 +278,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							print "<tr>\n";
 							$latestContent = $document->getLatestContent();
 							$previewer->createPreview($latestContent);
-							print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
+							print "<td><a href=\"#\">";
 							if($previewer->hasPreview($latestContent)) {
 								print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
@@ -295,7 +313,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							print "<tr>\n";
 							$latestContent = $document->getLatestContent();
 							$previewer->createPreview($latestContent);
-							print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
+							print "<td><a href=\"#\">";
 							if($previewer->hasPreview($latestContent)) {
 								print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
@@ -387,7 +405,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 						print "<tr>\n";
 						$latestContent = $document->getLatestContent();
 						$previewer->createPreview($latestContent);
-						print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+						print "<td><a href=\"#\">";
 						if($previewer->hasPreview($latestContent)) {
 							print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 						} else {
@@ -506,7 +524,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							$latestContent = $document->getLatestContent();
 							$workflow = $latestContent->getWorkflow();
 							$previewer->createPreview($latestContent);
-							print "<td><a href=\"../op/op.Download.php?documentid=".$st["document"]."&version=".$st["version"]."\">";
+							print "<td><a href=\"#\">";
 							if($previewer->hasPreview($latestContent)) {
 								print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
@@ -548,7 +566,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							$latestContent = $document->getLatestContent();
 							$workflow = $latestContent->getWorkflow();
 							$previewer->createPreview($latestContent);
-							print "<td><a href=\"../op/op.Download.php?documentid=".$st["document"]."&version=".$st["version"]."\">";
+							print "<td><a href=\"#\">";
 							if($previewer->hasPreview($latestContent)) {
 								print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
@@ -631,7 +649,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 						$latestContent = $document->getLatestContent();
 						$workflow = $latestContent->getWorkflow();
 						$previewer->createPreview($latestContent);
-						print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+						print "<td><a href=\"#\">";
 						if($previewer->hasPreview($latestContent)) {
 							print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 						} else {
@@ -712,7 +730,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					if($workflowmode == 'advanced')
 						$workflow = $latestContent->getWorkflow();
 					$previewer->createPreview($latestContent);
-					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+					print "<td><a href=\"#\">";
 					if($previewer->hasPreview($latestContent)) {
 						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					} else {
@@ -815,7 +833,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					print "<tr>\n";
 					$latestContent = $document->getLatestContent();
 					$previewer->createPreview($latestContent);
-					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+					print "<td><a href=\"#\">";
 					if($previewer->hasPreview($latestContent)) {
 						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					} else {
@@ -834,10 +852,19 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 			}
 			else printMLText("empty_notify_list");
 			
-			$this->contentContainerEnd();
+		$this->endsBoxPrimary();
 		}
-
+		?>
+		</div>
+		</div>
+		</div>
+		</div>
+		</div>
+		<?php
+		
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

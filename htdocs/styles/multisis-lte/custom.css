@@ -78,6 +78,10 @@
 
 
 /* ------------- Grids ------------------ */
+.well {
+    background-color: #fdfdfd !important;
+}
+
 .row {
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -239,7 +243,13 @@
     padding: 6px 12px;
 }
 
+a.doc-link {
+    font-weight: bold;
+}
 
+a.doc-disable {
+    color: #666 !important;
+}
 
 /* ------------- Lists ------------------ */
 ul.unstyled {
@@ -325,6 +335,10 @@ ul.unstyled {
     margin-bottom: 10px;
 }
 
+.header-bold {
+    font-weight: bold;
+}
+
 /* ------------------- My folders tree ----------------------- */
 
 a.fix-width {
@@ -364,7 +378,8 @@ span.wrap-normal {
 
 .header-brand {
     max-width: 200px;
-    max-height: 45px;
+    max-height: 40px;
+    vertical-align: sub;
 }
 
 .login-brand {
@@ -377,4 +392,9 @@ span.wrap-normal {
     margin-top: 10px;
     padding: 10px;
     text-align: center;
+}
+
+.logo-lg {
+    max-height: 50px !important;
+    padding: 5px 0px 5px 0px !important;    
 }

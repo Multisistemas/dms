@@ -56,7 +56,8 @@ function checkForm()
 
 function guestLogin()
 {
-	theme = $("#themeselector").val();
+	theme = "multisis-lte";
+	/*theme = $("#themeselector").val();*/
 	lang = $("#languageselector").val();
 	url = "../op/op.Login.php?login=guest";
 	if(theme)
@@ -68,6 +69,7 @@ function guestLogin()
 	}
 	document.location.href = url;
 }
+
 $(document).ready( function() {
 /*
 	$('body').on('submit', '#form', function(ev){
@@ -96,13 +98,13 @@ $(document).ready( function() {
 		},
 	});
 
-	$(function () {
+	/*$(function () {
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',
       increaseArea: '20%' // optional
     });
-  });
+  });*/
 
 });
 <?php
@@ -170,14 +172,8 @@ $(document).ready( function() {
 <?php } ?>
 	
 	<div class="row">
-    <div class="col-xs-6">
-      <div class="material-switch ">
-      Remember me
-        <input id="someSwitchOptionSuccess" name="someSwitchOption001" type="checkbox"/>
-      </div>    
-    </div>
     <!-- /.col -->
-    <div class="col-xs-6 pull-right">
+    <div class="">
       <button type="submit" class="btn btn-primary btn-block btn-flat"><?php printMLText("submit_login") ?></button>
     </div>
     <!-- /.col -->

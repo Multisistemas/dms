@@ -514,7 +514,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<!-- User Image -->";
     // Get user image
    	if($this->params['user']->hasImage()) {
-    	echo "<img class=\"img-circle\" src=\"../../out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
+    	echo "<img class=\"img-circle\" src=\"/out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
   	} else {
   		echo "<img class=\"img-circle\" src=\"/views/".$this->theme."/images/user-default.png\" alt=\"User Image\">";
   	}
@@ -605,7 +605,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     
     // Get user image
    	if($this->params['user']->hasImage()) {
-    	echo "<img class=\"img-nav-mini img-circle\" src=\"../../out/out.UserImage.php?userid=".$this->params['user']->getId()."\"> ";
+    	echo "<img class=\"img-nav-mini img-circle\" src=\"/out/out.UserImage.php?userid=".$this->params['user']->getId()."\"> ";
   	} else {
   		echo "<img class=\"user-image\" src=\"/views/".$this->theme."/images/user-default.png\" alt=\"User Image\"> ";
   	}
@@ -622,7 +622,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     // Get user image
    	if($this->params['user']->hasImage()) {
-    	echo "<img class=\"img-circle\" src=\"../../out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
+    	echo "<img class=\"img-circle\" src=\"/out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
   	} else {
   		echo "<img class=\"img-circle\" src=\"/views/".$this->theme."/images/user-default.png\" alt=\"User Image\">";
   	}
@@ -644,27 +644,49 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	    echo "<a class=\"btn btn-success btn-flat\" href=\"/out/out.MyDocuments.php?inProcess=1\" title=\"".getMLText("my_documents")."\"><i class=\"fa fa-file\"></i></a>";
 	    echo "</div>";
 
-    	echo "<div class=\"col-xs-3 text-center\">";
-    	echo "<a class=\"btn btn-primary btn-flat\" href=\"/out/out.SubstituteUser.php\" title=\"".getMLText("substitute_user")."\"><i class=\"fa fa-exchange\"></i></a>";
-    	echo "</div>";
+	    if(!$this->params['session']->getSu()) {
+	    	echo "<div class=\"col-xs-3 text-center\">";
+	    	echo "<a class=\"btn btn-primary btn-flat\" href=\"/out/out.SubstituteUser.php\" title=\"".getMLText("substitute_user")."\"><i class=\"fa fa-exchange\"></i></a>";
+	    	echo "</div>";
+	    }
 
-    	echo "<div class=\"col-xs-3 text-center\">";
-    	echo "<a href=\"/op/op.Logout.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out")."\"><i class=\"fa fa-sign-out\"></i></a>";
-    	echo "</div>";
+    	if($this->params['session']->getSu()) {
+
+				echo "<div class=\"col-xs-6 text-center\">";
+    		echo "<a href=\"/op/op.ResetSu.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out_user")."\"><i class=\"fa fa-sign-out\"></i></a>";
+    		echo "</div>";
+
+			} else {
+				echo "<div class=\"col-xs-3 text-center\">";
+    		echo "<a href=\"/op/op.Logout.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out")."\"><i class=\"fa fa-sign-out\"></i></a>";
+    		echo "</div>";
+
+			}
 
     } else {
 
-    	echo "<div class=\"col-xs-4 text-center\">"; 
-	    echo "<a class=\"btn btn-info btn-flat\" href=\"/out/out.MyAccount.php\" title=\"".getMLText("my_account")."\"><i class=\"fa fa-user\"></i></a>";
-	    echo "</div>";
+    	if (!$this->params['user']->isGuest()) {
+    		echo "<div class=\"col-xs-4 text-center\">"; 
+		    echo "<a class=\"btn btn-info btn-flat\" href=\"/out/out.MyAccount.php\" title=\"".getMLText("my_account")."\"><i class=\"fa fa-user\"></i></a>";
+		    echo "</div>";
 
-	    echo "<div class=\"col-xs-4 text-center\">";
-	    echo "<a class=\"btn btn-success btn-flat\" href=\"/out/out.MyDocuments.php?inProcess=1\" title=\"".getMLText("my_documents")."\"><i class=\"fa fa-file\"></i></a>";
-	    echo "</div>";
+		    echo "<div class=\"col-xs-4 text-center\">";
+		    echo "<a class=\"btn btn-success btn-flat\" href=\"/out/out.MyDocuments.php?inProcess=1\" title=\"".getMLText("my_documents")."\"><i class=\"fa fa-file\"></i></a>";
+		    echo "</div>";
+    	}
 
-	    echo "<div class=\"col-xs-4 text-center\">";
-    	echo "<a href=\"/op/op.Logout.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out")."\"><i class=\"fa fa-sign-out\"></i></a>";
-    	echo "</div>";
+	    if($this->params['session']->getSu()) {
+
+				echo "<div class=\"col-xs-4 text-center\">";
+    		echo "<a href=\"/op/op.ResetSu.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out_user")."\"><i class=\"fa fa-sign-out\"></i></a>";
+    		echo "</div>";
+
+			} else {
+				echo "<div class=\"col-xs-4 text-center\">";
+    		echo "<a href=\"/op/op.Logout.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out")."\"><i class=\"fa fa-sign-out\"></i></a>";
+    		echo "</div>";
+
+			}
 
     }
 
@@ -738,7 +760,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     // Get user image
    	if($this->params['user']->hasImage()) {
-    	echo "<img class=\"img-circle\" src=\"../../out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
+    	echo "<img class=\"img-circle\" src=\"/out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
   	} else {
   		echo "<img class=\"img-circle\" src=\"/views/".$this->theme."/images/user-default.png\" alt=\"User Image\">";
   	}
@@ -811,26 +833,28 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</li>";*/
 
     // Non conformities
-    echo "<li class=\"treeview\">";
-    echo "<a href=\"#\"><i class=\"fa fa-wrench\"></i> <span>".getMLText("nonconfo")."</span>";
-    echo "<span class=\"pull-right-container\">";
-    echo "<i class=\"fa fa-angle-left pull-right\"></i>";
-    echo "</span>";
-    echo "</a>";
-    echo "<ul class=\"treeview-menu\">";
-    echo "<li><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("nonconfo_view")."</a></li>";
-    echo "<li><a href=\"/ext/nonconfo/out/out.AddNonConfo.php\">".getMLText("nonconfo_add_nonconfo")."</a></li>";
-    
-    if ($this->params['user']->isAdmin()) {
-    	echo "<li><a href=\"/ext/nonconfo/out/out.AddProcess.php\">".getMLText("nonconfo_add_process")."</a></li>";
-    	echo "<li><a href=\"/ext/nonconfo/out/out.AddOwners.php\">".getMLText("nonconfo_define_owners")."</a></li>";
-    }
-    
-    echo "</ul>";
-    echo "</li>";
+    if (!$this->params['user']->isGuest()) {
+	    echo "<li class=\"treeview\">";
+	    echo "<a href=\"#\"><i class=\"fa fa-wrench\"></i> <span>".getMLText("nonconfo")."</span>";
+	    echo "<span class=\"pull-right-container\">";
+	    echo "<i class=\"fa fa-angle-left pull-right\"></i>";
+	    echo "</span>";
+	    echo "</a>";
+	    echo "<ul class=\"treeview-menu\">";
+	    echo "<li><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("nonconfo_view")."</a></li>";
+	    echo "<li><a href=\"/ext/nonconfo/out/out.AddNonConfo.php\">".getMLText("nonconfo_add_nonconfo")."</a></li>";
+	    
+	    if ($this->params['user']->isAdmin()) {
+	    	echo "<li><a href=\"/ext/nonconfo/out/out.AddProcess.php\">".getMLText("nonconfo_add_process")."</a></li>";
+	    	echo "<li><a href=\"/ext/nonconfo/out/out.AddOwners.php\">".getMLText("nonconfo_define_owners")."</a></li>";
+	    }
+
+    	echo "</ul>";
+    	echo "</li>";
+  	}
 
     // Calendar
-    if ($this->params['enablecalendar']){
+    if ($this->params['enablecalendar'] && !$this->params['user']->isGuest()){
 	    echo "<li class=\"treeview\">";
 	    echo "<a href=\"#\"><i class=\"fa fa-calendar\"></i> <span>".getMLText("calendar")."</span>";
 	    echo "<span class=\"pull-right-container\">";
@@ -973,6 +997,19 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 						 	</form>
     				</li>
     		</ul>
+    	</div>
+    	<h3 class="control-sidebar-heading">Cache</h3>
+    	<div>
+    	<ul class="list-unstyled clearfix">
+    		<li class="align-center">
+    		<form action="../../op/op.ClearCache.php" name="form1" method="post">
+				<?php echo createHiddenFieldWithKey('clearcache'); ?>
+				<input type="hidden" name="preview" value="1">
+				<input type="hidden" name="js" value="1">
+				<button type="submit" class="btn btn-danger"><i class="fa fa-refresh"></i> <?php printMLText("clear_cache");?></button>
+				</form>
+				</li>
+			</ul>
     	</div>
     </div>
   	<?php }
@@ -2807,12 +2844,27 @@ $(document).ready( function() {
 
 			$content .= "</td>";
 
-			$content .= "<td>";	
-			$content .= "<a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+			$content .= "<td>";
+
+			////////////////
+			if ($status['status'] == 2 ) {
+				if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
+					$content .= "<a href=\"#\" draggable=\"false\" class=\"preview-doc-btn btn-action doc-link\" id=\"".$docID."\" rel=\"".$latestContent->getVersion()."\" title=\"".htmlspecialchars($document->getName())." - ".getMLText("current_version").": ".$latestContent->getVersion()."\">" . htmlspecialchars($document->getName()) . "</a>";
+				}	else {
+					$content .= "<a draggable=\"false\" class=\"doc-link\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$docID."&version=". $latestContent->getVersion()."\">" . htmlspecialchars($document->getName()) . "</a>";
+				}
+
+			} else {
+				$content .= "<a href=\"#\" class=\"doc-link doc-disable\" draggable=\"false\" class=\"\" id=\"".$docID."\" rel=\"".$latestContent->getVersion()."\">" . htmlspecialchars($document->getName()) . "</a>";
+			}
+			////////////////
+
 			$content .= "<br/><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('version')." <b>".$version."</b> - ".($document->expires() ? ", ".getMLText('expires').": <b>".getReadableDate($document->getExpires())."</b>" : "")."</span>";
+
 			if($comment) {
 				$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 			}
+
 			$content .= "</td>\n";
 
 			$content .= "<td nowrap>";
@@ -2853,14 +2905,17 @@ $(document).ready( function() {
 				$content .= $this->printLockButton($document, 'splash_document_locked', 'splash_document_unlocked', true);
 			}
 			if($enableClipboard) {
-				$content .= '<a type="button" class="btn btn-success btn-sm addtoclipboard btn-action" rel="D'.$docID.'" msg="'.getMLText('splash_added_to_clipboard').'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("add_to_clipboard").'"><i class="icon-copy"></i></a>';
+				$content .= '<a type="button" class="btn btn-success btn-sm addtoclipboard btn-action" rel="D'.$docID.'" msg="'.getMLText('splash_added_to_clipboard').'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("add_to_clipboard").'"><i class="fa fa-copy"></i></a>';
 			}
 
-			if ($status['status'] == 2 ) {
+			////////
+			$content .= "<a type=\"button\" class=\"btn btn-info btn-sm\" href=\"out.ViewDocument.php?documentid=".$docID."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("view")."\"><i class=\"fa fa-eye\"></i></a>";
+			/*if ($status['status'] == 2 ) {
 				if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
 					$content .= '<a type="button" class="btn btn-info btn-sm preview-doc-btn btn-action" id="'.$docID.'" rel="'.$latestContent->getVersion().'" title="'.htmlspecialchars($document->getName()).' - '.getMLText('current_version').': '.$latestContent->getVersion().'"><i class="fa fa-eye"></i></a>';
 				}	
-			}
+			}*/
+			/////////
 
 			if($document->getAccessMode($user) >= M_ALL) {
 				$content .= '<a type="button" href="/out/out.DocumentAccess.php?documentid='.$docID.'&showtree=1" class="btn btn-success btn-sm access-folder-btn btn-action " rel="'.$docID.'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_document_access").'"><i class="fa fa-user-times"></i></a>';

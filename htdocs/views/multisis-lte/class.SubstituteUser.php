@@ -39,17 +39,22 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$allUsers = $this->params['allusers'];
 
-		$this->htmlStartPage(getMLText("substitute_user"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("substitute_user"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-		$this->contentHeading(getMLText("substitute_user"));
-		$this->contentContainerStart();
-?>
-	<table class="table table-condensed">
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+    $this->startBoxPrimary(getMLText("substitute_user"));
+		?>
+	<table class="table table-striped table-condensed">
 		<thead>
-		<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('email');?></th><th><?php printMLText('groups'); ?></th><th></th></tr>
+		<tr><th class="align-center"><?php printMLText('name'); ?></th><th class="align-center"><?php printMLText('email');?></th><th class="align-center"><?php printMLText('groups'); ?></th><th class="align-center"><?php printMLText("action"); ?></th></tr>
 		</thead>
 		<tbody>
 <?php
@@ -74,16 +79,24 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 			echo "</td>";
 			echo "<td>";
 			if($currUser->getID() != $user->getID()) {
-				echo "<a class=\"btn\" href=\"../op/op.SubstituteUser.php?userid=".((int) $currUser->getID())."&formtoken=".createFormKey('substituteuser')."\"><i class=\"icon-exchange\"></i> ".getMLText('substitute_user')."</a> ";
+				echo "<a class=\"btn btn-success\" href=\"../op/op.SubstituteUser.php?userid=".((int) $currUser->getID())."&formtoken=".createFormKey('substituteuser')."\"><i class=\"fa fa-exchange\"></i> ".getMLText('substitute_user')."</a> ";
 			}
 			echo "</td>";
 			echo "</tr>";
 		}
 		echo "</tbody>";
 		echo "</table>";
-		$this->contentContainerEnd();
-
-		$this->contentEnd();
+		
+		$this->endsBoxPrimary();
+		?>
+    </div>
+    </div>
+    </div>
+    <?php
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

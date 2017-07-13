@@ -1624,5 +1624,7 @@ URL: [url]',
 'img_validate_too_large' => 'Sorry, your file is too large',
 'img_logo_recomendation' => 'Only JPG, JPEG, PNG files are allowed. Recommended dimensions: 250x250',
 'img_brand_recomendation' => 'Only JPG, JPEG, PNG files are allowed. Recommended dimensions: 325x75',
+'disk_free_space' => 'Free disk space',
+'disk_used_space' => 'Disk used space',
 );
 ?>

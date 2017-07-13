@@ -235,7 +235,7 @@ URL: [url]',
 'choose_attrdefgroup' => '',
 'choose_category' => 'Seleccione categoría',
 'choose_group' => 'Seleccione grupo',
-'choose_role' => '',
+'choose_role' => 'Seleccione el rol',
 'choose_target_category' => 'Seleccione categoría',
 'choose_target_document' => 'Seleccione documento',
 'choose_target_file' => 'Seleccione fichero destino',
@@ -1594,6 +1594,8 @@ URL: [url]',
 'img_validate_too_large' => 'Lo siento, su archivo es demasiado grande',
 'img_logo_recomendation' => 'Sólo se permiten PNG, JPG, JPEG. Dimensiones recomendadas: 250x250',
 'img_brand_recomendation' => 'Sólo se permiten PNG, JPG, JPEG. Dimensiones recomendadas: 325x75',
+'disk_free_space' => 'Espacio libre en disco',
+'disk_used_space' => 'Espacio utilizado en disco',
 );
 
 // TODO: Mover strings de extensión de no conformiadad a su propio archivo de lenguaje.

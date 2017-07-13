@@ -710,7 +710,7 @@ $(document).ready(function(){
     echo "<span class=\"pull-right\">";
     //echo "<a class=\"btn btn-sm btn-primary\"><i class=\"fa fa-chevron-left\"></i></a>";
     //echo "<a class=\"btn btn-sm btn-primary\"><i class=\"fa fa-chevron-right\"></i></a>";
-    echo "<a class=\"close-doc-preview\"><i class=\"fa fa-times\"></i></a>";
+    echo "<a class=\"close-doc-preview btn btn-box-tool\"><i class=\"fa fa-times\"></i></a>";
     echo "</span>";
     echo "</div>";
     echo "<div class=\"box-body\">";
