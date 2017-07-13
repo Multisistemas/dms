@@ -514,7 +514,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<!-- User Image -->";
     // Get user image
    	if($this->params['user']->hasImage()) {
-    	echo "<img class=\"img-circle\" src=\"../../out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
+    	echo "<img class=\"img-circle\" src=\"/out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
   	} else {
   		echo "<img class=\"img-circle\" src=\"/views/".$this->theme."/images/user-default.png\" alt=\"User Image\">";
   	}
@@ -605,7 +605,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     
     // Get user image
    	if($this->params['user']->hasImage()) {
-    	echo "<img class=\"img-nav-mini img-circle\" src=\"../../out/out.UserImage.php?userid=".$this->params['user']->getId()."\"> ";
+    	echo "<img class=\"img-nav-mini img-circle\" src=\"/out/out.UserImage.php?userid=".$this->params['user']->getId()."\"> ";
   	} else {
   		echo "<img class=\"user-image\" src=\"/views/".$this->theme."/images/user-default.png\" alt=\"User Image\"> ";
   	}
@@ -622,7 +622,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     // Get user image
    	if($this->params['user']->hasImage()) {
-    	echo "<img class=\"img-circle\" src=\"../../out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
+    	echo "<img class=\"img-circle\" src=\"/out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
   	} else {
   		echo "<img class=\"img-circle\" src=\"/views/".$this->theme."/images/user-default.png\" alt=\"User Image\">";
   	}
@@ -758,7 +758,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     // Get user image
    	if($this->params['user']->hasImage()) {
-    	echo "<img class=\"img-circle\" src=\"../../out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
+    	echo "<img class=\"img-circle\" src=\"/out/out.UserImage.php?userid=".$this->params['user']->getId()."\">";
   	} else {
   		echo "<img class=\"img-circle\" src=\"/views/".$this->theme."/images/user-default.png\" alt=\"User Image\">";
   	}
