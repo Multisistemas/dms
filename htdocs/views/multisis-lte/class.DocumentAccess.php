@@ -45,9 +45,6 @@ class SeedDMS_View_DocumentAccess extends SeedDMS_Bootstrap_Style {
 		$folder = $this->params['folder'];
 		header('Content-Type: application/javascript');
 ?>
-function folderSelected(id, name) {
-	window.location = '../out/out.ViewFolder.php?folderid=' + id;
-}
 
 function checkForm()
 {
@@ -78,7 +75,7 @@ $(document).ready( function() {
 	});
 });
 <?php
-		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 1, "");
+
 	} /* }}} */
 
 	function show() { /* {{{ */

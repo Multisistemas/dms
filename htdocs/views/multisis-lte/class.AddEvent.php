@@ -71,59 +71,71 @@ $(document).ready(function() {
 
 	function show() { /* {{{ */
 
-		$this->htmlStartPage(getMLText("calendar"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("add_event"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation("", "calendar");
-
-		$this->contentHeading(getMLText("add_event"));
-		$this->contentContainerStart();
 
 		$expdate = date('Y-m-d');
 ?>
+<div class="gap-15"></div>
+<div class="row">
+	<div class="col-md-12">
 
-<form class="form-horizontal" action="../op/op.AddEvent.php" id="form1" name="form1" method="post">
+	<?php $this->startBoxPrimary(getMLText("add_event")); ?>
 
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("from");?>:</label>
-			<div class="controls"><?php //$this->printDateChooser(-1, "from");?>
+	<form action="../op/op.AddEvent.php" id="form1" name="form1" method="post">
+
+		<div class="control-form-group">
+			<label><?php printMLText("from");?>:</label>
+			<div><?php //$this->printDateChooser(-1, "from");?>
     		<span class="input-append date span12" id="fromdate" data-date="<?php echo $expdate; ?>" data-date-format="yyyy-mm-dd">
-      		<input class="span6" size="16" name="from" type="text" value="<?php echo $expdate; ?>">
+      		<input class="form-control" name="from" type="text" value="<?php echo $expdate; ?>">
       		<span class="add-on"><i class="icon-calendar"></i></span>
     		</span>
 			</div>
 		</div>
 
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("to");?>:</label>
-			<div class="controls"><?php //$this->printDateChooser(-1, "to");?>
+		<div class="form-group">
+			<label><?php printMLText("to");?>:</label>
+			<div><?php //$this->printDateChooser(-1, "to");?>
     		<span class="input-append date span12" id="todate" data-date="<?php echo $expdate; ?>" data-date-format="yyyy-mm-dd">
-      		<input class="span6" size="16" name="to" type="text" value="<?php echo $expdate; ?>">
+      		<input class="form-control" name="to" type="text" value="<?php echo $expdate; ?>">
       		<span class="add-on"><i class="icon-calendar"></i></span>
     		</span>
 			</div>
 		</div>
 
 
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("name");?>:</label>
-			<div class="controls"><input type="text" name="name" size="60"></div>
+		<div class="form-group">
+			<label><?php printMLText("name");?>:</label>
+			<div><input class="form-control" type="text" name="name" size="60"></div>
 		</div>
 
 
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("comment");?>:</label>
-			<div class="controls"><textarea name="comment" rows="4" cols="80"></textarea></div>
+		<div class="form-group">
+			<label><?php printMLText("comment");?>:</label>
+			<div><textarea class="form-control" name="comment" rows="4" cols="80"></textarea></div>
 		</div>
 		
-		<div class="controls">
-			<input class="btn" type="submit" value="<?php printMLText("add_event");?>">
+		<div class="box-footer">
+			<button class="btn history-back"><?php echo getMLText('back'); ?></button>
+			<button class="btn btn-info" type="submit"><i class="fa fa-save"></i> <?php printMLText("add_event");?></button>
 		</div>
 
-</form>
+	</form>
+
+	<?php $this->endsBoxPrimary(); ?>
+	</div>
+</div>
+
 <?php
-		$this->contentContainerEnd();
+		echo "</div>";
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

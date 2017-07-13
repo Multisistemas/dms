@@ -97,7 +97,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/plugins/noty/layouts/topCenter.js"></script>'."\n";
 		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/plugins/noty/themes/default.js"></script>'."\n";
 		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/plugins/jqtree/tree.jquery.js"></script>'."\n";
-
+		
+		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/custom/js/validate-logo.js"></script>'."\n";	
+		
 
 		if($this->extraheader['css'])
 			echo $this->extraheader['css'];
@@ -133,8 +135,11 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script src="/styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="/styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
 		echo '<script src="/styles/'.$this->theme.'/application.js"></script>'."\n";
-		echo '<script type="text/javascript" src="/styles/'.$this->theme.'/bootstrap/js/bootstrap-2.min.js"></script>'."\n";
 		echo '<script src="/styles/'.$this->theme.'/dist/js/demo.js"></script>'."\n";
+		echo '<script src="/styles/'.$this->theme.'/bootstrap/js/bootstrap-2.min.js"></script>'."\n";
+		//echo '<script src="/styles/'.$this->theme.'/plugins/jQueryUI/jquery-ui.min.js"></script>'."\n";
+		//echo '<script src="/styles/'.$this->theme.'/plugins/daterangepicker/moment.min.js"></script>'."\n";
+		//echo '<script src="/styles/'.$this->theme.'/plugins/fullcalendar/fullcalendar.min.js"></script>'."\n";
 		
 		if($this->footerjs) {
 			$jscode = "$(document).ready(function () {\n";
@@ -208,10 +213,10 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	function startLoginContent(){
 		echo "<div class=\"login-box\">
   	<div class=\"login-logo\">
-    <a href=\"#\"><b>".$this->params['sitename']."</b></a>
+    <a href=\"#\"><b><img class=\"login-brand\" src=".$this->getBrand()."></b></a>
   	</div>
 		<div class=\"login-box-body\">
-    <p class=\"login-box-msg\">Sign in to start your session</p>";
+    <p class=\"login-box-msg\"></p>";
 	}
 
 	function endLoginContent(){
@@ -251,13 +256,94 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<div class=\"box-body\">";
 	} /* }}} */
 
+	function startCalendarBox($title = "", $pagination = null){ /* {{{ */
+		echo "<div class=\"box box-success\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+
+    if ($pagination != null) {
+    	echo $pagination;	
+    }
+    
+    echo "<div class=\"pull-right\">";
+		echo "<div class=\"btn-group\">";
+
+		$currDate = time();
+		$year = (int)date("Y", $currDate);
+		$month = (int)date("m", $currDate);
+		$day = (int)date("d", $currDate);
+
+		echo "<a type=\"button\" class=\"btn btn-info btn-sm btn-flat\" href=\"/out/out.AddEvent.php\"><i class=\"fa fa-calendar-plus-o\"></i> ".getMLText("add_event")."</a>";
+		echo "<a type=\"button\" class=\"btn btn-success btn-sm btn-flat\" href=\"/out/out.Calendar.php?mode=y\"><i class=\"fa fa-calendar\"></i> ".$year."</a>";
+		echo "<a type=\"button\" class=\"btn btn-success btn-sm btn-flat\" href=\"/out/out.Calendar.php?mode=m\"><i class=\"fa fa-calendar\"></i> ".$month."</a>";
+		echo "<a type=\"button\" class=\"btn btn-success btn-sm btn-flat\" href=\"/out/out.Calendar.php?mode=w\"><i class=\"fa fa-calendar\"></i> ".$day."</a>";
+		echo "</div>";
+		echo "</div>";
+
+    echo "</div>";
+    echo "<div class=\"box-body box-calendar-background\">";
+	} /* }}} */
+
+	function endsCalendarBox(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function startBoxDanger($title = "") { /* {{{ */
+		echo "<div class=\"box box-danger\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+	} /* }}} */
+
+	function startBoxSuccess($title = "") { /* {{{ */
+		echo "<div class=\"box box-success\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+	} /* }}} */
+
 	function endsBoxPrimary(){ /* {{{ */
 		echo "</div>";
     echo "</div>";
 	} /* }}} */
 
-	function startBoxCollapsablePrimary($title = "") { /* {{{ */
-		echo "<div class=\"box box-primary\">";
+	function endsBoxDanger(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function endsBoxSuccess(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function startBoxCollapsablePrimary($title = "", $collapsed = "") { /* {{{ */
+		echo "<div class=\"box box-primary box-solid ".$collapsed."\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "<div class=\"box-tools pull-right\">";
+    if ($collapsed != "") {
+    	echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-plus\"></i>";
+    } else {
+    	echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>";
+    }
+    
+    echo "</button>";
+    echo "</div>";
+    echo "</div>";
+    if ($collapsed != "") {
+    	echo "<div class=\"box-body\" style=\"display:none;\">";	
+    } else {
+    	echo "<div class=\"box-body\">";
+    }
+    
+	} /* }}} */
+
+	function startBoxCollapsableSuccess($title = "") { /* {{{ */
+		echo "<div class=\"box box-success box-solid\">";
     echo "<div class=\"box-header with-border\">";
     echo "<h3 class=\"box-title\">".$title."</h3>";
     echo "<div class=\"box-tools pull-right\">";
@@ -268,7 +354,38 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<div class=\"box-body\">";
 	} /* }}} */
 
+	function startBoxSolidSuccess($title = "") { /* {{{ */
+		echo "<div class=\"box box-success box-solid\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+	} /* }}} */
+
+	function endsBoxSolidSuccess(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function startBoxSolidPrimary($title = "") { /* {{{ */
+		echo "<div class=\"box box-primary box-solid\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+	} /* }}} */
+
+	function endsBoxSolidPrimary(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
 	function endsBoxCollapsablePrimary(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function endsBoxCollapsableSuccess(){ /* {{{ */
 		echo "</div>";
     echo "</div>";
 	} /* }}} */
@@ -342,11 +459,11 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$sitename = trim(strip_tags($this->params['sitename']));
 
 		echo "<header class=\"main-header\">";
-    echo "<a href=\"/out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."&showtree=1\" class=\"logo\">";
+    echo "<a href=\"/out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\" class=\"logo\">";
     echo "<!-- mini logo for sidebar mini 50x50 pixels -->";
-    echo "<span class=\"logo-mini\"><b><i class=\"fa fa-home\"></i></b></span>"; // TODO: change for mini logo 
+    echo "<span class=\"logo-mini\"><b><img class=\"header-logo\" src=".$this->getLogo()."></b></span>"; // TODO: change for mini logo 
     echo "<!-- logo for regular state and mobile devices -->";
-    echo "<span class=\"logo-lg\"><b>".$sitename."</b></span>";
+    echo "<span class=\"logo-lg\"><b><img class=\"header-brand\" src=".$this->getBrand()."></b></span>";
     echo "</a>";
 
     echo "<!-- Header Navbar -->";
@@ -363,11 +480,11 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$sitename = trim(strip_tags($this->params['sitename']));
 
 		echo "<header class=\"main-header\">";
-    echo "<a href=\"/out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."&showtree=1\" class=\"logo\">";
+    echo "<a href=\"/out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\" class=\"logo\">";
     echo "<!-- mini logo for sidebar mini 50x50 pixels -->";
-    echo "<span class=\"logo-mini\"><b><i class=\"fa fa-home\"></i></b></span>"; // TODO: change for mini logo 
+    echo "<span class=\"logo-mini\"><img class=\"header-logo\" src=".$this->getLogo()."></span>"; // TODO: change for mini logo 
     echo "<!-- logo for regular state and mobile devices -->";
-    echo "<span class=\"logo-lg\"><b>".$sitename."</b></span>";
+    echo "<span class=\"logo-lg\"><img class=\"header-brand\" src=".$this->getBrand()."></span>";
     echo "</a>";
 
     echo "<!-- Header Navbar -->";
@@ -515,32 +632,70 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     //echo "<small>Member since Nov. 2012</small>";
     echo "</p>";
     echo "</li>";
-    echo "<!-- Menu Body -->";
-    /*echo "<li class=\"user-body\">";
+
+    echo "<li class=\"user-footer\">";
     echo "<div class=\"row\">";
-    echo "<div class=\"col-xs-4 text-center\">";
-    echo "<a href=\"#\">Followers</a>";
-    echo "</div>";
-    echo "<div class=\"col-xs-4 text-center\">";
-    echo "<a href=\"#\">Sales</a>";
-    echo "</div>";
-    echo "<div class=\"col-xs-4 text-center\">";
-    echo "<a href=\"#\">Friends</a>";
-    echo "</div>";
+    if ($this->params['user']->isAdmin()) {
+	    echo "<div class=\"col-xs-3 text-center\">"; 
+	    echo "<a class=\"btn btn-info btn-flat\" href=\"/out/out.MyAccount.php\" title=\"".getMLText("my_account")."\"><i class=\"fa fa-user\"></i></a>";
+	    echo "</div>";
+
+	    echo "<div class=\"col-xs-3 text-center\">";
+	    echo "<a class=\"btn btn-success btn-flat\" href=\"/out/out.MyDocuments.php?inProcess=1\" title=\"".getMLText("my_documents")."\"><i class=\"fa fa-file\"></i></a>";
+	    echo "</div>";
+
+	    if(!$this->params['session']->getSu()) {
+	    	echo "<div class=\"col-xs-3 text-center\">";
+	    	echo "<a class=\"btn btn-primary btn-flat\" href=\"/out/out.SubstituteUser.php\" title=\"".getMLText("substitute_user")."\"><i class=\"fa fa-exchange\"></i></a>";
+	    	echo "</div>";
+	    }
+
+    	if($this->params['session']->getSu()) {
+
+				echo "<div class=\"col-xs-6 text-center\">";
+    		echo "<a href=\"/op/op.ResetSu.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out_user")."\"><i class=\"fa fa-sign-out\"></i></a>";
+    		echo "</div>";
+
+			} else {
+				echo "<div class=\"col-xs-3 text-center\">";
+    		echo "<a href=\"/op/op.Logout.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out")."\"><i class=\"fa fa-sign-out\"></i></a>";
+    		echo "</div>";
+
+			}
+
+    } else {
+
+    	echo "<div class=\"col-xs-4 text-center\">"; 
+	    echo "<a class=\"btn btn-info btn-flat\" href=\"/out/out.MyAccount.php\" title=\"".getMLText("my_account")."\"><i class=\"fa fa-user\"></i></a>";
+	    echo "</div>";
+
+	    echo "<div class=\"col-xs-4 text-center\">";
+	    echo "<a class=\"btn btn-success btn-flat\" href=\"/out/out.MyDocuments.php?inProcess=1\" title=\"".getMLText("my_documents")."\"><i class=\"fa fa-file\"></i></a>";
+	    echo "</div>";
+
+	    if($this->params['session']->getSu()) {
+
+				echo "<div class=\"col-xs-4 text-center\">";
+    		echo "<a href=\"/op/op.ResetSu.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out_user")."\"><i class=\"fa fa-sign-out\"></i></a>";
+    		echo "</div>";
+
+			} else {
+				echo "<div class=\"col-xs-4 text-center\">";
+    		echo "<a href=\"/op/op.Logout.php\" class=\"btn btn-danger btn-flat\" title=\"".getMLText("sign_out")."\"><i class=\"fa fa-sign-out\"></i></a>";
+    		echo "</div>";
+
+			}
+
+    }
+
+    echo "<!-- Menu Footer-->";
     echo "</div>";
     echo "<!-- /.row -->";
-    echo "</li>";*/
-    echo "<!-- Menu Footer-->";
-    echo "<li class=\"user-footer\">";
-    echo "<div class=\"pull-left\">";
-    echo "<a href=\"/out/out.MyAccount.php\" class=\"btn btn-info btn-flat\">".getMLText("my_account")."</a>";
-    echo "</div>";
-    echo "<div class=\"pull-right\">";
-    echo "<a href=\"/op/op.Logout.php\" class=\"btn btn-danger btn-flat\">".getMLText("sign_out")."</a>"; ////////////////////////////
-    echo "</div>";
     echo "</li>";
     echo "</ul>";
     echo "</li>";
+
+
     echo "<!-- Control Sidebar Toggle Button -->";
     if ($this->params['user']->isAdmin()) {
     	echo "<li>";
@@ -557,6 +712,39 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</nav>";
   	echo "</header>";
 
+
+	} /* }}} */
+
+	/* Generate folder tree widget */
+
+	function printTheTree($tree, $i = 0){ /* {{{ */
+
+			foreach ($tree as $key => $treeNode) {
+				if ($i == 0) {
+					echo "<li class=\"treeview active\">";
+					echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"link-to-folder\"><i class=\"fa fa-folder-open\"></i></a>";
+				} else {
+					echo "<li class=\"treeview\">";
+					echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"link-to-folder\"><i class=\"fa fa-folder-open\"></i></a>";
+				}
+			  echo "<a href=\"#\" class=\"fix-width\"><i class=\"fa fa-folder\"></i> <span class=\"wrap-normal\">".$treeNode['label']." (".count($treeNode['children']).") </span>";
+
+			  if (count($treeNode['children']) > 0) {
+			  	echo "<span class=\"pull-right-container\">";
+			  	echo "<i class=\"\"></i>";
+			  	echo "</span>";	
+			  }
+			  echo "</a>";
+
+				if (count($treeNode['children']) > 0) {
+					$children = $treeNode['children'];
+			    echo "<ul class=\"treeview-menu\">";
+			    $i++;
+					$this->printTheTree($children, $i);
+					echo "</ul>";
+				}
+			  echo "</li>";
+			}
 
 	} /* }}} */
 
@@ -622,7 +810,12 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 		// View tree
 
-		echo "<li class=\"treeview active\">";
+		$rootFolder = $this->printTree(1, M_READ, 0,'', 1, 's');
+		$this->printTheTree($rootFolder, 0);
+
+    //TreeView Old 
+
+		/*echo "<li class=\"treeview active\">";
     echo "<a href=\"#\"><i class=\"fa fa-sitemap\"></i> <span>".getMLText("folderTree")."</span>";
     echo "<span class=\"pull-right-container\">";
     echo "<i class=\"fa fa-angle-left pull-right\"></i>";
@@ -635,7 +828,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</a>";
 		echo "</li>";
     echo "</ul>";
-    echo "</li>";
+    echo "</li>";*/
 
     // Non conformities
     echo "<li class=\"treeview\">";
@@ -645,10 +838,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</span>";
     echo "</a>";
     echo "<ul class=\"treeview-menu\">";
-    echo "<li><a href=\"#\">".getMLText("nonconfo_view")."</a></li>";
-    echo "<li><a href=\"#\">".getMLText("nonconfo_add_nonconfo")."</a></li>";
-    echo "<li><a href=\"#\">".getMLText("nonconfo_add_process")."</a></li>";
-    echo "<li><a href=\"#\">".getMLText("nonconfo_define_owners")."</a></li>";
+    echo "<li><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("nonconfo_view")."</a></li>";
+    echo "<li><a href=\"/ext/nonconfo/out/out.AddNonConfo.php\">".getMLText("nonconfo_add_nonconfo")."</a></li>";
+    
+    if ($this->params['user']->isAdmin()) {
+    	echo "<li><a href=\"/ext/nonconfo/out/out.AddProcess.php\">".getMLText("nonconfo_add_process")."</a></li>";
+    	echo "<li><a href=\"/ext/nonconfo/out/out.AddOwners.php\">".getMLText("nonconfo_define_owners")."</a></li>";
+    }
+    
     echo "</ul>";
     echo "</li>";
 
@@ -661,10 +858,10 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	    echo "</span>";
 	    echo "</a>";
 	    echo "<ul class=\"treeview-menu\">";
-	    echo "<li><a href=\"#\">".getMLText("week_view")."</a></li>";
-	    echo "<li><a href=\"#\">".getMLText("month_view")."</a></li>";
-	    echo "<li><a href=\"#\">".getMLText("year_view")."</a></li>";
-	    echo "<li><a href=\"#\">".getMLText("add_event")."</a></li>";
+	    echo "<li><a href=\"/out/out.Calendar.php?mode=w\">".getMLText("week_view")."</a></li>";
+	    echo "<li><a href=\"/out/out.Calendar.php?mode=m\">".getMLText("month_view")."</a></li>";
+	    echo "<li><a href=\"/out/out.Calendar.php?mode=y\">".getMLText("year_view")."</a></li>";
+	    echo "<li><a href=\"/out/out.AddEvent.php\">".getMLText("add_event")."</a></li>";
 	    echo "</ul>";
 	    echo "</li>";
 	  }
@@ -701,6 +898,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<li class=\"active\"><a href=\"#control-sidebar-theme-demo-options-tab\" data-toggle=\"tab\"><i class=\"fa fa-wrench\"></i></a></li>";
 		if($this->params['user']->isAdmin()) {
 			echo "<li><a href=\"#control-sidebar-home-tab\" data-toggle=\"tab\"><i class=\"fa fa-gears\"></i></a></li>";
+			echo "<li><a href=\"#control-sidebar-logo-tab\" data-toggle=\"tab\"><i class=\"fa fa-flag\"></i></a></li>";
 		}
     echo "</ul>";
     echo "<!-- Sidebar Menu -->";
@@ -756,17 +954,62 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</div>";
   	}
   	?>
+
   	<div id="control-sidebar-theme-demo-options-tab" class="tab-pane active">
   		<div>
   			<h4 class="control-sidebar-heading">Skins</h4>
   			<ul class="list-unstyled clearfix"><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9;"></span><span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Blue</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix"><span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe;"></span><span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Black</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span><span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Purple</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span><span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Green</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span><span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Red</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span><span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin">Yellow</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9;"></span><span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px">Blue Light</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix"><span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe;"></span><span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px">Black Light</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span><span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px">Purple Light</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span><span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px">Green Light</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span><span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px">Red Light</p></li><li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0);" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover"><div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span><span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span></div><div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div></a><p class="text-center no-margin" style="font-size: 12px;">Yellow Light</p></li></ul>
   		</div>
   	</div>
-  	<?php
+  	<?php if($this->params['user']->isAdmin()) { ?>
+  	<div class="tab-pane" id="control-sidebar-logo-tab">
+    	<h3 class="control-sidebar-heading">Logo</h3>
+    	<div>
+    		<ul class="list-unstyled clearfix">
+    		<?php
+    			$path_to_file_logo = $this->getLogo();
+    			?>
+    				<li class="align-center li-logo"><img class="thelogo" data-toggle="tooltip" data-placement="bottom" title="<?php echo getMLText("img_logo_recomendation"); ?>" src="<?php echo $path_to_file_logo; ?>"></li>
+    				<li>
+    					<form enctype="multipart/form-data" method="post" id="formupload1" name="formupload1" action="<?php echo "/views/".$this->theme."/validate.php"; ?>">
+    					<input type="hidden" name="command" value="validatelogo" />
+
+	    					<?php $this->printLogoChooser("logofile", false); ?>
+						 	</form>
+    				</li>
+    		</ul>
+    	</div>
+    	<h3 class="control-sidebar-heading">Brand</h3>
+    	<div>
+    		<ul class="list-unstyled clearfix">
+    		<?php
+    			$path_to_file_brand = $this->getBrand();
+    			?>
+    				<li class="align-center li-logo"><img class="thebrand" data-toggle="tooltip" data-placement="bottom" title="<?php echo getMLText("img_brand_recomendation"); ?>" src="<?php echo $path_to_file_brand; ?>"></li>
+    				<li>
+    					<form enctype="multipart/form-data" method="post" id="formupload2" name="formupload2" action="<?php echo "/views/".$this->theme."/validate.php"; ?>">
+    					<input type="hidden" name="command" value="validatebrand" />
+	    					<?php $this->printLogoChooser("brandfile", false); ?>
+						 	</form>
+    				</li>
+    		</ul>
+    	</div>
+    </div>
+  	<?php }
     echo "</div>";
   	echo "</aside>";
   	echo "<div class=\"control-sidebar-bg\"></div>";
 	} /* }}} */
+
+	function getLogo(){
+		$path = $this->imgpath."logo.png";
+		return $path;
+	}
+
+	function getBrand(){
+		$path = $this->imgpath."brand.png";
+		return $path;
+	}
 
 	function globalNavigation($folder=null) { /* {{{ */
 		$dms = $this->params['dms'];
@@ -908,7 +1151,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 				//$txtpath .= "<li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
 		}
 
-		return '<ul class="breadcrumb">'.$txtpath.'</ul>';
+		return '<ul class="breadcrumb default-bread">'.$txtpath.'</ul>';
 	} /* }}} */
 
 	function getDefaultFolderPathHTML($folder, $tagAll=false, $document=null) { /* {{{ */
@@ -929,7 +1172,23 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		if($document)
 			$txtpath .= "<li><a href=\"/out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a></li>";
 
-		return '<ul class="breadcrumb">'.$txtpath.'</ul>';
+		return '<ul class="breadcrumb default-bread">'.$txtpath.'</ul>';
+	} /* }}} */
+
+	// Nonconfo extension Navigation Bar for Multisis-LTE
+	function getNonconfoPathHTML() { /* {{{ */
+		$txtpath = "";
+
+		$txtpath .= "<li><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\" type=\"button\" class=\"btn btn-primary btn-sm\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("nonconfo")."\"><i class=\"fa fa-home\"></i></a></li>";
+
+		if ($this->params['user']->isAdmin()) {
+			$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a href=\"/ext/nonconfo/out/out.AddProcess.php\" type=\"button\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("nonconfo_add_process")."\"><i class=\"fa fa-wrench\"></i></a></li>";
+			$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a href=\"/ext/nonconfo/out/out.AddOwners.php\" type=\"button\" class=\"btn btn-warning btn-sm\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("nonconfo_define_owners")."\"><i class=\"fa fa-users\"></i></a></li>";
+		}
+
+		$txtpath .= "<li class=\"pull-right breadcrumb-btn\"><a id=\"add-nonconfo\" href=\"/ext/nonconfo/out/out.AddNonConfo.php\" type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("nonconfo_add_nonconfo")."\"><i class=\"fa fa-plus\"></i> <i class=\"fa fa-file\"></i></a> </li>";
+
+		echo '<ul class="breadcrumb nonconfo-bread">'.$txtpath.'</ul>';
 	} /* }}} */
 	
 	function pageNavigation($pageTitle, $pageType=null, $extra=null) { /* {{{ */
@@ -1445,6 +1704,22 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 				<span class="btn btn-primary btn-file">
 					<?php printMLText("browse");?> <i class="fa fa-search"></i><input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
 				</span>
+			</div>
+		</div>
+	</div>
+<?php
+	} /* }}} */
+
+	function printLogoChooser($varname) { /* {{{ */
+?>
+	<div id="upload-files">
+		<div id="upload-file">
+			<div class="input-append">
+				<input type="text" class="form-control" name="theuserfile" readonly>
+				<span class="btn btn-primary btn-file">
+					<?php printMLText("browse");?> <i class="fa fa-search"></i><input type="file" id="<?php echo $varname; ?>" name="<?php echo $varname; ?>">
+				</span>
+				<button type="submit" class="btn btn-success pull-right"><i class="fa fa-upload"></i> <?php echo getMLText("upload") ?></button>
 			</div>
 		</div>
 	</div>
@@ -2207,7 +2482,7 @@ $(function() {
     		message: confirmmsg,
     		buttons: {
         	confirm: {
-            label: \"<i class='icon-remove'></i> ".getMLText("rm_document")."\",
+            label: \"<i class='fa fa-times'></i> ".getMLText("rm_document")."\",
             className: 'btn-danger'
         	},
         	cancel: {
@@ -2287,7 +2562,7 @@ $(function() {
     		message: confirmmsg,
     		buttons: {
         	confirm: {
-            label: \"<i class='icon-remove'></i> ".getMLText("rm_folder")."\",
+            label: \"<i class='fa fa-times'></i> ".getMLText("rm_folder")."\",
             className: 'btn-danger'
         	},
         	cancel: {
@@ -2552,12 +2827,27 @@ $(document).ready( function() {
 
 			$content .= "</td>";
 
-			$content .= "<td>";	
-			$content .= "<a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
-			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('version')." <b>".$version."</b> - ".($document->expires() ? ", ".getMLText('expires').": <b>".getReadableDate($document->getExpires())."</b>" : "")."</span>";
+			$content .= "<td>";
+
+			////////////////
+			if ($status['status'] == 2 ) {
+				if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
+					$content .= "<a href=\"#\" draggable=\"false\" class=\"preview-doc-btn btn-action doc-link\" id=\"".$docID."\" rel=\"".$latestContent->getVersion()."\" title=\"".htmlspecialchars($document->getName())." - ".getMLText("current_version").": ".$latestContent->getVersion()."\">" . htmlspecialchars($document->getName()) . "</a>";
+				}	else {
+					$content .= "<a draggable=\"false\" class=\"doc-link\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$docID."&version=". $latestContent->getVersion()."\">" . htmlspecialchars($document->getName()) . "</a>";
+				}
+
+			} else {
+				$content .= "<a href=\"#\" class=\"doc-link doc-disable\" draggable=\"false\" class=\"\" id=\"".$docID."\" rel=\"".$latestContent->getVersion()."\">" . htmlspecialchars($document->getName()) . "</a>";
+			}
+			////////////////
+
+			$content .= "<br/><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('version')." <b>".$version."</b> - ".($document->expires() ? ", ".getMLText('expires').": <b>".getReadableDate($document->getExpires())."</b>" : "")."</span>";
+
 			if($comment) {
 				$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 			}
+
 			$content .= "</td>\n";
 
 			$content .= "<td nowrap>";
@@ -2598,14 +2888,17 @@ $(document).ready( function() {
 				$content .= $this->printLockButton($document, 'splash_document_locked', 'splash_document_unlocked', true);
 			}
 			if($enableClipboard) {
-				$content .= '<a type="button" class="btn btn-success btn-sm addtoclipboard btn-action" rel="D'.$docID.'" msg="'.getMLText('splash_added_to_clipboard').'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("add_to_clipboard").'"><i class="icon-copy"></i></a>';
+				$content .= '<a type="button" class="btn btn-success btn-sm addtoclipboard btn-action" rel="D'.$docID.'" msg="'.getMLText('splash_added_to_clipboard').'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("add_to_clipboard").'"><i class="fa fa-copy"></i></a>';
 			}
 
-			if ($status['status'] == 2 ) {
+			////////
+			$content .= "<a type=\"button\" class=\"btn btn-info btn-sm\" href=\"out.ViewDocument.php?documentid=".$docID."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("view")."\"><i class=\"fa fa-eye\"></i></a>";
+			/*if ($status['status'] == 2 ) {
 				if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
 					$content .= '<a type="button" class="btn btn-info btn-sm preview-doc-btn btn-action" id="'.$docID.'" rel="'.$latestContent->getVersion().'" title="'.htmlspecialchars($document->getName()).' - '.getMLText('current_version').': '.$latestContent->getVersion().'"><i class="fa fa-eye"></i></a>';
 				}	
-			}
+			}*/
+			/////////
 
 			if($document->getAccessMode($user) >= M_ALL) {
 				$content .= '<a type="button" href="/out/out.DocumentAccess.php?documentid='.$docID.'&showtree=1" class="btn btn-success btn-sm access-folder-btn btn-action " rel="'.$docID.'" data-toggle="tooltip" data-placement="bottom" title="'.getMLText("edit_document_access").'"><i class="fa fa-user-times"></i></a>';
@@ -3249,5 +3542,82 @@ $("body").on("click", "span.openpopupbox", function(e) {
     </div>
 <?php
 	} /* }}} */
+
+	/*  testing */
+	function printTree($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0, $orderby='') { /* {{{ */
+		function tree($path, $folder, $user, $accessmode, $showdocs=1, $expandtree=0, $orderby='') {
+			if($path || $expandtree) {
+				if($path)
+					$pathfolder = array_shift($path);
+				$subfolders = $folder->getSubFolders($orderby);
+				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, $accessmode);
+				$children = array();
+				foreach($subfolders as $subfolder) {
+					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>($subfolder->hasSubFolders() || ($subfolder->hasDocuments() && $showdocs)) ? true : false, 'is_folder'=>true);
+					if($expandtree || $pathfolder->getID() == $subfolder->getID()) {
+						if($showdocs) {
+							$documents = $folder->getDocuments($orderby);
+							$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, $accessmode);
+							foreach($documents as $document) {
+								$node2 = array('label'=>$document->getName(), 'id'=>$document->getID(), 'is_folder'=>false);
+								$children[] = $node2;
+							}
+						}
+						$node['children'] = tree($path, $subfolder, $user, $accessmode, $showdocs, $expandtree, $orderby);
+					}
+					$children[] = $node;
+				}
+				return $children;
+			} else {
+				$subfolders = $folder->getSubFolders($orderby);
+				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, $accessmode);
+				$children = array();
+				foreach($subfolders as $subfolder) {
+					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>($subfolder->hasSubFolders() || ($subfolder->hasDocuments() && $showdocs)) ? true : false, 'is_folder'=>true);
+					$children[] = $node;
+				}
+				return $children;
+
+			}
+			return array();
+		}
+
+		if($folderid) {
+			$folder = $this->params['dms']->getFolder($folderid);
+			$path = $folder->getPath();
+			$folder = array_shift($path);
+			$node = array('label'=>$folder->getName(), 'id'=>$folder->getID(), 'is_folder'=>true);
+			if(!$folder->hasSubFolders()) {
+				$node['load_on_demand'] = false;
+				$node['children'] = array();
+			} else {
+				$node['children'] = tree($path, $folder, $this->params['user'], $accessmode, $showdocs, $expandtree, $orderby);
+				if($showdocs) {
+					$documents = $folder->getDocuments($orderby);
+					$documents = SeedDMS_Core_DMS::filterAccess($documents, $this->params['user'], $accessmode);
+					foreach($documents as $document) {
+						$node2 = array('label'=>$document->getName(), 'id'=>$document->getID(), 'is_folder'=>false);
+						$node['children'][] = $node2;
+					}
+				}
+			}
+			/* Nasty hack to remove the highest folder */
+			if(isset($this->params['remove_root_from_tree']) && $this->params['remove_root_from_tree']) {
+				foreach($node['children'] as $n)
+					$tree[] = $n;
+			} else {
+				$tree[] = $node;
+			}
+			
+		} else {
+			$root = $this->params['dms']->getFolder($this->params['rootfolderid']);
+			$tree = array(array('label'=>$root->getName(), 'id'=>$root->getID(), 'is_folder'=>true));
+		}
+
+		return $tree;
+
+	} /* }}} */
+
+
 }
 ?>

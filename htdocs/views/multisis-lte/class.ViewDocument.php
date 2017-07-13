@@ -171,18 +171,36 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
 		}
 		$this->printDocumentChooserJs("form1");
-		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 1, "");
+	
 		?>
-			function folderSelected(id, name) {
-				window.location = '../out/out.ViewFolder.php?folderid=' + id;
-			}
-
 			$(document).on("ready", function(){
 				$("#document-info-widget").on("click", function(){
 					$("#document-info").addClass("div-hidden");
 					$("#tab-information").removeClass("col-md-8").addClass("col-md-12");
 				});
+
+				/* ---- For document previews ---- */
+
+			  $(".preview-doc-btn").on("click", function(){
+			  	$("#thedocinfo").hide();
+					$("#thetimeline").hide();
+
+			  	var docID = $(this).attr("id");
+			  	var version = $(this).attr("rel");
+			  	$("#doc-title").text($(this).attr("title"));
+			  	$("#document-previewer").show('slow');
+			  	$("#iframe-charger").attr("src","../pdfviewer/web/viewer.html?file=..%2F..%2Fop%2Fop.Download.php%3Fdocumentid%3D"+docID+"%26version%3D"+version);
+			  });
+
+			  $(".close-doc-preview").on("click", function(){
+			  	$("#document-previewer").hide();
+			  	$("#iframe-charger").attr("src","");
+			  	$("#thedocinfo").show('slow');
+			  	$("#thetimeline").show('slow');
+			  });
+
 			});
+
 
 		<?php
 
@@ -436,7 +454,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		echo $this->getDefaultFolderPathHTML($folder, true, $document);
 
-		echo "<div class=\"row\">";
+		echo "<div class=\"row\" id=\"thedocinfo\">";
 
 		//$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		//$this->globalNavigation($folder);
@@ -627,21 +645,36 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		/* Block for allow view/download the file*/
 		$theaccessMode2 = $folder->getAccessMode($this->params['user']);
-		if ($theaccessMode2 == M_READWRITE || $theaccessMode2 == M_ALL ) {
+		if ($theaccessMode2 == M_READWRITE || $theaccessMode2 == M_ALL ) { // If the user have read-write
 				if ($file_exists){
 					print "<a type=\"button\" class=\"btn btn-primary btn-action\" href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("download")."\"><i class=\"fa fa-download\"></i></a>";
-					if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
+
+					if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
+						print '<a type="button" class="btn btn-info preview-doc-btn btn-action" id="'.$documentid.'" rel="'.$latestContent->getVersion().'" title="'.htmlspecialchars($document->getName()).' - '.getMLText('current_version').': '.$latestContent->getVersion().'"><i class="fa fa-eye"></i></a>';
+					} else {
 						print "<a type=\"button\" class=\"btn btn-info btn-action\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("preview")."\"><i class=\"fa fa-eye\"></i></a>";
+					}
+					
+						//print "<a type=\"button\" class=\"btn btn-info btn-action\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("preview")."\"><i class=\"fa fa-eye\"></i></a>";
 				}
 		}
 
-		if ($theaccessMode2 == M_READ) {
+		if ($theaccessMode2 == M_READ) { // If the user only can read
 			// TODO: GET final status of the document
 			if($status["status"] == S_RELEASED) {
 				if ($file_exists){
 					print "<a type=\"button\" class=\"btn btn-primary btn-action\" href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("download")."\"><i class=\"fa fa-download\"></i></a>";
-					if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
+
+					if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
+						print '<a type="button" class="btn btn-info preview-doc-btn btn-action" id="'.$documentid.'" rel="'.$latestContent->getVersion().'" title="'.htmlspecialchars($document->getName()).' - '.getMLText('current_version').': '.$latestContent->getVersion().'"><i class="fa fa-eye"></i></a>';
+					} else {
 						print "<a type=\"button\" class=\"btn btn-info btn-action\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("preview")."\"><i class=\"fa fa-eye\"></i></a>";
+					}
+
+					//if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
+					//	print '<a type="button" class="btn btn-info preview-doc-btn btn-action" id="'.$documentid.'" rel="'.$latestContent->getVersion().'" title="'.htmlspecialchars($document->getName()).' - '.getMLText('current_version').': '.$latestContent->getVersion().'"><i class="fa fa-eye"></i></a>';
+
+						//print "<a type=\"button\" class=\"btn btn-info btn-action\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("preview")."\"><i class=\"fa fa-eye\"></i></a>";
 				}
 			}
 		}
@@ -893,7 +926,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		if($user->isAdmin()) {
 ?>
-		<div class="row-fluid">
+		<div class="row">
 			<div class="col-md-12">
 <?php
 			/* Check for an existing review log, even if the workflowmode
@@ -951,7 +984,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				/* Block for rewind the workflow status */
 
 				$theaccessMode = $folder->getAccessMode($this->params['user']);
-				if ($theaccessMode == M_READWRITE || $theaccessMode == M_ALL ) {
+				if ($theaccessMode >= M_READWRITE ) {
 					if (!$this->params['user']->isGuest()) {
 						if(!(SeedDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState()))) {
 							print "<form action=\"../out/out.RewindWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('rewindworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"folderid\" value=\"".$folder->getId()."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn btn-danger\"><i class=\"fa fa-refresh\"></i> ".getMLText('rewind_workflow')."</button></form>";
@@ -1479,7 +1512,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 if($user->isAdmin()) {
 $timeline = $document->getTimeline(); ?>
-<div class="row">
+<div class="row" id="thetimeline">
 	<div class="col-md-12">
 		<div class="box box-info">
       <div class="box-header with-border">
@@ -1520,6 +1553,24 @@ $timeline = $document->getTimeline(); ?>
 <?php } ?>
 		
 <?php
+		//// Document preview ////
+		echo "<div class=\"row div-hidden\" id=\"document-previewer\">";
+		echo "<div class=\"col-md-12\">";
+		echo "<div class=\"box box-info\">";
+		echo "<div class=\"box-header with-border box-header-doc-preview\">";
+    echo "<span id=\"doc-title\" class=\"box-title\"></span>";
+    echo "<span class=\"pull-right\">";
+    //echo "<a class=\"btn btn-sm btn-primary\"><i class=\"fa fa-chevron-left\"></i></a>";
+    //echo "<a class=\"btn btn-sm btn-primary\"><i class=\"fa fa-chevron-right\"></i></a>";
+    echo "<a class=\"close-doc-preview btn btn-box-tool\"><i class=\"fa fa-times\"></i></a>";
+    echo "</span>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+    echo "<iframe id=\"iframe-charger\" src=\"\" width=\"100%\" height=\"700px\"></iframe>";
+    echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		echo "</div>"; // End document preview
 		
 		echo "</div>"; // Ends content wraper
 

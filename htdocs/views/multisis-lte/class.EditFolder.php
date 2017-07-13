@@ -38,10 +38,6 @@ class SeedDMS_View_EditFolder extends SeedDMS_Bootstrap_Style {
 		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
 
-function folderSelected(id, name) {
-	window.location = '../out/out.ViewFolder.php?folderid=' + id;
-}
-
 function checkForm()
 {
 	msg = new Array();
@@ -91,7 +87,7 @@ $(document).ready(function() {
 	});
 });
 <?php
-		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', 1, "");
+
 	} /* }}} */
 
 	function show() { /* {{{ */

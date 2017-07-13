@@ -36,9 +36,6 @@ class SeedDMS_View_EditDocument extends SeedDMS_Bootstrap_Style {
 		header('Content-Type: application/javascript');
 
 ?>
-function folderSelected(id, name) {
-	window.location = '../out/out.ViewFolder.php?folderid=' + id;
-}
 
 function checkForm()
 {
@@ -95,7 +92,7 @@ $(document).ready( function() {
 });
 <?php
 		$this->printKeywordChooserJs('form1');
-		$this->printNewTreeNavigationJs(1, M_READ, 0, '', 1, "s");
+		
 	} /* }}} */
 
 	function show() { /* {{{ */
