@@ -67,13 +67,12 @@ document.form1.email.focus();
 		$referrer = $this->params['referrer'];
 
 		$this->htmlStartPage(getMLText("password_forgotten"), "passwordforgotten");
-		$this->globalBanner();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("password_forgotten"));
+		
+		$this->startLoginContent();
 ?>
 
 <?php $this->contentContainerStart(); ?>
-<form class="form-horizontal" action="../op/op.PasswordForgotten.php" method="post" id="form1" name="form1">
+<form action="../op/op.PasswordForgotten.php" method="post" id="form1" name="form1">
 <?php
 		if ($referrer) {
 			echo "<input type='hidden' name='referuri' value='".$referrer."'/>";
@@ -81,29 +80,30 @@ document.form1.email.focus();
 ?>
   <p><?php printMLText("password_forgotten_text"); ?></p>
 
-		<div class="control-group">
-		<label class="control-label"><?php printMLText("login");?>:</label>
-			<div class="controls">
-			<input type="text" name="login" id="login">
+		<div class="form-group">
+		<label><?php printMLText("login");?>:</label>
+			<div>
+			<input class="form-control" type="text" name="login" id="login">
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label"><?php printMLText("email");?>:</label>
-			<div class="controls">
-				<input type="text" name="email" id="email">
+			<label><?php printMLText("email");?>:</label>
+			<div>
+				<input class="form-control" type="text" name="email" id="email">
 			</div>
 		</div>
 
 		<div class="controls">
-			<input class="btn" type="submit" value="<?php printMLText("submit_password_forgotten") ?>">
+			<br>
+			<button type="submit" class="btn btn-primary"><?php printMLText("submit_password_forgotten") ?></button>
 		</div>
 
 </form>
 <?php $this->contentContainerEnd(); ?>
-<p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
+<p class="align-center"><a type="button" class="btn btn-info" href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
 <?php
-		$this->contentEnd();
-		$this->htmlEndPage();
+
+		$this->endLoginContent();
 	} /* }}} */
 }
 ?>

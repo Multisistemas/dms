@@ -55,7 +55,7 @@ class SeedDMS_View_RemoveWorkflowFromDocument extends SeedDMS_Bootstrap_Style {
 		$wkflog = $latestContent->getWorkflowLog();
 		$workflow = $latestContent->getWorkflow();
 
-		$msg = "The document is currently in state: ".$currentstate->getName()."<br />";
+		$msg = getMLText("status_current_info")." ".$currentstate->getName()."<br />";
 		if($wkflog) {
 			foreach($wkflog as $entry) {
 				if($entry->getTransition()->getNextState()->getID() == $currentstate->getID()) {
@@ -63,10 +63,10 @@ class SeedDMS_View_RemoveWorkflowFromDocument extends SeedDMS_Bootstrap_Style {
 					$enterts = makeTsFromLongDate($enterdate);
 				}
 			}
-			$msg .= "The state was entered at ".$enterdate." which was ";
-			$msg .= getReadableDuration((time()-$enterts))." ago.<br />";
+			$msg .= getMLText("status_date_record_one")." ".$enterdate." ".getMLText("status_date_record_two");
+			$msg .= getReadableDuration((time()-$enterts)).".<br />";
 		}
-		$msg .= "The document may stay in this state for ".$currentstate->getMaxTime()." sec.";
+		//$msg .= "The document may stay in this state for ".$currentstate->getMaxTime()." sec.";
 		$this->infoMsg($msg);
 
 		$this->startBoxDanger(getMLText("rm_workflow"));

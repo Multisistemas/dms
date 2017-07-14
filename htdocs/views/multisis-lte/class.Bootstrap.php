@@ -2819,7 +2819,7 @@ $(document).ready( function() {
 			if (file_exists($dms->contentDir . $latestContent->getPath())) { 
 
 				/*************** If the document status is equal to "released" the download will be available ***************/
-				if ($status['status'] == 2 ) { 
+				if ($status['status'] == 2 && !$document->isLocked()) { 
 					$content .= "<a draggable=\"false\" href=\"/op/op.Download.php?documentid=".$docID."&version=".$version."\">";
 					if($previewer->hasPreview($latestContent)) {
 						$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"/op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
@@ -2847,7 +2847,7 @@ $(document).ready( function() {
 			$content .= "<td>";
 
 			////////////////
-			if ($status['status'] == 2 ) {
+			if ($status['status'] == 2 && !$document->isLocked()) {
 				if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
 					$content .= "<a href=\"#\" draggable=\"false\" class=\"preview-doc-btn btn-action doc-link\" id=\"".$docID."\" rel=\"".$latestContent->getVersion()."\" title=\"".htmlspecialchars($document->getName())." - ".getMLText("current_version").": ".$latestContent->getVersion()."\">" . htmlspecialchars($document->getName()) . "</a>";
 				}	else {

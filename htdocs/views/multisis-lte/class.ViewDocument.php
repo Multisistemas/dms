@@ -577,21 +577,23 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
 		$previewer->createPreview($latestContent);
-		if ($file_exists) {
-			if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes)) {
+		if ($file_exists && !$document->isLocked()) {
+			print "<a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">";
+			/*if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes)) {
 				print "<a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\">";
 			} else {
 				print "<a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">";
-			}
+			}*/
 		}
+
 		if($previewer->hasPreview($latestContent)) {
-			if($status["status"] == S_RELEASED) {
+
 				print("<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidthdetail."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">");
-				}
+
 		} else {
 			print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 		}
-		if ($file_exists) {
+		if ($file_exists && !$document->isLocked()) {
 			print "</a>";
 		}
 		print "</td>\n";
@@ -644,8 +646,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		echo "<div class=\"btn-group-horizontal\">";
 
 		/* Block for allow view/download the file*/
-		$theaccessMode2 = $folder->getAccessMode($this->params['user']);
-		if ($theaccessMode2 == M_READWRITE || $theaccessMode2 == M_ALL ) { // If the user have read-write
+		//$theaccessMode2 = $folder->getAccessMode($this->params['user']);
+		if ($document->getAccessMode($user) >= M_READWRITE) { // If the user have read-write
 				if ($file_exists){
 					print "<a type=\"button\" class=\"btn btn-primary btn-action\" href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("download")."\"><i class=\"fa fa-download\"></i></a>";
 
@@ -659,9 +661,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				}
 		}
 
-		if ($theaccessMode2 == M_READ) { // If the user only can read
+		if ($document->getAccessMode($user) == M_READ) { // If the user only can read
 			// TODO: GET final status of the document
-			if($status["status"] == S_RELEASED) {
+			if($status["status"] == S_RELEASED && !($document->isLocked())) {
 				if ($file_exists){
 					print "<a type=\"button\" class=\"btn btn-primary btn-action\" href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("download")."\"><i class=\"fa fa-download\"></i></a>";
 
@@ -679,11 +681,15 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 		}
 		
-		if ($file_exists){
-			if($accessop->mayEditVersion()) {
-				print "<a type=\"button\" class=\"btn btn-success btn-action\" href=\"../out/out.EditOnline.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("edit")."\"><i class=\"fa fa-edit\"></i></a>";
+		// Option to edit online the version
+		/*if ($theaccessMode2 >= M_READ) {
+			if ($file_exists){
+				if($accessop->mayEditVersion()) {
+					print "<a type=\"button\" class=\"btn btn-warning btn-action\" href=\"../out/out.EditOnline.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("edit_online")."\"><i class=\"fa fa-edit\"></i></a>";
+				}
 			}
-		}
+		}*/
+
 		/* Only admin has the right to remove version in any case or a regular
 		 * user if enableVersionDeletion is on
 		 */
@@ -691,8 +697,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			print "<a type=\"button\" class=\"btn btn-danger btn-action\" href=\"../out/out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("rm_version")."\"><i class=\"fa fa-times\"></i></a>";
 		}
 		if($accessop->mayOverwriteStatus()) {
-			print "<a type=\"button\" class=\"btn btn-warning btn-action\" href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."' data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("change_status")."\"><i class=\"fa fa-align-justify\"></i></a>";
+			if($status["status"] != -2){
+				print "<a type=\"button\" class=\"btn btn-warning btn-action\" href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."' data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("change_status")."\"><i class=\"fa fa-align-justify\"></i></a>";
+			}
 		}
+
 		if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
 			// Allow changing reviewers/approvals only if not reviewed
 			if($accessop->maySetReviewersApprovers()) {
@@ -700,8 +709,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 		} else {
 			if($accessop->maySetWorkflow()) {
-				if(!$workflow) {
-					print "<a type=\"button\" class=\"btn btn-warning btn-action\" href='../out/out.SetWorkflow.php?documentid=".$documentid."&version=".$latestContent->getVersion()."' data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("set_workflow")."\"><i class=\"fa fa-random\"></i></a>";
+				if($status["status"] != -2){
+					if(!$workflow) {
+						print "<a type=\"button\" class=\"btn btn-warning btn-action\" href='../out/out.SetWorkflow.php?documentid=".$documentid."&version=".$latestContent->getVersion()."' data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("set_workflow")."\"><i class=\"fa fa-random\"></i></a>";
+					}
 				}
 			}
 		}
@@ -711,9 +722,19 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 
 		$theaccessMode3 = $folder->getAccessMode($this->params['user']);
-		if ($theaccessMode3 == M_READWRITE || $theaccessMode3 == M_ALL ) {
+		if ($theaccessMode3 >= M_READWRITE || ($document->getAccessMode($user) >= M_READWRITE)) {
 			if (!$this->params['user']->isGuest()) {
-				print "<a type=\"button\" class=\"btn btn-success btn-action\" href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("edit_attributes")."\"><i class=\"fa fa-edit\"></i></a>";
+				if($status["status"] != -2){
+					print "<a type=\"button\" class=\"btn btn-success btn-action\" href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("edit_attributes")."\"><i class=\"fa fa-edit\"></i></a>";
+				}
+			}
+		}
+
+		if ($theaccessMode3 >= M_READWRITE || ($document->getAccessMode($user) >= M_READWRITE)) {
+			if (!$this->params['user']->isGuest()) {
+				if ($status["status"] == S_RELEASED) {
+					print "<a type=\"button\" class=\"btn btn-primary btn-action\" href=\"out.UpdateDocument.php?documentid=".$documentid."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("update_document")."\"><i class=\"fa fa-refresh\"></i></a>";
+				}
 			}
 		}
 
@@ -838,9 +859,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				if($accessop->mayReview()) {
 					if ($is_reviewer) {
 						if ($r["status"]==0) {
-							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("add_review")."</a></li>";
+							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-sm btn-warning\">".getMLText("add_review")."</a></li>";
 						} elseif ($accessop->mayUpdateReview($updateUser) && (($r["status"]==1)||($r["status"]==-1))) {
-							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
+							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-sm btn-warning\">".getMLText("edit")."</a></li>";
 						}
 					}
 				}
@@ -967,7 +988,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 			echo "<div class=\"row\">";
 
-			if($user_is_involved || $user->isAdmin()){
+			if(($document->getAccessMode($this->params['user']) >= M_READWRITE) || $user->isAdmin()){
 
 			echo "<div class=\"col-md-12 col-no-padding pull-right\">";
 			echo "<div class=\"pull-right delete-wokflow-div\">";
@@ -983,8 +1004,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				/* Block for rewind the workflow status */
 
-				$theaccessMode = $folder->getAccessMode($this->params['user']);
-				if ($theaccessMode >= M_READWRITE ) {
+				//$theaccessMode = $folder->getAccessMode($this->params['user']);
+
+				if ($document->getAccessMode($this->params['user']) >= M_READWRITE) {
 					if (!$this->params['user']->isGuest()) {
 						if(!(SeedDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState()))) {
 							print "<form action=\"../out/out.RewindWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('rewindworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"folderid\" value=\"".$folder->getId()."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn btn-danger\"><i class=\"fa fa-refresh\"></i> ".getMLText('rewind_workflow')."</button></form>";
