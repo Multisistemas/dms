@@ -54,25 +54,36 @@ if ($res == 0 || empty($res)) {
 	UI::exitError(getMLText("nonconfo_add_nonconfo"),getMLText("error_occured"));
 }
 
-if ($res != 0) {
-	$owners = getOwnersByProcess($_POST['processId']);
-	$process = getProcess($_POST['processId']);
-	if (count($owners) != 0) {
-		if (count($owners) > 1) {
-			foreach ($owners as $owner) {
-				$resp = addNonConfoResponsible($res, $owner['userId']);
-				sendNotificationNonconfoAdded($owner['userId'], $res, $process['name']);
+if($settings->_enableEmail) {
+	if ($res != 0) {
+		$owners = getOwnersByProcess($_POST['processId']);
+		$process = getProcess($_POST['processId']);
+		if ($owners == false || $process == false) {
+			$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('nonconfo_non_owner_exists')));
+			header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$res);
+			die();
+		} else {
+		
+			if (count($owners) != 0) {
+				if (count($owners) > 1) {
+					foreach ($owners as $owner) {
+						$resp = addNonConfoResponsible($res, $owner['userId']);
+						sendNotificationNonconfoAdded($owner['userId'], $res, $process['name']);
+					}
+				} else if (count($owners) == 1) {
+					$resp = addNonConfoResponsible($res, $owners[0]['userId']);
+					sendNotificationNonconfoAdded($owners[0]['userId'], $res, $process['name']);
+				}
 			}
-		} else if (count($owners) == 1) {
-			$resp = addNonConfoResponsible($res, $owners[0]['userId']);
-			sendNotificationNonconfoAdded($owners[0]['userId'], $res, $process['name']);
 		}
 	}
+} else {
+	$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('nonconfo_send_error')));
+	header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$res);
+	die();
 }
 
 $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('nonconfo_added_success')));
-
-add_log_line();
 
 header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$res);
 

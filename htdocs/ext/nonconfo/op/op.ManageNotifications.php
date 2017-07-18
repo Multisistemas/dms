@@ -47,12 +47,19 @@ if (!isset($_GET['processId'])) {
 	UI::exitError(getMLText("nonconfo_title"),getMLText("nonconfo_no_process_selected"));
 }
 
+if (!$settings->_enableEmail) {
+	$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('nonconfo_send_error')));
+	
+	header("Location:../out/out.ViewNonConfo.php?nonconfoId=".$_GET['nonconfoId']);
+	die();
+}
+
 $action = $_GET['action'];
 switch ($action) {
 	case '1': // For request approbations
 
 		$process = getProcess($_GET['processId']);
-		$nonconfo =  getNonConfo($_GET['nonconfoId']);
+		$nonconfo = getNonConfo($_GET['nonconfoId']);
 		$notify = sendNotificationRequestApprobation($nonconfo['createdBy'], $process['name'], $_GET['nonconfoId']);
 
 		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('nonconfo_send_success')));

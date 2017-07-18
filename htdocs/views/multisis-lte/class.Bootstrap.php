@@ -320,9 +320,15 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</div>";
 	} /* }}} */
 
-	function startBoxCollapsablePrimary($title = "", $collapsed = "") { /* {{{ */
-		echo "<div class=\"box box-primary box-solid ".$collapsed."\">";
+	function startBoxCollapsablePrimary($title = "", $collapsed = "", $id = "") { /* {{{ */
+		if ($id != "") {
+			echo "<div class=\"box box-primary box-solid ".$collapsed."\" id=\"".$id."\">";
+		} else {
+			echo "<div class=\"box box-primary box-solid ".$collapsed."\">";
+		}
+		
     echo "<div class=\"box-header with-border\">";
+
     echo "<h3 class=\"box-title\">".$title."</h3>";
     echo "<div class=\"box-tools pull-right\">";
     if ($collapsed != "") {

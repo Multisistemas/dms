@@ -147,7 +147,7 @@ $(document).ready(function(){
 		if(!checkForm2()){
 			ev.preventDefault();
 		} else {
-			$("#box-form2").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i>></div>");
+			$("#box-form2").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i></div>");
 		}
 	});
 
