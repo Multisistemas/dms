@@ -40,66 +40,73 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 		$this->mainSideBar();
 		$this->contentStart();
 
-		$this->contentContainerStart();
+		
+
 ?>
+<div class="gap-20"></div>
+<div class="row">
+<div class="col-md-12">
+
 	<div id="admin-tools">
-	<div class="row-fluid">
+	<div class="row">
 	<?php if ($user->_comment != "client-admin") { ?>
-		<a href="../out/out.UsrMgr.php" class="span3 btn btn-medium"><i class="icon-user"></i><br /><?php echo getMLText("user_management")?></a>
-		<a href="../out/out.GroupMgr.php" class="span3 btn btn-medium"><i class="icon-group"></i><br /><?php echo getMLText("group_management")?></a>
+		<a href="../out/out.UsrMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-user"></i><br /><?php echo getMLText("user_management")?></a>
+		<a href="../out/out.GroupMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-group"></i><br /><?php echo getMLText("group_management")?></a>
 	<?php } ?>
 	</div>
-	<div class="row-fluid">
-		<a href="../out/out.BackupTools.php" class="span3 btn btn-medium"><i class="icon-hdd"></i><br /><?php echo getMLText("backup_tools")?></a>
+	<div class="row">
+		<a href="../out/out.BackupTools.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-hdd"></i><br /><?php echo getMLText("backup_tools")?></a>
 <?php		
 		if ($logfileenable)
-			echo "<a href=\"../out/out.LogManagement.php\" class=\"span3 btn btn-medium\"><i class=\"icon-list\"></i><br />".getMLText("log_management")."</a>";
+			echo "<a href=\"../out/out.LogManagement.php\" class=\"col-md-3 btn btn-medium btn-default\"><i class=\"fa fa-list\"></i><br />".getMLText("log_management")."</a>";
 ?>
 	</div>
-	<div class="row-fluid">
-		<a href="../out/out.DefaultKeywords.php" class="span3 btn btn-medium"><i class="icon-reorder"></i><br /><?php echo getMLText("global_default_keywords")?></a>
-		<a href="../out/out.Categories.php" class="span3 btn btn-medium"><i class="icon-columns"></i><br /><?php echo getMLText("global_document_categories")?></a>
-		<a href="../out/out.AttributeMgr.php" class="span3 btn btn-medium"><i class="icon-tags"></i><br /><?php echo getMLText("global_attributedefinitions")?></a>
+	<div class="row">
+		<a href="../out/out.DefaultKeywords.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-reorder"></i><br /><?php echo getMLText("global_default_keywords")?></a>
+		<a href="../out/out.Categories.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-columns"></i><br /><?php echo getMLText("global_document_categories")?></a>
+		<a href="../out/out.AttributeMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-tags"></i><br /><?php echo getMLText("global_attributedefinitions")?></a>
 	</div>
 <?php
 	if($this->params['workflowmode'] == 'advanced') {
 ?>
-	<div class="row-fluid">
-		<a href="../out/out.WorkflowMgr.php" class="span3 btn btn-medium"><i class="icon-sitemap"></i><br /><?php echo getMLText("global_workflows"); ?></a>
-		<a href="../out/out.WorkflowStatesMgr.php" class="span3 btn btn-medium"><i class="icon-star"></i><br /><?php echo getMLText("global_workflow_states"); ?></a>
-		<a href="../out/out.WorkflowActionsMgr.php" class="span3 btn btn-medium"><i class="icon-bolt"></i><br /><?php echo getMLText("global_workflow_actions"); ?></a>
+	<div class="row">
+		<a href="../out/out.WorkflowMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-sitemap"></i><br /><?php echo getMLText("global_workflows"); ?></a>
+		<a href="../out/out.WorkflowStatesMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-star"></i><br /><?php echo getMLText("global_workflow_states"); ?></a>
+		<a href="../out/out.WorkflowActionsMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-bolt"></i><br /><?php echo getMLText("global_workflow_actions"); ?></a>
 	</div>
 <?php
 		}
 		if($enablefullsearch) {
 ?>
-	<div class="row-fluid">
-		<a href="../out/out.Indexer.php" class="span3 btn btn-medium"><i class="icon-refresh"></i><br /><?php echo getMLText("update_fulltext_index")?></a>
-		<a href="../out/out.CreateIndex.php" class="span3 btn btn-medium"><i class="icon-search"></i><br /><?php echo getMLText("create_fulltext_index")?></a>
-		<a href="../out/out.IndexInfo.php" class="span3 btn btn-medium"><i class="icon-info-sign"></i><br /><?php echo getMLText("fulltext_info")?></a>
+	<div class="row">
+		<a href="../out/out.Indexer.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-refresh"></i><br /><?php echo getMLText("update_fulltext_index")?></a>
+		<a href="../out/out.CreateIndex.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-search"></i><br /><?php echo getMLText("create_fulltext_index")?></a>
+		<a href="../out/out.IndexInfo.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-info-sign"></i><br /><?php echo getMLText("fulltext_info")?></a>
 	</div>
 <?php
 		}
 ?>
-	<div class="row-fluid">
-		<a href="../out/out.Statistic.php" class="span3 btn btn-medium"><i class="icon-tasks"></i><br /><?php echo getMLText("folders_and_documents_statistic")?></a>
-		<a href="../out/out.Charts.php" class="span3 btn btn-medium"><i class="icon-bar-chart"></i><br /><?php echo getMLText("charts")?></a>
-		<a href="../out/out.ObjectCheck.php" class="span3 btn btn-medium"><i class="icon-check"></i><br /><?php echo getMLText("objectcheck")?></a>
-		<a href="../out/out.Timeline.php" class="span3 btn btn-medium"><i class="icon-time"></i><br /><?php echo getMLText("timeline")?></a>
+	<div class="row">
+		<a href="../out/out.Statistic.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-tasks"></i><br /><?php echo getMLText("folders_and_documents_statistic")?></a>
+		<a href="../out/out.Charts.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-bar-chart"></i><br /><?php echo getMLText("charts")?></a>
+		<a href="../out/out.ObjectCheck.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-check"></i><br /><?php echo getMLText("objectcheck")?></a>
+		<a href="../out/out.Timeline.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-chart"></i><br /><?php echo getMLText("timeline")?></a>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 	<?php if ($user->_comment != "client-admin") { ?>
-		<a href="../out/out.Settings.php" class="span3 btn btn-medium"><i class="icon-wrench"></i><br /><?php echo getMLText("settings")?></a>
-		<a href="../out/out.ExtensionMgr.php" class="span3 btn btn-medium"><i class="icon-cogs"></i><br /><?php echo getMLText("extension_manager")?></a>
-		<a href="../out/out.Info.php" class="span3 btn btn-medium"><i class="icon-info-sign"></i><br /><?php echo getMLText("version_info")?></a>
+		<a href="../out/out.Settings.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-wrench"></i><br /><?php echo getMLText("settings")?></a>
+		<a href="../out/out.ExtensionMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-cogs"></i><br /><?php echo getMLText("extension_manager")?></a>
+		<a href="../out/out.Info.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-info-circle"></i><br /><?php echo getMLText("version_info")?></a>
 	<?php } ?>	
+	</div>
+	</div>
 	</div>
 	</div>
 <?php
 		echo "</div>";
-		echo "</div>";
+
 		
-    $this->contentEnd();
+
 		$this->mainFooter();		
 		$this->containerEnd();
 		$this->htmlEndPage();

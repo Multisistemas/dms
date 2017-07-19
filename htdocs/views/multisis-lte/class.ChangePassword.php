@@ -40,17 +40,17 @@ document.form1.newpassword.focus();
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
-		$referuri = $this->params['referuri'];
+		$referuri = $this->params['referui'];
 		$hash = $this->params['hash'];
 		$passwordstrength = $this->params['passwordstrength'];
 
-		$this->htmlStartPage(getMLText("change_password"), "login");
-		$this->globalBanner();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("change_password"));
+		$this->htmlStartPage(getMLText("change_password"));
+		
+		$this->startLoginContent();
+
 		$this->contentContainerStart();
 ?>
-<form class="form-horizontal" action="../op/op.ChangePassword.php" method="post" name="form1">
+<form action="../op/op.ChangePassword.php" method="post" name="form1">
 <?php
 		if ($referuri) {
 			echo "<input type='hidden' name='referuri' value='".$referuri."'/>";
@@ -60,37 +60,35 @@ document.form1.newpassword.focus();
 		}
 ?>
 
-		 <div class="control-group">
-			<label class="control-label"><?php printMLText("password");?>:</label>
-			<div class="controls"><input class="pwd" type="password" rel="strengthbar" name="newpassword" id="password"></div>
+		 <div class="form-group">
+			<label><?php printMLText("new_password");?>:</label>
+			<div><input class="form-control" type="password" rel="strengthbar" name="newpassword" id="password"></div>
 		 </div>
 <?php
 		if($passwordstrength > 0) {
 ?>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("password_strength");?>:</label>
-			<div class="controls">
+		<div class="form-group">
+			<label><?php printMLText("password_strength");?>:</label>
+			<div>
 				<div id="strengthbar" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
 			</div>
 		</div>
 <?php
 		}
 ?>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("confirm_pwd");?>:</label>
-			<div class="controls"><input type="password" name="newpasswordrepeat" id="passwordrepeat"></div>
+		<div class="form-group">
+			<label><?php printMLText("confirm_pwd");?>:</label>
+			<div><input class="form-control" type="password" name="newpasswordrepeat" id="passwordrepeat"></div>
 		</div>
-		<div class="control-group">
-			<label class="control-label"></label>
-			<div class="controls"><input class="btn" type="submit" value="<?php printMLText("submit_password") ?>"></div>
+		<div class="form-group align-center">
+			<div><input class="btn btn-success" type="submit" value="<?php printMLText("submit_password") ?>"></div>
 		</div>
 
 </form>
 <?php $this->contentContainerEnd(); ?>
-<p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
+<p class="align-center"><a type="button" class="btn btn-info" href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
 <?php
-		$this->contentEnd();
-		$this->htmlEndPage();
+		$this->endLoginContent();
 	} /* }}} */
 }
 ?>

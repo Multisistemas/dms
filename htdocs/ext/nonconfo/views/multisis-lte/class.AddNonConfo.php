@@ -90,7 +90,7 @@ $(document).ready(function() {
 
 						<div class="form-group">
 							<label><?php printMLText("nonconfo_correlative");?>:</label>
-							<input type="text" class="form-control" name="correlative" value="" size="100" />
+							<input data-toggle="tooltip" data-placement="bottom" title="<?php echo getMLText("nonconfo_correlative_warning"); ?>" type="text" class="form-control" name="correlative" value="" size="100" />
 						</div>
 
 						<div class="form-group">

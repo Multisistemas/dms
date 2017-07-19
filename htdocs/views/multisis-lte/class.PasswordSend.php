@@ -34,19 +34,17 @@ class SeedDMS_View_PasswordSend extends SeedDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$referrer = $this->params['referrer'];
 
-		$this->htmlStartPage(getMLText("password_send"), "login");
-		$this->globalBanner();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("password_send"));
+		$this->htmlStartPage(getMLText("password_send"));
+		
+		$this->startLoginContent();
 ?>
 
 <?php $this->contentContainerStart(); ?>
 <?php printMLText('password_send_text'); ?>
 <?php $this->contentContainerEnd(); ?>
-<p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
+<p class="align-center"><a type="button" class="btn btn-info" href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
 <?php
-		$this->contentEnd();
-		$this->htmlEndPage();
+		$this->endLoginContent();
 	} /* }}} */
 }
 ?>

@@ -78,7 +78,7 @@ document.form1.email.focus();
 			echo "<input type='hidden' name='referuri' value='".$referrer."'/>";
 		}
 ?>
-  <p><?php printMLText("password_forgotten_text"); ?></p>
+  <p class="align-center"><?php printMLText("password_forgotten_text"); ?></p>
 
 		<div class="form-group">
 		<label><?php printMLText("login");?>:</label>

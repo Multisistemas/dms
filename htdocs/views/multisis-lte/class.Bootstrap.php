@@ -635,7 +635,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     echo "<p>";
     echo $this->params['user']->getFullName();
-    //echo "<small>Member since Nov. 2012</small>";
+    echo "<small>".$this->params['user']->getEmail()."</small>";
     echo "</p>";
     echo "</li>";
 
@@ -916,7 +916,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     if($this->params['user']->isAdmin()) {
     echo "<div class=\"tab-pane\" id=\"control-sidebar-home-tab\">";
-    echo "<h3 class=\"control-sidebar-heading\">".getMLText("admin_tools")."</h3>";
+    echo "<a type=\"button\" href=\"../../out/out.AdminTools.php\"><h3 class=\"control-sidebar-heading btn-admin-tools\">".getMLText("admin_tools")."</h3></a>";
     echo "<ul class=\"control-sidebar-menu\">";
     echo "<li><a href=\"../../out/out.UsrMgr.php\"><i class=\"menu-icon fa fa-user bg-green\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("user_management")."</h4></div></a></li>";
