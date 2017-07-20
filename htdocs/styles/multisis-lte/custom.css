@@ -75,6 +75,10 @@
     /*padding: 5px 5px 5px 15px !important; */
 }
 
+.btn-admin-tools {
+    border: 1px solid #777;
+    background-color: #666;
+}
 
 
 /* ------------- Grids ------------------ */
@@ -170,6 +174,12 @@
 .comment-width {
     max-width: 400px;
 }
+
+.small-box>.inner {
+    padding: 20px !important;
+}
+
+
 
 /* ------------- Modals ------------------ */
 /*.after_modal_appended
@@ -378,7 +388,8 @@ span.wrap-normal {
 
 .header-brand {
     max-width: 200px;
-    max-height: 45px;
+    max-height: 40px;
+    vertical-align: sub;
 }
 
 .login-brand {
@@ -391,4 +402,9 @@ span.wrap-normal {
     margin-top: 10px;
     padding: 10px;
     text-align: center;
+}
+
+.logo-lg {
+    max-height: 50px !important;
+    padding: 5px 0px 5px 0px !important;    
 }

@@ -86,6 +86,10 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		
 ?>
 
+function folderSelected(id, name) {
+	window.location = '../out/out.ViewFolder.php?folderid=' + id;
+}
+
 function checkForm() {
 	msg = new Array();
 	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
@@ -147,7 +151,7 @@ $(document).ready(function(){
 		if(!checkForm2()){
 			ev.preventDefault();
 		} else {
-			$("#box-form2").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i>></div>");
+			$("#box-form2").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i></div>");
 		}
 	});
 

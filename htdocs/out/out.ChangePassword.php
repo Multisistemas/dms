@@ -19,8 +19,13 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
+include("../inc/inc.Utils.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
 include("../inc/inc.ClassUI.php");
+
+global $dms;
 
 include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
@@ -37,8 +42,12 @@ if (isset($_REQUEST["hash"]) && strlen($_REQUEST["hash"])>0) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'referui'=>$referui, 'hash'=>$hash, 'passwordstrength'=>$settings->_passwordStrength));
+$view = UI::factory($theme, $tmp[1], array());
 if($view) {
+	$view->setParam('dms',$dms);
+	$view->setParam('referui',$referui);
+	$view->setParam('hash',$hash);
+	$view->setParam('passwordstrength',$settings->_passwordStrength);
 	$view($_GET);
 	exit;
 }

@@ -96,25 +96,44 @@ $(document).ready(function()	{
 		$cachedir = $this->params['cachedir'];
 		$previewwidthlist = $this->params['previewWidthList'];
 		$previewwidthdetail = $this->params['previewWidthDetail'];
+		$folder = $document->getFolder();
+
+		/*$set = 'default'; //default or markdown
+		$skin = 'markitup'; // simple or markitup
+		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/plugins/markitup/markitup/skins/'.$skin.'/style.css" rel="stylesheet">'."\n", 'css');
+		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/plugins/markitup/sets/'.$set.'/style.css" rel="stylesheet">'."\n", 'css');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/markitup/markitup/jquery.markitup.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/markitup/markitup/sets/'.$set.'/set.js"></script>'."\n", 'js');*/
 
 		$set = 'markdown'; //default or markdown
 		$skin = 'simple'; // simple or markitup
-		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/markitup/skins/'.$skin.'/style.css" rel="stylesheet">'."\n", 'css');
-		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/markitup/sets/'.$set.'/style.css" rel="stylesheet">'."\n", 'css');
-		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/markitup/jquery.markitup.js"></script>'."\n", 'js');
-		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/markitup/sets/'.$set.'/set.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/plugins/markitup/skins/'.$skin.'/style.css" rel="stylesheet">'."\n", 'css');
+		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/plugins/markitup/sets/'.$set.'/style.css" rel="stylesheet">'."\n", 'css');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/markitup/jquery.markitup.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/plugins/markitup/sets/'.$set.'/set.js"></script>'."\n", 'js');
 
-		$this->htmlStartPage(getMLText("edit_online"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$folder = $document->getFolder();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+		$this->htmlStartPage(getMLText("edit_online", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
+
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Document content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		$this->startBoxSuccess(getMLText("edit_online"));
+
+		
+		//$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 ?>
 
 <?php
-echo "<div class=\"row-fluid\">\n";
 
-echo "<div class=\"span6\">\n";
+
+echo "<div class=\"col-md-6\">\n";
 $this->contentHeading(getMLText("content"));
 ?>
 <form action="../op/op.EditOnline.php" id="form1" method="post">
@@ -127,18 +146,23 @@ $this->contentHeading(getMLText("content"));
 <button id="update" type="submit" class="btn btn-success"><i class="icon-save"></i> <?php printMLText("save"); ?></button>
 </form>
 <?php
-		echo "</div>\n";
+echo "</div>\n";
 
-		echo "<div class=\"span6\">\n";
-		$this->contentHeading(getMLText("preview"));
-		echo "<div class=\"ajax\" data-view=\"EditOnline\" data-action=\"preview\" data-query=\"documentid=".$document->getId()."\"></div>";
-		echo "</div>\n";
+echo "<div class=\"col-md-6\">\n";
 
-		echo "</div>\n";
+echo "<div class=\"ajax\" data-view=\"EditOnline\" data-action=\"preview\" data-query=\"documentid=".$document->getId()."\"></div>";
+echo "</div>\n";
 
-		$this->contentContainerEnd();
+
+		$this->endsBoxSuccess();
+		echo "</div>";
+		echo "</div>"; 
+		echo "</div>"; // Ends row
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
+
 	} /* }}} */
 }
 ?>

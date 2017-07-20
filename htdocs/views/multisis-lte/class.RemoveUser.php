@@ -37,12 +37,19 @@ class SeedDMS_View_RemoveUser extends SeedDMS_Bootstrap_Style {
 		$rmuser = $this->params['rmuser'];
 		$allusers = $this->params['allusers'];
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("rm_user"));
-		$this->contentContainerStart();
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxDanger(getMLText("rm_user"));
 
 ?>
 <form action="../op/op.UsrMgr.php" name="form1" method="post">
@@ -55,7 +62,7 @@ class SeedDMS_View_RemoveUser extends SeedDMS_Bootstrap_Style {
 
 <p>
 <?php printMLText("assign_user_property_to"); ?>:
-<select name="assignTo">
+<select name="assignTo" class="form-control">
 <?php
 		foreach ($allusers as $currUser) {
 			if ($currUser->isGuest() || ($currUser->getID() == $rmuser->getID()) )
@@ -68,11 +75,11 @@ class SeedDMS_View_RemoveUser extends SeedDMS_Bootstrap_Style {
 </select>
 </p>
 
-<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_user");?></button></p>
+<p><button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> <?php printMLText("rm_user");?></button></p>
 
 </form>
 <?php
-		$this->contentContainerEnd();
+		$this->endsBoxDanger();
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */

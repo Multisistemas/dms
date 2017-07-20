@@ -96,6 +96,18 @@ $(document).ready(function() {
 		$('#action-comment-'+id).show('slow');
 	});
 
+	$('#send-request-btn').on('click', function(){
+		$("#theemailactions").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i></div>");
+	});
+
+	$('#send-request2-btn').on('click', function(){
+		$("#theemailactions").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i></div>");
+	});
+
+	$('#send-request3-btn').on('click', function(){
+		$("#theemailactions").append("<div class=\"overlay\"><i class=\"fa fa-refresh fa-spin\"></i></div>");
+	});
+
 });
 
 <?php
@@ -182,7 +194,7 @@ $(document).ready(function() {
 						}
 					}
 				} else { 
-					echo $this->infoMsg(getMLText('nonconfo_non_owner_exists'));
+					echo $this->errorMsg(getMLText('nonconfo_non_owner_exists'));
 				}
 				?>
 				</div>
@@ -271,7 +283,7 @@ $(document).ready(function() {
 			<div class="col-md-4">
 				<div class="">
 					<?php 
-					$this->startBoxCollapsablePrimary(getMLText("actions"));
+					$this->startBoxCollapsablePrimary(getMLText("actions"), "", "theemailactions");
 					if($analysis != false ) {
 						if (false != $processOwners) {
 							for($i = 0; $i < count($processOwners); $i++){

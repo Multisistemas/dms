@@ -36,12 +36,19 @@ class SeedDMS_View_RemoveGroup extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$group = $this->params['group'];
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("rm_group"));
-		$this->contentContainerStart();
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxDanger(getMLText("rm_group"));
 
 ?>
 <form action="../op/op.GroupMgr.php" name="form1" method="post">
@@ -51,10 +58,10 @@ class SeedDMS_View_RemoveGroup extends SeedDMS_Bootstrap_Style {
 <p>
 <?php printMLText("confirm_rm_group", array ("groupname" => htmlspecialchars($group->getName())));?>
 </p>
-<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_group");?></button></p>
+<p><button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> <?php printMLText("rm_group");?></button></p>
 </form>
 <?php
-		$this->contentContainerEnd();
+		$this->endsBoxDanger();
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */

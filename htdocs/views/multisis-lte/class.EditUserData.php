@@ -204,7 +204,7 @@ $(document).ready( function() {
 <?php
 		}
 
-		if ($enablelanguageselector){
+		/*if ($enablelanguageselector){
 			echo "<div class=\"form-group\">";
 			echo "<label>".printMLText("language")."</label>";
 			echo "<div class=\"controls\">";
@@ -216,7 +216,7 @@ $(document).ready( function() {
 			echo "</select>";
 			echo "</div>";
 			echo "</div>";
-		}
+		}*/
 ?>
 <?php
 		

@@ -106,10 +106,6 @@ $(document).ready(function() {
 		//$msg .= "The document may stay in this state for ".$currentstate->getMaxTime()." sec.";
 		$this->infoMsg($msg);
 
-'status_date_record_one' => 'El estado fue ingresado el ',
-'status_date_record_two' => ' y ha estado así ',
-'status_current_info' => 'El documento se encuentra actualmente en estado: '
-
 		// Display the Workflow form.
 ?>
 	
@@ -140,7 +136,7 @@ $(document).ready(function() {
 			echo "<tr><th class=\"align-center th-info-background\">".getMLText('action')."</th><th class=\"align-center th-info-background\">".getMLText('status_from')."</th><th class=\"align-center th-info-background\">".getMLText('status_to')."</th><th class=\"align-center th-info-background\">".getMLText('date')."</th><th class=\"align-center th-info-background\">".getMLText('user')."</th><th class=\"align-center th-info-background\">".getMLText('comment')."</th></tr>";
 			foreach($wkflog as $entry) {
 				echo "<tr>";
-				echo "<td>".getMLText('action')." ".strtolower($entry->getTransition()->getAction()->getName()), array(), $entry->getTransition()->getAction()->getName()."</td>";
+				echo "<td>".getMLText('action')." ".strtolower($entry->getTransition()->getAction()->getName())."</td>";
 				echo "<td>".$entry->getTransition()->getState()->getName()."</td>";
 				echo "<td>".$entry->getTransition()->getNextState()->getName()."</td>";
 				echo "<td>".$entry->getDate()."</td>";

@@ -148,6 +148,7 @@ $text = array(
 	'nonconfo_comment_action_success' => 'Comment added correctly',
 	'nonconfo_delete_comment' => 'Delete comment',
 	'nonconfo_comment_deleted' => 'Successfully deleted comment',
+	'nonconfo_correlative_warning' => 'Add a correlative to nonconformity. Attention, this data is a history that can not be modified in the future',
 );
 
 ?>

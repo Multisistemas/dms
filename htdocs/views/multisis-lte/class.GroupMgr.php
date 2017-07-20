@@ -116,8 +116,8 @@ $(document).ready( function() {
 
 		if($selgroup) {
 			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
-			$this->contentHeading(getMLText("group_info"));
-			echo "<table class=\"table table-condensed\">\n";
+			$this->startBoxCollapsablePrimary(getMLText("group_info"));
+			echo "<table class=\"table table-bordered table-striped\">\n";
 			if($workflowmode == "traditional") {
 				$reviewstatus = $selgroup->getReviewStatus();
 				$i = 0;
@@ -144,6 +144,7 @@ $(document).ready( function() {
 					echo "<tr><td>".getMLText('pending_workflows')."</td><td>".count($workflowStatus)."</td></tr>\n";
 			}
 			echo "</table>";
+			$this->endsBoxCollapsablePrimary();
 		}
 	} /* }}} */
 
@@ -174,7 +175,7 @@ $(document).ready( function() {
 ?>
 		<div class="control-group">
 			<div class="controls">
-				<a href="../out/out.RemoveGroup.php?groupid=<?php print $group->getID();?>" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_group");?></a>
+				<a href="../out/out.RemoveGroup.php?groupid=<?php print $group->getID();?>" class="btn btn-danger"><i class="fa fa-times"></i> <?php printMLText("rm_group");?></a>
 			</div>
 		</div>
 <?php
@@ -183,17 +184,18 @@ $(document).ready( function() {
 		<div class="control-group">
 			<label class="control-label"><?php printMLText("name");?>:</label>
 			<div class="controls">
-				<input type="text" name="name" id="name" value="<?php print $group ? htmlspecialchars($group->getName()) : '';?>">
+				<input type="text" class="form-control" name="name" id="name" value="<?php print $group ? htmlspecialchars($group->getName()) : '';?>">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label"><?php printMLText("comment");?>:</label>
 			<div class="controls">
-				<textarea name="comment" id="comment" rows="4" cols="50"><?php print $group ? htmlspecialchars($group->getComment()) : '';?></textarea>
+				<textarea name="comment" class="form-control" id="comment" rows="4" cols="50"><?php print $group ? htmlspecialchars($group->getComment()) : '';?></textarea>
 			</div>
 		</div>
-		<div class="controls">
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
+		<div class="control-group">
+			<br>
+			<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save")?></button>
 		</div>
 
 	</form>
@@ -201,7 +203,8 @@ $(document).ready( function() {
 		if($group) {
 			$this->contentSubHeading(getMLText("group_members"));
 ?>
-		<table class="table-condensed">
+		<div class="table-responsive">
+		<table class="table table-striped table-bordered">
 <?php
 			$members = $group->getUsers();
 			if (count($members) == 0)
@@ -211,31 +214,33 @@ $(document).ready( function() {
 				foreach ($members as $member) {
 				
 					print "<tr>";
-					print "<td><i class=\"icon-user\"></i></td>";
+					print "<td><i class=\"fa fa-user\"></i></td>";
 					print "<td>" . htmlspecialchars($member->getFullName()) . "</td>";
 					print "<td>" . ($group->isMember($member,true)?getMLText("manager"):"&nbsp;") . "</td>";
 					print "<td>";
-					print "<form action=\"../op/op.GroupMgr.php\" method=\"post\" class=\"form-inline\" style=\"display: inline-block; margin-bottom: 0px;\"><input type=\"hidden\" name=\"action\" value=\"rmmember\" /><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('rmmember')."<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
+					print "<form action=\"../op/op.GroupMgr.php\" method=\"post\" class=\"form-inline\" style=\"display: inline-block; margin-bottom: 0px;\"><input type=\"hidden\" name=\"action\" value=\"rmmember\" /><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('rmmember')."<button type=\"submit\" class=\"btn btn-mini btn-danger\"><i class=\"fa fa-times\"></i> ".getMLText("delete")."</button></form>";
 					print "&nbsp;";
-					print "<form action=\"../op/op.GroupMgr.php\" method=\"post\" class=\"form-inline\" style=\"display: inline-block; margin-bottom: 0px;\"><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"action\" value=\"tmanager\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('tmanager')."<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-random\"></i> ".getMLText("toggle_manager")."</button></form>";
+					print "<form action=\"../op/op.GroupMgr.php\" method=\"post\" class=\"form-inline\" style=\"display: inline-block; margin-bottom: 0px;\"><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"action\" value=\"tmanager\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('tmanager')."<button type=\"submit\" class=\"btn btn-mini btn-primary\"><i class=\"fa fa-exchange\"></i> ".getMLText("toggle_manager")."</button></form>";
 					print "</td></tr>";
 				}
 			}
 ?>
 		</table>
+		</div>
 		
 <?php
 			$this->contentSubHeading(getMLText("add_member"));
 ?>
-		
+		<div class="table-responsive">
 		<form class="form-inline" action="../op/op.GroupMgr.php" method="POST" name="form_2" id="form_2">
 		<?php echo createHiddenFieldWithKey('addmember'); ?>
 		<input type="Hidden" name="action" value="addmember">
 		<input type="Hidden" name="groupid" value="<?php print $group->getID();?>">
+		
 		<table class="table-condensed">
 			<tr>
 				<td>
-					<select name="userid" id="userid">
+					<select name="userid" class="form-control" id="userid">
 						<option value="-1"><?php printMLText("select_one");?></option>
 						<?php
 							foreach ($allUsers as $currUser)
@@ -245,14 +250,16 @@ $(document).ready( function() {
 					</select>
 				</td>
 				<td>
-					<label class="checkbox"><input type="checkbox" name="manager" value="1"><?php printMLText("manager");?></label>
+					<label class="checkbox"><input type="checkbox" name="manager" value="1"> <?php printMLText("manager");?></label>
 				</td>
 				<td>
-					<input type="submit" class="btn" value="<?php printMLText("add");?>">
+					<button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> <?php printMLText("add");?></button>
 				</td>
 			</tr>
 		</table>
+		
 		</form>
+		</div>
 <?php
 		}
 	} /* }}} */
@@ -271,22 +278,27 @@ $(document).ready( function() {
 		$allGroups = $this->params['allgroups'];
 		$strictformcheck = $this->params['strictformcheck'];
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-		$this->contentHeading(getMLText("group_management"));
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxPrimary(getMLText("group_management"));
 ?>
 
-<div class="row-fluid">
-<div class="span4">
 <div class="well">
 <form class="form-horizontal">
 	<div class="control-group">
 		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
 		<div class="controls">
-<select class="chzn-select" id="selector">
+<select class="chzn-select form-control" id="selector">
 <option value="-1"><?php echo getMLText("choose_group")?></option>
 <option value="0"><?php echo getMLText("add_group")?></option>
 <?php
@@ -299,19 +311,26 @@ $(document).ready( function() {
 	</div>
 </form>
 </div>
-	<div class="ajax" data-view="GroupMgr" data-action="info" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
-</div>
+<div class="ajax" data-view="GroupMgr" data-action="info" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
 
-<div class="span8">
+
+<div class="span12">
 	<div class="well">
 		<div class="ajax" data-view="GroupMgr" data-action="form" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
 	</div>
 </div>
 
-</div>
 
 <?php
-		$this->contentEnd();
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

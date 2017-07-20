@@ -320,9 +320,15 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</div>";
 	} /* }}} */
 
-	function startBoxCollapsablePrimary($title = "", $collapsed = "") { /* {{{ */
-		echo "<div class=\"box box-primary box-solid ".$collapsed."\">";
+	function startBoxCollapsablePrimary($title = "", $collapsed = "", $id = "") { /* {{{ */
+		if ($id != "") {
+			echo "<div class=\"box box-primary box-solid ".$collapsed."\" id=\"".$id."\">";
+		} else {
+			echo "<div class=\"box box-primary box-solid ".$collapsed."\">";
+		}
+		
     echo "<div class=\"box-header with-border\">";
+
     echo "<h3 class=\"box-title\">".$title."</h3>";
     echo "<div class=\"box-tools pull-right\">";
     if ($collapsed != "") {
@@ -629,7 +635,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     echo "<p>";
     echo $this->params['user']->getFullName();
-    //echo "<small>Member since Nov. 2012</small>";
+    echo "<small>".$this->params['user']->getEmail()."</small>";
     echo "</p>";
     echo "</li>";
 
@@ -665,13 +671,15 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     } else {
 
-    	echo "<div class=\"col-xs-4 text-center\">"; 
-	    echo "<a class=\"btn btn-info btn-flat\" href=\"/out/out.MyAccount.php\" title=\"".getMLText("my_account")."\"><i class=\"fa fa-user\"></i></a>";
-	    echo "</div>";
+    	if (!$this->params['user']->isGuest()) {
+    		echo "<div class=\"col-xs-4 text-center\">"; 
+		    echo "<a class=\"btn btn-info btn-flat\" href=\"/out/out.MyAccount.php\" title=\"".getMLText("my_account")."\"><i class=\"fa fa-user\"></i></a>";
+		    echo "</div>";
 
-	    echo "<div class=\"col-xs-4 text-center\">";
-	    echo "<a class=\"btn btn-success btn-flat\" href=\"/out/out.MyDocuments.php?inProcess=1\" title=\"".getMLText("my_documents")."\"><i class=\"fa fa-file\"></i></a>";
-	    echo "</div>";
+		    echo "<div class=\"col-xs-4 text-center\">";
+		    echo "<a class=\"btn btn-success btn-flat\" href=\"/out/out.MyDocuments.php?inProcess=1\" title=\"".getMLText("my_documents")."\"><i class=\"fa fa-file\"></i></a>";
+		    echo "</div>";
+    	}
 
 	    if($this->params['session']->getSu()) {
 
@@ -831,26 +839,28 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</li>";*/
 
     // Non conformities
-    echo "<li class=\"treeview\">";
-    echo "<a href=\"#\"><i class=\"fa fa-wrench\"></i> <span>".getMLText("nonconfo")."</span>";
-    echo "<span class=\"pull-right-container\">";
-    echo "<i class=\"fa fa-angle-left pull-right\"></i>";
-    echo "</span>";
-    echo "</a>";
-    echo "<ul class=\"treeview-menu\">";
-    echo "<li><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("nonconfo_view")."</a></li>";
-    echo "<li><a href=\"/ext/nonconfo/out/out.AddNonConfo.php\">".getMLText("nonconfo_add_nonconfo")."</a></li>";
-    
-    if ($this->params['user']->isAdmin()) {
-    	echo "<li><a href=\"/ext/nonconfo/out/out.AddProcess.php\">".getMLText("nonconfo_add_process")."</a></li>";
-    	echo "<li><a href=\"/ext/nonconfo/out/out.AddOwners.php\">".getMLText("nonconfo_define_owners")."</a></li>";
-    }
-    
-    echo "</ul>";
-    echo "</li>";
+    if (!$this->params['user']->isGuest()) {
+	    echo "<li class=\"treeview\">";
+	    echo "<a href=\"#\"><i class=\"fa fa-wrench\"></i> <span>".getMLText("nonconfo")."</span>";
+	    echo "<span class=\"pull-right-container\">";
+	    echo "<i class=\"fa fa-angle-left pull-right\"></i>";
+	    echo "</span>";
+	    echo "</a>";
+	    echo "<ul class=\"treeview-menu\">";
+	    echo "<li><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("nonconfo_view")."</a></li>";
+	    echo "<li><a href=\"/ext/nonconfo/out/out.AddNonConfo.php\">".getMLText("nonconfo_add_nonconfo")."</a></li>";
+	    
+	    if ($this->params['user']->isAdmin()) {
+	    	echo "<li><a href=\"/ext/nonconfo/out/out.AddProcess.php\">".getMLText("nonconfo_add_process")."</a></li>";
+	    	echo "<li><a href=\"/ext/nonconfo/out/out.AddOwners.php\">".getMLText("nonconfo_define_owners")."</a></li>";
+	    }
+
+    	echo "</ul>";
+    	echo "</li>";
+  	}
 
     // Calendar
-    if ($this->params['enablecalendar']){
+    if ($this->params['enablecalendar'] && !$this->params['user']->isGuest()){
 	    echo "<li class=\"treeview\">";
 	    echo "<a href=\"#\"><i class=\"fa fa-calendar\"></i> <span>".getMLText("calendar")."</span>";
 	    echo "<span class=\"pull-right-container\">";
@@ -906,7 +916,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     if($this->params['user']->isAdmin()) {
     echo "<div class=\"tab-pane\" id=\"control-sidebar-home-tab\">";
-    echo "<h3 class=\"control-sidebar-heading\">".getMLText("admin_tools")."</h3>";
+    echo "<a type=\"button\" href=\"../../out/out.AdminTools.php\"><h3 class=\"control-sidebar-heading btn-admin-tools\">".getMLText("admin_tools")."</h3></a>";
     echo "<ul class=\"control-sidebar-menu\">";
     echo "<li><a href=\"../../out/out.UsrMgr.php\"><i class=\"menu-icon fa fa-user bg-green\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("user_management")."</h4></div></a></li>";
@@ -993,6 +1003,19 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 						 	</form>
     				</li>
     		</ul>
+    	</div>
+    	<h3 class="control-sidebar-heading">Cache</h3>
+    	<div>
+    	<ul class="list-unstyled clearfix">
+    		<li class="align-center">
+    		<form action="../../op/op.ClearCache.php" name="form1" method="post">
+				<?php echo createHiddenFieldWithKey('clearcache'); ?>
+				<input type="hidden" name="preview" value="1">
+				<input type="hidden" name="js" value="1">
+				<button type="submit" class="btn btn-danger"><i class="fa fa-refresh"></i> <?php printMLText("clear_cache");?></button>
+				</form>
+				</li>
+			</ul>
     	</div>
     </div>
   	<?php }
@@ -1844,10 +1867,10 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		print "<div class=\"form-group\">\n";
 		print "<input class=\"custom-input-text-search\" type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\" required/>";
 		print "<button type=\"button\" class=\"btn btn-default\" id=\"clearfolder".$form."\"><i class=\"fa fa-times\"></i></button>";
-		//print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal fade" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
+<div class="modal" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
   <div class="modal-dialog modal-primary" role="document">
 	  <div class="modal-header">
 	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -2802,7 +2825,7 @@ $(document).ready( function() {
 			if (file_exists($dms->contentDir . $latestContent->getPath())) { 
 
 				/*************** If the document status is equal to "released" the download will be available ***************/
-				if ($status['status'] == 2 ) { 
+				if ($status['status'] == 2 && !$document->isLocked()) { 
 					$content .= "<a draggable=\"false\" href=\"/op/op.Download.php?documentid=".$docID."&version=".$version."\">";
 					if($previewer->hasPreview($latestContent)) {
 						$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"/op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
@@ -2830,7 +2853,7 @@ $(document).ready( function() {
 			$content .= "<td>";
 
 			////////////////
-			if ($status['status'] == 2 ) {
+			if ($status['status'] == 2 && !$document->isLocked()) {
 				if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
 					$content .= "<a href=\"#\" draggable=\"false\" class=\"preview-doc-btn btn-action doc-link\" id=\"".$docID."\" rel=\"".$latestContent->getVersion()."\" title=\"".htmlspecialchars($document->getName())." - ".getMLText("current_version").": ".$latestContent->getVersion()."\">" . htmlspecialchars($document->getName()) . "</a>";
 				}	else {
