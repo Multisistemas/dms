@@ -175,13 +175,11 @@
     max-width: 400px;
 }
 
-#admin-tools a {
-    color: #000000 !important;
-    margin-bottom: 10px !important;
-    margin-right: 5px;
-    box-sizing: border-box;
-    word-wrap: normal;
+.small-box>.inner {
+    padding: 20px !important;
 }
+
+
 
 /* ------------- Modals ------------------ */
 /*.after_modal_appended
@@ -208,6 +206,9 @@
     color: #777 !important;
 }
 
+.modal {
+    overflow: auto !important;
+}
 
 
 /* ------------- Breadcrumb ------------------ */
@@ -227,6 +228,36 @@
 
 
 /* ------------- Forms ------------------ */
+input[type=text] {
+    max-width: 320px !important;
+}
+
+input[type=password] {
+    max-width: 320px !important;
+}
+
+select.form-control {
+    max-width: 320px !important;
+}
+
+textarea.form-control {
+    max-width: 600px !important;
+}
+
+.select2 {
+    max-width: 600px !important;
+    display: block !important;
+}
+
+.select2-selection {
+    max-width: 600px !important;
+    display: block !important;
+}
+
+.float-left {
+    float: left;
+}
+
 .is-required {
     color: red !important;
 }
@@ -296,10 +327,6 @@ ul.unstyled {
 .td-action-bkg-two {
     background-color: #605ca8;
     color: #ffffff;
-}
-
-.float-left {
-    float: left;
 }
 
 .background-white {

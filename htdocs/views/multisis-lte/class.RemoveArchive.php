@@ -36,22 +36,29 @@ class SeedDMS_View_RemoveArchive extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$arkname = $this->params['archive'];
 
-		$this->htmlStartPage(getMLText("backup_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("backup_remove"));
-		$this->contentContainerStart();
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxDanger(getMLText("backup_remove"));
 
 ?>
 <form action="../op/op.RemoveArchive.php" name="form1" method="post">
 	<input type="hidden" name="arkname" value="<?php echo htmlspecialchars($arkname); ?>">
   <?php echo createHiddenFieldWithKey('removearchive'); ?>
 	<p><?php printMLText("confirm_rm_backup", array ("arkname" => htmlspecialchars($arkname)));?></p>
-	<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("backup_remove");?></button></p>
+	<p><button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> <?php printMLText("backup_remove");?></button></p>
 </form>
 <?php
-		$this->contentContainerEnd();
+		$this->endsBoxDanger();
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */

@@ -48,55 +48,336 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 <div class="col-md-12">
 
 	<div id="admin-tools">
-	<div class="row">
+	<div class="row"> <!-- /////// -->
 	<?php if ($user->_comment != "client-admin") { ?>
-		<a href="../out/out.UsrMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-user"></i><br /><?php echo getMLText("user_management")?></a>
-		<a href="../out/out.GroupMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-group"></i><br /><?php echo getMLText("group_management")?></a>
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-green">
+        <div class="inner">
+          <h4><?php echo getMLText("user_management")?></h4>
+          <p></p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-user"></i>
+        </div>
+        <a href="../out/out.UsrMgr.php" class="small-box-footer">
+        	<i class="fa fa-arrow-circle-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-green">
+        <div class="inner">
+          <h4><?php echo getMLText("group_management")?></h4>
+          <p></p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-group"></i>
+        </div>
+        <a href="../out/out.GroupMgr.php" class="small-box-footer">
+        	<i class="fa fa-arrow-circle-right"></i>
+        </a>
+      </div>
+    </div>
+
 	<?php } ?>
 	</div>
-	<div class="row">
-		<a href="../out/out.BackupTools.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-hdd"></i><br /><?php echo getMLText("backup_tools")?></a>
-<?php		
-		if ($logfileenable)
-			echo "<a href=\"../out/out.LogManagement.php\" class=\"col-md-3 btn btn-medium btn-default\"><i class=\"fa fa-list\"></i><br />".getMLText("log_management")."</a>";
-?>
+	<div class="row"> <!-- /////// -->
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-blue">
+        <div class="inner">
+          <h4><?php echo getMLText("backup_tools")?></h4>
+          <p></p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-hdd-o"></i>
+        </div>
+        <a href="../out/out.BackupTools.php" class="small-box-footer">
+        	<i class="fa fa-arrow-circle-right"></i>
+        </a>
+      </div>
+    </div>
+
+<?php if ($logfileenable) { ?>
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-blue">
+        <div class="inner">
+          <h4><?php echo getMLText("log_management")?></h4>
+          <p></p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-list"></i>
+        </div>
+        <a href="../out/out.LogManagement.php" class="small-box-footer">
+        	<i class="fa fa-arrow-circle-right"></i>
+        </a>
+      </div>
+    </div>
+<?php } ?>
 	</div>
-	<div class="row">
-		<a href="../out/out.DefaultKeywords.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-reorder"></i><br /><?php echo getMLText("global_default_keywords")?></a>
-		<a href="../out/out.Categories.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-columns"></i><br /><?php echo getMLText("global_document_categories")?></a>
-		<a href="../out/out.AttributeMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-tags"></i><br /><?php echo getMLText("global_attributedefinitions")?></a>
+
+	<div class="row"> <!-- /////// -->
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-yellow">
+        <div class="inner">
+        <h4><?php echo getMLText("global_default_keywords")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-reorder"></i>
+      	</div>
+      	<a href="../out/out.DefaultKeywords.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-yellow">
+        <div class="inner">
+        <h4><?php echo getMLText("global_document_categories")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-columns"></i>
+      	</div>
+      	<a href="../out/out.Categories.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-yellow">
+        <div class="inner">
+        <h4><?php echo getMLText("global_attributedefinitions")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-tags"></i>
+      	</div>
+      	<a href="../out/out.AttributeMgr.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
 	</div>
+
 <?php
 	if($this->params['workflowmode'] == 'advanced') {
 ?>
 	<div class="row">
-		<a href="../out/out.WorkflowMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-sitemap"></i><br /><?php echo getMLText("global_workflows"); ?></a>
-		<a href="../out/out.WorkflowStatesMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-star"></i><br /><?php echo getMLText("global_workflow_states"); ?></a>
-		<a href="../out/out.WorkflowActionsMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-bolt"></i><br /><?php echo getMLText("global_workflow_actions"); ?></a>
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-purple">
+        <div class="inner">
+        <h4><?php echo getMLText("global_workflows")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-sitemap"></i>
+      	</div>
+      	<a href="../out/out.WorkflowMgr.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-purple">
+        <div class="inner">
+        <h4><?php echo getMLText("global_workflow_states")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-star"></i>
+      	</div>
+      	<a href="../out/out.WorkflowStatesMgr.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+  	<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-purple">
+        <div class="inner">
+        <h4><?php echo getMLText("global_workflow_actions")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-bolt"></i>
+      	</div>
+      	<a href="../out/out.WorkflowActionsMgr.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
 	</div>
-<?php
-		}
-		if($enablefullsearch) {
-?>
-	<div class="row">
-		<a href="../out/out.Indexer.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-refresh"></i><br /><?php echo getMLText("update_fulltext_index")?></a>
-		<a href="../out/out.CreateIndex.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-search"></i><br /><?php echo getMLText("create_fulltext_index")?></a>
-		<a href="../out/out.IndexInfo.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-info-sign"></i><br /><?php echo getMLText("fulltext_info")?></a>
+<?php } if($enablefullsearch) { ?>
+	<div class="row"> <!-- /////// -->
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-aqua">
+        <div class="inner">
+        <h4><?php echo getMLText("update_fulltext_index")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-refresh"></i>
+      	</div>
+      	<a href="../out/out.Indexer.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+  	<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-aqua">
+        <div class="inner">
+        <h4><?php echo getMLText("create_fulltext_index")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-search"></i>
+      	</div>
+      	<a href="../out/out.CreateIndex.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+  	<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-aqua">
+        <div class="inner">
+        <h4><?php echo getMLText("fulltext_info")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-info-sign"></i>
+      	</div>
+      	<a href="../out/out.IndexInfo.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
 	</div>
-<?php
-		}
-?>
-	<div class="row">
-		<a href="../out/out.Statistic.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-tasks"></i><br /><?php echo getMLText("folders_and_documents_statistic")?></a>
-		<a href="../out/out.Charts.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-bar-chart"></i><br /><?php echo getMLText("charts")?></a>
-		<a href="../out/out.ObjectCheck.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-check"></i><br /><?php echo getMLText("objectcheck")?></a>
-		<a href="../out/out.Timeline.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-chart"></i><br /><?php echo getMLText("timeline")?></a>
+
+<?php } ?>
+
+	<div class="row"> <!-- /////// -->
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-aqua">
+        <div class="inner">
+        <h4><?php echo getMLText("folders_and_documents_statistic")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-tasks"></i>
+      	</div>
+      	<a href="../out/out.Statistic.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+  	<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-aqua">
+        <div class="inner">
+        <h4><?php echo getMLText("charts")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-bar-chart"></i>
+      	</div>
+      	<a href="../out/out.Charts.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+  	<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-aqua">
+        <div class="inner">
+        <h4><?php echo getMLText("objectcheck")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-check"></i>
+      	</div>
+      	<a href="../out/out.ObjectCheck.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+  	<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-aqua">
+        <div class="inner">
+        <h4><?php echo getMLText("timeline")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-tasks"></i>
+      	</div>
+      	<a href="../out/out.Timeline.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
 	</div>
-	<div class="row">
+	<div class="row"> <!-- /////// -->
 	<?php if ($user->_comment != "client-admin") { ?>
-		<a href="../out/out.Settings.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-wrench"></i><br /><?php echo getMLText("settings")?></a>
-		<a href="../out/out.ExtensionMgr.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-cogs"></i><br /><?php echo getMLText("extension_manager")?></a>
-		<a href="../out/out.Info.php" class="col-md-3 btn btn-medium btn-default"><i class="fa fa-info-circle"></i><br /><?php echo getMLText("version_info")?></a>
+		<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-red">
+        <div class="inner">
+        <h4><?php echo getMLText("settings")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-wrench"></i>
+      	</div>
+      	<a href="../out/out.Settings.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+  	<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-red">
+        <div class="inner">
+        <h4><?php echo getMLText("extension_manager")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-cogs"></i>
+      	</div>
+      	<a href="../out/out.ExtensionMgr.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
+  	<div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-red">
+        <div class="inner">
+        <h4><?php echo getMLText("version_info")?></h4>
+        <p></p>
+      	</div>
+      	<div class="icon">
+        	<i class="fa fa-info-circle"></i>
+      	</div>
+      	<a href="../out/out.Info.php" class="small-box-footer">
+      	<i class="fa fa-arrow-circle-right"></i>
+      	</a>
+    	</div>
+  	</div>
 	<?php } ?>	
 	</div>
 	</div>

@@ -32,11 +32,16 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
-		$seluser = $this->params['seluser'];
+		$currUser = $this->params['seluser'];
 		$strictformcheck = $this->params['strictformcheck'];
 
 		header('Content-Type: application/javascript');
+		$this->printFolderChooserJs("form".($currUser ? $currUser->getId() : '0'));
 ?>
+function folderSelected(id, name) {
+	window.location = '../out/out.ViewFolder.php?folderid=' + id;
+}
+
 function checkForm()
 {
 	msg = new Array();
@@ -90,8 +95,8 @@ $(document).ready( function() {
 		if($seluser) {
 			$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
 
-			$this->contentHeading(getMLText("user_info"));
-			echo "<table class=\"table table-condensed\">\n";
+			$this->startBoxCollapsableInfo(getMLText("user_info"));
+			echo "<table class=\"table table-striped table-bordered\">\n";
 			echo "<tr><td>".getMLText('discspace')."</td><td>";
 			$qt = $seluser->getQuota() ? $seluser->getQuota() : $quota;
 			echo SeedDMS_Core_File::format_filesize($seluser->getUsedDiskSpace())." / ".SeedDMS_Core_File::format_filesize($qt)."<br />";
@@ -136,9 +141,12 @@ $(document).ready( function() {
 				echo "<tr><td>".getMLText('lastaccess')."</td><td>".getLongReadableDate($session->getLastAccess())."</td></tr>\n";
 			}
 			echo "</table>";
+			echo "<br>";
+
 
 			if($user->isAdmin() && $seluser->getID() != $user->getID())
-				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-success\">".getMLText("substitute_user")."</a>\n";
+					echo "<a class=\"btn btn-success\" href=\"../op/op.SubstituteUser.php?userid=".((int) $seluser->getID())."&formtoken=".createFormKey('substituteuser')."\"><i class=\"fa fa-exchange\"></i> ".getMLText('substitute_user')."</a> ";
+			$this->endsBoxCollapsableInfo();
 		}
 	} /* }}} */
 
@@ -160,8 +168,9 @@ $(document).ready( function() {
 		$undeluserids = $this->params['undeluserids'];
 		$workflowmode = $this->params['workflowmode'];
 		$quota = $this->params['quota'];
+
 ?>
-	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form" id="form">
+	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="<?php echo "form".($currUser ? $currUser->getId() : '0'); ?>" id="<?php echo "form".($currUser ? $currUser->getId() : '0'); ?>">
 <?php
 		if($currUser) {
 			echo createHiddenFieldWithKey('edituser');
@@ -177,24 +186,25 @@ $(document).ready( function() {
 <?php
 		}
 ?>
+<div class="table-responsive">
 	<table class="table-condensed">
 <?php
 	if($currUser && !in_array($currUser->getID(), $undeluserids)) {
 ?>
 		<tr>
 			<td></td>
-			<td><a class="btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_user");?></a></td>
+			<td><a class="btn btn-danger" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="fa fa-times"></i> <?php printMLText("rm_user");?></a></td>
 		</tr>
 <?php
 	}
 ?>
 		<tr>
 			<td><?php printMLText("user_login");?>:</td>
-			<td><input type="text" name="login" id="login" value="<?php print $currUser ? htmlspecialchars($currUser->getLogin()) : "";?>"></td>
+			<td><input type="text" class="form-control" name="login" id="login" value="<?php print $currUser ? htmlspecialchars($currUser->getLogin()) : "";?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("password");?>:</td>
-			<td><input type="password" class="pwd" rel="strengthbar<?php echo $currUser ? $currUser->getID() : "0"; ?>" name="pwd" id="pwd"><?php if($currUser && $currUser->isGuest()) echo ' <input type="checkbox" name="clearpwd" value="1" /> '.getMLText('clear_password'); ?></td>
+			<td><input type="password" class="pwd form-control" rel="strengthbar<?php echo $currUser ? $currUser->getID() : "0"; ?>" name="pwd" id="pwd"><?php if($currUser && $currUser->isGuest()) echo ' <input type="checkbox" name="clearpwd" value="1" /> '.getMLText('clear_password'); ?></td>
 		</tr>
 <?php
 		if($passwordstrength > 0) {
@@ -210,37 +220,37 @@ $(document).ready( function() {
 ?>
 		<tr>
 			<td><?php printMLText("confirm_pwd");?>:</td>
-			<td><input type="Password" name="pwdconf" id="pwdconf"></td>
+			<td><input type="Password" class="form-control" name="pwdconf" id="pwdconf"></td>
 		</tr>
 <?php
 	if($passwordexpiration > 0) {
 ?>
 		<tr>
 			<td><?php printMLText("password_expiration");?>:</td>
-			<td><select name="pwdexpiration"><?php if($currUser) { ?><option value=""><?php printMLText("keep");?></option><?php } ?><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option><option value="0000-00-00"><?php printMLText("never");?></option></select> <?php echo $currUser ? $currUser->getPwdExpiration() : ""; ?></td>
+			<td><select class="form-control" name="pwdexpiration"><?php if($currUser) { ?><option value=""><?php printMLText("keep");?></option><?php } ?><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option><option value="0000-00-00"><?php printMLText("never");?></option></select> <?php echo $currUser ? $currUser->getPwdExpiration() : ""; ?></td>
 		</tr>
 <?php
 	}
 ?>
 		<tr>
 			<td><?php printMLText("user_name");?>:</td>
-			<td><input type="text" name="name" id="name" value="<?php print $currUser ? htmlspecialchars($currUser->getFullName()) : "";?>"></td>
+			<td><input type="text" class="form-control" name="name" id="name" value="<?php print $currUser ? htmlspecialchars($currUser->getFullName()) : "";?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("email");?>:</td>
-			<td><input type="text" name="email" id="email" value="<?php print $currUser ? htmlspecialchars($currUser->getEmail()) : "";?>"></td>
+			<td><input type="text" class="form-control" name="email" id="email" value="<?php print $currUser ? htmlspecialchars($currUser->getEmail()) : "";?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" id="comment" rows="4" cols="50"><?php print $currUser ? htmlspecialchars($currUser->getComment()) : "";?></textarea></td>
+			<td><textarea name="comment" class="form-control" id="comment" rows="4" cols="50"><?php print $currUser ? htmlspecialchars($currUser->getComment()) : "";?></textarea></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("role");?>:</td>
-			<td><select name="role"><option value="<?php echo SeedDMS_Core_User::role_user ?>"><?php printMLText("role_user"); ?></option><option value="<?php echo SeedDMS_Core_User::role_admin ?>" <?php if($currUser && $currUser->getRole() == SeedDMS_Core_User::role_admin) echo "selected"; ?>><?php printMLText("role_admin"); ?></option><option value="<?php echo SeedDMS_Core_User::role_guest ?>" <?php if($currUser && $currUser->getRole() == SeedDMS_Core_User::role_guest) echo "selected"; ?>><?php printMLText("role_guest"); ?></option></select></td>
+			<td><select class="form-control" name="role"><option value="<?php echo SeedDMS_Core_User::role_user ?>"><?php printMLText("role_user"); ?></option><option value="<?php echo SeedDMS_Core_User::role_admin ?>" <?php if($currUser && $currUser->getRole() == SeedDMS_Core_User::role_admin) echo "selected"; ?>><?php printMLText("role_admin"); ?></option><option value="<?php echo SeedDMS_Core_User::role_guest ?>" <?php if($currUser && $currUser->getRole() == SeedDMS_Core_User::role_guest) echo "selected"; ?>><?php printMLText("role_guest"); ?></option></select></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("groups");?>:</td>
-			<td><select class="chzn-select" multiple="multiple" name="groups[]" data-placeholder="<?php printMLText('select_groups'); ?>">
+			<td><select class="chzn-select form-control" multiple="multiple" name="groups[]" data-placeholder="<?php printMLText('select_groups'); ?>">
 <?php
 		foreach($groups as $group) {
 			echo '<option value="'.$group->getID().'"'.($currUser && $group->isMember($currUser) ? ' selected' : '').'>'.$group->getName().'</option>';
@@ -250,11 +260,12 @@ $(document).ready( function() {
 		</tr>
 		<tr>
 			<td><?php printMLText("home_folder")?>:</td>
-			<td><?php $this->printFolderChooser("form".($currUser ? $currUser->getId() : '0'), M_READ, -1, $currUser ? $dms->getFolder($currUser->getHomeFolder()) : 0, 'homefolder');?></td>
+
+			<td><?php $this->printFolderChooserHTML2("form".($currUser ? $currUser->getId() : '0'), M_READ, -1, $currUser ? $dms->getFolder($currUser->getHomeFolder()) : 0, 'homefolder');?></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("quota");?>:</td>
-			<td><input type="text" name="quota" value="<?php echo $currUser ? $currUser->getQuota() : ""; ?>">
+			<td><input type="text" class="form-control" name="quota" value="<?php echo $currUser ? $currUser->getQuota() : ""; ?>">
 <?php
 	if($quota > 0)
 		echo $this->warningMsg(getMLText('current_quota', array('quota'=>SeedDMS_Core_File::format_filesize($quota))));
@@ -305,11 +316,7 @@ $(document).ready( function() {
 		</tr>
 <?php } ?>
 
-<?php
-		}
-		if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') {
-		if($workflowmode == "traditional") {
-?>
+<?php } if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') { if($workflowmode == "traditional") { ?>
 
 		<tr>
 			<td colspan="2"><?php printMLText("reviewers");?>:</td>
@@ -319,7 +326,7 @@ $(document).ready( function() {
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="usrReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>">
+        <select class="chzn-select form-control" name="usrReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>">
 <?php
 
 				if($currUser)
@@ -346,7 +353,7 @@ $(document).ready( function() {
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="grpReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_groups'); ?>">
+        <select class="chzn-select form-control" name="grpReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_groups'); ?>">
 <?php
 				foreach ($groups as $grp) {
 
@@ -359,9 +366,7 @@ $(document).ready( function() {
 				</select>
 			</td>
 		</tr>
-<?php
-				}
-?>
+<?php } ?>
 		<tr>
 			<td colspan="2"><?php printMLText("approvers");?>:</td>
 		</tr>
@@ -370,7 +375,7 @@ $(document).ready( function() {
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="usrApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>">
+        <select class="chzn-select form-control" name="usrApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>">
 <?php
 				if($currUser)
 					$res=$currUser->getMandatoryApprovers();
@@ -394,7 +399,7 @@ $(document).ready( function() {
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_groups'); ?>">
+        <select class="chzn-select form-control" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_groups'); ?>">
 <?php
 				foreach ($groups as $grp) {
 
@@ -407,17 +412,13 @@ $(document).ready( function() {
 				</select>
 			</td>
 		</tr>
-<?php
-		} else {
-			$workflows = $dms->getAllWorkflows();
-			if($workflows) {
-?>
+<?php } else { $workflows = $dms->getAllWorkflows(); if($workflows) { ?>
 		<tr>
 			<td>
 				<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="workflows[]" multiple="multiple" data-placeholder="<?php printMLText('select_workflow'); ?>">
+        <select class="chzn-select form-control" name="workflows[]" multiple="multiple" data-placeholder="<?php printMLText('select_workflow'); ?>">
 <?php
 				print "<option value=\"\">"."</option>";
 				$mandatoryworkflows = $currUser ? $currUser->getMandatoryWorkflows() : array();
@@ -439,9 +440,10 @@ $(document).ready( function() {
 ?>
 		<tr>
 			<td></td>
-			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText($currUser ? "save" : "add_user")?></button></td>
+			<td><button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText($currUser ? "save" : "add_user")?></button></td>
 		</tr>
 	</table>
+</div>
 	</form>
 <?php
 	} /* }}} */
@@ -460,17 +462,24 @@ $(document).ready( function() {
 		$workflowmode = $this->params['workflowmode'];
 		$quota = $this->params['quota'];
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-		$this->contentHeading(getMLText("user_management"));
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxPrimary(getMLText("user_management"));
 ?>
 
 <?php if ($user->_comment != "client-admin") { ?>
 <div class="row-fluid">
-<div class="span4">
+<div class="span12">
 <div class="well">
 <form class="form-horizontal">
 	<div class="control-group">
@@ -492,7 +501,7 @@ $(document).ready( function() {
 	<div class="ajax" data-view="UsrMgr" data-action="info" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 </div>
 
-<div class="span8">
+<div class="span12">
 	<div class="well">
 		<div class="ajax" data-view="UsrMgr" data-action="form" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 	</div>
@@ -502,8 +511,17 @@ $(document).ready( function() {
 <?php
 
 	}
-		$this->contentEnd();
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
+
 	} /* }}} */
 }
 ?>

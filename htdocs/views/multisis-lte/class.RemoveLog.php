@@ -37,12 +37,19 @@ class SeedDMS_View_RemoveLog extends SeedDMS_Bootstrap_Style {
 		$lognames = $this->params['lognames'];
 		$mode = $this->params['mode'];
 
-		$this->htmlStartPage(getMLText("backup_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("rm_file"));
-		$this->contentContainerStart();
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxDanger(getMLText("rm_file"));
 ?>
 <form action="../op/op.RemoveLog.php" name="form1" method="post">
   <?php echo createHiddenFieldWithKey('removelog'); ?>
@@ -54,10 +61,10 @@ class SeedDMS_View_RemoveLog extends SeedDMS_Bootstrap_Style {
 		}
 ?>
 	<p><?php printMLText("confirm_rm_log", array ("logname" => implode(', ', $lognames)));?></p>
-	<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_file");?></button></p>
+	<p><button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> <?php printMLText("rm_file");?></button></p>
 </form>
 <?php
-		$this->contentContainerEnd();
+		$this->endsBoxDanger();
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */

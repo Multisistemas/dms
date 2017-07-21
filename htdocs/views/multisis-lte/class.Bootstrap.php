@@ -360,6 +360,18 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<div class=\"box-body\">";
 	} /* }}} */
 
+	function startBoxCollapsableInfo($title = "") { /* {{{ */
+		echo "<div class=\"box box-info box-solid\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "<div class=\"box-tools pull-right\">";
+    echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>";
+    echo "</button>";
+    echo "</div>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+	} /* }}} */
+
 	function startBoxSolidSuccess($title = "") { /* {{{ */
 		echo "<div class=\"box box-success box-solid\">";
     echo "<div class=\"box-header with-border\">";
@@ -392,6 +404,11 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function endsBoxCollapsableSuccess(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function endsBoxCollapsableInfo(){ /* {{{ */
 		echo "</div>";
     echo "</div>";
 	} /* }}} */
@@ -1723,9 +1740,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	<div id="upload-files">
 		<div id="upload-file">
 			<div class="input-append">
-				<input type="text" class="form-control" name="theuserfile" readonly>
-				<span class="btn btn-primary btn-file">
-					<?php printMLText("browse");?> <i class="fa fa-search"></i><input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
+				<input type="text" class="custom-input-text-search" name="theuserfile" readonly>
+				<span class="btn btn-primary btn-file float-left btn-flat">
+					<?php printMLText("browse");?>... <i class="fa fa-search"></i>  	<input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
 				</span>
 			</div>
 		</div>
@@ -1858,6 +1875,63 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		</script>
 <?php
 	} /* }}} */
+	function printFolderChooserHtml3($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
+		$formid = "targetid".$form;
+		if(!$formname)
+			$formname = "targetid";
+		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
+		print "<div class=\"form-group\">\n";
+		print "<input class=\"custom-input-text-search\" type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\" required/>";
+			print "<button type=\"button\" class=\"btn btn-default\" id=\"clearfolder".$form."\"><i class=\"fa fa-times\"></i></button>";
+		print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "</div>\n";
+?>
+<div class="modal" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 class="modal-title" id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
+	  </div>
+	  <div class="modal-body">
+			<p><?php printMLText('tree_loading') ?></p>
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+	  </div>
+	 </div>
+</div>
+
+<?php
+	} /* }}} */
+
+	function printFolderChooserHtml2($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
+		$formid = "targetid".$form;
+		if(!$formname)
+			$formname = "targetid";
+		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
+		print "<div class=\"form-group\">\n";
+		print "<input class=\"custom-input-text-search\" type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\" required/>";
+		//	print "<button type=\"button\" class=\"btn btn-default\" id=\"clearfolder".$form."\"><i class=\"fa fa-times\"></i></button>";
+		print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "</div>\n";
+?>
+<div class="modal" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 class="modal-title" id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
+	  </div>
+	  <div class="modal-body">
+			<p><?php printMLText('tree_loading') ?></p>
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+	  </div>
+	 </div>
+</div>
+
+<?php
+	} /* }}} */
 
 	function printFolderChooserHtml($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
 		$formid = "targetid".$form;
@@ -1870,7 +1944,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		//print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal fade" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
+<div class="modal" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
   <div class="modal-dialog modal-primary" role="document">
 	  <div class="modal-header">
 	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -1973,11 +2047,11 @@ $(document).ready(function() {
 	function printKeywordChooserHtml($formName, $keywords='', $fieldname='keywords') { /* {{{ */
 		//$strictformcheck = $this->params['strictformcheck'];
 ?>
-<div class="input-group">
-	<input type="text" class="form-control" name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>" value="<?php echo htmlspecialchars($keywords);?>"<?php //echo $strictformcheck ? ' required' : ''; ?> />
-	<span class="input-group-btn">
-  	<a data-target="#keywordChooser" type="button" role="button" class="btn btn-default" data-toggle="modal" href="out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
-  </span>
+<div class="form-group">
+	<input type="text" class="custom-input-text-search" name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>" value="<?php echo htmlspecialchars($keywords);?>"<?php //echo $strictformcheck ? ' required' : ''; ?> />
+
+  <a data-target="#keywordChooser" type="button" role="button" class="btn btn-primary btn-flat float-left" data-toggle="modal" href="out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
+
 </div>
 <div class="modal fade modal-primary" id="keywordChooser" tabindex="-1" role="dialog" aria-labelledby="keywordChooserLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -2890,7 +2964,9 @@ $(document).ready( function() {
 				$content .= count($links)." ".getMLText("linked_documents")."<br />";
 			if($status["status"] == S_IN_WORKFLOW && $workflowmode == 'advanced') {
 				$workflowstate = $latestContent->getWorkflowState();
-				$content .= '<span title="'.getOverallStatusText($status["status"]).': '.$workflow->getName().'">'.$workflowstate->getName().'</span>';
+				if ($workflowstate) {
+					$content .= '<span title="'.getOverallStatusText($status["status"]).': '.$workflowstate->getName().'">'.$workflowstate->getName().'</span>';
+				}
 			} else {
 				$content .= getOverallStatusText($status["status"]);
 			}

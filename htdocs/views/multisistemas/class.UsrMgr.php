@@ -160,6 +160,8 @@ $(document).ready( function() {
 		$undeluserids = $this->params['undeluserids'];
 		$workflowmode = $this->params['workflowmode'];
 		$quota = $this->params['quota'];
+
+		var_dump($currUser);
 ?>
 	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form" id="form">
 <?php
@@ -466,6 +468,8 @@ $(document).ready( function() {
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
 		$this->contentHeading(getMLText("user_management"));
+
+		var_dump($seluser);
 ?>
 <div class="row-fluid">
 <div class="span4">
