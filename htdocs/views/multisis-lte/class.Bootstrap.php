@@ -586,34 +586,50 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</li>";
     */
 
-
     if($this->params['enablelanguageselector']) {
+
 				echo "<!-- Languages Menu -->";
 		    echo "<li class=\"dropdown tasks-menu\">";
 		    echo "<!-- Menu Toggle Button -->";
 		    echo "<a href=\"#\" class=\"dropdown-toggle a-fix-height\" data-toggle=\"dropdown\">";
 		    echo "<i class=\"fa fa-flag-o fix-padding\"></i>";
-		    echo "<span class=\"label label-info\">es</span>";
+
+		    if ($this->params['session']->getLanguage() == "es_ES") {
+		    	echo "<span class=\"label label-info\">es</span>";	
+		    } else if ($this->params['session']->getLanguage() == "en_GB") {
+		    	echo "<span class=\"label label-info\">en</span>";
+		    }
+		    
 		    echo "</a>";
 		    echo "<ul class=\"dropdown-menu\">";
 		    echo "<li class=\"header\">".getMLText("settings_available_languages")."</li>";
 		    echo "<li>";
 		    echo "<!-- Inner menu: contains languages -->";
-		    echo "<ul class=\"menu\">";
+
+		    echo "<ul class=\"my-menu\">";
 
 				$languages = getLanguages();
+				$langCount = 0;
 				foreach ($languages as $currLang) {
 					if($this->params['session']->getLanguage() == $currLang)
-						echo "<li class=\"active\">";
+						echo "<li class=\"language-active\">";
 					else
 						echo "<li>";
 
 					echo "<a href=\"/op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
-					echo "<h3>".getMLText($currLang);
-					echo "<small class=\"pull-right\">9</small>";
-			    echo "</h3>";
+					echo "<div class=\"my-menu-body\">".getMLText($currLang);
+
+					//if ($this->params['session']->getLanguage() == "es_ES") {
+					//var_dump($this->getCountryFlag($languages[$langCount]));
+					echo "<img class=\"pull-right\" src=\"images/".$this->getCountryFlag($languages[$langCount])."\" ></img>";
+					//} else if ($this->params['session']->getLanguage() == "en_GB") {
+					//	echo "<small class=\"pull-right\"></small>";
+					//}
+					
+			    echo "</div>";
 			    echo "</a>";
 			    echo "</li>";
+			    $langCount++;
 				}
 				echo "</ul>\n";
 				echo "</li>\n";

@@ -49,7 +49,7 @@
 
 
 
-/* ------------- Profile picture ------------------ */
+/* ------------- Main header ------------------ */
 
 .img-nav-mini {
     width: 100% !important;
@@ -68,6 +68,32 @@
 
 i.fix-padding {
     padding-top: 7px;
+}
+
+.my-menu {
+    max-height: 200px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.my-menu>li>a {
+    font-size: 12px;
+    padding: 0px;
+    color: #666; 
+}
+
+.my-menu>li:hover {
+    background-color: #f6f6f6;
+}
+
+.my-menu-body {
+    border: 1px solid #eeeeee;
+    padding: 10px;
+}
+
+.language-active {
+    background-color: #eeeeee;
 }
 
 /* ------------- Control sidebar ------------------ */
