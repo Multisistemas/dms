@@ -153,10 +153,19 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$rootfolder = $this->params['rootfolder'];
 
-		$this->htmlStartPage(getMLText("folders_and_documents_statistic"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxPrimary(getMLText("folders_and_documents_statistic"));
 
 		$this->folder_count=0;
 		$this->document_count=0;
@@ -165,20 +174,20 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 ?>
 <style type="text/css">
 .folderClass {
-	list-style-image : url(<?php $this->printImgPath("folder_closed.gif");?>);
-	list-style : url(<?php $this->printImgPath("folder_closed.gif");?>);
+	list-style-image : url(<?php $this->printImgPath("folder.png");?>);
+	list-style : url(<?php $this->printImgPath("folder.png");?>);
 }
 
 .documentClass {
-	list-style-image : url(<?php $this->printImgPath("file.gif");?>);
-	list-style : url(<?php $this->printImgPath("file.gif");?>);
+	list-style-image : url(<?php $this->printImgPath("document.png");?>);
+	list-style : url(<?php $this->printImgPath("document.png");?>);
 }
 </style>
 
 <?php
-		$this->contentHeading(getMLText("folders_and_documents_statistic"));
-		echo "<div class=\"row-fluid\">\n";
-		echo "<div class=\"span8\">\n";
+
+
+		echo "<div class=\"col-md-8\">\n";
 		echo "<div class=\"well\">\n";
 
 		print "<ul>\n";
@@ -188,7 +197,7 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 		echo "</div>\n";
 		echo "</div>\n";
 
-		echo "<div class=\"span4\">\n";
+		echo "<div class=\"col-md-4\">\n";
 		echo "<div class=\"well\">\n";
 		print "<legend>".getMLText("legend")."</legend>\n";
 		print "<ul class=\"unstyled\">\n";
@@ -210,10 +219,17 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 
 		echo "</div>\n";
 		echo "</div>\n";
-		echo "</div>\n";
 
-		$this->contentContainerEnd();
-		$this->contentEnd();
+
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

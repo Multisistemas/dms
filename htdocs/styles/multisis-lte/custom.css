@@ -66,6 +66,10 @@
     height: 50px !important;
 }
 
+i.fix-padding {
+    padding-top: 7px;
+}
+
 /* ------------- Control sidebar ------------------ */
 .control-sidebar-heading {
     text-align: center !important;
@@ -436,4 +440,38 @@ span.wrap-normal {
 .logo-lg {
     max-height: 50px !important;
     padding: 5px 0px 5px 0px !important;    
+}
+
+/* -------------- Workflow colors --------------- */
+
+i.initstate {
+    color: #ff9900;
+}
+
+i.in-workflow {
+    color: #11479e;
+}
+
+i.workflow-action {
+    color: #91479e;
+}
+
+i.released {
+    color: #00b000;
+}
+
+i.rejected {
+    color: #b00000;
+}
+
+[class^="fa-circle"] {
+    display: inline;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    vertical-align: baseline;
+    background-image: none;
+    background-position: 0% 0%;
+    background-repeat: repeat;
+    margin-top: 0;
 }

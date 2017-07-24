@@ -48,11 +48,12 @@ $(document).ready( function() {
 		$selcat = $this->params['selcategory'];
 
 		if($selcat) {
-			$this->contentHeading(getMLText("category_info"));
+			$this->startBoxCollapsableInfo(getMLText("category_info"));
 			$documents = $selcat->getDocumentsByCategory();
-			echo "<table class=\"table table-condensed\">\n";
+			echo "<table class=\"table table-bordered table-condensed\">\n";
 			echo "<tr><td>".getMLText('document_count')."</td><td>".(count($documents))."</td></tr>\n";
 			echo "</table>";
+			$this->endsBoxCollapsableInfo();
 		}
 	} /* }}} */
 
@@ -66,7 +67,7 @@ $(document).ready( function() {
 		if($category) {
 			if($category->isUsed()) {
 ?>
-						<p><?php echo getMLText('category_in_use') ?></p>
+						<p><?php $this->warningMsg(getMLText('category_in_use')); ?></p>
 <?php
 			} else {
 ?>
@@ -74,7 +75,7 @@ $(document).ready( function() {
 						<?php echo createHiddenFieldWithKey('removecategory'); ?>
 						<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
 						<input type="hidden" name="action" value="removecategory">
-						<button class="btn" type="submit"><i class="icon-remove"></i> <?php echo getMLText("rm_document_category")?></button>
+						<button class="btn btn-danger" type="submit"><i class="fa fa-times"></i> <?php echo getMLText("rm_document_category")?></button>
 						</form>
 <?php
 			}
@@ -82,8 +83,7 @@ $(document).ready( function() {
 ?>
 					</div>
 				</div>
-
-
+				<br>
 				<form class="form-horizontal" style="margin-bottom: 0px;" action="../op/op.Categories.php" method="post">
 				<?php if(!$category) { ?>
 					<?php echo createHiddenFieldWithKey('addcategory'); ?>
@@ -96,12 +96,12 @@ $(document).ready( function() {
 				<div class="control-group">
 					<label class="control-label"><?php echo getMLText("name")?>:</label>
 					<div class="controls">
-							<input name="name" type="text" value="<?php echo $category ? htmlspecialchars($category->getName()) : '' ?>">&nbsp;
+							<input name="name" class="form-control" type="text" value="<?php echo $category ? htmlspecialchars($category->getName()) : '' ?>">&nbsp;
 					</div>
 				</div>
 				<div class="control-group">
 					<div class="controls">
-						<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
+						<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save");?></button>
 					</div>
 				</div>
 				</form>
@@ -121,21 +121,28 @@ $(document).ready( function() {
 		$categories = $this->params['categories'];
 		$selcat = $this->params['selcategory'];
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-		$this->contentHeading(getMLText("global_document_categories"));
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxPrimary(getMLText("global_document_categories"));
 ?>
 <div class="row-fluid">
-	<div class="span4">
+	<div class="span12">
 		<div class="well">
 <form class="form-horizontal">
 	<div class="control-group">
 		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
 		<div class="controls">
-			<select id="selector" class="input-xlarge">
+			<select id="selector" class="form-control">
 				<option value="-1"><?php echo getMLText("choose_category")?>
 				<option value="0"><?php echo getMLText("new_document_category")?>
 <?php
@@ -151,7 +158,7 @@ $(document).ready( function() {
 		<div class="ajax" data-view="Categories" data-action="info" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 	</div>
 
-	<div class="span8">
+	<div class="span12">
 		<div class="well">
 			<div class="ajax" data-view="Categories" data-action="form" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 
@@ -160,8 +167,16 @@ $(document).ready( function() {
 </div>
 	
 <?php
-		$this->contentEnd();
-		$this->htmlEndPage();
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
+		$this->htmlEndPage();	
 	} /* }}} */
 }
 ?>

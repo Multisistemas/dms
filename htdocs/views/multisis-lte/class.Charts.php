@@ -148,8 +148,8 @@ $(document).ready( function() {
 				show: true,
 				radius: 1,
 				label: {
-					show: true,
-					radius: 2/3,
+					show: false,
+					radius: 1,
 					formatter: labelFormatter,
 					threshold: 0.1,
 					background: {
@@ -201,47 +201,64 @@ $(document).ready( function() {
 			'<script type="text/javascript" src="../styles/bootstrap/flot/jquery.flot.categories.min.js"></script>'."\n".
 			'<script type="text/javascript" src="../styles/bootstrap/flot/jquery.flot.time.min.js"></script>'."\n");
 
-		$this->htmlStartPage(getMLText("folders_and_documents_statistic"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-		echo "<div class=\"row-fluid\">\n";
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
 
-		echo "<div class=\"span3\">\n";
-		$this->contentHeading(getMLText("chart_selection"));
-		echo "<div class=\"well\">\n";
+		$this->startBoxPrimary(getMLText("folders_and_documents_statistic"));
+
+		echo "<div class=\"col-md-3\">\n";
+		$this->startBoxSolidPrimary(getMLText("chart_selection"));
+		
 		foreach(array('docsperuser', 'sizeperuser', 'docspermimetype', 'docspercategory', 'docsperstatus', 'docspermonth', 'docsaccumulated') as $atype) {
-			echo "<div><a href=\"?type=".$atype."\">".getMLText('chart_'.$atype.'_title')."</a></div>\n";
+			echo "<div><a type=\"button\" class=\"btn btn-default btn-block btn-sm\" href=\"?type=".$atype."\">".getMLText('chart_'.$atype.'_title')."</a></div>\n";
 		}
-		echo "</div>\n";
+		$this->endsBoxSolidPrimary();
 		echo "</div>\n";
 
 		if(in_array($type, array('docspermonth', 'docsaccumulated'))) {
-			echo "<div class=\"span9\">\n";
+			echo "<div class=\"col-md-9\">\n";
 		} else {
-			echo "<div class=\"span6\">\n";
+			echo "<div class=\"col-md-6\">\n";
 		}
-		$this->contentHeading(getMLText('chart_'.$type.'_title'));
-		echo "<div class=\"well\">\n";
+		//$this->contentHeading(getMLText('chart_'.$type.'_title'));
+		$this->startBoxSolidSuccess(getMLText('chart_'.$type.'_title'));
+		//echo "<div class=\"well\">\n";
 ?>
 <div id="chart" style="height: 400px;" class="chart"></div>
 <?php
+		//echo "</div>\n";
+		$this->endsBoxSolidSuccess();
 		echo "</div>\n";
-		echo "</div>\n";
-
+		
 		if(!in_array($type, array('docspermonth', 'docsaccumulated'))) {
-			echo "<div class=\"span3\">\n";
-			$this->contentHeading(getMLText('legend'));
-			echo "<div class=\"well\" id=\"legend\">\n";
+			echo "<div class=\"col-md-3\">\n";
+			//$this->contentHeading(getMLText('legend'));
+			$this->startBoxSolidPrimary(getMLText('legend'));
+			echo "<div class=\"\" id=\"legend\">\n";
 			echo "</div>\n";
+			$this->endsBoxSolidPrimary();
+			//echo "</div>\n";
 			echo "</div>\n";
 		}
 
-		echo "</div>\n";
+		$this->endsBoxPrimary();
 
-		$this->contentContainerEnd();
-		$this->contentEnd();
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

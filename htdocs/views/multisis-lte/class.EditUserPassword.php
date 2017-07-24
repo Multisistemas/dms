@@ -29,7 +29,7 @@ require_once("class.Bootstrap.php");
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_View_EditUserData extends SeedDMS_Bootstrap_Style {
+class SeedDMS_View_EditUserPassword extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript');
@@ -37,9 +37,14 @@ class SeedDMS_View_EditUserData extends SeedDMS_Bootstrap_Style {
 function checkForm()
 {
 	msg = new Array();
+	if ($("#currentpwd").val() == "") msg.push("<?php printMLText("js_no_pwd");?>");
+	if ($("#pwd").val() == "") msg.push("<?php printMLText("js_no_pwd");?>");
+	if ($("#pwdconf").val() == "") msg.push("<?php printMLText("js_no_pwd");?>");
+
+	if ($("#pwd").val() != $("#pwdconf").val()) msg.push("<?php printMLText("js_pwd_not_conf");?>");
 	if ($("#fullname").val() == "") msg.push("<?php printMLText("js_no_name");?>");
 	if ($("#email").val() == "") msg.push("<?php printMLText("js_no_email");?>");
-
+//	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 	if (msg != "") {
   	noty({
   		text: msg.join('<br />'),
@@ -91,6 +96,7 @@ $(document).ready( function() {
 				required: "<?php printMLText("js_no_email");?>",
 				email: "<?php printMLText("js_invalid_email");?>"
 			},
+			pwdconf: "<?php printMLText("js_unequal_passwords");?>",
 		},
 	});
 });
@@ -123,86 +129,36 @@ $(document).ready( function() {
 ?>
 <form action="../op/op.EditUserData.php" enctype="multipart/form-data" method="post" id="form">
 	<div class="form-group">
-		<label><?php printMLText("name");?>:</label>
+		<label><?php printMLText("current_password");?>:</label>
 		<div class="controls">
-			<input class="form-control" type="text" id="fullname" name="fullname" value="<?php print htmlspecialchars($user->getFullName());?>" size="30">
+			<input class="form-control" id="currentpwd" type="password" name="currentpwd" size="30">
 		</div>
 	</div>
 	<div class="form-group">
-		<label><?php printMLText("email");?>:</label>
+		<label><?php printMLText("new_password");?>:</label>
 		<div class="controls">
-			<input class="form-control" type="text" id="email" name="email" value="<?php print htmlspecialchars($user->getEmail());?>" size="30">
+			<input class="pwd form-control" type="password" rel="strengthbar" id="pwd" name="pwd" size="30">
+		</div>
+	</div>
+<?php
+	if($passwordstrength) {
+?>
+	<div class="form-group">
+		<label><?php printMLText("password_strength");?>:</label>
+		<div class="controls">
+			<div id="strengthbar" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
+		</div>
+	</div>
+<?php
+	}
+?>
+	<div class="form-group">
+		<label><?php printMLText("confirm_pwd");?>:</label>
+		<div class="controls">
+			<input class="form-control" id="pwdconf" type="Password" id="pwdconf" name="pwdconf" size="30">
 		</div>
 	</div>
 
-	<?php if ($user->_comment != "client-admin") { ?>
-	<div class="form-group">
-		<label><?php printMLText("biography");?>:</label>
-		<div class="controls">
-			<textarea class="form-control" name="comment" rows="5" cols="100"><?php print htmlspecialchars($user->getComment());?></textarea>
-		</div>
-	</div>
-	<?php } ?>
-	
-<?php	
-		if ($enableuserimage){	
-?>	
-	<div class="form-group">
-		<label><?php printMLText("user_image");?>:</label>
-		<div class="controls">
-<?php
-			if ($user->hasImage())
-				print "<img src=\"".$httproot . "out/out.UserImage.php?userid=".$user->getId()."\">";
-			else printMLText("no_user_image");
-?>
-		</div>
-	</div>
-	<div class="form-group">
-		<label><?php printMLText("new_user_image");?>:</label>
-		<div class="controls">
-<?php
-	$this->printFileChooser('userfile', false, "image/jpeg");
-?>
-		</div>
-	</div>
-<?php
-		}
-
-		/*if ($enablelanguageselector){
-			echo "<div class=\"form-group\">";
-			echo "<label>".printMLText("language")."</label>";
-			echo "<div class=\"controls\">";
-			echo "<select name=\"language\" class=\"form-control\">";
-				$languages = getLanguages();
-				foreach ($languages as $currLang) {
-					print "<option value=\"".$currLang."\" ".(($user->getLanguage()==$currLang) ? "selected" : "").">".getMLText($currLang)."</option>";
-				}
-			echo "</select>";
-			echo "</div>";
-			echo "</div>";
-		}*/
-?>
-<?php
-		
-
-		if ($enablethemeselector){	
-?>
-	<div class="form-group">
-		<label><?php printMLText("theme");?>:</label>
-		<div class="controls">
-			<select name="theme" class="form-control">
-<?php
-			$themes = UI::getStyles();
-			foreach ($themes as $currTheme) {
-				print "<option value=\"".$currTheme."\" ".(($user->getTheme()==$currTheme) ? "selected" : "").">".$currTheme."</option>";
-			}
-?>
-			</select>
-		</div>
-	</div>
-<?php
-		}
-?>
 	<div class="box-footer">
 		<button class="btn history-back"><?php echo getMLText('back'); ?></button>
 		<button class="btn btn-info" type="submit"><i class="fa fa-save"></i> <?php printMLText("save");?></button>

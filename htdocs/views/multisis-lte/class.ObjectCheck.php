@@ -212,19 +212,25 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		$rootfolder = $this->params['rootfolder'];
 		$this->enableClipboard = $this->params['enableclipboard'];
 
-		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
-
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("objectcheck"));
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxPrimary(getMLText("objectcheck"));
 
 		if($repair) {
 			echo "<div class=\"alert\">".getMLText('repairing_objects')."</div>";
 		}
-		$this->contentContainerStart();
-		print "<table class=\"table table-condensed\">";
+
+		print "<table class=\"table table-bordered table-condensed\">";
 		print "<thead>\n<tr>\n";
 		print "<th></th>\n";
 		print "<th>".getMLText("name")."</th>\n";
@@ -235,16 +241,17 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		$this->needsrepair = false;
 		$this->tree($dms, $folder, $repair);
 		print "</tbody></table>\n";
-
+		print "<br>";
 		if($this->needsrepair && $repair == 0) {
 			echo '<p><a href="out.ObjectCheck.php?repair=1">'.getMLText('do_object_repair').'</a></p>';
 		}
-		$this->contentContainerEnd();
+
 
 		if($unlinkedfolders) {
-			$this->contentHeading(getMLText("unlinked_folders"));
+			//$this->contentHeading(getMLText("unlinked_folders"));
+			$this->startBoxSolidPrimary(getMLText("unlinked_folders"));
 			$this->contentContainerStart();
-			print "<table class=\"table table-condensed\">";
+			print "<table class=\"table table-bordered table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("name")."</th>\n";
 			print "<th>".getMLText("id")."</th>\n";
@@ -263,12 +270,14 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 			}
 			print "</tbody></table>\n";
 			$this->contentContainerEnd();
+			$this->endsBoxSolidPrimary();
 		}
 
 		if($unlinkeddocuments) {
-			$this->contentHeading(getMLText("unlinked_documents"));
+			//$this->contentHeading(getMLText("unlinked_documents"));
+			$this->startBoxSolidPrimary(getMLText("unlinked_documents"));
 			$this->contentContainerStart();
-			print "<table class=\"table-condensed\">";
+			print "<table class=\"table table-bordered table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("name")."</th>\n";
 			print "<th>".getMLText("id")."</th>\n";
@@ -287,16 +296,18 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 			}
 			print "</tbody></table>\n";
 			$this->contentContainerEnd();
+			$this->endsBoxSolidPrimary();
 		}
 
-		$this->contentHeading(getMLText("unlinked_content"));
+		//$this->contentHeading(getMLText("unlinked_content"));
+		$this->startBoxSolidPrimary(getMLText("unlinked_content"));
 		$this->contentContainerStart();
 		if($unlink) {
 			echo "<p>".getMLText('unlinking_objects')."</p>";
 		}
 
 		if($unlinkedversions) {
-			print "<table class=\"table-condensed\">";
+			print "<table class=\"table table-bordered table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("document")."</th>\n";
 			print "<th>".getMLText("version")."</th>\n";
@@ -319,12 +330,14 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		}
 
 		$this->contentContainerEnd();
+		$this->endsBoxSolidPrimary();
 
-		$this->contentHeading(getMLText("missing_filesize"));
+		//$this->contentHeading(getMLText("missing_filesize"));
+		$this->startBoxSolidPrimary(getMLText("missing_filesize"));
 		$this->contentContainerStart();
 
 		if($nofilesizeversions) {
-			print "<table class=\"table-condensed\">";
+			print "<table class=\"table table-bordered table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("document")."</th>\n";
 			print "<th>".getMLText("version")."</th>\n";
@@ -348,12 +361,14 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		}
 
 		$this->contentContainerEnd();
+		$this->endsBoxSolidPrimary();
 
-		$this->contentHeading(getMLText("missing_checksum"));
+		//$this->contentHeading(getMLText("missing_checksum"));
+		$this->startBoxSolidPrimary(getMLText("missing_checksum"));
 		$this->contentContainerStart();
 
 		if($nochecksumversions) {
-			print "<table class=\"table-condensed\">";
+			print "<table class=\"table table-bordered table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("document")."</th>\n";
 			print "<th>".getMLText("version")."</th>\n";
@@ -377,12 +392,14 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		}
 
 		$this->contentContainerEnd();
+		$this->endsBoxSolidPrimary();
 
-		$this->contentHeading(getMLText("duplicate_content"));
+		//$this->contentHeading(getMLText("duplicate_content"));
+		$this->startBoxSolidPrimary(getMLText("duplicate_content"));
 		$this->contentContainerStart();
 
 		if($duplicateversions) {
-			print "<table class=\"table-condensed\">";
+			print "<table class=\"table table-bordered table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("document")."</th>\n";
 			print "<th>".getMLText("version")."</th>\n";
@@ -403,9 +420,18 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 			}
 			print "</tbody></table>\n";
 		}
+		$this->containerEnd();
+		$this->endsBoxSolidPrimary();
 
-		$this->contentContainerEnd();
-		$this->contentEnd();
+
+		$this->endsBoxPrimary();
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

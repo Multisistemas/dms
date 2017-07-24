@@ -289,7 +289,7 @@ $(document).ready( function() {
     <div class="row">
     <div class="col-md-12">
     <?php 
-
+if ($user->_comment != "client-admin") {
 		$this->startBoxPrimary(getMLText("group_management"));
 ?>
 
@@ -323,7 +323,7 @@ $(document).ready( function() {
 
 <?php
 		$this->endsBoxPrimary();
-
+}
 		echo "</div>";
 		echo "</div>";
 		echo "</div>";
