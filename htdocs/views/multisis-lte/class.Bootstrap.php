@@ -852,7 +852,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		// View tree
 
 		$rootFolder = $this->printTree(1, M_READ, 0,'', 1, 's');
-		
+
 		$this->printTheTree($rootFolder, 0, $folder);
 
     //TreeView Old 
@@ -1007,59 +1007,59 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
     if($this->params['user']->isAdmin()) {
     echo "<div class=\"tab-pane\" id=\"control-sidebar-home-tab\">";
-    echo "<a type=\"button\" href=\"../../out/out.AdminTools.php\"><h3 class=\"control-sidebar-heading btn-admin-tools\">".getMLText("admin_tools")."</h3></a>";
+    echo "<a type=\"button\" href=\"/out/out.AdminTools.php\"><h3 class=\"control-sidebar-heading btn-admin-tools\">".getMLText("admin_tools")."</h3></a>";
     echo "<ul class=\"control-sidebar-menu\">";
 
     if ($this->params['user']->_comment != "client-admin") {
-    echo "<li><a href=\"../../out/out.UsrMgr.php\"><i class=\"menu-icon fa fa-user bg-green\"></i>";
+    echo "<li><a href=\"/out/out.UsrMgr.php\"><i class=\"menu-icon fa fa-user bg-green\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("user_management")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.GroupMgr.php\"><i class=\"menu-icon fa fa-users bg-green\"></i>";
+    echo "<li><a href=\"/out/out.GroupMgr.php\"><i class=\"menu-icon fa fa-users bg-green\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("group_management")."</h4></div></a></li>";
   	}
 
-    echo "<li><a href=\"../../out/out.BackupTools.php\"><i class=\"menu-icon fa fa-hdd-o bg-green\"></i>";
+    echo "<li><a href=\"/out/out.BackupTools.php\"><i class=\"menu-icon fa fa-hdd-o bg-green\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("backup_tools")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.LogManagement.php\"><i class=\"menu-icon fa fa-list bg-green\"></i>";
+    echo "<li><a href=\"/out/out.LogManagement.php\"><i class=\"menu-icon fa fa-list bg-green\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("log_management")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.DefaultKeywords.php\"><i class=\"menu-icon fa fa-bars bg-green\"></i>";
+    echo "<li><a href=\"/out/out.DefaultKeywords.php\"><i class=\"menu-icon fa fa-bars bg-green\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("global_default_keywords")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.Categories.php\"><i class=\"menu-icon fa fa-columns bg-light-blue\"></i>";
+    echo "<li><a href=\"/out/out.Categories.php\"><i class=\"menu-icon fa fa-columns bg-light-blue\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("global_document_categories")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.AttributeMgr.php\"><i class=\"menu-icon fa fa-tags bg-light-blue\"></i>";
+    echo "<li><a href=\"/out/out.AttributeMgr.php\"><i class=\"menu-icon fa fa-tags bg-light-blue\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("global_attributedefinitions")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.WorkflowMgr.php\"><i class=\"menu-icon fa fa-sitemap bg-light-blue\"></i>";
+    echo "<li><a href=\"/out/out.WorkflowMgr.php\"><i class=\"menu-icon fa fa-sitemap bg-light-blue\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("global_workflows")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.WorkflowStatesMgr.php\"><i class=\"menu-icon fa fa-star-o bg-light-blue\"></i>";
+    echo "<li><a href=\"/out/out.WorkflowStatesMgr.php\"><i class=\"menu-icon fa fa-star-o bg-light-blue\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("global_workflow_states")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.WorkflowActionsMgr.php\"><i class=\"menu-icon fa fa-bolt bg-light-blue\"></i>";
+    echo "<li><a href=\"/out/out.WorkflowActionsMgr.php\"><i class=\"menu-icon fa fa-bolt bg-light-blue\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("global_workflow_actions")."</h4></div></a></li>";
     
     if($this->params['enablefullsearch']) {
-    echo "<li><a href=\"../../out/out.Indexer.php\"><i class=\"menu-icon fa fa-refresh bg-yellow\"></i>";
+    echo "<li><a href=\"/out/out.Indexer.php\"><i class=\"menu-icon fa fa-refresh bg-yellow\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("update_fulltext_index")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.CreateIndex.php\"><i class=\"menu-icon fa fa-search bg-yellow\"></i>";
+    echo "<li><a href=\"/out/out.CreateIndex.php\"><i class=\"menu-icon fa fa-search bg-yellow\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("create_fulltext_index")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.IndexInfo.php\"><i class=\"menu-icon fa fa-info bg-yellow\"></i>";
+    echo "<li><a href=\"/out/out.IndexInfo.php\"><i class=\"menu-icon fa fa-info bg-yellow\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("fulltext_info")."</h4></div></a></li>";
   	}
 
-    echo "<li><a href=\"../../out/out.Statistic.php\"><i class=\"menu-icon fa fa-tasks bg-yellow\"></i>";
+    echo "<li><a href=\"/out/out.Statistic.php\"><i class=\"menu-icon fa fa-tasks bg-yellow\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("folders_and_documents_statistic")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.Charts.php\"><i class=\"menu-icon fa fa-pie-chart bg-yellow\"></i>";
+    echo "<li><a href=\"/out/out.Charts.php\"><i class=\"menu-icon fa fa-pie-chart bg-yellow\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("charts")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.ObjectCheck.php\"><i class=\"menu-icon fa fa-check-circle-o bg-red\"></i>";
+    echo "<li><a href=\"/out/out.ObjectCheck.php\"><i class=\"menu-icon fa fa-check-circle-o bg-red\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("objectcheck")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.Timeline.php\"><i class=\"menu-icon fa fa-clock-o bg-red\"></i>";
+    echo "<li><a href=\"/out/out.Timeline.php\"><i class=\"menu-icon fa fa-clock-o bg-red\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("timeline")."</h4></div></a></li>";
 
     if ($this->params['user']->_comment != "client-admin") {
-    echo "<li><a href=\"../../out/out.Settings.php\"><i class=\"menu-icon fa fa-wrench bg-red\"></i>";
+    echo "<li><a href=\"/out/out.Settings.php\"><i class=\"menu-icon fa fa-wrench bg-red\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("settings")."</h4></div></a></li>";
-    echo "<li><a href=\"../../out/out.ExtensionMgr.php\"><i class=\"menu-icon fa fa-cogs bg-red\"></i>";
+    echo "<li><a href=\"/out/out.ExtensionMgr.php\"><i class=\"menu-icon fa fa-cogs bg-red\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("extension_manager")."</h4></div></a></li>";
   	}
 
-    echo "<li><a href=\"../../out/out.Info.php\"><i class=\"menu-icon fa fa-info-circle bg-red\"></i>";
+    echo "<li><a href=\"/out/out.Info.php\"><i class=\"menu-icon fa fa-info-circle bg-red\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("version_info")."</h4></div></a></li>";
     echo "</ul>";
     echo "<!-- /.sidebar-menu -->";
