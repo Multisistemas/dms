@@ -313,7 +313,7 @@ $(document).ready(function(){
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))), "skin-blue sidebar-mini");
 		$this->containerStart();
 		$this->mainHeader();
-		$this->mainSideBar();
+		$this->mainSideBar($folder->getID(),0,0);
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 		echo $this->callHook('preContent');
 		$this->contentStart();		

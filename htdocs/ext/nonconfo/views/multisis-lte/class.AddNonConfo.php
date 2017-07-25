@@ -76,7 +76,7 @@ $(document).ready(function() {
 		$this->htmlStartPage(getMLText("nonconfo_title"), "skin-blue sidebar-mini");
 		$this->containerStart();
 		$this->mainHeader();
-		$this->mainSideBar();
+		$this->mainSideBar(0, 2, 0);
 		$this->contentStart();
 		$this->getNonconfoPathHTML();
 ?>

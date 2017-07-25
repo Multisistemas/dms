@@ -618,13 +618,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 					echo "<a href=\"/op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
 					echo "<div class=\"my-menu-body\">".getMLText($currLang);
-
-					//if ($this->params['session']->getLanguage() == "es_ES") {
-					//var_dump($this->getCountryFlag($languages[$langCount]));
-					echo "<img class=\"pull-right\" src=\"images/".$this->getCountryFlag($languages[$langCount])."\" ></img>";
-					//} else if ($this->params['session']->getLanguage() == "en_GB") {
-					//	echo "<small class=\"pull-right\"></small>";
-					//}
+					echo "<img class=\"pull-right\" src=\"".$this->getCountryFlag($languages[$langCount])."\" ></img>";
 					
 			    echo "</div>";
 			    echo "</a>";
@@ -633,10 +627,12 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 				}
 				echo "</ul>\n";
 				echo "</li>\n";
+
+			echo "</ul>\n";
+			echo "</li>\n";
 		}
 
-		echo "</ul>\n";
-		echo "</li>\n";
+		
 
     echo "<!-- User Account Menu -->";
     echo "<li class=\"dropdown user user-menu\">";
@@ -760,16 +756,18 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	/* Generate folder tree widget */
 
-	function printTheTree($tree, $i = 0){ /* {{{ */
+	function printTheTree($tree, $i = 0, $folder){ /* {{{ */
 
 			foreach ($tree as $key => $treeNode) {
-				if ($i == 0) {
-					echo "<li class=\"treeview active\">";
-					echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"link-to-folder\"><i class=\"fa fa-folder-open\"></i></a>";
-				} else {
-					echo "<li class=\"treeview\">";
-					echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"link-to-folder\"><i class=\"fa fa-folder-open\"></i></a>";
-				}
+				
+					if ($i == 0 && $folder != 0) {
+						echo "<li class=\"treeview active\">";
+						echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"link-to-folder\"><i class=\"fa fa-folder-open\"></i></a>";
+					} else {
+						echo "<li class=\"treeview\">";
+						echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"link-to-folder\"><i class=\"fa fa-folder-open\"></i></a>";
+					}
+				
 			  echo "<a href=\"#\" class=\"fix-width\"><i class=\"fa fa-folder\"></i> <span class=\"wrap-normal\">".$treeNode['label']." (".count($treeNode['children']).") </span>";
 
 			  if (count($treeNode['children']) > 0) {
@@ -783,7 +781,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 					$children = $treeNode['children'];
 			    echo "<ul class=\"treeview-menu\">";
 			    $i++;
-					$this->printTheTree($children, $i);
+					$this->printTheTree($children, $i,$folder);
 					echo "</ul>";
 				}
 			  echo "</li>";
@@ -791,7 +789,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	} /* }}} */
 
-	function mainSideBar(){ /* {{{ */
+	function mainSideBar($folder = 0, $nonconfo = 0, $calendar = 0){ /* {{{ */
 		echo "<aside class=\"main-sidebar\">";
     echo "<section class=\"sidebar\">";
 
@@ -854,7 +852,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		// View tree
 
 		$rootFolder = $this->printTree(1, M_READ, 0,'', 1, 's');
-		$this->printTheTree($rootFolder, 0);
+		
+		$this->printTheTree($rootFolder, 0, $folder);
 
     //TreeView Old 
 
@@ -874,39 +873,96 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</li>";*/
 
     // Non conformities
+    $viewAllActive = "";
+    $addNonConfoActive = "";
+    $addProcessActive = "";
+    $addOwnerActive = "";
+    if ($nonconfo != 0) {
+    	switch ($nonconfo) {
+    	case 1:
+    		$viewAllActive = "active";
+    		break;
+    	case 2: 
+    		$addNonConfoActive = "active";
+    		break;
+    	case 3:
+    		$addProcessActive = "active";
+    		break;
+    	case 4:
+    		$addOwnerActive = "active";
+    		break;
+    	default:
+    		break;
+    	}
+    }
+    
     if (!$this->params['user']->isGuest()) {
-	    echo "<li class=\"treeview\">";
+    	if ($nonconfo != 0) {
+    		echo "<li class=\"treeview active\">";	
+    	} else {
+    		echo "<li class=\"treeview\">";	
+    	}
 	    echo "<a href=\"#\"><i class=\"fa fa-wrench\"></i> <span>".getMLText("nonconfo")."</span>";
 	    echo "<span class=\"pull-right-container\">";
 	    echo "<i class=\"fa fa-angle-left pull-right\"></i>";
 	    echo "</span>";
 	    echo "</a>";
 	    echo "<ul class=\"treeview-menu\">";
-	    echo "<li><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("nonconfo_view")."</a></li>";
-	    echo "<li><a href=\"/ext/nonconfo/out/out.AddNonConfo.php\">".getMLText("nonconfo_add_nonconfo")."</a></li>";
+	    echo "<li class=\"".$viewAllActive."\"><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("nonconfo_view")."</a></li>";
+	    echo "<li class=\"".$addNonConfoActive."\"><a href=\"/ext/nonconfo/out/out.AddNonConfo.php\">".getMLText("nonconfo_add_nonconfo")."</a></li>";
 	    
 	    if ($this->params['user']->isAdmin()) {
-	    	echo "<li><a href=\"/ext/nonconfo/out/out.AddProcess.php\">".getMLText("nonconfo_add_process")."</a></li>";
-	    	echo "<li><a href=\"/ext/nonconfo/out/out.AddOwners.php\">".getMLText("nonconfo_define_owners")."</a></li>";
+	    	echo "<li class=\"".$addProcessActive."\"><a href=\"/ext/nonconfo/out/out.AddProcess.php\">".getMLText("nonconfo_add_process")."</a></li>";
+	    	echo "<li class=\"".$addOwnerActive."\"><a href=\"/ext/nonconfo/out/out.AddOwners.php\">".getMLText("nonconfo_define_owners")."</a></li>";
 	    }
 
     	echo "</ul>";
     	echo "</li>";
   	}
 
-    // Calendar
+  	// Calendar
+  	$calendarWeekActive = "";
+  	$calendarMonthActive = "";
+  	$calendarYearActive = "";
+    $addEventActive = "";
+    if ($calendar != 0) {
+    	if (isset($_GET['mode'])) {
+    		switch ($_GET['mode']) {
+		    	case "w":
+		    		$calendarWeekActive = "active";
+		    		break;
+		    	case "m": 
+		    		$calendarMonthActive = "active";
+		    		break;
+		    	case "y":
+		    		$calendarYearActive = "active";
+		    		break;
+    		}	
+    	}
+
+    	if ($calendar == 2) {
+    		$addEventActive = "active";
+    	}
+    }
+
+    
     if ($this->params['enablecalendar'] && !$this->params['user']->isGuest()){
-	    echo "<li class=\"treeview\">";
+    	if ($calendar != 0) {
+    		echo "<li class=\"treeview active\">";	
+    	} else {
+    		echo "<li class=\"treeview\">";
+    	}
+
 	    echo "<a href=\"#\"><i class=\"fa fa-calendar\"></i> <span>".getMLText("calendar")."</span>";
 	    echo "<span class=\"pull-right-container\">";
 	    echo "<i class=\"fa fa-angle-left pull-right\"></i>";
 	    echo "</span>";
 	    echo "</a>";
 	    echo "<ul class=\"treeview-menu\">";
-	    echo "<li><a href=\"/out/out.Calendar.php?mode=w\">".getMLText("week_view")."</a></li>";
-	    echo "<li><a href=\"/out/out.Calendar.php?mode=m\">".getMLText("month_view")."</a></li>";
-	    echo "<li><a href=\"/out/out.Calendar.php?mode=y\">".getMLText("year_view")."</a></li>";
-	    echo "<li><a href=\"/out/out.AddEvent.php\">".getMLText("add_event")."</a></li>";
+	    echo "<li class=\"".$calendarWeekActive."\"><a href=\"/out/out.Calendar.php?mode=w\">".getMLText("week_view")."</a></li>";
+	    echo "<li class=\"".$calendarMonthActive."\"><a href=\"/out/out.Calendar.php?mode=m\">".getMLText("month_view")."</a></li>";
+	    echo "<li class=\"".$calendarYearActive."\"><a href=\"/out/out.Calendar.php?mode=y\">".getMLText("year_view")."</a></li>";
+	    echo "<li class=\"".$addEventActive."\"><a href=\"/out/out.AddEvent.php\">".getMLText("add_event")."</a></li>";
 	    echo "</ul>";
 	    echo "</li>";
 	  }
@@ -940,7 +996,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	function controlSideBar(){ /* {{{ */
 		echo "<aside class=\"control-sidebar control-sidebar-dark aside-fixed\">";
 		echo "<ul class=\"nav nav-tabs nav-justified control-sidebar-tabs\">";
-		echo "<li class=\"active\"><a href=\"#control-sidebar-theme-demo-options-tab\" data-toggle=\"tab\"><i class=\"fa fa-wrench\"></i></a></li>";
+		echo "<li class=\"active\"><a href=\"#control-sidebar-theme-demo-options-tab\" data-toggle=\"tab\"><i class=\"fa fa-paint-brush\"></i></a></li>";
 		if($this->params['user']->isAdmin()) {
 			echo "<li><a href=\"#control-sidebar-home-tab\" data-toggle=\"tab\"><i class=\"fa fa-gears\"></i></a></li>";
 			echo "<li><a href=\"#control-sidebar-logo-tab\" data-toggle=\"tab\"><i class=\"fa fa-flag\"></i></a></li>";
@@ -2245,10 +2301,10 @@ $(document).ready(function() {
 	function getCountryFlag($lang) { /* {{{ */
 		switch($lang) {
 		case "en_GB":
-			return 'flags/gb.png';
+			return '/views/'.$this->theme.'/images/flags/gb.png';
 			break;
 		default:
-			return 'flags/'.substr($lang, 0, 2).'.png';
+			return '/views/'.$this->theme.'/images/flags/'.substr($lang, 0, 2).'.png';
 		}
 	} /* }}} */
 
