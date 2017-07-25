@@ -40,11 +40,19 @@ class SeedDMS_View_RunSubWorkflow extends SeedDMS_Bootstrap_Style {
 
 		$latestContent = $document->getLatestContent();
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("run_subworkflow"));
+		$this->htmlStartPage(getMLText("run_subworkflow"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
+
+		//echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Document content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"gap-20\"></div>";
+		echo "<div class=\"col-md-12\">";
+		$this->startBoxPrimary(getMLText("run_subworkflow"));
 
 		$currentstate = $latestContent->getWorkflowState();
 		$wkflog = $latestContent->getWorkflowLog();
@@ -64,11 +72,11 @@ class SeedDMS_View_RunSubWorkflow extends SeedDMS_Bootstrap_Style {
 		$msg .= "The document may stay in this state for ".$currentstate->getMaxTime()." sec.";
 		$this->infoMsg($msg);
 
-		$this->contentContainerStart();
+		//$this->contentContainerStart();
 		// Display the Workflow form.
 ?>
-	<div class="row-fluid">
-	<div class="span4">
+	<div class="row">
+	<div class="col-md-4">
 	<form method="POST" action="../op/op.RunSubWorkflow.php" name="form1">
 	<?php echo createHiddenFieldWithKey('runsubworkflow'); ?>
 	<table>
@@ -76,20 +84,20 @@ class SeedDMS_View_RunSubWorkflow extends SeedDMS_Bootstrap_Style {
 	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
 	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
 	<input type='hidden' name='subworkflow' value='<?php echo $subworkflow->getID(); ?>'/>
-	<input type='submit' class="btn" value='<?php printMLText("run_subworkflow"); ?>'/>
+	<input type='submit' class="btn btn-primary" value='<?php printMLText("run_subworkflow"); ?>'/>
 	</td></tr></table>
 	</form>
 	</div>
-	<div id="workflowgraph" class="span8">
+	<div id="workflowgraph" class="col-md-8">
 	<iframe src="out.WorkflowGraph.php?workflow=<?php echo $subworkflow->getID(); ?>" width="100%" height="400" style="border: 1px solid #AAA;"></iframe>
 	</div>
 	</div>
 <?php
-		$this->contentContainerEnd();
+		$this->endsBoxPrimary();
 
 		if($wkflog) {
 			$this->contentContainerStart();
-			echo "<table class=\"table-condensed\">";
+			echo "<table class=\"table table-bordered table-condensed\">";
 			echo "<tr><th>".getMLText('action')."</th><th>Start state</th><th>End state</th><th>".getMLText('date')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>";
 			foreach($wkflog as $entry) {
 				echo "<tr>";
@@ -105,7 +113,12 @@ class SeedDMS_View_RunSubWorkflow extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerEnd();
 		}
 
+		echo "</div>";
+		echo "</div>"; 
+		echo "</div>"; // Ends row
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

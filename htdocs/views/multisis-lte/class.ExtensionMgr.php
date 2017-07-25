@@ -33,12 +33,21 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		$httproot = $this->params['httproot'];
 		$version = $this->params['version'];
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentContainerStart();
-		echo "<table class=\"table table-condensed\">\n";
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <?php
+    $this->startBoxPrimary(getMLText("extension_manager"));
+
+		echo "<table class=\"table table-bordered table-condensed\">\n";
 		print "<thead>\n<tr>\n";
 		print "<th></th>\n";	
 		print "<th>".getMLText('name')."</th>\n";	
@@ -104,13 +113,22 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		}
 		echo "</table>\n";
 ?>
+<br>
 <form action="../op/op.ExtensionMgr.php" name="form1" method="post">
   <?php echo createHiddenFieldWithKey('extensionmgr'); ?>
-	<p><button type="submit" class="btn"><i class="icon-refresh"></i> <?php printMLText("refresh");?></button></p>
+	<p><button type="submit" class="btn btn-success"><i class="fa fa-refresh"></i> <?php printMLText("refresh");?></button></p>
 </form>
+
 <?php
-		$this->contentContainerEnd();
-		$this->contentEnd();
+
+		$this->endsBoxPrimary();
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

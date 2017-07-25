@@ -65,6 +65,11 @@ $(document).ready(function() {
 	$( "#selector" ).change(function() {
 		$('div.ajax').trigger('update', {workflowid: $(this).val()});
 	});
+
+	$("#document-workflow-widget").on("click", function(){
+		$("#workflow-preview").addClass("div-hidden");
+		$("#workflow-info").removeClass("col-md-6").addClass("col-md-12");
+	});
 });
 <?php
 	} /* }}} */
@@ -74,10 +79,20 @@ $(document).ready(function() {
 		$user = $this->params['user'];
 		$selworkflow = $this->params['selworkflow'];
 		if($selworkflow) { ?>
-<div id="workflowgraph">
-<iframe src="out.WorkflowGraph.php?workflow=<?php echo $selworkflow->getID(); ?>" width="100%" height="661" style="border: 1px solid #e3e3e3; border-radius: 4px; margin: -1px;"></iframe>
-</div>
-<?php }
+		<div class="box box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title"><?php echo getMLText("workflow"); ?></h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" id="document-workflow-widget" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+      </div>
+      <div class="box-body">
+			<div id="workflowgraph">
+			<iframe src="out.WorkflowGraph.php?workflow=<?php echo $selworkflow->getID(); ?>" width="100%" height="661" style="border: 1px solid #e3e3e3; border-radius: 4px; margin: -1px;"></iframe>
+			</div>
+		</div>
+		</div>
+		<?php }
 	} /* }}} */
 
 	function showWorkflowForm($workflow) { /* {{{ */
@@ -93,7 +108,7 @@ $(document).ready(function() {
 				foreach($path as $state) {
 					$names[] = $state->getName();
 				}
-				$this->errorMsg(getMLText('workflow_has_cycle').": ".implode(' <i class="icon-arrow-right"></i> ', $names));
+				$this->errorMsg(getMLText('workflow_has_cycle').": ".implode(' <i class="fa fa-arrow-right"></i> ', $names));
 			}
 
 			$transitions = $workflow->getTransitions();
@@ -134,28 +149,20 @@ $(document).ready(function() {
 			}
 		}
 ?>
+	
+<?php if($workflow) { ?>
 	<div class="well">
 	<form class="form-horizontal" action="../op/op.WorkflowMgr.php" method="post" enctype="multipart/form-data">
-<?php
-	if($workflow) {
-		echo createHiddenFieldWithKey('editworkflow');
-?>
+
+	<?php echo createHiddenFieldWithKey('editworkflow'); ?>
 	<input type="hidden" name="workflowid" value="<?php print $workflow->getID();?>">
 	<input type="hidden" name="action" value="editworkflow">
-<?php
-	} else {
-		echo createHiddenFieldWithKey('addworkflow');
-?>
-		<input type="hidden" name="action" value="addworkflow">
-<?php
-	}
-?>
 
 <?php
 		if($workflow && !$workflow->isUsed()) {
 ?>
 		<div class="controls">
-			  <a class="standardText btn" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $workflow->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_workflow");?></a>
+			  <a type="button" class="btn btn-danger" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $workflow->getID();?>"><i class="fa fa-remove"></i> <?php printMLText("rm_workflow");?></a>
 		</div>
 <?php
 		}
@@ -163,13 +170,13 @@ $(document).ready(function() {
 		<div class="control-group">
 			<label class="control-label"><?php printMLText("workflow_name");?>:</label>
 			<div class="controls">
-				<input type="text" name="name" value="<?php print ($workflow ? htmlspecialchars($workflow->getName()) : "");?>">
+				<input type="text" name="name" class="form-control" value="<?php print ($workflow ? htmlspecialchars($workflow->getName()) : "");?>">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label"><?php printMLText("workflow_initstate");?>:</label>
 			<div class="controls">
-				<select name="initstate">
+				<select name="initstate" class="form-control">
 <?php
 			foreach($workflowstates as $workflowstate) {
 				echo "<option value=\"".$workflowstate->getID()."\"";
@@ -181,19 +188,22 @@ $(document).ready(function() {
 			</select>
 			</div>
 		</div>
-
+		<br>
 		<div class="controls">
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
+			<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save")?></button>
 		</div>
 
 	</form>
 	</div>
-<?php
+
+<?php }
+
 		if($workflow) {
 		$actions = $dms->getAllWorkflowActions();
 		if($actions) {
 		$transitions = $workflow->getTransitions();
-		echo "<table class=\"table table-condensed\"><thead>";
+		echo "<div class=\"table-responsive\">";
+		echo "<table class=\"table table-bordered table-condensed\"><thead>";
 		echo "<tr><th>".getMLText('state_and_next_state')."</th><th>".getMLText('action')."</th><th>".getMLText('users_and_groups')."</th><th></th></tr></thead><tbody>";
 		if($transitions) {
 			foreach($transitions as $transition) {
@@ -206,14 +216,14 @@ $(document).ready(function() {
 				if(!$transusers && !$transgroups) {
 					echo " class=\"error\"";
 				}
-				echo "><td>".'<i class="icon-circle'.($workflow->getInitState()->getId() == $state->getId() ? ' initstate' : ' in-workflow').'"></i> '.$state->getName()."<br />";
+				echo "><td>".'<i class="fa fa-circle'.($workflow->getInitState()->getId() == $state->getId() ? ' initstate' : ' in-workflow').'"></i> '.$state->getName()."<br />";
 				$docstatus = $nextstate->getDocumentStatus();
-				echo '<i class="icon-circle'.($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ' in-workflow')).'"></i> '.$nextstate->getName();
+				echo '<i class="fa fa-circle'.($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ' in-workflow')).'"></i> '.$nextstate->getName();
 				if($docstatus == S_RELEASED || $docstatus == S_REJECTED) {
-					echo "<br /><i class=\"icon-arrow-right\"></i> ".getOverallStatusText($docstatus);
+					echo "<br /><i class=\"fa fa-arrow-right\"></i> ".getOverallStatusText($docstatus);
 				}
 				echo "</td>";
-				echo "<td><i class=\"icon-sign-blank workflow-action\"></i> ".$action->getName()."</td>";
+				echo "<td><i class=\"fa fa-square workflow-action\"></i> ".$action->getName()."</td>";
 				echo "<td>";
 				foreach($transusers as $transuser) {
 					$u = $transuser->getUser();
@@ -234,7 +244,7 @@ $(document).ready(function() {
   <?php echo createHiddenFieldWithKey('removetransitionfromworkflow'); ?>
 	<input type="hidden" name="workflow" value="<?php print $workflow->getID();?>">
 	<input type="hidden" name="transition" value="<?php print $transition->getID(); ?>">
-	<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("delete");?></button>
+	<button type="submit" class="btn btn-danger"><i class="fa fa-remove"></i> <?php printMLText("delete");?></button>
 </form>
 <?php
 				echo "</td>";
@@ -242,19 +252,21 @@ $(document).ready(function() {
 			}
 		}
 		echo "</tbody></table>";
+		echo "</div>";
 ?>
-<form class="form-inline" action="../op/op.AddTransitionToWorkflow.php" method="post">
+<form class="" action="../op/op.AddTransitionToWorkflow.php" method="post">
 <?php
-		echo "<table class=\"table table-condensed\"><thead></thead><tbody>";
+		echo "<div class=\"table-responsive\">";
+		echo "<table class=\"table table-bordered table-condensed\"><thead></thead><tbody>";
 			echo "<tr>";
 			echo "<td>";
-			echo "<select name=\"state\">";
+			echo "<select name=\"state\" class=\"form-control\">";
 			$states = $dms->getAllWorkflowStates();
 			foreach($states as $state) {
 				echo "<option value=\"".$state->getID()."\">".$state->getName()."</option>";
 			}
 			echo "</select><br />";
-			echo "<select name=\"nextstate\">";
+			echo "<select name=\"nextstate\" class=\"form-control\">";
 			$states = $dms->getAllWorkflowStates();
 			foreach($states as $state) {
 				echo "<option value=\"".$state->getID()."\">".$state->getName()."</option>";
@@ -262,21 +274,21 @@ $(document).ready(function() {
 			echo "</select>";
 			echo "</td>";
 			echo "<td>";
-			echo "<select name=\"action\">";
+			echo "<select name=\"action\" class=\"form-control\">";
 			foreach($actions as $action) {
 				echo "<option value=\"".$action->getID()."\">".$action->getName()."</option>";
 			}
 			echo "</select>";
 			echo "</td>";
 			echo "<td>";
-      echo "<select class=\"chzn-select\" name=\"users[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_users')."\" data-no_results_text=\"".getMLText('unknown_user')."\">";
+      echo "<select class=\"chzn-select form-control\" name=\"users[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_users')."\" data-no_results_text=\"".getMLText('unknown_user')."\">";
 			$allusers = $dms->getAllUsers();
 			foreach($allusers as $usr) {
 				print "<option value=\"".$usr->getID()."\">". htmlspecialchars($usr->getLogin()." - ".$usr->getFullName())."</option>";
 			}
 			echo "</select>";
 			echo "<br />";
-      echo "<select class=\"chzn-select\" name=\"groups[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_groups')."\" data-no_results_text=\"".getMLText('unknown_group')."\">";
+      echo "<select class=\"chzn-select form-control\" name=\"groups[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_groups')."\" data-no_results_text=\"".getMLText('unknown_group')."\">";
 			$allgroups = $dms->getAllGroups();
 			foreach($allgroups as $grp) {
 				print "<option value=\"".$grp->getID()."\">". htmlspecialchars($grp->getName())."</option>";
@@ -287,11 +299,12 @@ $(document).ready(function() {
 ?>
   <?php echo createHiddenFieldWithKey('addtransitiontoworkflow'); ?>
 	<input type="hidden" name="workflow" value="<?php print $workflow->getID();?>">
-	<input type="submit" class="btn" value="<?php printMLText("add");?>">
+	<input type="submit" class="btn btn-info" value="<?php printMLText("add");?>">
 <?php
 			echo "</td>";
 			echo "</tr>\n";
 		echo "</tbody></table>";
+		echo "</div>";
 ?>
 </form>
 <?php
@@ -312,21 +325,24 @@ $(document).ready(function() {
 		$workflows = $this->params['allworkflows'];
 		$workflowstates = $this->params['allworkflowstates'];
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("workflow_management"));
+
+		?>
+    <div class="gap-10"></div>
+    <?php 
 ?>
 
-<div class="row-fluid">
-<div class="span5">
-<div class="well">
+<div class="row">
+<div class="col-md-6">
+<?php $this->startBoxCollapsablePrimary(getMLText("selection")); ?>
 <form class="form-horizontal">
 	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
 		<div class="controls">
-<select id="selector" class="span9">
+<select id="selector" class="form-control">
 <option value="-1"><?php echo getMLText("choose_workflow")?>
 <option value="0"><?php echo getMLText("add_workflow")?>
 <?php
@@ -338,17 +354,64 @@ $(document).ready(function() {
 		</div>
 	</div>
 </form>
-</div>
-<div class="ajax" data-view="WorkflowMgr" data-action="info" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
-</div>
 
-<div class="span7">
+<?php $this->endsBoxCollapsablePrimary(); ?>
+
+</div>
+<div class="col-md-6">
+	<?php $this->startBoxCollapsablePrimary(getMLText("add_workflow")); ?>
+	<form class="form-horizontal" action="../op/op.WorkflowMgr.php" method="post" enctype="multipart/form-data">
+		<?php	echo createHiddenFieldWithKey('addworkflow'); ?>
+		<input type="hidden" name="action" value="addworkflow">
+
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("workflow_name");?>:</label>
+			<div class="controls">
+				<input type="text" class="form-control" name="name">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("workflow_initstate");?>:</label>
+			<div class="controls">
+				<select name="initstate" class="form-control">
+				<?php
+				foreach($workflowstates as $workflowstate) {
+					echo "<option value=\"".$workflowstate->getID()."\"";
+					echo ">".htmlspecialchars($workflowstate->getName())."</option>\n";
+				}
+				?>
+			</select>
+			</div>
+		</div>
+		<br>
+		<div class="controls">
+			<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save")?></button>
+		</div>
+	</form>
+	</div>
+<?php $this->endsBoxCollapsablePrimary(); ?>
+</div>
+<div class="row">
+<div class="col-md-12">
+<?php $this->startBoxSolidPrimary(getMLText("workflow")); ?>
+
+<div id="workflow-info" class="col-md-12">
 		<div class="ajax" data-view="WorkflowMgr" data-action="form" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
 </div>
+
+<div id="workflow-preview" class="col-md-12 ajax" data-view="WorkflowMgr" data-action="info" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
+</div>
+
+<?php $this->endsBoxSolidPrimary(); ?>
 </div>
 
 <?php
-		$this->contentEnd();
+
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

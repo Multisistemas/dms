@@ -335,15 +335,15 @@ div.buttons #zoom {margin: 3px; _float: right;}
 <div id="preview">
 	<img id="png" />
 	<div id="legend">
-		<i class="icon-circle initstate"></i> <?php printMLText("workflow_initstate"); ?><br />
-		<i class="icon-circle released"></i> <?php echo getOverallStatusText(S_RELEASED); ?><br />
-		<i class="icon-circle rejected"></i> <?php echo getOverallStatusText(S_REJECTED); ?><br />
-		<i class="icon-circle in-workflow"></i> <?php echo getOverallStatusText(S_IN_WORKFLOW); ?><br />
-		<i class="icon-sign-blank workflow-action"></i> <?php echo printMLText('global_workflow_actions'); ?>
+		<i class="fa fa-circle initstate"></i> <?php printMLText("workflow_initstate"); ?><br />
+		<i class="fa fa-circle released"></i> <?php echo getOverallStatusText(S_RELEASED); ?><br />
+		<i class="fa fa-circle rejected"></i> <?php echo getOverallStatusText(S_REJECTED); ?><br />
+		<i class="fa fa-circle in-workflow"></i> <?php echo getOverallStatusText(S_IN_WORKFLOW); ?><br />
+		<i class="fa fa-square workflow-action"></i> <?php echo printMLText('global_workflow_actions'); ?>
 	</div>
 	<div class="buttons">
-		<div id="zoom"><button class="btn btn-mini btn-default">Zoom</button></div>
-		<button class="btn btn-mini" id="setlayout" data-layout="cose"><?php printMLText('redraw'); ?></button>
+		<div id="zoom"><button class="btn btn-mini btn-primary">Zoom</button></div>
+		<button class="btn btn-mini btn-success" id="setlayout" data-layout="cose"><i class="fa fa-refresh"></i> <?php printMLText('redraw'); ?></button>
 	</div>
 </div>
 <?php

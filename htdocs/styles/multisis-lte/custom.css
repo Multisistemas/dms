@@ -49,7 +49,7 @@
 
 
 
-/* ------------- Profile picture ------------------ */
+/* ------------- Main header ------------------ */
 
 .img-nav-mini {
     width: 100% !important;
@@ -64,6 +64,36 @@
 
 .a-fix-height {
     height: 50px !important;
+}
+
+i.fix-padding {
+    padding-top: 7px;
+}
+
+.my-menu {
+    max-height: 200px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.my-menu>li>a {
+    font-size: 12px;
+    padding: 0px;
+    color: #666; 
+}
+
+.my-menu>li:hover {
+    background-color: #f6f6f6;
+}
+
+.my-menu-body {
+    border: 1px solid #eeeeee;
+    padding: 10px;
+}
+
+.language-active {
+    background-color: #eeeeee;
 }
 
 /* ------------- Control sidebar ------------------ */
@@ -206,6 +236,9 @@
     color: #777 !important;
 }
 
+.modal {
+    overflow: auto !important;
+}
 
 
 /* ------------- Breadcrumb ------------------ */
@@ -225,6 +258,36 @@
 
 
 /* ------------- Forms ------------------ */
+input[type=text] {
+    max-width: 320px !important;
+}
+
+input[type=password] {
+    max-width: 320px !important;
+}
+
+select.form-control {
+    max-width: 320px !important;
+}
+
+textarea.form-control {
+    max-width: 600px !important;
+}
+
+.select2 {
+    max-width: 600px !important;
+    display: block !important;
+}
+
+.select2-selection {
+    max-width: 600px !important;
+    display: block !important;
+}
+
+.float-left {
+    float: left;
+}
+
 .is-required {
     color: red !important;
 }
@@ -294,10 +357,6 @@ ul.unstyled {
 .td-action-bkg-two {
     background-color: #605ca8;
     color: #ffffff;
-}
-
-.float-left {
-    float: left;
 }
 
 .background-white {
@@ -407,4 +466,38 @@ span.wrap-normal {
 .logo-lg {
     max-height: 50px !important;
     padding: 5px 0px 5px 0px !important;    
+}
+
+/* -------------- Workflow colors --------------- */
+
+i.initstate {
+    color: #ff9900;
+}
+
+i.in-workflow {
+    color: #11479e;
+}
+
+i.workflow-action {
+    color: #91479e;
+}
+
+i.released {
+    color: #00b000;
+}
+
+i.rejected {
+    color: #b00000;
+}
+
+[class^="fa-circle"] {
+    display: inline;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    vertical-align: baseline;
+    background-image: none;
+    background-position: 0% 0%;
+    background-repeat: repeat;
+    margin-top: 0;
 }

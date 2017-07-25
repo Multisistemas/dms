@@ -659,7 +659,12 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 						print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=workflow\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
 //						print "<td>".getOverallStatusText($res["status"])."</td>";
 						$workflowstate = $latestContent->getWorkflowState();
-						print '<td>'.getOverallStatusText($res["status"]).': '.$workflow->getName().'<br />'.$workflowstate->getName().'</td>';
+						if ($workflowstate) {
+							print '<td>'.getOverallStatusText($res["status"]).': '.$workflow->getName().'<br />'.$workflowstate->getName().'</td>';	
+						} else {
+							print '<td></td>';
+						}
+						//print '<td>'.getOverallStatusText($res["status"]).': '.$workflow->getName().'<br />'.$workflowstate->getName().'</td>';
 						print "<td>".$res["version"]."</td>";
 						print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
 						print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				

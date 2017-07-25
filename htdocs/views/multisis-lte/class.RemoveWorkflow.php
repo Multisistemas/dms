@@ -36,16 +36,17 @@ class SeedDMS_View_RemoveWorkflow extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$workflow = $this->params['workflow'];
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->htmlStartPage(getMLText("rm_workflow"), "skin-blue sidebar-mini");
 		$this->containerStart();
 		$this->mainHeader();
 		$this->mainSideBar();
 		$this->contentStart();		
 
-		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+		//echo $this->getDefaultFolderPathHTML($folder, true, $document);
 
 		//// Document content ////
 		echo "<div class=\"row\">";
+		echo "<div class=\"gap-20\"></div>";
 		echo "<div class=\"col-md-12\">";
 		$this->startBoxPrimary(getMLText("rm_workflow"));
 		// Display the Workflow form.

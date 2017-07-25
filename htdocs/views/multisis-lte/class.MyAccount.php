@@ -61,12 +61,12 @@ class SeedDMS_View_MyAccount extends SeedDMS_Bootstrap_Style {
 		
 		echo "<div class=\"row-fluid\">\n";
 		if ($enableuserimage){
-			echo "<div class=\"span2\">\n";
+			echo "<div class=\"col-md-2\">\n";
 			print ($user->hasImage() ? "<img class=\"userImage\" src=\"".$httproot . "out/out.UserImage.php?userid=".$user->getId()."\">" : getMLText("no_user_image"))."\n";
 			echo "</div>\n";
-			echo "<div class=\"span10\">\n";
+			echo "<div class=\"col-md-10\">\n";
 		} else {
-			echo "<div class=\"span12\">\n";
+			echo "<div class=\"col-md-12\">\n";
 		}
 
 		print "<table class=\"table table-bordered table-condensed\">\n";
@@ -80,8 +80,12 @@ class SeedDMS_View_MyAccount extends SeedDMS_Bootstrap_Style {
 		print "<td class=\"header-bold\">".getMLText("email")." : </td>\n";
 		print "<td>".htmlspecialchars($user->getEmail())."</td>\n";
 		print "</tr>\n<tr>\n";
-		print "<td class=\"header-bold\">".getMLText("comment")." : </td>\n";
-		print "<td>".htmlspecialchars($user->getComment())."</td>\n";
+
+		if ($user->_comment != "client-admin") {
+			print "<td class=\"header-bold\">".getMLText("biography")." : </td>\n";
+			print "<td>".htmlspecialchars($user->getComment())."</td>\n";	
+		}
+		
 		print "</tr>\n";
 		if($passwordexpiration > 0) {
 			print "<tr>\n";
@@ -140,6 +144,7 @@ class SeedDMS_View_MyAccount extends SeedDMS_Bootstrap_Style {
 		?>
 		<div class="box-footer">
 			<a href="/out/out.EditUserData.php" type="button" class="btn btn-success"><i class="fa fa-pencil"></i> <?php printMLText("edit_user_details"); ?></a>
+			<a href="/out/out.EditUserPassword.php" type="button" class="btn btn-primary"><i class="fa fa-pencil"></i> <?php printMLText("change_password"); ?></a>
 		</div>
 		<?php $this->endsBoxPrimary(); ?>
 

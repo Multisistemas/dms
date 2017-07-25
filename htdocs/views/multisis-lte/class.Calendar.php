@@ -240,7 +240,7 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 		$this->htmlStartPage(getMLText("calendar"), "skin-blue sidebar-mini");
 		$this->containerStart();
 		$this->mainHeader();
-		$this->mainSideBar();
+		$this->mainSideBar(0,0,1);
 		$this->contentStart();
 
     ?>

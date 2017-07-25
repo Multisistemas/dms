@@ -132,8 +132,8 @@ $(document).ready( function() {
 			<form class="form-inline" action="../op/op.DefaultKeywords.php" method="post" id="form">
   		<?php echo createHiddenFieldWithKey('addcategory'); ?>
 			<input type="hidden" name="action" value="addcategory">
-			<?php printMLText("name");?>: <input type="text" class="name" name="name">
-			<input type="submit" class="btn" value="<?php printMLText("new_default_keyword_category"); ?>">
+			<?php printMLText("name");?>: <input type="text" class="name form-control" name="name">
+			<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("new_default_keyword_category"); ?></button>
 			</form>
 <?php
 		} else {
@@ -148,11 +148,11 @@ $(document).ready( function() {
   						<?php echo createHiddenFieldWithKey('removecategory'); ?>
 							<input type="Hidden" name="action" value="removecategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-							<button type="submit" class="btn" title="<?php echo getMLText("delete")?>"><i class="icon-remove"></i> <?php printMLText("rm_default_keyword_category");?></button>
+							<button type="submit" class="btn btn-danger" title="<?php echo getMLText("delete")?>"><i class="fa fa-times"></i> <?php printMLText("rm_default_keyword_category");?></button>
 						</form>
 					</div>
 				</div>
-
+				<br>
 				<div class="control-group">
 					<label class="control-label"><?php echo getMLText("name")?>:</label>
 					<div class="controls">
@@ -160,12 +160,12 @@ $(document).ready( function() {
   						<?php echo createHiddenFieldWithKey('editcategory'); ?>
 							<input type="hidden" name="action" value="editcategory">
 							<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
-							<input name="name" class="name" type="text" value="<?php echo htmlspecialchars($category->getName()) ?>">
-							<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
+							<input name="name" class="name form-control" type="text" value="<?php echo htmlspecialchars($category->getName()) ?>">
+							<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save");?></button>
 						</form>
 					</div>
 				</div>
-
+				<br>
 				<div class="control-group">
 					<label class="control-label"><?php echo getMLText("default_keywords")?>:</label>
 					<div class="controls">
@@ -181,8 +181,8 @@ $(document).ready( function() {
 									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
 									<input type="Hidden" name="action" value="editkeywords">
-									<input name="keywords" class="keywords" type="text" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
-									<button class="btn" title="<?php echo getMLText("save")?>"><i class="icon-save"></i> <?php echo getMLText("save")?></button>
+									<input name="keywords" class="keywords form-control" type="text" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
+									<button class="btn btn-success" title="<?php echo getMLText("save")?>"><i class="fa fa-save"></i> <?php echo getMLText("save")?></button>
 									<!--	 <input name="action" value="removekeywords" type="Image" src="images/del.gif" title="<?php echo getMLText("delete")?>" border="0"> &nbsp; -->
 									</form>
 									<form style="display: inline-block;" method="post" action="../op/op.DefaultKeywords.php" >
@@ -190,8 +190,9 @@ $(document).ready( function() {
 									<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
 									<input type="hidden" name="keywordsid" value="<?php echo $list["id"]?>">
 									<input type="hidden" name="action" value="removekeywords">
-									<button class="btn" title="<?php echo getMLText("delete")?>"><i class="icon-remove"></i> <?php echo getMLText("delete")?></button>
+									<button class="btn btn-danger" title="<?php echo getMLText("delete")?>"><i class="fa fa-times"></i> <?php echo getMLText("delete")?></button>
 									</form>
+									<br>
 									<br>
 						<?php }  ?>
 					</div>
@@ -204,8 +205,8 @@ $(document).ready( function() {
   				  <?php echo createHiddenFieldWithKey('newkeywords'); ?>
 						<input type="Hidden" name="action" value="newkeywords">
 						<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-						<input type="text" class="keywords" name="keywords">
-					  	<input type="submit" class="btn" value="<?php printMLText("new_default_keywords");?>">
+						<input type="text" class="keywords form-control" name="keywords">
+						<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("new_default_keywords");?></button>
 						</form>
 					</div>
 				</div>
@@ -220,21 +221,28 @@ $(document).ready( function() {
 		$categories = $this->params['categories'];
 		$selcategoryid = $this->params['selcategoryid'];
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-		$this->contentHeading(getMLText("global_default_keywords"));
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxPrimary(getMLText("global_default_keywords"));
 ?>
 <div class="row-fluid">
-<div class="span4">
+<div class="span12">
 <div class="well">
-<form class="form-horizontal">
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
+<form>
+	<div class="form-group">
+		<label for="login"><?php printMLText("selection");?>:</label>
 		<div class="controls">
-	<select id="selector" class="input-xlarge">
+	<select id="selector" class="input-xlarge form-control">
 		<option value="-1"><?php echo getMLText("choose_category")?>
 		<option value="0"><?php echo getMLText("new_default_keyword_category")?>
 <?php
@@ -258,7 +266,7 @@ $(document).ready( function() {
 </div>
 </div>
 
-<div class="span8">
+<div class="span12">
 	<div class="well">
 		<div class="ajax" data-view="DefaultKeywords" data-action="form" <?php echo ($selcategoryid ? "data-query=\"categoryid=".$selcategoryid."\"" : "") ?>></div>
 		</div>
@@ -266,7 +274,15 @@ $(document).ready( function() {
 </div>
 
 <?php
-		$this->contentEnd();
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

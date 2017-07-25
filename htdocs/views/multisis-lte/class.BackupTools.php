@@ -44,39 +44,51 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$contentdir = $this->params['contentdir'];
 
-		$this->htmlStartPage(getMLText("backup_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-		$this->contentHeading(getMLText("backup_tools"));
-		$this->contentContainerStart();
-		print getMLText("space_used_on_data_folder")." : ".SeedDMS_Core_File::format_filesize(dskspace($contentdir));
-		$this->contentContainerEnd();
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxPrimary(getMLText("backup_tools"));
+
+		//$this->contentContainerStart();
+		$this->infoMsg(getMLText("space_used_on_data_folder")." : ".SeedDMS_Core_File::format_filesize(dskspace($contentdir)));
+		//$this->contentContainerEnd();
 
 		// versioning file creation ////////////////////////////////////////////////////
 
-		$this->contentHeading(getMLText("versioning_file_creation"));
-		$this->contentContainerStart();
+		//$this->contentHeading(getMLText("versioning_file_creation"));
+		//$this->contentContainerStart();
+		$this->startBoxSolidPrimary(getMLText("versioning_file_creation"));
 		print "<p>".getMLText("versioning_file_creation_warning")."</p>\n";
 
 		print "<form class=\"form-inline\" action=\"../op/op.CreateVersioningFiles.php\" name=\"form1\">";
-		$this->printFolderChooserHtml("form1",M_READWRITE);
-		print "<input type='submit' class='btn' name='' value='".getMLText("versioning_file_creation")."'/>";
+		$this->printFolderChooserHtml3("form1",M_READWRITE);
+		print "<input type='submit' class='btn btn-info' name='' value='".getMLText("versioning_file_creation")."'/>";
 		print "</form>\n";
 
-		$this->contentContainerEnd();
+		$this->endsBoxSolidPrimary();
+		//$this->contentContainerEnd();
 
 		// archive creation ////////////////////////////////////////////////////////////
 
-		$this->contentHeading(getMLText("archive_creation"));
-		$this->contentContainerStart();
+		//$this->contentHeading(getMLText("archive_creation"));
+		//$this->contentContainerStart();
+		$this->startBoxSolidPrimary(getMLText("archive_creation"));
 		print "<p>".getMLText("archive_creation_warning")."</p>\n";
 
 		print "<form action=\"../op/op.CreateFolderArchive.php\" name=\"form2\">";
-		$this->printFolderChooserHtml("form2",M_READWRITE);
-		print "<label class=\"checkbox\"><input type=\"checkbox\" name=\"human_readable\" value=\"1\">".getMLText("human_readable")."</label>";
-		print "<input type='submit' class='btn' name='' value='".getMLText("archive_creation")."'/>";
+		$this->printFolderChooserHtml3("form2",M_READWRITE);
+		print "<input type=\"checkbox\" name=\"human_readable\" value=\"1\"> ".getMLText("human_readable")."<br>";
+		print "<br>";
+		print "<input type='submit' class='btn btn-info' name='' value='".getMLText("archive_creation")."'/>";
 		print "</form>\n";
 
 		// list backup files
@@ -95,7 +107,8 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 
 		if($entries) {
 			$this->contentSubHeading(getMLText("backup_list"));
-			print "<table class=\"table-condensed\">\n";
+			print "<div class='table-responsive'>";
+			print "<table class=\"table table-bordered table-condensed\">\n";
 			print "<thead>\n<tr>\n";
 			print "<th></th>\n";
 			print "<th>".getMLText("folder")."</th>\n";
@@ -116,23 +129,26 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 				print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
 				print "<td>".SeedDMS_Core_File::format_filesize(filesize($contentdir.$entry))."</td>\n";
 				print "<td>";
-				print "<a href=\"out.RemoveArchive.php?arkname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("backup_remove")."</a>";
+				print "<a href=\"out.RemoveArchive.php?arkname=".$entry."\" class=\"btn btn-mini btn-danger\"><i class=\"fa fa-times\"></i> ".getMLText("backup_remove")."</a>";
 				print "</td>\n";	
 				print "</tr>\n";
 			}
 			print "</table>\n";
+			print "</div>";
 		}
 
-		$this->contentContainerEnd();
+		//$this->contentContainerEnd();
+		$this->endsBoxSolidPrimary();
 
 		// dump creation ///////////////////////////////////////////////////////////////
 
-		$this->contentHeading(getMLText("dump_creation"));
-		$this->contentContainerStart();
+		//$this->contentHeading(getMLText("dump_creation"));
+		//$this->contentContainerStart();
+		$this->startBoxSolidPrimary(getMLText("dump_creation"));
 		print "<p>".getMLText("dump_creation_warning")."</p>\n";
 
 		print "<form action=\"../op/op.CreateDump.php\" name=\"form4\">";
-		print "<input type='submit' class='btn' name='' value='".getMLText("dump_creation")."'/>";
+		print "<input type='submit' class='btn btn-info' name='' value='".getMLText("dump_creation")."'/>";
 		print "</form>\n";
 
 		// list backup files
@@ -150,7 +166,8 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 
 		if($entries) {
 			$this->contentSubHeading(getMLText("dump_list"));
-			print "<table class=\"table-condensed\">\n";
+			print "<div class='table-responsive'>";
+			print "<table class=\"table table-bordered table-condensed\">\n";
 			print "<thead>\n<tr>\n";
 			print "<th></th>\n";
 			print "<th>".getMLText("creation_date")."</th>\n";
@@ -164,14 +181,16 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 				print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
 				print "<td>".SeedDMS_Core_File::format_filesize(filesize($contentdir.$entry))."</td>\n";
 				print "<td>";
-				print "<a href=\"out.RemoveDump.php?dumpname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("dump_remove")."</a>";
+				print "<a href=\"out.RemoveDump.php?dumpname=".$entry."\" class=\"btn btn-mini btn-danger\"><i class=\"fa fa-times\"></i> ".getMLText("dump_remove")."</a>";
 				print "</td>\n";	
 				print "</tr>\n";
 			}
 			print "</table>\n";
+			print "</div>";
 		}
 
-		$this->contentContainerEnd();
+		//$this->contentContainerEnd();
+		$this->endsBoxSolidPrimary();
 
 		// files deletion //////////////////////////////////////////////////////////////
 		/*
@@ -187,8 +206,17 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerEnd();
 		*/
 
-		$this->contentEnd();
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
+
 	} /* }}} */
 }
 ?>

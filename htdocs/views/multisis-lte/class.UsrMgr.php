@@ -32,10 +32,11 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
-		$seluser = $this->params['seluser'];
+		$currUser = $this->params['seluser'];
 		$strictformcheck = $this->params['strictformcheck'];
 
 		header('Content-Type: application/javascript');
+		$this->printFolderChooserJs("form".($currUser ? $currUser->getId() : '0'));
 ?>
 function folderSelected(id, name) {
 	window.location = '../out/out.ViewFolder.php?folderid=' + id;
@@ -94,7 +95,7 @@ $(document).ready( function() {
 		if($seluser) {
 			$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
 
-			$this->startBoxCollapsableSuccess(getMLText("user_info"));
+			$this->startBoxCollapsableInfo(getMLText("user_info"));
 			echo "<table class=\"table table-striped table-bordered\">\n";
 			echo "<tr><td>".getMLText('discspace')."</td><td>";
 			$qt = $seluser->getQuota() ? $seluser->getQuota() : $quota;
@@ -145,7 +146,7 @@ $(document).ready( function() {
 
 			if($user->isAdmin() && $seluser->getID() != $user->getID())
 					echo "<a class=\"btn btn-success\" href=\"../op/op.SubstituteUser.php?userid=".((int) $seluser->getID())."&formtoken=".createFormKey('substituteuser')."\"><i class=\"fa fa-exchange\"></i> ".getMLText('substitute_user')."</a> ";
-			$this->endsBoxCollapsableSuccess();
+			$this->endsBoxCollapsableInfo();
 		}
 	} /* }}} */
 
@@ -167,8 +168,9 @@ $(document).ready( function() {
 		$undeluserids = $this->params['undeluserids'];
 		$workflowmode = $this->params['workflowmode'];
 		$quota = $this->params['quota'];
+
 ?>
-	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form" id="form">
+	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="<?php echo "form".($currUser ? $currUser->getId() : '0'); ?>" id="<?php echo "form".($currUser ? $currUser->getId() : '0'); ?>">
 <?php
 		if($currUser) {
 			echo createHiddenFieldWithKey('edituser');
@@ -259,7 +261,7 @@ $(document).ready( function() {
 		<tr>
 			<td><?php printMLText("home_folder")?>:</td>
 
-			<td><?php $this->printFolderChooserHTML("form".($currUser ? $currUser->getId() : '0'), M_READ, -1, $currUser ? $dms->getFolder($currUser->getHomeFolder()) : 0, 'homefolder');?></td>
+			<td><?php $this->printFolderChooserHTML2("form".($currUser ? $currUser->getId() : '0'), M_READ, -1, $currUser ? $dms->getFolder($currUser->getHomeFolder()) : 0, 'homefolder');?></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("quota");?>:</td>

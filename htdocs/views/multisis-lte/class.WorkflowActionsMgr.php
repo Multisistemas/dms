@@ -76,7 +76,7 @@ $(document).ready( function() {
 			if($selworkflowaction->isUsed()) {
 				$transitions = $selworkflowaction->getTransitions();
 				if($transitions) {
-					echo "<table class=\"table table-condensed\">";
+					echo "<table class=\"table table-bordered table-striped\">";
 					echo "<thead><tr><th>".getMLText('workflow')."</th><th>".getMLText('previous_state')."</th><th>".getMLText('next_state')."</th></tr></thead>\n";
 					echo "<tbody>";
 					foreach($transitions as $transition) {
@@ -88,9 +88,9 @@ $(document).ready( function() {
 						echo "<td>";
 						echo $workflow->getName();
 						echo "</td><td>";
-						echo '<i class="icon-circle'.($workflow->getInitState()->getId() == $state->getId() ? ' initstate' : ' in-workflow').'"></i> '.$state->getName();
+						echo '<i class="fa fa-circle'.($workflow->getInitState()->getId() == $state->getId() ? ' initstate' : ' in-workflow').'"></i> '.$state->getName();
 						echo "</td><td>";
-						echo '<i class="icon-circle'.($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ' in-workflow')).'"></i> '.$nextstate->getName();
+						echo '<i class="fa fa-circle'.($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ' in-workflow')).'"></i> '.$nextstate->getName();
 						echo "</td></tr>";
 					}
 					echo "</tbody>";
@@ -111,13 +111,14 @@ $(document).ready( function() {
 <form class="form-inline" action="../op/op.RemoveWorkflowAction.php" method="post">
   <?php echo createHiddenFieldWithKey('removeworkflowaction'); ?>
 	<input type="hidden" name="workflowactionid" value="<?php print $action->getID();?>">
-	<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_workflow_action");?></button>
+	<button type="submit" class="btn btn-danger"><i class="fa fa-remove"></i> <?php printMLText("rm_workflow_action");?></button>
 </form>
+<br>
 <?php
 			}
 		}
 ?>
-<form action="../op/op.WorkflowActionsMgr.php" method="post" class="form-horizontal">
+<form action="../op/op.WorkflowActionsMgr.php" method="post" class="">
 <?php
 		if($action) {
 			echo createHiddenFieldWithKey('editworkflowaction');
@@ -135,13 +136,13 @@ $(document).ready( function() {
 	<div class="control-group">
 		<label class="control-label" for="login"><?php printMLText("workflow_action_name");?>:</label>
 		<div class="controls">
-			<input type="text" id="name" name="name" value="<?php print $action ? htmlspecialchars($action->getName()) : '';?>">
+			<input type="text" id="name" class="form-control" name="name" value="<?php print $action ? htmlspecialchars($action->getName()) : '';?>" required>
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="login"></label>
 		<div class="controls">
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
+			<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save")?></button>
 		</div>
 	</div>
 	</form>
@@ -161,21 +162,29 @@ $(document).ready( function() {
 
 		$workflowactions = $dms->getAllWorkflowActions();
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("workflow_actions_management"));
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxPrimary(getMLText("workflow_actions_management"));
 ?>
 
-<div class="row-fluid">
-<div class="span4">
+<div class="row">
+<div class="col-md-4">
 <div class="well">
-<form class="form-horizontal">
-	<div class="control-group">
+<form class="">
+	<div class="form-group">
 		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
 		<div class="controls">
-<select id="selector" class="span9">
+<select id="selector" class="form-control">
 <option value="-1"><?php echo getMLText("choose_workflow_action")?>
 <option value="0"><?php echo getMLText("add_workflow_action")?>
 <?php
@@ -191,7 +200,7 @@ $(document).ready( function() {
 <div class="ajax" data-view="WorkflowActionsMgr" data-action="info" <?php echo ($selworkflowaction ? "data-query=\"workflowactionid=".$selworkflowaction->getID()."\"" : "") ?>></div>
 </div>
 
-<div class="span8">
+<div class="col-md-8">
 	<div class="well">
 		<div class="ajax" data-view="WorkflowActionsMgr" data-action="form" <?php echo ($selworkflowaction ? "data-query=\"workflowactionid=".$selworkflowaction->getID()."\"" : "") ?>></div>
 	</div>
@@ -199,7 +208,15 @@ $(document).ready( function() {
 
 </div>
 <?php
-		$this->contentEnd();
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

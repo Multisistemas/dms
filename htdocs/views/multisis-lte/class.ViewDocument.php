@@ -1128,7 +1128,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			echo "</tr>";
 			echo "</table>";
 
-			$workflows = $dms->getAllWorkflows();
+			/*$workflows = $dms->getAllWorkflows();
 			if($workflows) {
 				$subworkflows = array();
 				foreach($workflows as $wkf) {
@@ -1154,13 +1154,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			/* If in a sub workflow, the check if return the parent workflow
 			 * is possible.
 			 */
-			if($parentworkflow = $latestContent->getParentWorkflow()) {
+			/*if($parentworkflow = $latestContent->getParentWorkflow()) {
 				$states = $parentworkflow->getStates();
-				foreach($states as $state) {
+				foreach($states as $state) {*/
 					/* Check if the current workflow state is also a state in the
 					 * parent workflow
 					 */
-					if($latestContent->getWorkflowState()->getID() == $state->getID()) {
+					/*if($latestContent->getWorkflowState()->getID() == $state->getID()) {
 						echo "Switching from sub workflow '".$workflow->getName()."' into state ".$state->getName()." of parent workflow '".$parentworkflow->getName()."' is possible<br />";
 						/* Check if the transition from the state where the sub workflow
 						 * starts into the current state is also allowed in the parent
@@ -1169,7 +1169,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						 * but that is difficult to check.
 						 */
 						/* If the init state has not been left, return is always possible */
-						if($workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()) {
+						/*if($workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()) {
 							echo "Initial state of sub workflow has not been left. Return to parent workflow is possible<br />";
 							echo "<form action=\"../out/out.ReturnFromSubWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('returnfromsubworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" />";
 							echo "<input type=\"submit\" class=\"btn btn-info\" value=\"".getMLText('return_from_subworkflow')."\" />";
@@ -1179,7 +1179,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 							 * (which is the initial state of the sub workflow) into
 							 * current state.
 							 */
-							echo "Check for transition from ".$workflow->getInitState()->getName()." into ".$latestContent->getWorkflowState()->getName()." is possible in parentworkflow ".$parentworkflow->getID()."<br />";
+							/*echo "Check for transition from ".$workflow->getInitState()->getName()." into ".$latestContent->getWorkflowState()->getName()." is possible in parentworkflow ".$parentworkflow->getID()."<br />";
 							$transitions = $parentworkflow->getTransitionsByStates($workflow->getInitState(), $latestContent->getWorkflowState());
 							if($transitions) {
 								echo "Found transitions in workflow ".$parentworkflow->getID()."<br />";
@@ -1196,7 +1196,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 					}
 				}
-			}
+			}*/
 		
 			// ---------------- Show workflow diagram --------------------- //
 

@@ -76,7 +76,7 @@ $(document).ready(function() {
 		$this->htmlStartPage(getMLText("nonconfo_title"), "skin-blue sidebar-mini");
 		$this->containerStart();
 		$this->mainHeader();
-		$this->mainSideBar();
+		$this->mainSideBar(0, 2, 0);
 		$this->contentStart();
 		$this->getNonconfoPathHTML();
 ?>
@@ -109,8 +109,7 @@ $(document).ready(function() {
 						</div>
 
 						<div class="form-group">
-							<label><?php printMLText("nonconfo_request_date");?>:</label>
-							<input type="text" class="form-control" name="date" value="<?php echo date("d-m-Y H:i:sa"); ?>" size="100" disabled />
+							<input type="hidden" class="form-control" name="date" value="<?php echo date("d-m-Y H:i:sa"); ?>" size="100" disabled />
 						</div>
 
 						<div class="form-group">
@@ -137,8 +136,7 @@ $(document).ready(function() {
 						</div>
 
 						<div class="form-group">
-							<label><?php printMLText("nonconfo_reporter_name"); ?>:</label>
-							<input type="text" class="form-control" name="reporter" value="<?php echo $user->getFullName(); ?>" size="100" disabled />
+							<input type="hidden" class="form-control" name="reporter" value="<?php echo $user->getFullName(); ?>" size="100" disabled />
 						</div>
 
 						<div class="box-footer">

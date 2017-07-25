@@ -36,21 +36,28 @@ class SeedDMS_View_RemoveDump extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$dumpname = $this->params['dumpfile'];
 
-		$this->htmlStartPage(getMLText("backup_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("dump_remove"));
-		$this->contentContainerStart();
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxDanger(getMLText("dump_remove"));
 ?>
 <form action="../op/op.RemoveDump.php" name="form1" method="post">
 	<input type="Hidden" name="dumpname" value="<?php echo htmlspecialchars($dumpname); ?>">
   <?php echo createHiddenFieldWithKey('removedump'); ?>
 	<p><?php printMLText("confirm_rm_dump", array ("dumpname" => htmlspecialchars($dumpname)));?></p>
-	<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("dump_remove");?></button></p>
+	<p><button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> <?php printMLText("dump_remove");?></button></p>
 </form>
 <?php
-		$this->contentContainerEnd();
+		$this->endsBoxDanger();
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */

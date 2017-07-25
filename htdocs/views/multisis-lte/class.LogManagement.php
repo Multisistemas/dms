@@ -36,8 +36,9 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 		foreach ($entries as $entry){
 			
 			if ($print_header){
+				print "<div class='table-responsive'>";
 				print "<form action=\"out.RemoveLog.php\" method=\"get\">\n";
-				print "<table class=\"table-condensed\">\n";
+				print "<table class=\"table table-bordered table-condensed\">\n";
 				print "<thead>\n<tr>\n";
 				print "<th></th>\n";
 				print "<th>".getMLText("name")."</th>\n";
@@ -56,24 +57,25 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 			print "<td>".SeedDMS_Core_File::format_filesize(filesize($this->contentdir.$entry))."</td>\n";
 			print "<td>";
 			
-			print "<a href=\"out.RemoveLog.php?mode=".$mode."&logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("rm_file")."</a>";
+			print "<a href=\"out.RemoveLog.php?mode=".$mode."&logname=".$entry."\" class=\"btn btn-mini btn-danger\"><i class=\"fa fa-times\"></i> ".getMLText("rm_file")."</a>";
 			print "&nbsp;";
-			print "<a href=\"../op/op.Download.php?logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText("download")."</a>";
+			print "<a href=\"../op/op.Download.php?logname=".$entry."\" class=\"btn btn-mini btn-success\"><i class=\"fa fa-download\"></i> ".getMLText("download")."</a>";
 			print "&nbsp;";
-			print "<a data-target=\"#logViewer\" data-cache=\"false\" href=\"out.LogManagement.php?logname=".$entry."\" role=\"button\" class=\"btn btn-mini\" data-toggle=\"modal\"><i class=\"icon-eye-open\"></i> ".getMLText('view')." …</a>";
+			print "<a data-target=\"#logViewer\" data-cache=\"false\" href=\"out.LogManagement.php?logname=".$entry."\" role=\"button\" class=\"btn btn-mini btn-info\" data-toggle=\"modal\"><i class=\"fa fa-eye\"></i> ".getMLText('view')."</a>";
 			print "</td>\n";	
 			print "</tr>\n";
 		}
 
 		if ($print_header) printMLText("empty_notify_list");
-		else print "<tr><td><i class=\"icon-arrow-up\"></i></td><td colspan=\"2\"><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText('remove_marked_files')."</button></td></tr></table></form>\n";
+		else print "<tr><td><i class=\"fa fa-arrow-up\"></i></td><td colspan=\"2\"><button type=\"submit\" class=\"btn btn-danger\"><i class=\"fa fa-times\"></i> ".getMLText('remove_marked_files')."</button></td></tr></table></form></div>\n";
+
 	} /* }}} */
 
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript');
 ?>
 $(document).ready( function() {
-	$('i.icon-arrow-up').on('click', function(e) {
+	$('i.fa-arrow-up').on('click', function(e) {
 //var checkBoxes = $("input[type=checkbox]");
 //checkBoxes.prop("checked", !checkBoxes.prop("checked"));
 		$('input[type=checkbox]').prop('checked', true);
@@ -91,12 +93,19 @@ $(document).ready( function() {
 		$mode = $this->params['mode'];
 
 		if(!$logname) {
-		$this->htmlStartPage(getMLText("log_management"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-		$this->contentHeading(getMLText("log_management"));
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxPrimary(getMLText("log_management"));
 
 		$entries = array();
 		$wentries = array();
@@ -120,9 +129,10 @@ $(document).ready( function() {
 			$wentries = array_reverse($wentries);
 		}
 ?>
+	<div class="nav-tabs-custom">
   <ul class="nav nav-tabs" id="logtab">
-	  <li <?php echo ($mode == 'web') ? 'class="active"' : ''; ?>><a data-target="#web" data-toggle="tab">web</a></li>
-	  <li <?php echo ($mode == 'webdav') ? 'class="active"' : ''; ?>><a data-target="#webdav" data-toggle="tab">webdav</a></li>
+	  <li <?php echo ($mode == 'web') ? 'class="active"' : ''; ?>><a href="" data-target="#web" data-toggle="tab">web</a></li>
+	  <li <?php echo ($mode == 'webdav') ? 'class="active"' : ''; ?>><a href="" data-target="#webdav" data-toggle="tab">webdav</a></li>
 	</ul>
 	<div class="tab-content">
 	  <div class="tab-pane <?php echo ($mode == 'web') ? 'active' : ''; ?>" id="web">
@@ -140,17 +150,37 @@ $(document).ready( function() {
 ?>
 		</div>
 	</div>
-  <div class="modal hide" style="width: 900px; margin-left: -450px;" id="logViewer" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
-    <div class="modal-body">
-      <p>Please wait, until document tree is loaded …</p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" data-dismiss="modal" aria-hidden="true"><?php print getMLText("close"); ?></button>
-    </div>
-  </div>
+</div>
+ 
+  <div class="modal fade" id="logViewer" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary modal-lg" role="document">
+  	<div class="modal-content">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3 class="modal-title"><?php printMLText("log_management") ?></h3>
+		  </div>
+		  <div class="modal-body">
+				<p><?php printMLText('tree_loading') ?></p>
+		  </div>
+		  <div class="modal-footer">
+		    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+		  </div>
+	  </div>
+	 </div>
+	</div>
+
 <?php
-		$this->contentEnd();
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
+
 		} elseif(file_exists($this->contentdir.$logname)){
 			echo $logname."<pre>\n";
 			readfile($this->contentdir.$logname);

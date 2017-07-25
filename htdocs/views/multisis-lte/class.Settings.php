@@ -33,18 +33,18 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 
 	protected function showTextField($name, $value, $type='', $placeholder='') { /* {{{ */
 		if($type != 'password' && strlen($value) > 80)
-			echo '<textarea class="input-xxlarge" name="'.$name.'">'.$value.'</textarea>';
+			echo '<textarea class="form-control" name="'.$name.'">'.$value.'</textarea>';
 		else {
 			if(strlen($value) > 40)
-				$class = 'input-xxlarge';
+				$class = 'form-control';
 			elseif(strlen($value) > 30)
-				$class = 'input-xlarge';
+				$class = 'form-control';
 			elseif(strlen($value) > 18)
-				$class = 'input-large';
+				$class = 'form-control';
 			elseif(strlen($value) > 12)
-				$class = 'input-medium';
+				$class = 'form-control';
 			else
-				$class = 'input-small';
+				$class = 'form-control';
 			echo '<input '.($type=='password' ? 'type="password"' : 'type="text"').'" class="'.$class.'" name="'.$name.'" value="'.$value.'" placeholder="'.$placeholder.'"/>';
 		}
 	} /* }}} */
@@ -87,11 +87,19 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 		$settings = $this->params['settings'];
 		$currenttab = $this->params['currenttab'];
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("settings"));
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+    $this->containerStart();
+    $this->mainHeader();
+    $this->mainSideBar();
+    $this->contentStart();
+
+    ?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+    $this->startBoxPrimary(getMLText("settings"));
 
 ?>
   <form action="../op/op.Settings.php" method="post" enctype="multipart/form-data" name="form0" >
@@ -104,12 +112,12 @@ if(!is_writeable($settings->_configFilePath)) {
 	print "</div>";
 }
 ?>
-
+<div class="nav-tabs-custom">
   <ul class="nav nav-tabs" id="settingstab">
-		<li class="<?php if(!$currenttab || $currenttab == 'site') echo 'active'; ?>"><a data-target="#site" data-toggle="tab"><?php printMLText('settings_Site'); ?></a></li>
-	  <li class="<?php if($currenttab == 'system') echo 'active'; ?>"><a data-target="#system" data-toggle="tab"><?php printMLText('settings_System'); ?></a></li>
-	  <li class="<?php if($currenttab == 'advanced') echo 'active'; ?>"><a data-target="#advanced" data-toggle="tab"><?php printMLText('settings_Advanced'); ?></a></li>
-	  <li class="<?php if($currenttab == 'extensions') echo 'active'; ?>"><a data-target="#extensions" data-toggle="tab"><?php printMLText('settings_Extensions'); ?></a></li>
+		<li class="<?php if(!$currenttab || $currenttab == 'site') echo 'active'; ?>"><a href="#" data-target="#site" data-toggle="tab"><?php printMLText('settings_Site'); ?></a></li>
+	  <li class="<?php if($currenttab == 'system') echo 'active'; ?>"><a href="#" data-target="#system" data-toggle="tab"><?php printMLText('settings_System'); ?></a></li>
+	  <li class="<?php if($currenttab == 'advanced') echo 'active'; ?>"><a href="#" data-target="#advanced" data-toggle="tab"><?php printMLText('settings_Advanced'); ?></a></li>
+	  <li class="<?php if($currenttab == 'extensions') echo 'active'; ?>"><a href="#" data-target="#extensions" data-toggle="tab"><?php printMLText('settings_Extensions'); ?></a></li>
 	</ul>
 
 	<div class="tab-content">
@@ -135,7 +143,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_available_languages_desc");?>">
         <td><?php printMLText("settings_available_languages");?>:</td>
         <td>
-         <select name="availablelanguages[]" multiple>
+         <select class="form-control" name="availablelanguages[]" multiple>
             <?php
               $languages = getAvailableLanguages();
               foreach($languages as $language)
@@ -152,7 +160,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_language_desc");?>">
         <td><?php printMLText("settings_language");?>:</td>
         <td>
-         <select name="language">
+         <select class="form-control" name="language">
             <?php
               $languages = getAvailableLanguages();
               foreach($languages as $language)
@@ -169,7 +177,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_theme_desc");?>">
         <td><?php printMLText("settings_theme");?>:</td>
         <td>
-         <select name="theme">
+         <select class="form-control" name="theme">
             <?php
               $themes = UI::getStyles();
               foreach($themes as $theme)
@@ -239,7 +247,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_fullSearchEngine_desc");?>">
         <td><?php printMLText("settings_fullSearchEngine");?>:</td>
 				<td>
-				  <select name="fullSearchEngine">
+				  <select class="form-control" name="fullSearchEngine">
 					  <option value="lucene" <?php if ($settings->_fullSearchEngine=='lucene') echo "selected" ?>><?php printMLText("settings_fullSearchEngine_vallucene");?></option>
 						<option value="sqlitefts" <?php if ($settings->_fullSearchEngine=='sqlitefts') echo "selected" ?>><?php printMLText("settings_fullSearchEngine_valsqlitefts");?></option>
 					</select>
@@ -248,7 +256,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_defaultSearchMethod_desc");?>">
         <td><?php printMLText("settings_defaultSearchMethod");?>:</td>
 				<td>
-				  <select name="defaultSearchMethod">
+				  <select class="form-control" name="defaultSearchMethod">
 					  <option value="database" <?php if ($settings->_defaultSearchMethod=='database') echo "selected" ?>><?php printMLText("settings_defaultSearchMethod_valdatabase");?></option>
 						<option value="fulltext" <?php if ($settings->_defaultSearchMethod=='fulltext') echo "selected" ?>><?php printMLText("settings_defaultSearchMethod_valfulltext");?></option>
 					</select>
@@ -277,7 +285,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_expandFolderTree_desc");?>">
         <td><?php printMLText("settings_expandFolderTree");?>:</td>
         <td>
-          <SELECT name="expandFolderTree">
+          <SELECT class="form-control" name="expandFolderTree">
             <OPTION VALUE="0" <?php if ($settings->_expandFolderTree==0) echo "SELECTED" ?> ><?php printMLText("settings_expandFolderTree_val0");?></OPTION>
             <OPTION VALUE="1" <?php if ($settings->_expandFolderTree==1) echo "SELECTED" ?> ><?php printMLText("settings_expandFolderTree_val1");?></OPTION>
             <OPTION VALUE="2" <?php if ($settings->_expandFolderTree==2) echo "SELECTED" ?> ><?php printMLText("settings_expandFolderTree_val2");?></OPTION>
@@ -306,7 +314,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_sortUsersInList_desc");?>">
         <td><?php printMLText("settings_sortUsersInList");?>:</td>
         <td>
-          <SELECT name="sortUsersInList">
+          <SELECT class="form-control" name="sortUsersInList">
             <OPTION VALUE="" <?php if ($settings->_sortUsersInList=='') echo "SELECTED" ?> ><?php printMLText("settings_sortUsersInList_val_login");?></OPTION>
             <OPTION VALUE="fullname" <?php if ($settings->_sortUsersInList=='fullname') echo "SELECTED" ?> ><?php printMLText("settings_sortUsersInList_val_fullname");?></OPTION>
           </SELECT>
@@ -314,7 +322,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_sortFoldersDefault_desc");?>">
         <td><?php printMLText("settings_sortFoldersDefault");?>:</td>
         <td>
-          <SELECT name="sortFoldersDefault">
+          <SELECT class="form-control" name="sortFoldersDefault">
             <OPTION VALUE="u" <?php if ($settings->_sortFoldersDefault=='') echo "SELECTED" ?> ><?php printMLText("settings_sortFoldersDefault_val_unsorted");?></OPTION>
             <OPTION VALUE="s" <?php if ($settings->_sortFoldersDefault=='s') echo "SELECTED" ?> ><?php printMLText("settings_sortFoldersDefault_val_sequence");?></OPTION>
             <OPTION VALUE="n" <?php if ($settings->_sortFoldersDefault=='n') echo "SELECTED" ?> ><?php printMLText("settings_sortFoldersDefault_val_name");?></OPTION>
@@ -332,7 +340,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_calendarDefaultView_desc");?>">
         <td><?php printMLText("settings_calendarDefaultView");?>:</td>
         <td>
-          <SELECT name="calendarDefaultView">
+          <SELECT class="form-control" name="calendarDefaultView">
             <OPTION VALUE="w" <?php if ($settings->_calendarDefaultView=="w") echo "SELECTED" ?> ><?php printMLText("week_view");?></OPTION>
             <OPTION VALUE="m" <?php if ($settings->_calendarDefaultView=="m") echo "SELECTED" ?> ><?php printMLText("month_view");?></OPTION>
             <OPTION VALUE="y" <?php if ($settings->_calendarDefaultView=="y") echo "SELECTED" ?> ><?php printMLText("year_view");?></OPTION>
@@ -341,7 +349,7 @@ if(!is_writeable($settings->_configFilePath)) {
      <tr title="<?php printMLText("settings_firstDayOfWeek_desc");?>">
         <td><?php printMLText("settings_firstDayOfWeek");?>:</td>
         <td>
-          <SELECT name="firstDayOfWeek">
+          <SELECT class="form-control" name="firstDayOfWeek">
             <OPTION VALUE="0" <?php if ($settings->_firstDayOfWeek=="0") echo "SELECTED" ?> ><?php printMLText("sunday");?></OPTION>
             <OPTION VALUE="1" <?php if ($settings->_firstDayOfWeek=="1") echo "SELECTED" ?> ><?php printMLText("monday");?></OPTION>
             <OPTION VALUE="2" <?php if ($settings->_firstDayOfWeek=="2") echo "SELECTED" ?> ><?php printMLText("tuesday");?></OPTION>
@@ -397,7 +405,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_logFileRotation_desc");?>">
         <td><?php printMLText("settings_logFileRotation");?>:</td>
         <td>
-          <SELECT name="logFileRotation">
+          <SELECT class="form-control" name="logFileRotation">
             <OPTION VALUE="h" <?php if ($settings->_logFileRotation=="h") echo "SELECTED" ?> ><?php printMLText("hourly");?></OPTION>
             <OPTION VALUE="d" <?php if ($settings->_logFileRotation=="d") echo "SELECTED" ?> ><?php printMLText("daily");?></OPTION>
             <OPTION VALUE="m" <?php if ($settings->_logFileRotation=="m") echo "SELECTED" ?> ><?php printMLText("monthly");?></OPTION>
@@ -446,7 +454,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_passwordStrengthAlgorithm_desc");?>">
         <td><?php printMLText("settings_passwordStrengthAlgorithm");?>:</td>
         <td>
-				  <select name="passwordStrengthAlgorithm">
+				  <select class="form-control" name="passwordStrengthAlgorithm">
 					  <option value="simple" <?php if ($settings->_passwordStrengthAlgorithm=='simple') echo "selected" ?>><?php printMLText("settings_passwordStrengthAlgorithm_valsimple");?></option>
 						<option value="advanced" <?php if ($settings->_passwordStrengthAlgorithm=='advanced') echo "selected" ?>><?php printMLText("settings_passwordStrengthAlgorithm_valadvanced");?></option>
 					</select>
@@ -487,7 +495,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_defaultAccessDocs_desc");?>">
         <td><?php printMLText("settings_defaultAccessDocs");?>:</td>
         <td>
-				  <select name="defaultAccessDocs">
+				  <select class="form-control" name="defaultAccessDocs">
 						<option value="0" <?php if ($settings->_defaultAccessDocs==0) echo "selected" ?>><?php printMLText("inherited");?></option>
 						<option value="<?php echo M_NONE; ?>" <?php if ($settings->_defaultAccessDocs==M_NONE) echo "selected" ?>><?php printMLText("access_mode_none");?></option>
 						<option value="<?php echo M_READ; ?>" <?php if ($settings->_defaultAccessDocs==M_READ) echo "selected" ?>><?php printMLText("access_mode_read");?></option>
@@ -526,7 +534,7 @@ if(!is_writeable($settings->_configFilePath)) {
      <!--
         -- SETTINGS - SYSTEM - SMTP
       -->
-			<tr ><td><b> <?php printMLText("settings_SMTP");?></b></td><td><a class="btn sendtestmail"><?php printMLText('send_test_mail'); ?></a></td> </tr>
+			<tr ><td><b> <?php printMLText("settings_SMTP");?></b></td><td><a class="btn btn-primary sendtestmail"><?php printMLText('send_test_mail'); ?></a></td> </tr>
       <tr title="<?php printMLText("settings_smtpServer_desc");?>">
         <td><?php printMLText("settings_smtpServer");?>:</td>
         <td><?php $this->showTextField("smtpServer", $settings->_smtpServer); ?></td>
@@ -596,7 +604,7 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_workflowMode_desc");?>">
         <td><?php printMLText("settings_workflowMode");?>:</td>
         <td>
-				  <select name="workflowMode">
+				  <select class="form-control" name="workflowMode">
 					  <option value="traditional" <?php if ($settings->_workflowMode=='traditional') echo "selected" ?>><?php printMLText("settings_workflowMode_valtraditional");?></option>
 					  <option value="traditional_only_approval" <?php if ($settings->_workflowMode=='traditional_only_approval') echo "selected" ?>><?php printMLText("settings_workflowMode_valtraditional_only_approval");?></option>
 						<option value="advanced" <?php if ($settings->_workflowMode=='advanced') echo "selected" ?>><?php printMLText("settings_workflowMode_valadvanced");?></option>
@@ -758,10 +766,11 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php		$this->contentContainerEnd(); ?>
   </div>
   </div>
+</div>
 <?php
 if(is_writeable($settings->_configFilePath)) {
 ?>
-  <button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
+  <button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save")?></button>
 <?php
 }
 ?>
@@ -769,8 +778,17 @@ if(is_writeable($settings->_configFilePath)) {
 
 
 <?php
-		$this->contentEnd();
-		$this->htmlEndPage();
+		
+    $this->endsBoxPrimary();
+
+    echo "</div>";
+    echo "</div>";
+    echo "</div>";
+    
+    $this->contentEnd();
+    $this->mainFooter();    
+    $this->containerEnd();
+    $this->htmlEndPage();
 	} /* }}} */
 }
 ?>

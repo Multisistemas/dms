@@ -116,7 +116,7 @@ $(document).ready( function() {
 
 		if($selgroup) {
 			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
-			$this->startBoxCollapsablePrimary(getMLText("group_info"));
+			$this->startBoxCollapsableInfo(getMLText("group_info"));
 			echo "<table class=\"table table-bordered table-striped\">\n";
 			if($workflowmode == "traditional") {
 				$reviewstatus = $selgroup->getReviewStatus();
@@ -144,7 +144,7 @@ $(document).ready( function() {
 					echo "<tr><td>".getMLText('pending_workflows')."</td><td>".count($workflowStatus)."</td></tr>\n";
 			}
 			echo "</table>";
-			$this->endsBoxCollapsablePrimary();
+			$this->endsBoxCollapsableInfo();
 		}
 	} /* }}} */
 
@@ -289,7 +289,7 @@ $(document).ready( function() {
     <div class="row">
     <div class="col-md-12">
     <?php 
-
+if ($user->_comment != "client-admin") {
 		$this->startBoxPrimary(getMLText("group_management"));
 ?>
 
@@ -323,7 +323,7 @@ $(document).ready( function() {
 
 <?php
 		$this->endsBoxPrimary();
-
+}
 		echo "</div>";
 		echo "</div>";
 		echo "</div>";

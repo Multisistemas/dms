@@ -360,6 +360,18 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<div class=\"box-body\">";
 	} /* }}} */
 
+	function startBoxCollapsableInfo($title = "") { /* {{{ */
+		echo "<div class=\"box box-info box-solid\">";
+    echo "<div class=\"box-header with-border\">";
+    echo "<h3 class=\"box-title\">".$title."</h3>";
+    echo "<div class=\"box-tools pull-right\">";
+    echo "<button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>";
+    echo "</button>";
+    echo "</div>";
+    echo "</div>";
+    echo "<div class=\"box-body\">";
+	} /* }}} */
+
 	function startBoxSolidSuccess($title = "") { /* {{{ */
 		echo "<div class=\"box box-success box-solid\">";
     echo "<div class=\"box-header with-border\">";
@@ -392,6 +404,11 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function endsBoxCollapsableSuccess(){ /* {{{ */
+		echo "</div>";
+    echo "</div>";
+	} /* }}} */
+
+	function endsBoxCollapsableInfo(){ /* {{{ */
 		echo "</div>";
     echo "</div>";
 	} /* }}} */
@@ -499,6 +516,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<a href=\"#\" class=\"sidebar-toggle\" data-toggle=\"offcanvas\" role=\"button\">";
     echo "<span class=\"sr-only\"></span>";
     echo "</a>";
+
     echo "<!-- Navbar Right Menu -->";
     echo "<div class=\"navbar-custom-menu\">";
     echo "<ul class=\"nav navbar-nav\">";
@@ -542,7 +560,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</ul>";
     echo "</li>";
     echo "<!-- /.messages-menu -->";
-
+		
     echo "<!-- Notifications Menu -->";
     echo "<li class=\"dropdown notifications-menu\">";
     echo "<!-- Menu toggle button -->";
@@ -566,42 +584,55 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<li class=\"footer\"><a href=\"#\">View all</a></li>";
     echo "</ul>";
     echo "</li>";
-    echo "<!-- Tasks Menu -->";
-    echo "<li class=\"dropdown tasks-menu\">";
-    echo "<!-- Menu Toggle Button -->";
-    echo "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">";
-    echo "<i class=\"fa fa-flag-o\"></i>";
-    echo "<span class=\"label label-danger\">9</span>";
-    echo "</a>";
-    echo "<ul class=\"dropdown-menu\">";
-    echo "<li class=\"header\">You have 9 tasks</li>";
-    echo "<li>";
-    echo "<!-- Inner menu: contains the tasks -->";
-    echo "<ul class=\"menu\">";
-    echo "<li><!-- Task item -->";
-    echo "<a href=\"#\">";
-    echo "<!-- Task title and progress text -->";
-    echo "<h3>";
-    echo "Design some buttons";
-    echo "<small class=\"pull-right\">20%</small>";
-    echo "</h3>";
-    echo "<!-- The progress bar -->";
-    echo "<div class=\"progress xs\">";
-    echo "<!-- Change the css width attribute to simulate progress -->";
-    echo "<div class=\"progress-bar progress-bar-aqua\" style=\"width: 20%\" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\">";
-    echo "<span class=\"sr-only\">20% Complete</span>";
-    echo "</div>";
-    echo "</div>";
-    echo "</a>";
-    echo "</li>";
-    echo "<!-- end task item -->";
-    echo "</ul>";
-    echo "</li>";
-    echo "<li class=\"footer\">";
-    echo "<a href=\"#\">View all tasks</a>";
-    echo "</li>";
-    echo "</ul>";
-    echo "</li>";*/
+    */
+
+    if($this->params['enablelanguageselector']) {
+
+				echo "<!-- Languages Menu -->";
+		    echo "<li class=\"dropdown tasks-menu\">";
+		    echo "<!-- Menu Toggle Button -->";
+		    echo "<a href=\"#\" class=\"dropdown-toggle a-fix-height\" data-toggle=\"dropdown\">";
+		    echo "<i class=\"fa fa-flag-o fix-padding\"></i>";
+
+		    if ($this->params['session']->getLanguage() == "es_ES") {
+		    	echo "<span class=\"label label-info\">es</span>";	
+		    } else if ($this->params['session']->getLanguage() == "en_GB") {
+		    	echo "<span class=\"label label-info\">en</span>";
+		    }
+		    
+		    echo "</a>";
+		    echo "<ul class=\"dropdown-menu\">";
+		    echo "<li class=\"header\">".getMLText("settings_available_languages")."</li>";
+		    echo "<li>";
+		    echo "<!-- Inner menu: contains languages -->";
+
+		    echo "<ul class=\"my-menu\">";
+
+				$languages = getLanguages();
+				$langCount = 0;
+				foreach ($languages as $currLang) {
+					if($this->params['session']->getLanguage() == $currLang)
+						echo "<li class=\"language-active\">";
+					else
+						echo "<li>";
+
+					echo "<a href=\"/op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
+					echo "<div class=\"my-menu-body\">".getMLText($currLang);
+					echo "<img class=\"pull-right\" src=\"".$this->getCountryFlag($languages[$langCount])."\" ></img>";
+					
+			    echo "</div>";
+			    echo "</a>";
+			    echo "</li>";
+			    $langCount++;
+				}
+				echo "</ul>\n";
+				echo "</li>\n";
+
+			echo "</ul>\n";
+			echo "</li>\n";
+		}
+
+		
 
     echo "<!-- User Account Menu -->";
     echo "<li class=\"dropdown user user-menu\">";
@@ -725,16 +756,18 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	/* Generate folder tree widget */
 
-	function printTheTree($tree, $i = 0){ /* {{{ */
+	function printTheTree($tree, $i = 0, $folder){ /* {{{ */
 
 			foreach ($tree as $key => $treeNode) {
-				if ($i == 0) {
-					echo "<li class=\"treeview active\">";
-					echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"link-to-folder\"><i class=\"fa fa-folder-open\"></i></a>";
-				} else {
-					echo "<li class=\"treeview\">";
-					echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"link-to-folder\"><i class=\"fa fa-folder-open\"></i></a>";
-				}
+				
+					if ($i == 0 && $folder != 0) {
+						echo "<li class=\"treeview active\">";
+						echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"link-to-folder\"><i class=\"fa fa-folder-open\"></i></a>";
+					} else {
+						echo "<li class=\"treeview\">";
+						echo "<a href=\"/out/out.ViewFolder.php?folderid=".$treeNode['id']."\" class=\"link-to-folder\"><i class=\"fa fa-folder-open\"></i></a>";
+					}
+				
 			  echo "<a href=\"#\" class=\"fix-width\"><i class=\"fa fa-folder\"></i> <span class=\"wrap-normal\">".$treeNode['label']." (".count($treeNode['children']).") </span>";
 
 			  if (count($treeNode['children']) > 0) {
@@ -748,7 +781,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 					$children = $treeNode['children'];
 			    echo "<ul class=\"treeview-menu\">";
 			    $i++;
-					$this->printTheTree($children, $i);
+					$this->printTheTree($children, $i,$folder);
 					echo "</ul>";
 				}
 			  echo "</li>";
@@ -756,7 +789,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	} /* }}} */
 
-	function mainSideBar(){ /* {{{ */
+	function mainSideBar($folder = 0, $nonconfo = 0, $calendar = 0){ /* {{{ */
 		echo "<aside class=\"main-sidebar\">";
     echo "<section class=\"sidebar\">";
 
@@ -819,7 +852,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		// View tree
 
 		$rootFolder = $this->printTree(1, M_READ, 0,'', 1, 's');
-		$this->printTheTree($rootFolder, 0);
+		
+		$this->printTheTree($rootFolder, 0, $folder);
 
     //TreeView Old 
 
@@ -839,39 +873,96 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "</li>";*/
 
     // Non conformities
+    $viewAllActive = "";
+    $addNonConfoActive = "";
+    $addProcessActive = "";
+    $addOwnerActive = "";
+    if ($nonconfo != 0) {
+    	switch ($nonconfo) {
+    	case 1:
+    		$viewAllActive = "active";
+    		break;
+    	case 2: 
+    		$addNonConfoActive = "active";
+    		break;
+    	case 3:
+    		$addProcessActive = "active";
+    		break;
+    	case 4:
+    		$addOwnerActive = "active";
+    		break;
+    	default:
+    		break;
+    	}
+    }
+    
     if (!$this->params['user']->isGuest()) {
-	    echo "<li class=\"treeview\">";
+    	if ($nonconfo != 0) {
+    		echo "<li class=\"treeview active\">";	
+    	} else {
+    		echo "<li class=\"treeview\">";	
+    	}
 	    echo "<a href=\"#\"><i class=\"fa fa-wrench\"></i> <span>".getMLText("nonconfo")."</span>";
 	    echo "<span class=\"pull-right-container\">";
 	    echo "<i class=\"fa fa-angle-left pull-right\"></i>";
 	    echo "</span>";
 	    echo "</a>";
 	    echo "<ul class=\"treeview-menu\">";
-	    echo "<li><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("nonconfo_view")."</a></li>";
-	    echo "<li><a href=\"/ext/nonconfo/out/out.AddNonConfo.php\">".getMLText("nonconfo_add_nonconfo")."</a></li>";
+	    echo "<li class=\"".$viewAllActive."\"><a href=\"/ext/nonconfo/out/out.ViewAllNonConfo.php\">".getMLText("nonconfo_view")."</a></li>";
+	    echo "<li class=\"".$addNonConfoActive."\"><a href=\"/ext/nonconfo/out/out.AddNonConfo.php\">".getMLText("nonconfo_add_nonconfo")."</a></li>";
 	    
 	    if ($this->params['user']->isAdmin()) {
-	    	echo "<li><a href=\"/ext/nonconfo/out/out.AddProcess.php\">".getMLText("nonconfo_add_process")."</a></li>";
-	    	echo "<li><a href=\"/ext/nonconfo/out/out.AddOwners.php\">".getMLText("nonconfo_define_owners")."</a></li>";
+	    	echo "<li class=\"".$addProcessActive."\"><a href=\"/ext/nonconfo/out/out.AddProcess.php\">".getMLText("nonconfo_add_process")."</a></li>";
+	    	echo "<li class=\"".$addOwnerActive."\"><a href=\"/ext/nonconfo/out/out.AddOwners.php\">".getMLText("nonconfo_define_owners")."</a></li>";
 	    }
 
     	echo "</ul>";
     	echo "</li>";
   	}
 
-    // Calendar
+  	// Calendar
+  	$calendarWeekActive = "";
+  	$calendarMonthActive = "";
+  	$calendarYearActive = "";
+    $addEventActive = "";
+    if ($calendar != 0) {
+    	if (isset($_GET['mode'])) {
+    		switch ($_GET['mode']) {
+		    	case "w":
+		    		$calendarWeekActive = "active";
+		    		break;
+		    	case "m": 
+		    		$calendarMonthActive = "active";
+		    		break;
+		    	case "y":
+		    		$calendarYearActive = "active";
+		    		break;
+    		}	
+    	}
+
+    	if ($calendar == 2) {
+    		$addEventActive = "active";
+    	}
+    }
+
+    
     if ($this->params['enablecalendar'] && !$this->params['user']->isGuest()){
-	    echo "<li class=\"treeview\">";
+    	if ($calendar != 0) {
+    		echo "<li class=\"treeview active\">";	
+    	} else {
+    		echo "<li class=\"treeview\">";
+    	}
+
 	    echo "<a href=\"#\"><i class=\"fa fa-calendar\"></i> <span>".getMLText("calendar")."</span>";
 	    echo "<span class=\"pull-right-container\">";
 	    echo "<i class=\"fa fa-angle-left pull-right\"></i>";
 	    echo "</span>";
 	    echo "</a>";
 	    echo "<ul class=\"treeview-menu\">";
-	    echo "<li><a href=\"/out/out.Calendar.php?mode=w\">".getMLText("week_view")."</a></li>";
-	    echo "<li><a href=\"/out/out.Calendar.php?mode=m\">".getMLText("month_view")."</a></li>";
-	    echo "<li><a href=\"/out/out.Calendar.php?mode=y\">".getMLText("year_view")."</a></li>";
-	    echo "<li><a href=\"/out/out.AddEvent.php\">".getMLText("add_event")."</a></li>";
+	    echo "<li class=\"".$calendarWeekActive."\"><a href=\"/out/out.Calendar.php?mode=w\">".getMLText("week_view")."</a></li>";
+	    echo "<li class=\"".$calendarMonthActive."\"><a href=\"/out/out.Calendar.php?mode=m\">".getMLText("month_view")."</a></li>";
+	    echo "<li class=\"".$calendarYearActive."\"><a href=\"/out/out.Calendar.php?mode=y\">".getMLText("year_view")."</a></li>";
+	    echo "<li class=\"".$addEventActive."\"><a href=\"/out/out.AddEvent.php\">".getMLText("add_event")."</a></li>";
 	    echo "</ul>";
 	    echo "</li>";
 	  }
@@ -905,7 +996,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	function controlSideBar(){ /* {{{ */
 		echo "<aside class=\"control-sidebar control-sidebar-dark aside-fixed\">";
 		echo "<ul class=\"nav nav-tabs nav-justified control-sidebar-tabs\">";
-		echo "<li class=\"active\"><a href=\"#control-sidebar-theme-demo-options-tab\" data-toggle=\"tab\"><i class=\"fa fa-wrench\"></i></a></li>";
+		echo "<li class=\"active\"><a href=\"#control-sidebar-theme-demo-options-tab\" data-toggle=\"tab\"><i class=\"fa fa-paint-brush\"></i></a></li>";
 		if($this->params['user']->isAdmin()) {
 			echo "<li><a href=\"#control-sidebar-home-tab\" data-toggle=\"tab\"><i class=\"fa fa-gears\"></i></a></li>";
 			echo "<li><a href=\"#control-sidebar-logo-tab\" data-toggle=\"tab\"><i class=\"fa fa-flag\"></i></a></li>";
@@ -918,10 +1009,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<div class=\"tab-pane\" id=\"control-sidebar-home-tab\">";
     echo "<a type=\"button\" href=\"../../out/out.AdminTools.php\"><h3 class=\"control-sidebar-heading btn-admin-tools\">".getMLText("admin_tools")."</h3></a>";
     echo "<ul class=\"control-sidebar-menu\">";
+
+    if ($this->params['user']->_comment != "client-admin") {
     echo "<li><a href=\"../../out/out.UsrMgr.php\"><i class=\"menu-icon fa fa-user bg-green\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("user_management")."</h4></div></a></li>";
     echo "<li><a href=\"../../out/out.GroupMgr.php\"><i class=\"menu-icon fa fa-users bg-green\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("group_management")."</h4></div></a></li>";
+  	}
+
     echo "<li><a href=\"../../out/out.BackupTools.php\"><i class=\"menu-icon fa fa-hdd-o bg-green\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("backup_tools")."</h4></div></a></li>";
     echo "<li><a href=\"../../out/out.LogManagement.php\"><i class=\"menu-icon fa fa-list bg-green\"></i>";
@@ -938,12 +1033,16 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("global_workflow_states")."</h4></div></a></li>";
     echo "<li><a href=\"../../out/out.WorkflowActionsMgr.php\"><i class=\"menu-icon fa fa-bolt bg-light-blue\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("global_workflow_actions")."</h4></div></a></li>";
+    
+    if($this->params['enablefullsearch']) {
     echo "<li><a href=\"../../out/out.Indexer.php\"><i class=\"menu-icon fa fa-refresh bg-yellow\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("update_fulltext_index")."</h4></div></a></li>";
     echo "<li><a href=\"../../out/out.CreateIndex.php\"><i class=\"menu-icon fa fa-search bg-yellow\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("create_fulltext_index")."</h4></div></a></li>";
     echo "<li><a href=\"../../out/out.IndexInfo.php\"><i class=\"menu-icon fa fa-info bg-yellow\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("fulltext_info")."</h4></div></a></li>";
+  	}
+
     echo "<li><a href=\"../../out/out.Statistic.php\"><i class=\"menu-icon fa fa-tasks bg-yellow\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("folders_and_documents_statistic")."</h4></div></a></li>";
     echo "<li><a href=\"../../out/out.Charts.php\"><i class=\"menu-icon fa fa-pie-chart bg-yellow\"></i>";
@@ -952,10 +1051,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("objectcheck")."</h4></div></a></li>";
     echo "<li><a href=\"../../out/out.Timeline.php\"><i class=\"menu-icon fa fa-clock-o bg-red\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("timeline")."</h4></div></a></li>";
+
+    if ($this->params['user']->_comment != "client-admin") {
     echo "<li><a href=\"../../out/out.Settings.php\"><i class=\"menu-icon fa fa-wrench bg-red\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("settings")."</h4></div></a></li>";
     echo "<li><a href=\"../../out/out.ExtensionMgr.php\"><i class=\"menu-icon fa fa-cogs bg-red\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("extension_manager")."</h4></div></a></li>";
+  	}
+
     echo "<li><a href=\"../../out/out.Info.php\"><i class=\"menu-icon fa fa-info-circle bg-red\"></i>";
     echo "<div class=\"menu-info\"><h4 class=\"control-sidebar-subheading\">".getMLText("version_info")."</h4></div></a></li>";
     echo "</ul>";
@@ -1723,9 +1826,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	<div id="upload-files">
 		<div id="upload-file">
 			<div class="input-append">
-				<input type="text" class="form-control" name="theuserfile" readonly>
-				<span class="btn btn-primary btn-file">
-					<?php printMLText("browse");?> <i class="fa fa-search"></i><input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
+				<input type="text" class="custom-input-text-search" name="theuserfile" readonly>
+				<span class="btn btn-primary btn-file float-left btn-flat">
+					<?php printMLText("browse");?>... <i class="fa fa-search"></i>  	<input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
 				</span>
 			</div>
 		</div>
@@ -1858,6 +1961,63 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		</script>
 <?php
 	} /* }}} */
+	function printFolderChooserHtml3($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
+		$formid = "targetid".$form;
+		if(!$formname)
+			$formname = "targetid";
+		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
+		print "<div class=\"form-group\">\n";
+		print "<input class=\"custom-input-text-search\" type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\" required/>";
+			print "<button type=\"button\" class=\"btn btn-default\" id=\"clearfolder".$form."\"><i class=\"fa fa-times\"></i></button>";
+		print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "</div>\n";
+?>
+<div class="modal" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 class="modal-title" id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
+	  </div>
+	  <div class="modal-body">
+			<p><?php printMLText('tree_loading') ?></p>
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+	  </div>
+	 </div>
+</div>
+
+<?php
+	} /* }}} */
+
+	function printFolderChooserHtml2($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
+		$formid = "targetid".$form;
+		if(!$formname)
+			$formname = "targetid";
+		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
+		print "<div class=\"form-group\">\n";
+		print "<input class=\"custom-input-text-search\" type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\" required/>";
+		//	print "<button type=\"button\" class=\"btn btn-default\" id=\"clearfolder".$form."\"><i class=\"fa fa-times\"></i></button>";
+		print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "</div>\n";
+?>
+<div class="modal" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 class="modal-title" id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
+	  </div>
+	  <div class="modal-body">
+			<p><?php printMLText('tree_loading') ?></p>
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+	  </div>
+	 </div>
+</div>
+
+<?php
+	} /* }}} */
 
 	function printFolderChooserHtml($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
 		$formid = "targetid".$form;
@@ -1867,7 +2027,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		print "<div class=\"form-group\">\n";
 		print "<input class=\"custom-input-text-search\" type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\" required/>";
 		print "<button type=\"button\" class=\"btn btn-default\" id=\"clearfolder".$form."\"><i class=\"fa fa-times\"></i></button>";
-		print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		//print "<a type=\"button\" data-target=\"#folderChooser".$form."\" href=\"/out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn btn-default\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
@@ -1973,11 +2133,11 @@ $(document).ready(function() {
 	function printKeywordChooserHtml($formName, $keywords='', $fieldname='keywords') { /* {{{ */
 		//$strictformcheck = $this->params['strictformcheck'];
 ?>
-<div class="input-group">
-	<input type="text" class="form-control" name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>" value="<?php echo htmlspecialchars($keywords);?>"<?php //echo $strictformcheck ? ' required' : ''; ?> />
-	<span class="input-group-btn">
-  	<a data-target="#keywordChooser" type="button" role="button" class="btn btn-default" data-toggle="modal" href="out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
-  </span>
+<div class="form-group">
+	<input type="text" class="custom-input-text-search" name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>" value="<?php echo htmlspecialchars($keywords);?>"<?php //echo $strictformcheck ? ' required' : ''; ?> />
+
+  <a data-target="#keywordChooser" type="button" role="button" class="btn btn-primary btn-flat float-left" data-toggle="modal" href="out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
+
 </div>
 <div class="modal fade modal-primary" id="keywordChooser" tabindex="-1" role="dialog" aria-labelledby="keywordChooserLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -2141,10 +2301,10 @@ $(document).ready(function() {
 	function getCountryFlag($lang) { /* {{{ */
 		switch($lang) {
 		case "en_GB":
-			return 'flags/gb.png';
+			return '/views/'.$this->theme.'/images/flags/gb.png';
 			break;
 		default:
-			return 'flags/'.substr($lang, 0, 2).'.png';
+			return '/views/'.$this->theme.'/images/flags/'.substr($lang, 0, 2).'.png';
 		}
 	} /* }}} */
 
@@ -2782,7 +2942,7 @@ $(document).ready( function() {
 	function documentListRow($document, $previewer, $skipcont=false, $version=0) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$showtree = $this->params['showtree'];
+		//$showtree = $this->params['showtree'];
 		$workflowmode = $this->params['workflowmode'];
 		$previewwidth = $this->params['previewWidthList'];
 		$enableClipboard = $this->params['enableclipboard'];
@@ -2890,7 +3050,9 @@ $(document).ready( function() {
 				$content .= count($links)." ".getMLText("linked_documents")."<br />";
 			if($status["status"] == S_IN_WORKFLOW && $workflowmode == 'advanced') {
 				$workflowstate = $latestContent->getWorkflowState();
-				$content .= '<span title="'.getOverallStatusText($status["status"]).': '.$workflow->getName().'">'.$workflowstate->getName().'</span>';
+				if ($workflowstate) {
+					$content .= '<span title="'.getOverallStatusText($status["status"]).': '.$workflowstate->getName().'">'.$workflowstate->getName().'</span>';
+				}
 			} else {
 				$content .= getOverallStatusText($status["status"]);
 			}

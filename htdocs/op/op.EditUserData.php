@@ -37,20 +37,44 @@ if (!$user->isAdmin() && ($settings->_disableSelfEdit)) {
 	UI::exitError(getMLText("edit_user_details"),getMLText("access_denied"));
 }
 
-$fullname = $_POST["fullname"];
-$email    = $_POST["email"];
-$comment  = $_POST["comment"];
-$language  = $_POST["language"];
-/* 'theme' won't be set, if themeselector is turn off */
-if(isset($_POST["theme"]))
-	$mytheme  = $_POST["theme"];
-$current_pwd  = $_POST["currentpwd"];
-
-if($user->getPwd() != md5($current_pwd)) {
-	UI::exitError(getMLText("edit_user_details"),getMLText("password_wrong"));
+if (isset($_POST['fullname']) && $_POST["fullname"] != "") {
+	$fullname = $_POST["fullname"];
+	if ($user->getFullName() != $fullname){ $user->setFullName($fullname); }
 }
 
+if (isset($_POST['email']) && $_POST["email"] != "") {
+	$email = $_POST["email"];
+	if ($user->getEmail() != $email) { $user->setEmail($email); }
+}
+
+if (isset($_POST['comment']) && $_POST["comment"] != "") {
+	$comment = $_POST["comment"];
+	if ($comment != "client-admin"){
+		if ($user->getComment() != $comment) { $user->setComment($comment);	}
+	}
+}
+
+if (isset($_POST['language']) && $_POST["language"] != "") {
+	$language = $_POST["language"];
+	if ($user->getLanguage() != $language) { $user->setLanguage($language); }
+}
+
+if (isset($_POST['theme']) && $_POST["theme"] != "") {
+	$mytheme = $_POST["theme"];
+	if (isset($mytheme) && $user->getTheme() != $mytheme) { $user->setTheme($mytheme); }
+}
+
+//$current_pwd  = $_POST["currentpwd"];
+
+/*if($user->getPwd() != md5($current_pwd)) {
+	UI::exitError(getMLText("edit_user_details"),getMLText("password_wrong"));
+}*/
+
 if (isset($_POST["pwd"]) && ($_POST["pwd"] != "")) {
+	$current_pwd  = $_POST["currentpwd"];
+	if($user->getPwd() != md5($current_pwd)) {
+		UI::exitError(getMLText("edit_user_details"),getMLText("password_wrong"));
+	}
 	if($settings->_passwordStrength) {
 		$ps = new Password_Strength();
 		$ps->set_password($_POST["pwd"]);
@@ -85,21 +109,6 @@ if (isset($_POST["pwd"]) && ($_POST["pwd"] != "")) {
 		$user->setPwdExpiration(date('Y-m-d H:i:s', time()+$settings->_passwordExpiration*86400));
 	}
 }
-
-if ($user->getFullName() != $fullname)
-	$user->setFullName($fullname);
-
-if ($user->getEmail() != $email)
-	$user->setEmail($email);
-
-if ($user->getComment() != $comment)
-	$user->setComment($comment);
-
-if ($user->getLanguage() != $language)
-	$user->setLanguage($language);
-
-if (isset($mytheme) && $user->getTheme() != $mytheme)
-	$user->setTheme($mytheme);
 
 if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
 {

@@ -77,7 +77,7 @@ $(document).ready(function() {
 			if($selworkflowstate->isUsed()) {
 				$transitions = $selworkflowstate->getTransitions();
 				if($transitions) {
-					echo "<table class=\"table table-condensed\">";
+					echo "<table class=\"table table-bordered table-striped\">";
 					echo "<thead><tr><th>".getMLText('workflow')."</th><th>".getMLText('previous_state')."</th><th>".getMLText('next_state')."</th></tr></thead>\n";
 					echo "<tbody>";
 					foreach($transitions as $transition) {
@@ -89,9 +89,9 @@ $(document).ready(function() {
 						echo "<td>";
 						echo $workflow->getName();
 						echo "</td><td>";
-						echo '<i class="icon-circle'.($workflow->getInitState()->getId() == $state->getId() ? ' initstate' : ' in-workflow').'"></i> '.$state->getName();
+						echo '<i class="fa fa-circle'.($workflow->getInitState()->getId() == $state->getId() ? ' initstate' : ' in-workflow').'"></i> '.$state->getName();
 						echo "</td><td>";
-						echo '<i class="icon-circle'.($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ' in-workflow')).'"></i> '.$nextstate->getName();
+						echo '<i class="fa fa-circle'.($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ' in-workflow')).'"></i> '.$nextstate->getName();
 						echo "</td></tr>";
 					}
 					echo "</tbody>";
@@ -112,13 +112,14 @@ $(document).ready(function() {
 <form class="form-inline" action="../op/op.RemoveWorkflowState.php" method="post">
   <?php echo createHiddenFieldWithKey('removeworkflowstate'); ?>
 	<input type="hidden" name="workflowstateid" value="<?php print $state->getID();?>">
-	<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_workflow_state");?></button>
+	<button type="submit" class="btn btn-danger"><i class="fa fa-remove"></i> <?php printMLText("rm_workflow_state");?></button>
 </form>
+<br>
 <?php
 			}
 		}
 ?>
-	<form action="../op/op.WorkflowStatesMgr.php" method="post" class="form-horizontal">
+	<form action="../op/op.WorkflowStatesMgr.php" method="post" class="">
 <?php
 		if($state) {
 			echo createHiddenFieldWithKey('editworkflowstate');
@@ -133,16 +134,16 @@ $(document).ready(function() {
 <?php
 		}
 ?>
-	<div class="control-group">
+	<div class="form-group">
 		<label class="control-label" for="login"><?php printMLText("workflow_state_name");?>:</label>
 		<div class="controls">
-			<input type="text" id="name" name="name" value="<?php print $state ? htmlspecialchars($state->getName()) : '';?>">
+			<input type="text" class="form-control" id="name" name="name" value="<?php print $state ? htmlspecialchars($state->getName()) : '';?>">
 		</div>
 	</div>
-	<div class="control-group">
+	<div class="form-group">
 		<label class="control-label" for="login"><?php printMLText("workflow_state_docstatus");?>:</label>
 		<div class="controls">
-			<select name="docstatus">
+			<select name="docstatus" class="form-control">
 				<option value=""><?php printMLText('keep_doc_status'); ?></option>
 				<option value="<?php echo S_RELEASED; ?>" <?php if($state && $state->getDocumentStatus() == S_RELEASED) echo "selected"; ?>><?php printMLText('released'); ?></option>
 				<option value="<?php echo S_REJECTED; ?>" <?php if($state && $state->getDocumentStatus() == S_REJECTED) echo "selected"; ?>><?php printMLText('rejected'); ?></option>
@@ -152,7 +153,7 @@ $(document).ready(function() {
 	<div class="control-group">
 		<label class="control-label" for="login"></label>
 		<div class="controls">
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
+			<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("save")?></button>
 		</div>
 	</div>
 	</form>
@@ -172,21 +173,29 @@ $(document).ready(function() {
 
 		$workflowstates = $dms->getAllWorkflowStates();
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
+		$this->htmlStartPage(getMLText("admin_tools"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("workflow_states_management"));
+
+		?>
+    <div class="gap-10"></div>
+    <div class="row">
+    <div class="col-md-12">
+    <?php 
+
+		$this->startBoxPrimary(getMLText("workflow_states_management"));
 ?>
 
-<div class="row-fluid">
-<div class="span4">
+<div class="row">
+<div class="col-md-4">
 <div class="well">
-<form class="form-horizontal">
-	<div class="control-group">
+<form class="">
+	<div class="form-group">
 		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
 		<div class="controls">
-<select id="selector" class="span9">
+<select id="selector" class="form-control">
 <option value="-1"><?php echo getMLText("choose_workflow_state")?>
 <option value="0"><?php echo getMLText("add_workflow_state")?>
 <?php
@@ -202,7 +211,7 @@ $(document).ready(function() {
 <div class="ajax" data-view="WorkflowStatesMgr" data-action="info" <?php echo ($selworkflowstate ? "data-query=\"workflowstateid=".$selworkflowstate->getID()."\"" : "") ?>></div>
 </div>
 
-<div class="span8">
+<div class="col-md-8">
 	<div class="well">
 		<div class="ajax" data-view="WorkflowStatesMgr" data-action="form" <?php echo ($selworkflowstate ? "data-query=\"workflowstateid=".$selworkflowstate->getID()."\"" : "") ?>></div>
 	</div>
@@ -210,7 +219,15 @@ $(document).ready(function() {
 </div>
 
 <?php
-		$this->contentEnd();
+		$this->endsBoxPrimary();
+
+		echo "</div>";
+		echo "</div>";
+		echo "</div>";
+		
+    $this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

@@ -74,7 +74,7 @@ $(document).ready(function() {
 		$this->htmlStartPage(getMLText("add_event"), "skin-blue sidebar-mini");
 		$this->containerStart();
 		$this->mainHeader();
-		$this->mainSideBar();
+		$this->mainSideBar(0,0,2);
 		$this->contentStart();
 
 		$expdate = date('Y-m-d');
