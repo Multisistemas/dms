@@ -618,7 +618,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 					
 					echo "<a href=\"/op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
 					echo "<div class=\"my-menu-body\">".getMLText($currLang);
-					echo "<img class=\"pull-right\" src=\"".$this->getCountryFlag($languages[$langCount])."\" ></img>";
+					//echo "<img class=\"pull-right\" src=\"".$this->getCountryFlag($languages[$langCount])."\" ></img>";
 					
 			    echo "</div>";
 			    echo "</a>";
