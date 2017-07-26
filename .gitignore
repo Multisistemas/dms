@@ -10,3 +10,5 @@ php_errors.log
 htdocs/robots.txt
 /webhook.php
 /.idea/
+/htdocs/views/multisis-lte/images/
+htdocs/views/multisis-lte/images/
