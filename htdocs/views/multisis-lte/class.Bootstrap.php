@@ -615,7 +615,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 						echo "<li class=\"language-active\">";
 					else
 						echo "<li>";
-
+					
 					echo "<a href=\"/op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
 					echo "<div class=\"my-menu-body\">".getMLText($currLang);
 					echo "<img class=\"pull-right\" src=\"".$this->getCountryFlag($languages[$langCount])."\" ></img>";
@@ -2299,12 +2299,13 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function getCountryFlag($lang) { /* {{{ */
-		switch($lang) {
+		switch((string)$lang) {
 		case "en_GB":
 			return '/views/'.$this->theme.'/images/flags/gb.png';
 			break;
-		default:
-			return '/views/'.$this->theme.'/images/flags/'.substr($lang, 0, 2).'.png';
+		case "es_ES":
+			return '/views/'.$this->theme.'/images/flags/es.png';
+			break;
 		}
 	} /* }}} */
 
