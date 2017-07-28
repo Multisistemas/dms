@@ -55,7 +55,7 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 		$color = $folder->inheritsAccess() ? "black" : $this->getAccessColor($folder->getDefaultAccess());
 
 		print "<li class=\"folderClass\">";
-		print "<a style=\"color: $color\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."\">".htmlspecialchars($folder->getName()) ."</a>";
+		print "<i class=\"fa fa-folder fa-lg\"></i> <a style=\"color: $color\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."\">".htmlspecialchars($folder->getName()) ."</a>";
 
 		$owner = $folder->getOwner();
 		$color = $this->getAccessColor(M_ALL);
@@ -106,7 +106,7 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 
 		$color = $document->inheritsAccess() ? "black" : $this->getAccessColor($document->getDefaultAccess());
 		print "<li class=\"documentClass\">";
-		print "<a style=\"color: $color\" href=\"out.ViewDocument.php?documentid=".$document->getID()."\">".htmlspecialchars($document->getName())."</a>";
+		print "<i class=\"fa fa-file-o\"></i> <a style=\"color: $color\" href=\"out.ViewDocument.php?documentid=".$document->getID()."\">".htmlspecialchars($document->getName())."</a>";
 
 		$owner = $document->getOwner();
 		$color = $this->getAccessColor(M_ALL);
@@ -174,13 +174,15 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 ?>
 <style type="text/css">
 .folderClass {
-	list-style-image : url(<?php $this->printImgPath("folder.png");?>);
-	list-style : url(<?php $this->printImgPath("folder.png");?>);
+	list-style-image : none;
+	list-style : none;
+	color: #3c8dbc;
 }
 
 .documentClass {
-	list-style-image : url(<?php $this->printImgPath("document.png");?>);
-	list-style : url(<?php $this->printImgPath("document.png");?>);
+	list-style-image : none;
+	list-style : none;
+	color: #3c8dbc;
 }
 </style>
 
