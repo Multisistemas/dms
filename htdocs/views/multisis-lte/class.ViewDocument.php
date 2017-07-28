@@ -192,6 +192,17 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			  	$("#iframe-charger").attr("src","../pdfviewer/web/viewer.html?file=..%2F..%2Fop%2Fop.Download.php%3Fdocumentid%3D"+docID+"%26version%3D"+version);
 			  });
 
+			  $(".preview-attach-btn").on("click", function(){
+			  	$("#thedocinfo").hide();
+					$("#thetimeline").hide();
+
+			  	var docID = $(this).attr("id");
+			  	var file = $(this).attr("rel");
+			  	$("#doc-title").text($(this).attr("title"));
+			  	$("#document-previewer").show('slow');
+			  	$("#iframe-charger").attr("src","../pdfviewer/web/viewer.html?file=..%2F..%2Fop%2Fop.Download.php%3Fdocumentid%3D"+docID+"%26file%3D"+file);
+			  });
+
 			  $(".close-doc-preview").on("click", function(){
 			  	$("#document-previewer").hide();
 			  	$("#iframe-charger").attr("src","");
@@ -1292,8 +1303,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				if ($file_exists){
 					print "<a type=\"button\" class=\"btn btn-primary btn-action\" href=\"../op/op.Download.php?documentid=".$documentid."&version=".$version->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("download")."\"><i class=\"fa fa-download\"></i></a>";
-					if ($viewonlinefiletypes && in_array(strtolower($version->getFileType()), $viewonlinefiletypes))
-						print "<a type=\"button\" class=\"btn btn-info btn-action\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=".$version->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("view_online")."\"><i class=\"fa fa-star\"></i></a>";
+					if (htmlspecialchars($latestContent->getMimeType()) == 'application/pdf' ) {
+						print '<a type="button" class="btn btn-info preview-doc-btn btn-action" id="'.$documentid.'" rel="'.$version->getVersion().'" title="'.htmlspecialchars($document->getName()).' - '.getMLText('current_version').': '.$version->getVersion().'"><i class="fa fa-eye"></i></a>';
+					} else {
+						print "<a type=\"button\" class=\"btn btn-info btn-action\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("preview")."\"><i class=\"fa fa-eye\"></i></a>";
+					}
+
 				}
 				/* Only admin has the right to remove version in any case or a regular
 				 * user if enableVersionDeletion is on
@@ -1307,7 +1322,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				if($accessop->mayEditAttributes()) {
 					print "<a type=\"button\" class=\"btn btn-success btn-action\" href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$version->getVersion()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("edit_attributes")."\"><i class=\"fa fa-edit\"></i></a>";
 				}
-				print "<a type=\"button\" class=\"btn btn-info btn-action\" href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."' data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("details")."\"><i class=\"fa fa-info-sign\"></i></a>";
+				print "<a type=\"button\" class=\"btn btn-info btn-action\" href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."' data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("details")."\"><i class=\"fa fa-list\"></i></a>";
 
 				print "</div>\n";
 				print "</td>\n</tr>\n";
@@ -1346,9 +1361,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<td class='align-center'>";
 				$previewer->createPreview($file, $previewwidthdetail);
 				if($file_exists) {
-					if ($viewonlinefiletypes && in_array(strtolower($file->getFileType()), $viewonlinefiletypes))
-						print "<a target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\">";
-					else
 						print "<a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\">";
 				}
 				if($previewer->hasPreview($file)) {
@@ -1378,8 +1390,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				if ($file_exists) {
 					print "<a type=\"button\" class=\"btn btn-primary btn-action\" href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("download")."\"><i class=\"fa fa-download\"></i></a>";
-					if ($viewonlinefiletypes && in_array(strtolower($file->getFileType()), $viewonlinefiletypes))
-						print "<a type=\"button\" class=\"btn btn-info btn-action\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("view_online")."\"><i class=\"fa fa-eye\"></i></a>";
+
+					if (htmlspecialchars($file->getMimeType()) == 'application/pdf' ) {
+						print '<a type="button" class="btn btn-info preview-attach-btn btn-action" id="'.$documentid.'" rel="'.$file->getID().'" data-toggle=\"tooltip\" data-placement=\"bottom\" title="'.htmlspecialchars($file->getName()).'"><i class="fa fa-eye"></i></a>';
+					} else {
+						print "<a type=\"button\" class=\"btn btn-info btn-action\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=".$file->getID()."\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"".getMLText("view_online")."\"><i class=\"fa fa-eye\"></i></a>";
+					}
+
 				}
 
 				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))

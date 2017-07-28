@@ -615,7 +615,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 						echo "<li class=\"language-active\">";
 					else
 						echo "<li>";
-					
+
 					echo "<a href=\"/op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
 					echo "<div class=\"my-menu-body\">".getMLText($currLang);
 					//echo "<img class=\"pull-right\" src=\"".$this->getCountryFlag($languages[$langCount])."\" ></img>";
@@ -1128,12 +1128,12 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function getLogo(){
-		$path = $this->imgpath."logo.png";
+		$path = "/images/multisis-lte/logo.png";
 		return $path;
 	}
 
 	function getBrand(){
-		$path = $this->imgpath."brand.png";
+		$path = "/images/multisis-lte/brand.png";
 		return $path;
 	}
 

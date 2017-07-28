@@ -38,23 +38,35 @@ class SeedDMS_View_RemoveVersion extends SeedDMS_Bootstrap_Style {
 		$document = $this->params['document'];
 		$version = $this->params['version'];
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
+		$this->htmlStartPage(getMLText("delete"), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("rm_version"));
-		$this->contentContainerStart();
-?>
+
+		?>
+		<div class="gap-15"></div>
+		<div class="row">
+		<div class="col-md-12">
+		<?php $this->startBoxDanger(getMLText("rm_version")); ?>
+
 <form action="../op/op.RemoveVersion.php" name="form1" method="post">
 	<?php echo createHiddenFieldWithKey('removeversion'); ?>
 	<input type="hidden" name="documentid" value="<?php echo $document->getID()?>">
 	<input type="hidden" name="version" value="<?php echo $version->getVersion()?>">
 	<p><?php printMLText("confirm_rm_version", array ("documentname" => htmlspecialchars($document->getName()), "version" => $version->getVersion()));?></p>
-  <p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_version");?></button></p>
+  <p><button type="submit" class="btn btn-danger"><i class="fa fa-remove"></i> <?php printMLText("rm_version");?></button></p>
 </form>
+<?php $this->endsBoxSuccess(); ?>
+</div>
+</div>
 <?php
-		$this->contentContainerEnd();
+		
+		echo "</div>";
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
