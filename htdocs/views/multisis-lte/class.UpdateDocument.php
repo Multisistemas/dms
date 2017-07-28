@@ -135,11 +135,20 @@ console.log(element);
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("update_document"));
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
+		$this->contentStart();		
+
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Document content ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		$this->startBoxPrimary(getMLText("update_document"));
 
 		if ($document->isLocked()) {
 
@@ -171,19 +180,19 @@ console.log(element);
 		if($workflowmode == 'advanced') {
 			if($status = $latestContent->getStatus()) {
 				if($status["status"] == S_IN_WORKFLOW) {
-					$this->warningMsg("The current version of this document is in a workflow. This will be interrupted and cannot be completed if you upload a new version.");
+					$this->warningMsg(getMLText("doc_is_in_workflow"));
 				}
 			}
 		}
 
 		$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
-		if($enablelargefileupload) {
+		/*if($enablelargefileupload) {
 			$msg .= "<p>".sprintf(getMLText('link_alt_updatedocument'), "out.AddMultiDocument.php?folderid=".$folder->getID()."&showtree=".showtree())."</p>";
 		}
-		$this->warningMsg($msg);
+		$this->warningMsg($msg);*/
 		$this->contentContainerStart();
 ?>
-
+<div class="table-responsive">
 <form action="../op/op.UpdateDocument.php" enctype="multipart/form-data" method="post" name="form1" id="form1">
 	<input type="hidden" name="documentid" value="<?php print $document->getID(); ?>">
 	<table class="table-condensed">
@@ -220,11 +229,11 @@ console.log(element);
 			<td><?php printMLText("expires");?>:</td>
 			<td class="standardText">
         <span class="input-append date span12" id="expirationdate" data-date="<?php echo date('Y-m-d', $expts); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-          <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('Y-m-d', $expts); ?>">
+          <input class="form-control" size="16" name="expdate" type="text" value="<?php echo date('Y-m-d', $expts); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
-        </span><br />
-        <label class="checkbox inline">
-				  <input type="checkbox" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
+        </span>
+        <label>
+				  <input type="checkbox" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>> <?php printMLText("does_not_expire");?><br>
         </label>
 			</td>
 		</tr>
@@ -498,7 +507,7 @@ console.log(element);
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
       </td>
       <td>
-        <select id="GrpApprover" class="chzn-select span9" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_approvers'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
+        <select id="GrpApprover" class="chzn-select form-control" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_approvers'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
 <?php
 				foreach ($docAccess["groups"] as $grp) {
 				
@@ -585,7 +594,7 @@ console.log(element);
 <?php
 					} else {
 ?>
-        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+        <select class="_chzn-select-deselect form-control" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
 <?php
 					$curworkflow = $latestContent->getWorkflow();
 					foreach ($mandatoryworkflows as $workflow) {
@@ -600,7 +609,7 @@ console.log(element);
 					}
 				} else {
 ?>
-        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+        <select class="_chzn-select-deselect form-control" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
 <?php
 					$workflows=$dms->getAllWorkflows();
 					print "<option value=\"\">"."</option>";
@@ -624,15 +633,23 @@ console.log(element);
 	}
 ?>
 		<tr>
+			<td><button type="submit" class="btn btn-info"><i class="fa fa-save"></i> <?php printMLText("update_document")?></button></td>
 			<td></td>
-			<td><input type="submit" class="btn btn-success" value="<?php printMLText("update_document")?>"></td>
 		</tr>
 	</table>
 </form>
-
+</div>
 <?php
-		$this->contentContainerEnd();
+		$this->endsBoxPrimary();
+
+		echo "</div>"; 
+		echo "</div>"; 
+		echo "</div>"; 
+		echo "</div>"; // Ends row
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

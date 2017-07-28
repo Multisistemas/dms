@@ -1630,5 +1630,6 @@ URL: [url]',
 'disk_free_space' => 'Free disk space',
 'disk_used_space' => 'Disk used space',
 'biography' => 'Biography',
+'doc_is_in_workflow' => 'The current version of this document is in a workflow. This will be interrupted and cannot be completed if you upload a new version.',
 );
 ?>

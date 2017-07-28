@@ -101,16 +101,18 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		$reviewStatus = $version->getReviewStatus();
 		$approvalStatus = $version->getApprovalStatus();
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-?>
-<div class="row-fluid">
-<div class="span4">
-<?php
-		$this->contentHeading(getMLText("document_infos"));
-		$this->contentContainerStart();
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Atach file ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		$this->startBoxPrimary(getMLText("document_infos"));
 ?>
 <table class="table-condensed">
 <tr>
@@ -411,7 +413,17 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 </div>
 </div>
 <?php
+		
+		$this->endsBoxPrimary();
+
+		echo "</div>"; 
+		echo "</div>"; 
+		echo "</div>"; 
+		echo "</div>"; // Ends row
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

@@ -101,20 +101,29 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		$reviewStatus = $version->getReviewStatus();
 		$approvalStatus = $version->getApprovalStatus();
 
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))), "skin-blue sidebar-mini");
+		$this->containerStart();
+		$this->mainHeader();
+		$this->mainSideBar();
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
+
+		//// Atach file ////
+		echo "<div class=\"row\">";
+		echo "<div class=\"col-md-12\">";
+
+		$this->startBoxPrimary(getMLText("details"));
+
 ?>
 <div class="row-fluid">
-<div class="span4">
+<div class="col-md-4">
 <?php
 		$this->contentHeading(getMLText("document_infos"));
 		$this->contentContainerStart();
 ?>
-<table class="table-condensed">
+<table class="table table-bordered table-condensed">
 <tr>
-<td><?php printMLText("owner");?>:</td>
+<td><b><?php printMLText("owner");?>:</b></td>
 <td>
 <?php
 		$owner = $document->getOwner();
@@ -126,26 +135,26 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		if($document->getComment()) {
 ?>
 <tr>
-<td><?php printMLText("comment");?>:</td>
+<td><b><?php printMLText("comment");?>:</b></td>
 <td><?php print htmlspecialchars($document->getComment());?></td>
 </tr>
 <?php
 		}
 ?>
 <tr>
-<td><?php printMLText("used_discspace");?>:</td>
+<td><b><?php printMLText("used_discspace");?>:</b></td>
 <td><?php print SeedDMS_Core_File::format_filesize($document->getUsedDiskSpace());?></td>
 </tr>
 <tr>
 <tr>
-<td><?php printMLText("creation_date");?>:</td>
+<td><b><?php printMLText("creation_date");?>:</b></td>
 <td><?php print getLongReadableDate($document->getDate()); ?></td>
 </tr>
 <?php
 		if($document->expires()) {
 ?>
 		<tr>
-		<td><?php printMLText("expires");?>:</td>
+		<td><b><?php printMLText("expires");?>:</b></td>
 		<td><?php print getReadableDate($document->getExpires()); ?></td>
 		</tr>
 <?php
@@ -153,7 +162,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		if($document->getKeywords()) {
 ?>
 <tr>
-<td><?php printMLText("keywords");?>:</td>
+<td><b><?php printMLText("keywords");?>:</b></td>
 <td><?php print htmlspecialchars($document->getKeywords());?></td>
 </tr>
 <?php
@@ -162,7 +171,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 			$lockingUser = $document->getLockingUser();
 ?>
 <tr>
-	<td><?php printMLText("lock_status");?>:</td>
+	<td><b><?php printMLText("lock_status");?>:</b></td>
 	<td><?php printMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName())));?></td>
 </tr>
 <?php
@@ -176,7 +185,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 				$attrdef = $attribute->getAttributeDefinition();
 ?>
 		    <tr>
-					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+					<td><b><?php echo htmlspecialchars($attrdef->getName()); ?>:</b></td>
 					<td><?php echo htmlspecialchars(implode(', ', $attribute->getValueAsArray())); ?></td>
 		    </tr>
 <?php
@@ -186,10 +195,10 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 </table>
 <?php
 		$this->contentContainerEnd();
-		$this->preview();
+		//$this->preview();
 ?>
 </div>
-<div class="span8">
+<div class="col-md-8">
 <?php
 
 		// verify if file exists
@@ -197,13 +206,13 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 
 		$this->contentHeading(getMLText("details_version", array ("version" => $version->getVersion())));
 		$this->contentContainerStart();
-		print "<table class=\"table table-condensed\">";
+		print "<table class=\"table table-bordered table-condensed\">";
 		print "<thead>\n<tr>\n";
 		print "<th width='10%'></th>\n";
 		print "<th width='30%'>".getMLText("file")."</th>\n";
 		print "<th width='25%'>".getMLText("comment")."</th>\n";
 		print "<th width='15%'>".getMLText("status")."</th>\n";
-		print "<th width='20%'></th>\n";
+		print "<th width='20%'>".getMLText("actions")."</th>\n";
 		print "</tr>\n</thead>\n<tbody>\n";
 		print "<tr>\n";
 		print "<td><ul class=\"unstyled\">";
@@ -233,30 +242,29 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		print "<td>";
 
 		//if (($document->getAccessMode($user) >= M_READWRITE)) {
-		print "<ul class=\"actions unstyled\">";
+		echo "<div class=\"btn-group-horizontal\">";
 		if ($file_exists){
-			print "<li><a href=\"../op/op.Download.php?documentid=".$document->getID()."&version=".$version->getVersion()."\" title=\"".htmlspecialchars($version->getMimeType())."\"><i class=\"icon-download\"></i> ".getMLText("download")."</a>";
+			print "<a type=\"button\" class=\"btn btn-primary btn-action\" href=\"../op/op.Download.php?documentid=".$document->getID()."&version=".$version->getVersion()."\" title=\"".htmlspecialchars($version->getMimeType())."\"><i class=\"fa fa-download\"></i></a>";
 			if ($viewonlinefiletypes && in_array(strtolower($version->getFileType()), $viewonlinefiletypes))
-				print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-star\"></i> " . getMLText("view_online") . "</a>";
-			print "</ul>";
-			print "<ul class=\"actions unstyled\">";
+				print "<a type=\"button\" class=\"btn btn-info btn-action\" target=\"_self\" href=\"../op/op.ViewOnline.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"fa fa-eye\"></i></a>";
+
 		}
 
 		if (($enableversionmodification && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin()) {
-			print "<li><a href=\"out.RemoveVersion.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-remove\"></i> ".getMLText("rm_version")."</a></li>";
+			print "<a type=\"button\" class=\"btn btn-danger btn-action\" href=\"out.RemoveVersion.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"fa fa-remove\"></i></a>";
 		}
 		if (($enableversionmodification && ($document->getAccessMode($user) == M_ALL)) || $user->isAdmin()) {
 			if ( $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE ){
-				print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$document->getID()."&version=".$version->getVersion()."'><i class=\"icon-align-justify\"></i>".getMLText("change_status")."</a></li>";
+				print "<a type=\"button\" class=\"btn btn-warning btn-action\" href='../out/out.OverrideContentStatus.php?documentid=".$document->getID()."&version=".$version->getVersion()."'><i class=\"fa fa-align-justify\"></i></a>";
 			}
 		}
 		if (($enableversionmodification && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin()) {
 			if($status["status"] != S_OBSOLETE)
-				print "<li><a href=\"out.EditComment.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-comment\"></i> ".getMLText("edit_comment")."</a></li>";
+				print "<a type=\"button\" class=\"btn btn-success btn-action\" href=\"out.EditComment.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"fa fa-comment\"></i></a>";
 			if ( $status["status"] == S_DRAFT_REV){
-				print "<li><a href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i> ".getMLText("edit_attributes")."</a></li>";
+				print "<a type=\"button\" class=\"btn btn-success btn-action\" href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."\"><i class=\"fa fa-pencil\"></i></a>";
 		}
-			print "</ul>";
+			print "</div>";
 		}
 		else {
 			print "&nbsp;";
@@ -266,7 +274,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		print "</tr></tbody>\n</table>\n";
 
 
-		print "<table class=\"table-condensed\">\n";
+		print "<table class=\"table table-bordered table-condensed\">\n";
 
 		if (is_array($reviewStatus) && count($reviewStatus)>0) {
 
@@ -368,8 +376,8 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 			$this->contentHeading(getMLText("status"));
 			$this->contentContainerStart();
 			$statuslog = $version->getStatusLog();
-			echo "<table class=\"table table-condensed\"><thead>";
-			echo "<th>".getMLText('date')."</th><th>".getMLText('status')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>\n";
+			echo "<table class=\"table table-condensed table-bordered\"><thead>";
+			echo "<th class=\"align-center\">".getMLText('date')."</th><th class=\"align-center\">".getMLText('status')."</th><th class=\"align-center\">".getMLText('user')."</th><th class=\"align-center\">".getMLText('comment')."</th></tr>\n";
 			echo "</thead><tbody>";
 			foreach($statuslog as $entry) {
 				if($suser = $dms->getUser($entry['userID']))
@@ -411,7 +419,16 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 </div>
 </div>
 <?php
+		
+		$this->endsBoxPrimary();
+
+		echo "</div>"; 
+		echo "</div>"; 
+		echo "</div>"; // Ends row
+
 		$this->contentEnd();
+		$this->mainFooter();		
+		$this->containerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

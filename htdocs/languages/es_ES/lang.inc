@@ -58,8 +58,8 @@ URL: [url]',
 'add_document' => 'Añadir documento',
 'add_document_link' => 'Añadir vínculo',
 'add_document_notify' => 'Asignar notificación',
-'add_doc_reviewer_approver_warning' => 'Documentos N.B. se marcan automáticamente como publicados si no hay revisores o aprobadores asignados.',
-'add_doc_workflow_warning' => 'Documentos N.B. se marcan automáticamente como publicados si no hay flujo de trabajo asignado.',
+'add_doc_reviewer_approver_warning' => 'Documentos nuevos se marcan automáticamente como publicados si no hay revisores o aprobadores asignados.',
+'add_doc_workflow_warning' => 'Documentos nuevos se marcan automáticamente como publicados si no hay flujo de trabajo asignado.',
 'add_event' => 'Añadir evento',
 'add_group' => 'Añadir nuevo grupo',
 'add_member' => 'Añadir miembro',
@@ -1600,6 +1600,7 @@ URL: [url]',
 'disk_free_space' => 'Espacio libre en disco',
 'disk_used_space' => 'Espacio utilizado en disco',
 'biography' => 'Biografía',
+'doc_is_in_workflow' => 'La versión actual de este documento se encuentra en flujo de trabajo. Esto se interrumpirá y no podrá ser completado si ud actualiza a una nueva versión.',
 );
 
 // TODO: Mover strings de extensión de no conformiadad a su propio archivo de lenguaje.

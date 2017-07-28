@@ -94,7 +94,7 @@ $(document).ready( function() {
 		$this->mainHeader();
 		$this->mainSideBar();
 		$this->contentStart();
-		echo $this->getDefaultFolderPathHTML($folder);
+		echo $this->getDefaultFolderPathHTML($folder, true, $document);
 
 		//// Atach file ////
 		echo "<div class=\"row\">";
@@ -102,15 +102,15 @@ $(document).ready( function() {
 
 		?>
 
-<div class="callout callout-warning alert-dismissible">
-	<button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
-	<?php echo getMLText("max_upload_size").": ".ini_get( "upload_max_filesize"); ?>
+<!--<div class="callout callout-warning alert-dismissible">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>-->
+	<?php	$this->warningMsg(getMLText("max_upload_size").": ".ini_get( "upload_max_filesize")); ?>
 	<?php
-		if($enablelargefileupload) {
+		/*if($enablelargefileupload) {
 	  	printf('<p>'.getMLText('link_alt_updatedocument').'</p>', "out.AddFile2.php?documentid=".$document->getId());
-		}
+		}*/
 	?>
-</div>
+<!--</div>-->
 
 <?php
 		echo "<div class=\"box box-primary\">";
@@ -120,17 +120,10 @@ $(document).ready( function() {
     echo "<div class=\"box-body\">";
 ?>
 
-<div class="form-group">
-			<label><?php printMLText("name");?>:</label>
-			<div class="controls">
-				<input class="form-control" type="text" name="name" value="<?php print htmlspecialchars($folder->getName());?>" required>
-			</div>
-		</div>
-
-<form class="form-horizontal" action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" id="fileupload">
+<form class="" action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" id="fileupload">
 <input type="hidden" name="documentid" value="<?php print $document->getId(); ?>">
 
-<div class="control-group">
+<div class="form-group">
 	<label><?php printMLText("local_file");?>:</label>
 	<div class="controls">
 		<?php $this->printFileChooser('userfile', false); ?>
@@ -138,29 +131,27 @@ $(document).ready( function() {
 </div>
 
 
-<div class="control-group">
+<div class="form-group">
 	<label><?php printMLText("name");?>:</label>
 	<div class="controls">
-		<input class="form-control" type="text" name="name" id="name" size="60">
+		<input type="text" class="form-control" name="name" id="name" size="60" required="required">
 	</div>
 </div>
 
 
-<div class="control-group">
+<div class="form-group">
 	<label><?php printMLText("comment");?>:</label>
 	<div class="controls">
-		<textarea class="form-control" name="comment" id="comment" rows="4" cols="80"></textarea>
+		<textarea name="comment" class="form-control" id="comment" rows="4" cols="80"></textarea>
 	</div>
 </div>
 
 
-<div class="box-footer">
+<div class="controls">
 	<button class="btn btn-info" type="submit"><i class="fa fa-save"></i> <?php printMLText("add");?></button>
 </div>
 
 </form>
-
-
 
 <?php
 

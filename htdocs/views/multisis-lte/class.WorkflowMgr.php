@@ -108,7 +108,7 @@ $(document).ready(function() {
 				foreach($path as $state) {
 					$names[] = $state->getName();
 				}
-				$this->errorMsg(getMLText('workflow_has_cycle').": ".implode(' <i class="fa fa-arrow-right"></i> ', $names));
+				$this->warningMsg(getMLText('workflow_has_cycle').": ".implode(' <i class="fa fa-arrow-right"></i> ', $names));
 			}
 
 			$transitions = $workflow->getTransitions();
@@ -142,7 +142,7 @@ $(document).ready(function() {
 			if(!$hasreleased)
 				$this->errorMsg(getMLText('workflow_no_doc_released_state'));
 			if(!$hasrejected)
-				$this->errorMsg(getMLText('workflow_no_doc_rejected_state'));
+				$this->warningMsg(getMLText('workflow_no_doc_rejected_state'));
 
 			if($workflow->isUsed()) {
 				$this->infoMsg(getMLText('workflow_in_use'));

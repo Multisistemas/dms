@@ -9,12 +9,12 @@ include("../../inc/inc.ClassUI.php");
 include("../../inc/inc.Authentication.php");
 
 if (isset($_POST["command"])) {
-	$target_dir = $settings->_rootDir."/views/multisis-lte/images/";
+	//$target_dir = $settings->_rootDir."/views/multisis-lte/images/";
 	switch ($_POST["command"]) {
 
 	case 'validatelogo':
 
-		$target_dir =$settings->_rootDir."/views/multisis-lte/images/";
+		$target_dir =$settings->_rootDir."/images/multisis-lte/";
 		$target_file = $target_dir . basename($_FILES["logofile"]["name"]);
 		$uploadOk = 1;
 		$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
@@ -68,7 +68,7 @@ if (isset($_POST["command"])) {
 
 	case 'validatebrand':
 
-		$target_dir =$settings->_rootDir."/views/multisis-lte/images/";
+		$target_dir =$settings->_rootDir."/images/multisis-lte/";
 		$target_file = $target_dir . basename($_FILES["brandfile"]["name"]);
 		$uploadOk = 1;
 		$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
